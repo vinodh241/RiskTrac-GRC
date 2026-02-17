@@ -4,8 +4,6 @@
 # API ports: 6001 authapi, 6002 umapi, 6003 ormapi, 6004 bcmapi
 # Docker Hub: vinod9072/imagename:v1
 
-version: "3.8"
-
 services:
   authapi:
     image: vinod9072/authapi:v1
