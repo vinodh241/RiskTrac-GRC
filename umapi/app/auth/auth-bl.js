@@ -3109,28 +3109,29 @@ function successfulResponse(refreshedToken, successMessage, result){
  * @returns 
  */
 async function sendRequestToAuthAPIApplication(requestBody, endPoint) {
+    const log = (global.logger && global.logger.log) ? (...a) => { try { global.logger.log(...a); } catch (_) {} } : () => {};
     try {
-        logger.log('info', 'AuthBl : sendRequestToAuthAPIApplication : Execution started.');
-        logger.log('info', 'AuthBl : sendRequestToAuthAPIApplication : Sending request to API URL : ' + endPoint);
-        logger.log('info', 'AuthBl : sendRequestToAuthAPIApplication : Sending request to API URL with requestBody value = ' + JSON.stringify(requestBody));
+        log('info', 'AuthBl : sendRequestToAuthAPIApplication : Execution started.');
+        log('info', 'AuthBl : sendRequestToAuthAPIApplication : Sending request to API URL : ' + endPoint);
+        log('info', 'AuthBl : sendRequestToAuthAPIApplication : Sending request to API URL with requestBody value = ' + JSON.stringify(requestBody));
         
-        const AUTH_SERVICE_BASE_URL = APP_CONFIG.AUTH_SERVICE_URL;
+        const AUTH_SERVICE_BASE_URL = (APP_CONFIG && APP_CONFIG.AUTH_SERVICE_URL) ? APP_CONFIG.AUTH_SERVICE_URL : 'http://localhost:9001';
         const HEADERS               = { 'Content-Type': 'application/json'};
         
-        return AXIOS.post(AUTH_SERVICE_BASE_URL + endPoint, {reqPayload: requestBody}, {headers: HEADERS})
+        return AXIOS.post(AUTH_SERVICE_BASE_URL + endPoint, {reqPayload: requestBody || {}}, {headers: HEADERS})
         .then((response) => {
-            logger.log('info', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Response Received for API URL : ' + endPoint);
-            logger.log('info', 'AuthBl : sendRequestToAuthAPIApplication : Response Received for API URL with response value = ' + JSON.stringify(response.data));
+            log('info', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Response Received for API URL : ' + endPoint);
+            log('info', 'AuthBl : sendRequestToAuthAPIApplication : Response Received for API URL with response value = ' + JSON.stringify(response.data));
             return response.data;
         })
         .catch((error) => {
-            logger.log('error', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Sending request to API URL : ' + endPoint + ' : wtih input value : ' + JSON.stringify(requestBody));
-            logger.log('error', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Error occured while processing request for API URL : ' + endPoint + ' : Error details : ' + error);
+            log('error', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Sending request to API URL : ' + endPoint + ' : wtih input value : ' + JSON.stringify(requestBody));
+            log('error', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Error occured while processing request for API URL : ' + endPoint + ' : Error details : ' + error);
             return CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
         });
     } catch (error) {
-        logger.log('error', 'AuthBl : sendRequestToAuthAPIApplication : Sending request to API URL : ' + endPoint + ' : wtih input value : ' + JSON.stringify(requestBody));
-        logger.log('error', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Got unhandled error. : Error details : ' + error);
+        log('error', 'AuthBl : sendRequestToAuthAPIApplication : Sending request to API URL : ' + endPoint + ' : wtih input value : ' + JSON.stringify(requestBody));
+        log('error', 'AuthBl : sendRequestToAuthAPIApplication : Execution end. : Got unhandled error. : Error details : ' + error);
         return CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
     }
 }

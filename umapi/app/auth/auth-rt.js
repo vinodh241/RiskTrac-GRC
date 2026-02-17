@@ -16,8 +16,14 @@ class AuthRt {
      */
     start() {
         this.app.post('/user-management/auth/logout',   TOKEN_UPDATE_MIDDELWARE,  this.authBlObject.updateUserLogout);
-        this.app.post('/user-management/auth/get-key',                            this.authBlObject.getPublicKey);
-        this.app.get('/user-management/auth/get-key',                             this.authBlObject.getPublicKey);
+        const safeGetPublicKey = (req, res) => {
+            Promise.resolve(this.authBlObject.getPublicKey(req, res)).catch((err) => {
+                try { if (global.logger && global.logger.log) global.logger.log('error', 'get-key route catch: ' + (err && (err.message || err.toString()) || err)); } catch (_) {}
+                if (!res.headersSent) res.status(200).json({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Service temporarily unavailable' } });
+            });
+        };
+        this.app.post('/user-management/auth/get-key',                            safeGetPublicKey);
+        this.app.get('/user-management/auth/get-key',                             safeGetPublicKey);
         this.app.post('/user-management/auth/login',                              this.authBlObject.updateUserLogin);
         this.app.get('/user-management/auth/get-All-Accounts-Name',               this.authBlObject.getAllAccountsName);
 
