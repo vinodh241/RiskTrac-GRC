@@ -25,7 +25,7 @@ const APP_SERVER = {
     APP_ADMIN_USER_NAME     : "",
     APP_ADMIN_PASSWORD      : "",
     PATH                    : PATH_OBJ.join(__dirname, '../'),
-    ALLOWED_ORIGINS         : ["https://serisktracgrcqa.secureyes.net","https://serisktracgrcdev.secureyes.net","http://localhost:5000"]      // Alowed origins list, else we will get CORS policy error.
+    ALLOWED_ORIGINS         : (process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',').map(s => s.trim()) : []).concat(["https://serisktracgrcqa.secureyes.net","https://serisktracgrcdev.secureyes.net","http://localhost:5000","http://localhost:9003","http://localhost:4200","http://10.0.1.32:8080","http://127.0.0.1:8080","http://10.0.1.32:80","http://127.0.0.1:80"])
 };
 
 /**
