@@ -4,7 +4,6 @@ const DB_CONFIG                             = require('../../../config/db-config
 const MESSAGE_FILE_OBJ                      = require("../../../utility/message/message-constant.js");
 const CONSTANT_FILE_OBJ                     = require("../../../utility/constants/constant.js");
 const { logger }                            = require("../../../utility/log-manager/log-manager.js");
-const { log }                               = require('gulp-util');
 const fs                                    = require('fs');
 const path                                  = require('path');
 
@@ -374,7 +373,7 @@ class DynamicMasterManagement {
                 // Write the query string to the file
                 fs.writeFile(filePathTable, query, (err) => {
                     if (err) throw err;
-                    logger.log('Query saved to file:', filePathTable);
+                    logger.log('info', 'Query saved to file: ' + filePathTable);
                 });
 
             } catch (err) {
