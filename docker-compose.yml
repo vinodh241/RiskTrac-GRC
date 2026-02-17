@@ -1,6 +1,6 @@
 # RiskTrac GRC - Docker Compose
 # Server: 10.0.1.32
-# Access app at http://10.0.1.32 (nginx port 80)
+# Access app at http://10.0.1.32:8080 (nginx; use 8080 if host port 80 is in use)
 # API ports: 6001 authapi, 6002 umapi, 6003 ormapi, 6004 bcmapi
 # Docker Hub: vinod9072/imagename:v1
 
@@ -108,7 +108,7 @@ services:
       dockerfile: Dockerfile
     container_name: risktrac-nginx
     ports:
-      - "80:80"
+      - "8080:80"
     depends_on:
       - authapi
       - umapi

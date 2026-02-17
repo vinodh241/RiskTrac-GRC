@@ -7,7 +7,7 @@
 
 | Port | Service  |
 |------|----------|
-| 80   | Nginx (main entry - all UIs and API routes) |
+| 8080 | Nginx (main entry - all UIs and API routes) |
 | 6001 | Auth API (direct) |
 | 6002 | UM API (direct) |
 | 6003 | ORM API (direct) |
@@ -26,11 +26,11 @@ docker-compose logs -f
 ```
 
 **Access:**
-- App (host + all modules): **http://10.0.1.32** or **http://localhost**
-- User Management: http://10.0.1.32/um/
-- ORM: http://10.0.1.32/orm/
-- BCM: http://10.0.1.32/bcm/
-- APIs via nginx: http://10.0.1.32/authapi/, /umapi/, /ormapi/, /bcmapi/
+- App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
+- User Management: http://10.0.1.32:8080/um/
+- ORM: http://10.0.1.32:8080/orm/
+- BCM: http://10.0.1.32:8080/bcm/
+- APIs via nginx: http://10.0.1.32:8080/authapi/, /umapi/, /ormapi/, /bcmapi/
 
 ## Build and push images to Docker Hub
 

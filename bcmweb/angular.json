@@ -33,7 +33,8 @@
             "scripts": [],
             "allowedCommonJsDependencies": [
               "file-saver",
-              "highcharts"
+              "highcharts",
+              "moment"
             ]
           },
           "configurations": {
