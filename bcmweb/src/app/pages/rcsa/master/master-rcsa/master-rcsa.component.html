@@ -37,7 +37,7 @@
                                                       >{{ResidualRiskResponseGridForms.get('GridRows')?.value[i].RiskResponse}}</span>
                                                     <mat-form-field
                                                     *ngIf="!ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable"
-                                                    [appearance]="ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                    [appearance]="$any(ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                                         <input matInput type="text" formControlName="RiskResponse"
                                                         *ngIf="!ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable"
                                                         [readonly]="ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable">
@@ -153,7 +153,7 @@
                                                 </span>
                                                 <mat-form-field
                                                 [hidden]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable"
-                                                [appearance]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                [appearance]="$any(ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                                     <input matInput type="text" formControlName="ResponsiblePerson"
                                                     [hidden]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable"
                                                     [readonly]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable">
@@ -248,7 +248,7 @@
                                                     white-space: normal;"
                                                     [hidden]="!ControlTestResultForms.get('GridRows')?.value[i].isEditable">{{ControlTestResultForms.get('GridRows')?.value[i].ControlTestingResult}}</span>
                                                     <mat-form-field *ngIf="!ControlTestResultForms.get('GridRows')?.value[i].isEditable"
-                                                    [appearance]="ControlTestResultForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                    [appearance]="$any(ControlTestResultForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                                         <input matInput type="text" formControlName="ControlTestingResult"
                                                         *ngIf="!ControlTestResultForms.get('GridRows')?.value[i].isEditable"
                                                         [readonly]="ControlTestResultForms.get('GridRows')?.value[i].isEditable">
@@ -363,7 +363,7 @@
                                                     [hidden]="!ActionPlanStatusForms.get('GridRows')?.value[i].isEditable">{{ActionPlanStatusForms.get('GridRows')?.value[i].ActionPlanStatus}}</span>
                                                     <mat-form-field
                                                     *ngIf="!ActionPlanStatusForms.get('GridRows')?.value[i].isEditable"
-                                                    [appearance]="ActionPlanStatusForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                    [appearance]="$any(ActionPlanStatusForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                                         <input matInput type="text" formControlName="ActionPlanStatus"
                                                         *ngIf="!ActionPlanStatusForms.get('GridRows')?.value[i].isEditable"
                                                         [readonly]="ActionPlanStatusForms.get('GridRows')?.value[i].isEditable">
@@ -477,7 +477,7 @@
                                                     [hidden]="!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable">{{ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].Description}}</span>
                                                     <mat-form-field
                                                     [hidden]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable"
-                                                    [appearance]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                    [appearance]="$any(ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                                         <input matInput type="text" formControlName="Description"
                                                         [hidden]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable"
                                                         [readonly]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable">
@@ -589,7 +589,7 @@
                                                     [hidden]="!ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable">{{ActionPlanVerificationForms.get('GridRows')?.value[i].ControlVerificationClosure}}</span>
                                                     <mat-form-field
                                                     *ngIf="!ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable"
-                                                    [appearance]="ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                    [appearance]="$any(ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                                         <input matInput type="text" formControlName="ControlVerificationClosure"
                                                         *ngIf="!ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable"
                                                          [readonly]="ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable">
@@ -721,7 +721,7 @@
                                             [hidden]="!ReviewerForms.get('GridRows')?.value[i].isEditable">{{ReviewerForms.get('GridRows')?.value[i].Description}}</span>
                                         <mat-form-field
                                             [hidden]="ReviewerForms.get('GridRows')?.value[i].isEditable"
-                                            [appearance]="ReviewerForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(ReviewerForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="text" formControlName="Description"
                                             [hidden]="ReviewerForms.get('GridRows')?.value[i].isEditable"
                                             [readonly]="ReviewerForms.get('GridRows')?.value[i].isEditable">

@@ -15,7 +15,7 @@
                         <mat-header-cell *matHeaderCellDef mat-sort-header>Process</mat-header-cell>
                         <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
                             <mat-form-field
-                                [appearance]="GridFormsProcessRisk.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                [appearance]="$any(GridFormsProcessRisk.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                 <input matInput type="text" formControlName="Name"
                                     [readonly]="GridFormsProcessRisk.get('GridRows')?.value[i].isEditable">
                             </mat-form-field>
