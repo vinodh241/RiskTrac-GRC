@@ -4,6 +4,7 @@ FROM node:18-alpine AS build
 WORKDIR /app
 
 COPY package*.json ./
+COPY .npmrc ./
 RUN npm install --legacy-peer-deps
 
 COPY . .
