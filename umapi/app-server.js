@@ -63,6 +63,15 @@ APP.use(CORS({
 APP.use(COOKIE_PARSER());
 
 /**
+ * Global error handler: never send 500 to client; return 200 with success:0
+ */
+APP.use(function(err, req, res, next) {
+    try { if (global.logger && global.logger.log) global.logger.log('error', 'Unhandled error: ' + (err && (err.message || err.toString()) || err)); } catch (_) {}
+    if (res.headersSent) return next(err);
+    res.status(200).json({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Service temporarily unavailable' } });
+});
+
+/**
  * Node server is running on port no. "appPortNo"
  * PORT can be overridden via process.env.PORT (e.g. in Docker)
  */
