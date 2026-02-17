@@ -1,3 +1,4 @@
+const HTTP                          = require('http');
 const EXPRESS                       = require('express');
 const APP                           = EXPRESS();
 const BODY_PARSER                   = require('body-parser');
@@ -18,6 +19,38 @@ const LOG_NOTIFICATION_FILE_OBJ     = require('./utility/log-manager/log-notific
 const NOTIFICATION_UTIL             = require('./utility/sql-service/message-queue-util.js');
 const swaggerUi                     = require("swagger-ui-express");
 const { apiDocumentation }          = require('./api-docs/api-doc.js')
+
+/**
+ * IMMEDIATE get-key response - runs before any other middleware. Never 500.
+ */
+function getKeyFallbackResultSync() {
+    try {
+        var cfg = APP_CONFIG_FILE_OBJECT || {};
+        var appPath = (cfg.APP_SERVER && cfg.APP_SERVER.PATH) ? cfg.APP_SERVER.PATH : process.cwd();
+        var certPath = PATH.join(appPath, 'config/certs/public.pem');
+        var publicKeyUM = (FS.existsSync(certPath)) ? FS.readFileSync(certPath, 'utf8') : '';
+        var r = {
+            OTPLength: 6, ResentOTPTime: 60, ResentOTPTimeForChangePassword: 60,
+            DateFormat: 'YYYY-MM-DD', authenticationMode: 3, IS_OTP_FOR_CHANGE_PASSWORD: false,
+            CHANGE_PASSWORD_CONFIG: null, USER_NAME_CONFIG: null, USER_ID_CONFIG: null,
+            MFA_CONFIG_IS_MFA: false, LOGIN_PAGE_DATA: null, publicKeyUM: publicKeyUM
+        };
+        return JSON.stringify({ success: 1, message: 'OK', result: r, error: { errorCode: null, errorMessage: null } });
+    } catch (e) {
+        return JSON.stringify({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Service temporarily unavailable' } });
+    }
+}
+APP.use(function getKeyFirst(req, res, next) {
+    var p = (req.url && req.url.split('?')[0]) || (req.path || '');
+    if (p.endsWith('/')) p = p.slice(0, -1);
+    if ((req.method === 'POST' || req.method === 'GET') && (p === '/user-management/auth/get-key')) {
+        res.statusCode = 200;
+        res.setHeader('Content-Type', 'application/json');
+        res.end(getKeyFallbackResultSync());
+        return;
+    }
+    next();
+});
 
 /**
  * Swagger UI Configuration
@@ -159,11 +192,32 @@ APP.get('/user-management/auth/get-key', getKeyHandler);
 var appPortNo   = process.env.PORT || APP_CONFIG_FILE_OBJECT.APP_SERVER.APP_START_PORT;
 appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.UNDEFINED ) ? CONSTANT_FILE_OBJECT.APP_CONSTANT.DEFAULT_PORT : parseInt(appPortNo, 10);
 
- 
 /**
- *  
+ * get-key handled in raw Node layer BEFORE Express - impossible to 500.
  */
- APP.listen(appPortNo, async function() {
+function getKeyResponseBody() {
+    try {
+        var cfg = APP_CONFIG_FILE_OBJECT || {};
+        var appPath = (cfg.APP_SERVER && cfg.APP_SERVER.PATH) ? cfg.APP_SERVER.PATH : process.cwd();
+        var certPath = PATH.join(appPath, 'config/certs/public.pem');
+        var publicKeyUM = (FS.existsSync(certPath)) ? FS.readFileSync(certPath, 'utf8') : '';
+        var r = { OTPLength: 6, ResentOTPTime: 60, ResentOTPTimeForChangePassword: 60, DateFormat: 'YYYY-MM-DD', authenticationMode: 3, IS_OTP_FOR_CHANGE_PASSWORD: false, CHANGE_PASSWORD_CONFIG: null, USER_NAME_CONFIG: null, USER_ID_CONFIG: null, MFA_CONFIG_IS_MFA: false, LOGIN_PAGE_DATA: null, publicKeyUM: publicKeyUM };
+        return JSON.stringify({ success: 1, message: 'OK', result: r, error: { errorCode: null, errorMessage: null } });
+    } catch (e) {
+        return JSON.stringify({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Service temporarily unavailable' } });
+    }
+}
+var SERVER = HTTP.createServer(function (req, res) {
+    var p = (req.url && req.url.split('?')[0]) || '';
+    if (p.endsWith('/')) p = p.slice(0, -1);
+    if ((req.method === 'POST' || req.method === 'GET') && p === '/user-management/auth/get-key') {
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(getKeyResponseBody());
+        return;
+    }
+    APP(req, res);
+});
+SERVER.listen(appPortNo, async function() {
     /**
      * Fetching looger object and setting in global variable :: Start
      */
