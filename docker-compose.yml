@@ -91,15 +91,15 @@ services:
       - risktrac-net
     restart: unless-stopped
 
-  # bcmweb:
-  #   image: vinod9072/bcmweb:v1
-  #   build:
-  #     context: ./bcmweb
-  #     dockerfile: Dockerfile
-  #   container_name: risktrac-bcmweb
-  #   networks:
-  #     - risktrac-net
-  #   restart: unless-stopped
+  bcmweb:
+    image: vinod9072/bcmweb:v1
+    build:
+      context: ./bcmweb
+      dockerfile: Dockerfile
+    container_name: risktrac-bcmweb
+    networks:
+      - risktrac-net
+    restart: unless-stopped
 
   nginx:
     image: vinod9072/risktrac-nginx:v1
@@ -117,6 +117,7 @@ services:
       - hostweb
       - umweb
       - ormweb
+      - bcmweb
     networks:
       - risktrac-net
     restart: unless-stopped
