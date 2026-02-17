@@ -23,7 +23,6 @@ const AUTO_EMAIL_REMAINDER_RCSA_ASSESSMENT_OBJ = require('../../config/email-tem
 
 
 var cron = require('node-cron');
-const { log } = require('gulp-util');
 
 let sqlServiceEmitter = CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
 let messageQueue = CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
