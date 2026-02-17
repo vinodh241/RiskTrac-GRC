@@ -1628,7 +1628,7 @@ export class KriMeasurementReviewComponent implements OnInit {
     }
 
     popupCheckBox(): MatDialogRef<AlertComponent> {
-        const dialogRef = this.dialog.open(AlertComponent, {
+        const dialogRef = this.dialog.open<AlertComponent>(AlertComponent, {
             width: '250px',
             panelClass: 'dark',
             data: {

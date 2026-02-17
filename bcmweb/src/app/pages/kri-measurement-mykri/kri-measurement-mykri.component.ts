@@ -1075,7 +1075,7 @@ export class KriMeasurementMykriComponent implements OnInit {
 
         console.log('frequency:', frequency);
 
-        const dialogRef = this.dialog.open(AlertComponent, {
+        const dialogRef = this.dialog.open<AlertComponent>(AlertComponent, {
             width: '462px',
             maxWidth: '60vw',
             minHeight: '27vh',
@@ -1135,7 +1135,7 @@ export class KriMeasurementMykriComponent implements OnInit {
     }
 
     popupInfo(Value1: any, Value5: any): MatDialogRef<AlertComponent> {
-        const dialogRef = this.dialog.open(AlertComponent, {
+        const dialogRef = this.dialog.open<AlertComponent>(AlertComponent, {
             width: '250px',
             panelClass: 'dark',
             data: {
