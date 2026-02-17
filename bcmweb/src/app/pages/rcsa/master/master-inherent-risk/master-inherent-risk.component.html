@@ -34,7 +34,7 @@
                                             [hidden]="!RiskCategoryGridForms.get('GridRows')?.value[i].isEditable">{{RiskCategoryGridForms.get('GridRows')?.value[i].Category}}</span>
                                         <mat-form-field
                                             [hidden]="RiskCategoryGridForms.get('GridRows')?.value[i].isEditable"
-                                            [appearance]="RiskCategoryGridForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(RiskCategoryGridForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="text" formControlName="Category"
                                                 [hidden]="RiskCategoryGridForms.get('GridRows')?.value[i].isEditable"
                                                 [readonly]="RiskCategoryGridForms.get('GridRows')?.value[i].isEditable">

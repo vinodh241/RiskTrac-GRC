@@ -27,7 +27,7 @@
                                     <mat-cell *matCellDef="let row;let i = index" [formGroup]="row" style="flex: 1 1 100%; box-sizing: border-box; max-width: 41%; padding-right: 8px">
                                         <span class="tablecolumnspan" style="word-wrap: break-word; overflow-wrap: break-word; min-width: 12vw;  white-space: normal;"
                                             [hidden]="!GridFormsControlInPlace.get('GridRows')?.value[i].isEditable">{{GridFormsControlInPlace.get('GridRows')?.value[i].Name}}</span>
-                                        <mat-form-field [appearance]="GridFormsControlInPlace.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                        <mat-form-field [appearance]="$any(GridFormsControlInPlace.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="text" formControlName="Name" [hidden]="GridFormsControlInPlace.get('GridRows')?.value[i].isEditable"
                                                 [readonly]="GridFormsControlInPlace.get('GridRows')?.value[i].isEditable">
                                         </mat-form-field>
@@ -140,7 +140,7 @@
                                        overflow-wrap: break-word;
                                        white-space: normal;"  [hidden]="!GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable">{{GridFormsControlNatureScore.get('GridRows')?.value[i].NatureofControl}}</span>
                                         <mat-form-field
-                                            [appearance]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="text" formControlName="NatureofControl" [hidden]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable"
                                                 [readonly]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable">
                                         </mat-form-field>
@@ -150,7 +150,7 @@
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
                                     <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
                                         <mat-form-field
-                                            [appearance]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="Score"
                                                 [readonly]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable">
                                         </mat-form-field>
@@ -278,7 +278,7 @@
                                         overflow-wrap: break-word;
                                         white-space: normal;"   [hidden]="!GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable">{{GridFormsControlAutomationScore.get('GridRows')?.value[i].LevelOfControl}}</span>
                                         <mat-form-field
-                                            [appearance]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="text" formControlName="LevelOfControl" [hidden]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable"
                                                 [readonly]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable">
                                         </mat-form-field>
@@ -288,7 +288,7 @@
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
                                     <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
                                         <mat-form-field
-                                            [appearance]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="Score"
                                                 [readonly]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable">
                                         </mat-form-field>
@@ -413,7 +413,7 @@
                                         overflow-wrap: break-word;
                                         white-space: normal;" [hidden]="!GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable">{{GridFormsControlFrequencyScore.get('GridRows')?.value[i].Frequency}}</span>
                                         <mat-form-field
-                                            [appearance]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="text" formControlName="Frequency" [hidden]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable"
                                                 [readonly]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable">
                                         </mat-form-field>
@@ -423,7 +423,7 @@
                                     <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
                                     <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
                                         <mat-form-field
-                                            [appearance]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            [appearance]="$any(GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy')">
                                             <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="Score"
                                                 [readonly]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable">
                                         </mat-form-field>

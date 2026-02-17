@@ -6,8 +6,7 @@
     >Schedule New Assessment</button> -->
     <div class="applyFilter addDesktop position-relative text-start me-4">
         <button type="button" class="btn btn-dark btnGradient ad" data-bs-toggle="modal" (click)="newAssesment()"    [disabled]="frameworkDataResp === 0" [matTooltip]="frameworkDataResp === 0 ? 'Please add a framework to schedule an assessment' : ''">Schedule New Assessment</button>
-        <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img src="./assets/images/icon-add-desktop.svg" style="    width: 2vh;
-            margin-top: 1vh;"   [ngStyle]="{'margin-left':(dataSource?.data?.length || 0) > 8  ? '-2.3vh' : '-0.3vh'}"></span>
+        <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img src="./assets/images/icon-add-desktop.svg" [ngStyle]="{'width': '2vh', 'margin-top': '1vh', 'margin-left': (dataSource?.data?.length || 0) > 8 ? '-2.3vh' : '-0.3vh'}"></span>
     </div>
 </mat-toolbar>
 <div class="container" >
