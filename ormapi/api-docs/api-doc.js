@@ -28,8 +28,8 @@ const setRecommendationStatus = require("./incidents/incidents-api-set-recommend
 const setIncidentReview = require("./incidents/incidents-api-set-incident-review");
 
 // KRI API imports
-const setKRIMasterData = require("./kri/kri-api-set-kri-master-data");
-const getKRIMasterData = require("./kri/kri-api-get-kri-master-data");
+const setKRIMasterData = require("./KRI/kri-api-set-kri-master-data");
+const getKRIMasterData = require("./KRI/kri-api-get-kri-master-data");
 const getKRIDefinitions = require("./KRI/kri-api-get-kri-definitions");
 const setKRIDefinition = require("./KRI/kri-api-set-kri-definitions");
 const deleteKRIDefinition = require("./KRI/kri-api-delete-kri-definitions");

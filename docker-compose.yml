@@ -29,6 +29,7 @@ services:
       - "6002:6002"
     environment:
       - PORT=6002
+      - AUTH_SERVICE_URL=http://authapi:6001
     networks:
       - risktrac-net
     restart: unless-stopped

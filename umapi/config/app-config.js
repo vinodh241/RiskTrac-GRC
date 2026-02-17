@@ -70,8 +70,9 @@ const LOG_CONFIG = {
 
 /**
  * If AMLAK Auth application deployed into local machine
+ * In Docker set AUTH_SERVICE_URL=http://authapi:6001
  */
-const AUTH_SERVICE_URL = "http://localhost:9001";
+const AUTH_SERVICE_URL = process.env.AUTH_SERVICE_URL || "http://localhost:9001";
 
 // Add/Remove whichever the module required in UM(with role Power User or Standard User or FA) 
 const MODULE_LIST = [
