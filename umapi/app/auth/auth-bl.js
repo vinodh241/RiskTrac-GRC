@@ -41,71 +41,63 @@ class AuthBl {
      * @param {*} response 
      */
     async getPublicKey(request, response){
-        if (global.logger) global.logger.log('info', 'AuthBl : getPublicKey : Execution started.');
-
         try {
-            var requestBody                 = request.body;
+            if (global.logger && global.logger.log) global.logger.log('info', 'AuthBl : getPublicKey : Execution started.');
+
+            var requestBody                 = request.body || {};
             let absolutePathForPublicKey    = CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
             let publicKeyUM                 = CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
             const API_RESPONSE_OBJ          = await sendRequestToAuthAPIApplication(requestBody, '/auth-management/auth/get-Key');
 
             if(CONSTANT_FILE_OBJ.APP_CONSTANT.UNDEFINED != API_RESPONSE_OBJ && CONSTANT_FILE_OBJ.APP_CONSTANT.NULL != API_RESPONSE_OBJ  && CONSTANT_FILE_OBJ.APP_CONSTANT.ONE === API_RESPONSE_OBJ.success){
-                if (global.logger) global.logger.log('info', 'AuthBl : getPublicKey : Get public key successfully');
-                
-                API_RESPONSE_OBJ.result.OTPLength                           = APP_CONFIG.OTP_CONFIG.NUMBER_OF_DIGITS_IN_OTP;
-                API_RESPONSE_OBJ.result.ResentOTPTime                       = APP_CONFIG.OTP_CONFIG.RESEND_OTP_TIME_IN_SECONDS;
-                API_RESPONSE_OBJ.result.ResentOTPTimeForChangePassword      = APP_CONFIG.OTP_CONFIG_FOR_CHANGE_PASSWORD.RESEND_OTP_TIME_IN_SECONDS;
-                API_RESPONSE_OBJ.result.DateFormat                          = APP_CONFIG.DATE_FORMAT_CONFIG.DATE_FORMAT;
-                API_RESPONSE_OBJ.result.authenticationMode                  = APP_CONFIG.APP_SERVER.APP_AUTHENTICATION_MODE;
-                API_RESPONSE_OBJ.result.IS_OTP_FOR_CHANGE_PASSWORD          = APP_CONFIG.PASSWORD_CONFIG.REQUIRED_OTP_FOR_CHANGE_PASSWORD;
-                API_RESPONSE_OBJ.result.CHANGE_PASSWORD_CONFIG              = APP_CONFIG.CHANGE_PASSWORD_CONFIG;
-                API_RESPONSE_OBJ.result.USER_NAME_CONFIG                    = APP_CONFIG.USER_NAME_CONFIG;
-                API_RESPONSE_OBJ.result.USER_ID_CONFIG                      = APP_CONFIG.USER_ID_CONFIG;    
-                API_RESPONSE_OBJ.result.MFA_CONFIG_IS_MFA                   = APP_CONFIG.MFA_CONFIG.IS_MFA;
-                API_RESPONSE_OBJ.result.LOGIN_PAGE_DATA                     = APP_CONFIG.LOGIN_PAGE_DATA;
-                
-                absolutePathForPublicKey    = PATH.join(APP_CONFIG.APP_SERVER.PATH, PUBLIC_KEY_FILE_PATH_UM);
+                if (global.logger && global.logger.log) global.logger.log('info', 'AuthBl : getPublicKey : Get public key successfully');
+                if (!API_RESPONSE_OBJ.result) API_RESPONSE_OBJ.result = {};
+
+                API_RESPONSE_OBJ.result.OTPLength                           = (APP_CONFIG.OTP_CONFIG && APP_CONFIG.OTP_CONFIG.NUMBER_OF_DIGITS_IN_OTP) !== undefined ? APP_CONFIG.OTP_CONFIG.NUMBER_OF_DIGITS_IN_OTP : 6;
+                API_RESPONSE_OBJ.result.ResentOTPTime                       = (APP_CONFIG.OTP_CONFIG && APP_CONFIG.OTP_CONFIG.RESEND_OTP_TIME_IN_SECONDS) !== undefined ? APP_CONFIG.OTP_CONFIG.RESEND_OTP_TIME_IN_SECONDS : 60;
+                API_RESPONSE_OBJ.result.ResentOTPTimeForChangePassword      = (APP_CONFIG.OTP_CONFIG_FOR_CHANGE_PASSWORD && APP_CONFIG.OTP_CONFIG_FOR_CHANGE_PASSWORD.RESEND_OTP_TIME_IN_SECONDS) !== undefined ? APP_CONFIG.OTP_CONFIG_FOR_CHANGE_PASSWORD.RESEND_OTP_TIME_IN_SECONDS : 60;
+                API_RESPONSE_OBJ.result.DateFormat                          = (APP_CONFIG.DATE_FORMAT_CONFIG && APP_CONFIG.DATE_FORMAT_CONFIG.DATE_FORMAT) || 'YYYY-MM-DD';
+                API_RESPONSE_OBJ.result.authenticationMode                  = (APP_CONFIG.APP_SERVER && APP_CONFIG.APP_SERVER.APP_AUTHENTICATION_MODE) !== undefined ? APP_CONFIG.APP_SERVER.APP_AUTHENTICATION_MODE : 3;
+                API_RESPONSE_OBJ.result.IS_OTP_FOR_CHANGE_PASSWORD          = (APP_CONFIG.PASSWORD_CONFIG && APP_CONFIG.PASSWORD_CONFIG.REQUIRED_OTP_FOR_CHANGE_PASSWORD) !== undefined ? APP_CONFIG.PASSWORD_CONFIG.REQUIRED_OTP_FOR_CHANGE_PASSWORD : false;
+                API_RESPONSE_OBJ.result.CHANGE_PASSWORD_CONFIG              = (APP_CONFIG && APP_CONFIG.CHANGE_PASSWORD_CONFIG) || null;
+                API_RESPONSE_OBJ.result.USER_NAME_CONFIG                    = (APP_CONFIG && APP_CONFIG.USER_NAME_CONFIG) || null;
+                API_RESPONSE_OBJ.result.USER_ID_CONFIG                      = (APP_CONFIG && APP_CONFIG.USER_ID_CONFIG) || null;
+                API_RESPONSE_OBJ.result.MFA_CONFIG_IS_MFA                   = (APP_CONFIG.MFA_CONFIG && APP_CONFIG.MFA_CONFIG.IS_MFA) !== undefined ? APP_CONFIG.MFA_CONFIG.IS_MFA : false;
+                API_RESPONSE_OBJ.result.LOGIN_PAGE_DATA                     = (APP_CONFIG && APP_CONFIG.LOGIN_PAGE_DATA) || null;
+
+                var appPath = (APP_CONFIG.APP_SERVER && APP_CONFIG.APP_SERVER.PATH) ? APP_CONFIG.APP_SERVER.PATH : process.cwd();
+                absolutePathForPublicKey    = PATH.join(appPath, PUBLIC_KEY_FILE_PATH_UM);
                 if (!FILE_SYSTEM.existsSync(absolutePathForPublicKey)) {
-                    if (global.logger) global.logger.log('error', 'AuthBl : getPublicKey : Public key file not found : ' + absolutePathForPublicKey);
+                    if (global.logger && global.logger.log) global.logger.log('error', 'AuthBl : getPublicKey : Public key file not found : ' + absolutePathForPublicKey);
                     return response.status(200).json({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Public key file not found' } });
                 }
                 publicKeyUM                 = FILE_SYSTEM.readFileSync(absolutePathForPublicKey, "utf8");
 
-                API_RESPONSE_OBJ.result.publicKeyUM     = publicKeyUM;     
-                
-                return response.status(CONSTANT_FILE_OBJ.APP_CONSTANT.TWO_HUNDRED).json({
-                    success : CONSTANT_FILE_OBJ.APP_CONSTANT.ONE,
-                    message : MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.GET_KEY,
-                    result  : API_RESPONSE_OBJ.result,
-                    error: {
-                        errorCode       : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
-                        errorMessage    : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL
-                    }
-               });
+                API_RESPONSE_OBJ.result.publicKeyUM     = publicKeyUM;
 
+                return response.status(200).json({
+                    success : 1,
+                    message : (MESSAGE_FILE_OBJ.MESSAGE_CONSTANT && MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.GET_KEY) || 'OK',
+                    result  : API_RESPONSE_OBJ.result,
+                    error: { errorCode: null, errorMessage: null }
+               });
             } else {
-                if (global.logger) global.logger.log('error', 'AuthBl : getPublicKey : Execution end. : Error details : Error from Auth application module, for more details check Auth application module API log.');
-                return response.status(CONSTANT_FILE_OBJ.APP_CONSTANT.TWO_HUNDRED).json({
-                    success : CONSTANT_FILE_OBJ.APP_CONSTANT.ZERO,
-                    message : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
-                    result  : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
-                    error   : {
-                        errorCode       : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
-                        errorMessage    : MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.GET_KEY_FAIL
-                    }
+                if (global.logger && global.logger.log) global.logger.log('error', 'AuthBl : getPublicKey : Auth module error or unreachable.');
+                return response.status(200).json({
+                    success : 0,
+                    message : null,
+                    result  : null,
+                    error   : { errorCode: null, errorMessage: (MESSAGE_FILE_OBJ.MESSAGE_CONSTANT && MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.GET_KEY_FAIL) || 'Get key failed' }
                 });
             }
-        } catch (error) {
-            if (global.logger) global.logger.log('error', 'AuthBl : getPublicKey : Execution end. : Got unhandled error. : Error details : '+error);
-            return response.status(CONSTANT_FILE_OBJ.APP_CONSTANT.TWO_HUNDRED).json({
-                success : CONSTANT_FILE_OBJ.APP_CONSTANT.ZERO,
-                message : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
-                result  : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
-                error   : {
-                    errorCode       : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
-                    errorMessage    : MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.GET_KEY_FAIL
-                }
-           });
+        } catch (err) {
+            try { if (global.logger && global.logger.log) global.logger.log('error', 'AuthBl : getPublicKey : ' + (err && err.message || err)); } catch (_) {}
+            return response.status(200).json({
+                success : 0,
+                message : null,
+                result  : null,
+                error   : { errorCode: null, errorMessage: (MESSAGE_FILE_OBJ.MESSAGE_CONSTANT && MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.GET_KEY_FAIL) || 'Get key failed' }
+            });
         }
     }
 
