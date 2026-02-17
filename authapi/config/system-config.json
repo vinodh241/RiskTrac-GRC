@@ -1,0 +1,6 @@
+{
+    "APP_MODULES" :{
+        "AUTH_MODULE"               : "./app/auth/auth-rt.js",
+        "USER_MANAGEMENT_MODULE"    : "./app/user-management/user-management-rt.js"
+    }
+}

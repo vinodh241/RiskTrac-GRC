@@ -1,0 +1,114 @@
+<!-- <div class="container">
+  <mat-toolbar>
+    <label class="mat-h3">Modules</label>
+  </mat-toolbar>
+    <mat-divider></mat-divider>
+    <div class="content">
+        <div class="row">
+            <div class="col-2" *ngIf="mods.includes('UM')">
+                <mat-card class="module-card" (click)="navigateUserManagement()">
+                    <mat-card-title>User Management</mat-card-title>
+                    <mat-card-subtitle>Manage user roles.</mat-card-subtitle>
+                </mat-card>
+            </div>
+            <div class="col-2" *ngIf="!(mods.includes('UM')) && mods.includes('ORM')">
+                <mat-card class="module-card" (click)="navigateORM()">
+                    <mat-card-title>ORM</mat-card-title>
+                    <mat-card-subtitle>ORM Module.</mat-card-subtitle>
+                </mat-card>
+            </div>
+            <div class="col-2" *ngIf="!(mods.includes('UM')) && mods.includes('BCM')">
+              <mat-card class="module-card" (click)="navigateBCM()">
+                  <mat-card-title>BCM</mat-card-title>
+                  <mat-card-subtitle>BCM Module.</mat-card-subtitle>
+              </mat-card>
+          </div>
+        </div>
+    </div>
+</div> -->
+
+
+	<div class="w-100 h-100">
+
+		<div class="h-72 px-3 w-100 ptpb vscroll">
+
+			<div class="h-100 dashboardCard pb-3 w-100" style="height: 42.7vh;">
+
+        <!-- <div class="col-2" *ngIf="mods.includes('UM')">
+          <mat-card class="module-card" (click)="navigateUserManagement()" style="margin-bottom: 25vh;margin-right: 47vh;">
+              <mat-card-title>User Management</mat-card-title>
+              <mat-card-subtitle>Manage user roles.</mat-card-subtitle>
+          </mat-card>
+      </div> -->
+
+      <div class="cardGen colorGeyGradient umBg position-relative" style="cursor: pointer;"  *ngIf="mods.includes('UM')" (click)="navigateUserManagement()">
+        <a  class="w-100 h-100 cardLink" >
+          <div class="cardBody bgwhite w-100 h-100 d-flex justify-content-start">
+
+            <h2 class="um">{{ummods}}</h2>
+            <img src="/assets/um-img.jpg" class="cardImg" alt="User Management">
+
+
+          </div>
+        </a>
+      </div>
+
+				<div class="cardGen cardGenORM colorGeyGradient ormBg position-relative" style="cursor: pointer;" *ngIf="!(mods.includes('UM')) && mods.includes('ORM')"   (click)="navigateORM()">
+					<a  class="w-100 h-100 cardLink">
+						<div class="cardBody bgwhite w-100 h-100 d-flex justify-content-start" >
+							<h2 class="orm">{{ormmods}}</h2>
+							<img src="/assets/orm-img.jpg" class="cardImg">
+						</div>
+					</a>
+				</div>
+
+				<div class="cardGen cardGenBCM colorGeyGradient bcmBg position-relative" style="cursor: pointer" *ngIf="!(mods.includes('UM')) && mods.includes('BCM')" (click)="navigateBCM()">
+					<a  class="w-100 h-100 cardLink" >
+						<div class="cardBody bgwhite w-100 h-100 d-flex justify-content-start">
+							<h2 class="bcm">{{bcmmods}}</h2>
+							<img src="/assets/bcm-img.jpg" class="cardImg">
+						</div>
+					</a>
+				</div>
+
+        <!-- <div class="cardGen cardGenBCM colorGeyGradient bcmBg position-relative" style="cursor: pointer;" *ngIf="!(mods.includes('UM')) && mods.includes('DM')" (click)="navigateDM()">
+					<a  class="w-100 h-100 cardLink" >
+						<div class="cardBody bgwhite w-100 h-100 d-flex justify-content-start">
+							<h2 class="bcm">DM</h2>
+							<img src="/assets/bcm-img.jpg" class="cardImg">
+						</div>
+					</a>
+				</div> -->
+
+        <div class="cardGen cardGenTPP colorGeyGradient tppBg position-relative"  style="cursor: pointer;" *ngIf="!(mods.includes('UM')) && mods.includes('TPTrac')" (click)="navigateTPP()">
+					<a class="w-100 h-100 cardLink">
+						<div class="cardBody bgwhite w-100 h-100 d-flex justify-content-start">
+
+							<h2 class="um">{{tptracmods}}</h2>
+							<img src="./assets/tptrac-img.jpg" class="cardImg" >
+
+
+						</div>
+					</a>
+				</div>
+
+        <div class="cardGen cardGenDMS colorGeyGradient dsmBg position-relative" style="cursor: pointer;" *ngIf="!(mods.includes('UM')) && mods.includes('DMS')" (click)="navigateDM()">
+					<a class="w-100 h-100 cardLink">
+						<div class="cardBody bgwhite w-100 h-100 d-flex justify-content-start">
+
+							<h2 class="bcm">{{dmsmods}}</h2>
+							<img src="./assets/dms-img.jpg" class="cardImg">
+
+
+						</div>
+					</a>
+				</div>
+			</div>
+		</div>
+
+		<div class="w-100 h-4 lpFooter px-3 position-relative">
+			<div class="px-3 position-absolute vmiddleLeft">© {{year}} Copyright SecurEyes Techno Services Pvt. Ltd. All rights reserved.</div>
+		</div>
+
+	</div>
+

@@ -1,0 +1,53 @@
+<mat-toolbar>
+    <!-- <ng-container>
+        <button mat-icon-button title="previous">
+            <mat-icon aria-hidden="false" aria-label="Left" fontIcon="chevron_left"></mat-icon>
+        </button>
+    </ng-container> -->
+    <label class="mat-h3" style="font: 400 3vh / 1 Roboto Condensed">Risk Appetite</label>
+    <label class="mat-h4">&nbsp;| {{frameworkName}}</label>
+    <span class="space"></span>
+    <label class="mat-display-3">Assessment End Date:</label>
+    <label class="mat-display-4">&nbsp;{{utils.formatDate(frameworkEndDate)}}</label>
+    <span class="space"></span>
+    <label class="mat-display-4" *ngIf="['view', 'submit', 'review'].includes(mode)"><span class="dark">{{daysRemains()}} </span></label>
+    <!-- <button mat-raised-button>Save for Later</button> -->
+    <span class="space"></span>
+    <label class="mat-display-3" *ngIf="assessmentFlag">Submit Form is disabled because Assessment Start Date is in Future Date.</label>
+    <label class="mat-display-3" *ngIf="!assessmentFlag && this.isReviewerUser && ['submit'].includes(mode) && isReviewerAsUser">Reviewer is not allowed to Submit the Assessment</label> 
+    <!-- reviewer as a user, submit page -->
+    <label class="mat-display-3" *ngIf="!assessmentFlag && this.isMakerUser && ['review'].includes(mode) && isReviewerAsUnit"> Maker user is not allowed to review the Assessment</label> 
+     <!-- reviewer as a unit, review page -->
+
+
+    <span class="spacer"></span>
+    <button mat-icon-button  *ngIf="(mode=='review' && remainderEnable)" [disabled]="buttondisable" class="material-icons app-toolbar-menu save-button" (click)="sendMailReminder(CollectionScheduleID)"
+    [matTooltip]="buttondisable ? formatReminderDate() : 'Send Reminder'">
+    <mat-icon>mail</mat-icon>
+</button>
+    <!-- <button mat-icon-button title="Minimize" (click)="minimize()">
+        <mat-icon aria-hidden="false" aria-label="Minimize" fontIcon="fullscreen_exit"></mat-icon>
+    </button>
+    <button mat-icon-button title="Maximize" (click)="maximize()">
+        <mat-icon aria-hidden="false" aria-label="Maximize" fontIcon="fullscreen"></mat-icon>
+    </button> -->
+    <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close *ngIf="mode=='history'">
+        <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+    </button>
+</mat-toolbar>
+<div class="container" >
+    <div class="left">
+        <app-risk-chart style="width: 100%;"  [container]="container" [chartData]="chartData" (selectedCategory)="getSelectedCategory($event)"></app-risk-chart>
+        <!-- <button mat-raised-button class="button">Bulk Review</button> container-->
+    </div>
+    <div class="right">
+        <span *ngIf="container && container.length>0">
+            <div *ngFor="let i of container" style="padding-bottom: 10px;">
+                <app-risk-unit *ngIf="['view', 'history'].includes(mode)" [assessmentFlag]="assessmentFlag"[colors]="colors" [preheader]="preheader" [source]="i" [collectionScheduleID]="CollectionScheduleID" (refresh)="refresh(null)"></app-risk-unit>
+                <app-risk-unit-maker *ngIf="mode=='submit'" [convertedDate]="convertedDate" [frameworkStartDate]="frameworkStartDate"  [orgdata]="dumData" [colors]="colors" [reports]="reports" [preheader]="preheader" [source]="i" [collectionScheduleID]="CollectionScheduleID" (refresh)="refresh($event)" (selectedCategory)="getSelectedCategory($event)"></app-risk-unit-maker>
+                <app-risk-unit-reviewer *ngIf="mode=='review'" [assessmentFlag]="assessmentFlag" [orgdata]="dumData" [colors]="colors" [preheader]="preheader" [source]="i" [collectionScheduleID]="CollectionScheduleID" (refresh)="refresh($event)" (selectedCategory)="getSelectedCategory($event)"></app-risk-unit-reviewer>
+            </div>
+        </span>
+        <label class="not-part" *ngIf="notpart">{{notpart}}</label>
+    </div>
+</div>

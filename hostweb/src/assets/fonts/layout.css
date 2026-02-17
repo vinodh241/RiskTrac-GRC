@@ -1,0 +1,32 @@
+/* .cardGen {border-radius: 0.3vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 100%; width: calc(100% / 3); padding: 1px;} */
+.cardGen {border-radius: 0.5vh 2vh 0.5vh 0.5vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 22vh; width: 100%; padding: 1px;}
+.cardGen .cardBody {border-radius: 0.5vh 2vh 0.5vh 0.5vh; font-size: 1.6rem; padding:0.4%;}
+.cardGen.cardGenAuto {height: auto;}
+.cardGen.cardGenAutoAccord {height: auto; min-height: fit-content; padding: 1px 1px 0 1px;}
+.cardGen.cardGenAutoAccordRgt {height: auto; min-height: 10.1%; padding: 1px 1px 0 1px;}
+
+.cardLink, .cardLink:hover {text-decoration: none; color: inherit;}
+
+/* DASHBOARD CARD BOX */
+.dashboardCard > .cardGen {container-type: inline-size;}
+.dashboardCard {display: grid; grid-template-columns: repeat(2, 1fr); grid-row-gap: 2vh; grid-column-gap: 4vw; grid-template-rows:  50% 50%; grid-auto-rows: 1fr; justify-items: center;
+    align-items: center; padding: 7%;}
+/* .cardImg {position: absolute; right: 3%; top: 6%; box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.25); border: 2px solid #fff; border-radius: 1vh; width: 36%; opacity: 0.5; transition: opacity 0.3s;}
+
+.cardLink:hover .cardImg {text-decoration: none; color: inherit; opacity: 1;} */
+
+.dashboardCard h2 {font-size: 160%; font-weight: 600; padding-left: 3%; padding-top: 5%;}
+.dashboardCard h2.orm {color: #935600;}
+.dashboardCard h2.bcm {color: #1154A0;}
+
+.cardTable {width: 70%; position: absolute; bottom: 6%; right: 3%;}
+.cardTable td {text-align: right; padding-inline: 0.8vw; width: 60%;}
+.cardTable td:not(:first-child) {text-align: left; color: #9B1818; width: 40%;}
+
+/* END DASHBOARD CARD BOX */
+
+
+
+/* FOOTER */
+.lpFooter {background: linear-gradient(90deg, #0A58A0 0.57%, #1DA34A 100%);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); color: #fff; line-height: 2; font-size: 90%;}

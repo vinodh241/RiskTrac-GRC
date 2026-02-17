@@ -1,0 +1,24 @@
+.unit {
+    width: 180px;
+    background-color: #e4e6f0;
+    height: 70px;
+}
+
+.unitname-wrap {
+    display: inline-flex;
+    white-space: normal;
+}
+.flex-box{
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.flex-box input{
+    background-color:white;
+    height: 27px;
+}
+
+.flex-box mat-form-field{
+    width: 60px;
+    margin-top: -30px;
+}

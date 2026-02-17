@@ -1,0 +1,66 @@
+<div class="container">
+    <mat-toolbar class="fontSize">
+        <span>Risk Metric Levels</span>
+    </mat-toolbar>
+    <div class="risk-metric-level-container">
+        <div class="mat-elevation-z8">
+            <mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="Index">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> # </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.Index}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Name">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Risk Metric Level </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.Name}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="RiskMetricZone">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Risk Metric Zone </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.RiskMetricZone}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="ColorCode">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Color Code </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <div [(colorPicker)]="row.ColorCode" [style.background]="row.ColorCode" style="cursor: pointer; width:100px; height:30px;"></div>
+                        <label style="cursor:pointer; color: #2D75A6;" (click)="row.ColorCode = row.DefaultColorCode">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Reset to Default Color</label>
+                    </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Description </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.Description}} </mat-cell>
+                </ng-container>
+
+                <ng-container matColumnDef="CreatedDate">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Created On </mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{utils.formatDate(row.CreatedDate)}} </mat-cell>
+                </ng-container>
+
+                <!-- <ng-container matColumnDef="action">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header> Action </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <button mat-icon-button title="Edit">
+                            <mat-icon aria-hidden="false" aria-label="Edit" fontIcon="edit"></mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container> -->
+
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+        </div>
+        <div class="button-container">
+            <!-- <button mat-raised-button color="primary" (click)="save()">Save</button>
+            <button mat-raised-button (click)="cancel()">Cancel</button> -->
+
+            <div class="move-buttons" >
+                <button class="buttons save" id="saveSub" (click)="save()" ><img src="./assets/images/icon-application.svg"
+                          alt="Save">Save</button>
+
+                </div>
+                        <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh;height: 6vh;margin-top: 0.8vh;" (click)="cancel()">Cancel</button>
+        </div>
+</div>
+</div>

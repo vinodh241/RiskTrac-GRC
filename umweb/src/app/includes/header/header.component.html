@@ -1,0 +1,54 @@
+<header>
+    <mat-toolbar>
+        <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>menu</mat-icon>
+        </button> -->
+        <div style="height: 6vh;"><img src="assets/logo-risktrac.svg" height="100%"></div>
+        <span>{{ 'header.title' | translate }}</span>
+        <span class="spacer"></span>
+        <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <mat-icon>settings</mat-icon>
+        </button> -->
+        <button mat-icon-button (click)="navigateToLanding()" class="pb-1 me-2" id="Home"><img
+              src="./assets/icon-home.svg" class="pb-1" [alt]="'header.homeAlt' | translate" style="cursor: pointer;width: 3vh;"></button>
+        <div style="height: 6vh;">
+            <img matTooltipPosition="below"
+            matTooltip="{{userName}}" style=" background-color: white; border-radius: 50%; margin: 0px 0.8vw;" src="assets/user.svg" height="100%">
+        </div>
+        <a mat-icon-button class="example-icon" [attr.aria-label]="'header.logoutAriaLabel' | translate" (click)="logoutUser($event)" style="cursor: pointer; text-decoration: none;">
+          <mat-icon>logout</mat-icon>
+      </a>
+      
+      <!-- Dropdown Menu -->
+      <!-- <div *ngIf="logoutflag" class="dropdown-menu dropdown-menu-dark gradientDropdown userLogin" aria-labelledby="userLogin"  (click)="logout()" 
+          style="width: 10vw; margin-left: -20vh; height: 5vh; position: absolute; top: 61px; z-index: 9999;cursor: pointer;" #dropdownMenu>
+          <div class="d-flex justify-content-start w-100 h-100">
+              <div class="menuList listOne h-100 w-100">
+                  <ul class="w-100 mb-0" style="list-style-type: none; padding-left: 0;">
+                      <li style="cursor: pointer; margin-top: -3vh; margin-right: 9vh; display: flex; align-items: center;">
+                          <mat-icon>arrow_right_alt</mat-icon>
+                          <a class="dropdown-item" style="font-size: 16px; margin-left: 5px;" >Logout</a>
+                      </li>
+                  </ul>
+              </div>
+          </div>
+      </div> -->
+
+      <div *ngIf="logoutflag" class="dropdown-menu dropdown-menu-dark gradientDropdown userLogin" aria-labelledby="userLogin"  (click)="logout()" 
+      style="width: 10vw; margin-left: -20vh; height: 5vh; position: absolute;top: 61px; z-index: 9999;cursor: pointer;" >
+      <div class="d-flex justify-content-start w-100 h-100">
+          <div class="menuList listOne h-100 w-100">
+              <ul class="w-100 mb-0" style="list-style-type: none; padding-left: 0;">
+                  <li style="cursor: pointer; margin-top: -3vh; margin-right: 9vh; display: flex; align-items: center;">
+                      <mat-icon>arrow_right_alt</mat-icon>
+                      <a class="dropdown-item" style="font-size: 16px; margin-left: 5px;" >{{ 'header.logoutText' | translate }}</a>
+                  </li>
+              </ul>
+          </div>
+      </div>
+  </div>
+      
+      
+      
+    </mat-toolbar>
+</header>

@@ -1,0 +1,836 @@
+<mat-toolbar class="fontSize">
+  <button mat-raised-button color="primary"
+    style="display:inline-block; padding:0vh 1vh;border-radius:100vw;margin-right: 10px;"
+    (click)="navigateToPreviousPage()" matTooltip="Navigate back to Self Assessment Summary">
+    <span style="font-size:16px; margin-right:10px;">&#11164;</span>Back
+  </button>
+  <h2 mat-dialog-title style="font-weight: 400;font-size: 3vh;">Assessment Details</h2>
+  <span class="spacer"></span>
+  <span class="navigate"><mat-icon style="float:right" matTooltip="Previous"
+      (click)="Prev()">keyboard_arrow_left</mat-icon> </span>
+  <span class="navigate"> <mat-icon style="float:right" matTooltip="Next"
+      (click)="Next()">keyboard_arrow_right</mat-icon></span>
+</mat-toolbar>
+<div fxLayout="column">
+  <!-- ===================== ALWAYS ON TOP: Inherent Risk Detail  ===================== -->
+  <mat-dialog-content fxLayout="row" fxLayoutGap="16" fxLayoutAlign="start stretch" style="padding: 20px 10px 0 10px;">
+    <div fxFlex="65" fxLayout="column">
+      <span fxLayout="row" class="headertext" fxFlex="100">Inherent Risk Detail</span>
+      <mat-card class="mat-elevation-z4" fxFlex="100">
+        <mat-card-content>
+          <table mat-table [dataSource]="dataSource" class="adTopTable">
+            <ng-container matColumnDef="RCSACode">
+              <th mat-header-cell *matHeaderCellDef>RCSACode</th>
+              <td mat-cell *matCellDef="let row; let iRow = index">{{ row.RCSACode }}</td>
+            </ng-container>
+            <ng-container matColumnDef="Risk">
+              <th mat-header-cell *matHeaderCellDef>Risk</th>
+              <td mat-cell *matCellDef="let row;"
+                style="flex: 1 1 100%; box-sizing: border-box; max-width: 250px;padding-right: 8px">{{row.Risk}}</td>
+            </ng-container>
+            <ng-container matColumnDef="GroupName">
+              <th mat-header-cell *matHeaderCellDef>Department</th>
+              <td mat-cell *matCellDef="let row;">{{row.GroupName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="UnitName">
+              <th mat-header-cell *matHeaderCellDef>Unit</th>
+              <td mat-cell *matCellDef="let row;">{{row.UnitName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="RiskCategoryName">
+              <th mat-header-cell *matHeaderCellDef>Risk Category</th>
+              <td mat-cell *matCellDef="let row;">{{row.RiskCategoryName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="ProcessName">
+              <th mat-header-cell *matHeaderCellDef>Process</th>
+              <td mat-cell *matCellDef="let row;">{{row.ProcessName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="InherentLikelihoodName">
+              <th mat-header-cell *matHeaderCellDef>Likelihood Rating</th>
+              <td mat-cell *matCellDef="let row;">{{row.InherentLikelihoodName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="InherentImpactRatingName">
+              <th mat-header-cell *matHeaderCellDef>Impact Rating</th>
+              <td mat-cell *matCellDef="let row;">{{row.InherentImpactRatingName}}</td>
+            </ng-container>
+            <ng-container matColumnDef="OverallInherentRiskRating">
+              <th mat-header-cell *matHeaderCellDef>Risk Rating</th>
+              <td mat-cell *matCellDef="let row;" style="text-align:center;">
+                <div [style.background]="formData?.OverallInherentRiskColor || '#eee'"
+                  [style.color]="getContrastColor(formData?.OverallInherentRiskColor || '#eee')"
+                  style="border-radius: 50vh; padding-block: 0.3vh;">
+                  {{ formData?.OverallInherentRiskRating }}
+                </div>
+
+              </td>
+            </ng-container>
+            <tr mat-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let element; columns:displayedColumns"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <div fxFlex="30" fxLayout="column">
+      <span class="headertext" fxFlex="100" *ngIf="iSReviewerPanelEnabled">Reviewer's Detail</span>
+      <mat-card class="mat-elevation-z4" fxFlex="100" *ngIf="iSReviewerPanelEnabled">
+        <mat-card-content>
+          <form [formGroup]="reviewerForm" autocomplete="off" fxLayout="row wrap" fxLayoutAlign="center center"
+            fxFlex="90">
+            <mat-form-field appearance="fill" fxFlex="100%">
+              <mat-label>Reviewer's Remarks</mat-label>
+              <textarea matInput formControlName="txtReviewerRemark"></textarea>
+            </mat-form-field>
+            <div fxFlex="100%" fxLayoutAlign="end center" fxLayoutGap="12">
+              <button type="button" mat-stroked-button color="primary"
+                [style.display]="iSReviewerPanelEnabled? ''  : 'none'" aria-label="Approve"
+                (click)="approveScheduleAssessment()">Approve</button>
+              <button mat-stroked-button class="warm" [style.display]="iSReviewerPanelEnabled? ''  : 'none'"
+                aria-label="Reject" (click)="RejectScheduleAssessment()">Reject</button>
+            </div>
+          </form>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-dialog-content>
+  <!-- ===================== /Inherent Risk Detail ===================== -->
+  <div class="page-shell tabs-full" fxLayout="column" fxFlex="100" style="position: relative;">
+    <div class="topTabTxt">
+      <ng-container *ngIf="isActionPlanRequired">
+        <span class="post-required-label" style="display:inline-block; margin-left:8px;">
+          &nbsp;Residual risk exceeds the risk appetite. An action plan is required.
+        </span>
+      </ng-container>
+
+      <ng-container *ngIf="showPostRiskTreatmentLabel">
+        <span class="post-required-label" style="display:inline-block; margin-left:8px;">
+          &nbsp;Post Risk Treatment is Required.
+        </span>
+      </ng-container>
+    </div>
+
+    <mat-tab-group class="tabs-full">
+      <!-- ========================= TAB 1: RISK DETAILS ========================= -->
+      <mat-tab label="Risk Details">
+        <mat-dialog-content fxLayout="column" fxLayoutGap="16" class="content-area">
+          <!-- Row 1 -->
+          <div fxLayout="row" fxLayoutGap="10" fxLayoutAlign="start stretch">
+            <!-- Col 1: Control Assessment (re-worked) -->
+            <div fxLayout="column" fxFlex="66">
+              <span class="headertext" fxLayout="row">Control Assessment</span>
+              <mat-card class="mat-elevation-z4" fxFlex="100">
+                <mat-card-content fxLayout="column" fxLayoutGap="10">
+                  <div style="    background-color: rgb(42 128 184 / 25%); margin-bottom: 10px; padding: 1.5vh 0.5vw;">
+                    <!-- 1) Radio: Select vs Add New -->
+                    <mat-radio-group [(ngModel)]="controlInputMode" fxLayout="row" fxLayoutGap="24"
+                      name="controlInputMode">
+                      <mat-radio-button value="select" [disabled]="isSaveDisabled">Search and Select
+                        Control</mat-radio-button>
+                      <mat-radio-button value="new" [disabled]="isSaveDisabled">Add a New Control</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                  <!-- 2a) SELECT EXISTING: searchable dropdown -->
+                  <div *ngIf="controlInputMode === 'select'" fxLayout="row wrap" fxLayoutGap="10">
+                    <mat-form-field appearance="fill" fxFlex="100" [class.disabled-field]="isSaveDisabled">
+                      <mat-label>Search Control</mat-label>
+                      <input type="text" matInput [formControl]="controlSearchCtrl" [matAutocomplete]="ctrlAuto"
+                        [matAutocompleteDisabled]="isSaveDisabled"
+                        placeholder="Type to search Control Code / Description" [disabled]="isSaveDisabled"
+                        [readonly]="isSaveDisabled" (focus)="onSearchInputFocus($event)" />
+                      <mat-autocomplete #ctrlAuto="matAutocomplete" [displayWith]="displayControl">
+                        <mat-option *ngFor="let c of filteredControls$ | async" [value]="c">
+                          {{ c.ControlCode }} — {{ c.ControlDescription }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <div style="display: flex; justify-content: flex-end; width: 100%">
+                      <button mat-stroked-button color="primary" (click)="addSelectedControlToTable()"
+                        [disabled]="!controlSearchCtrl.value" class="btnDarkBlue">Select Control(s) to
+                        Assessment</button>
+                    </div>
+                  </div>
+
+                  <!-- 2b) ADD NEW: description + control type -->
+                  <form [formGroup]="controlAssessmentForm" *ngIf="controlInputMode === 'new'" fxLayout="row wrap"
+                    fxLayoutGap="10">
+                    <mat-form-field appearance="fill" fxFlex="100">
+                      <mat-label>Control Description</mat-label>
+                      <textarea rows="5" matInput formControlName="txtControlDescription"></textarea>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="25">
+                      <mat-label>Control Type</mat-label>
+                      <mat-select matSelectSearch placeholder="Search control type..." formControlName="ddlControlType" required>
+                        <mat-option *ngFor="let item of controlTypeDS" [value]="item.ControlTypeID">
+                          {{ item.ControlType }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="controlAssessmentForm.get('ddlControlType')?.hasError('required')">
+                        Control Type is required
+                      </mat-error>
+                    </mat-form-field>
+                    <div fxFlex="100" style="justify-content: end; display: flex;">
+                      <button mat-stroked-button color="primary" (click)="addNewControlToTable()"
+                        [disabled]="isSaveDisabled || !controlAssessmentForm.get('txtControlDescription')?.value || !controlAssessmentForm.get('ddlControlType')?.value"
+                        class="btnDarkBlue">Select Control(s) to Assessment</button>
+                    </div>
+                  </form>
+                  <!-- 3) Controls table -->
+                  <div>
+                    <table class="mat-elevation-z1 tblHead" style="width:100%">
+                      <thead>
+                        <tr>
+                          <th style="text-align: center; width: 5%;">#</th>
+                          <th style="text-align: left; width: 15%;">Control Code</th>
+                          <th style="text-align: left; width: 40%;">Control Description</th>
+                          <th style="text-align: left; width: 25%;">Control Type</th>
+                          <th style="width:90px; text-align: left; width: 15%;">Actions</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let row of controlsTable; let i = index">
+                          <td style="text-align: center;">{{ i + 1 }}</td>
+                          <td>{{ row.ControlCode || '-' }}</td>
+                          <td *ngIf="!row._editing">{{ row.ControlDescription }}</td>
+                          <td *ngIf="row._editing" class="ca-edit-desc-cell">
+                            <mat-form-field appearance="fill" class="w-full">
+                              <textarea matInput [(ngModel)]="row._editDescription" name="desc_{{i}}" rows="3"
+                                cdkTextareaAutosize cdkAutosizeMinRows="3" cdkAutosizeMaxRows="6"
+                                placeholder="Edit control description"> </textarea>
+                            </mat-form-field>
+                          </td>
+                          <td *ngIf="!row._editing">{{ row.ControlType || (controlTypeLookup[row.ControlTypeID] || '-')
+                            }}</td>
+                          <td *ngIf="row._editing">
+                            <mat-form-field appearance="fill" style="width:180px;">
+                              <mat-select matSelectSearch placeholder="Search control type..." [(ngModel)]="row._editControlTypeID" name="ctype_{{i}}">
+                                <mat-option *ngFor="let item of controlTypeDS"
+                                  [value]="item.ControlTypeID">{{item.ControlType}}</mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </td>
+                          <td>
+                            <button mat-icon-button *ngIf="row._isCustom && !row._editing" (click)="editControlRow(i)"
+                              [disabled]="isSaveDisabled" matTooltip="Edit"> <mat-icon fontIcon="edit"></mat-icon>
+                            </button>
+                            <button mat-icon-button *ngIf="row._isCustom && row._editing" (click)="saveControlRow(i)"
+                              [disabled]="isSaveDisabled" matTooltip="Save"> <mat-icon fontIcon="check"></mat-icon>
+                            </button>
+                            <button mat-icon-button *ngIf="row._isCustom && row._editing"
+                              (click)="cancelEditControlRow(i)" [disabled]="isSaveDisabled" matTooltip="Cancel">
+                              <mat-icon fontIcon="close"></mat-icon> </button>
+                            <button mat-icon-button (click)="removeControlRow(i)" [disabled]="isSaveDisabled"
+                              matTooltip="Remove"> <mat-icon fontIcon="delete"></mat-icon> </button>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+            <!-- Col 2: Residual Risk + Control Testing  -->
+            <div fxFlex="33" fxLayout="column" fxLayoutGap="10">
+              <span class="headertext" fxLayout="row">Residual Risk</span>
+              <mat-card class="mat-elevation-z4" fxFlex="48">
+                <mat-card-content>
+                  <form [formGroup]="residualRiskForm" autocomplete="off">
+                    <div fxLayout="row">
+                      <span class="residualspantext" fxFlex="50" fxLayoutAlign="start center">
+                        <b>Residual Risk Rating</b></span>
+                      <span class="TextboxSpan" fxFlex="50" style="text-align:center; border: none;">
+                        <span [style.background]="formData?.ResidualRiskRatingColourCode || '#eee'"
+                          [style.color]="getContrastColor(formData?.ResidualRiskRatingColourCode || '#eee')"
+                          style="border-radius: 50vh; padding-block: 0.3vh; padding-inline: 0.5vw; min-width: 80%; display: inline-block;">
+                          {{ formData?.ResidualRiskRating }}
+                        </span>
+                      </span>
+                    </div>
+                    <br />
+                    <div fxLayout="row">
+                      <mat-form-field appearance="fill" fxFlex="100">
+                        <mat-label>Risk Response</mat-label>
+                        <mat-select matSelectSearch placeholder="Search risk response..." formControlName="ddlRiskResponse">
+                          <mat-option *ngFor="let item of ResidualRiskResponseDS"
+                            [value]="item.ResidualRiskResponseID">{{item.RiskResponse}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                    <div fxLayout="row">
+                      <mat-form-field appearance="fill" fxFlex="100">
+                        <mat-label>Risk Responsible Person</mat-label>
+                        <mat-select matSelectSearch placeholder="Search person..." formControlName="ddlResidualRiskResponsePerson">
+                          <mat-option *ngFor="let item of ResidualRiskResponsePersonDS"
+                            [value]="item.ResidualRiskResponsiblePersonID">{{item.ResponsiblePerson}}</mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </div>
+                  </form>
+                </mat-card-content>
+              </mat-card>
+              <div fxFlex="48" fxLayout="column">
+                <span class="headertext" fxLayout="row">Control Testing</span>
+                <mat-card class="mat-elevation-z4" fxFlex="100">
+                  <mat-card-content>
+                    <form [formGroup]="controlTestingForm" autocomplete="off" fxLayout="row wrap"
+                      fxLayoutAlign="center center" fxFlex="100">
+                      <div fxFlex="100">
+                        <mat-form-field appearance="fill" fxFlex="100">
+                          <mat-label>Current Quarter control Test Result</mat-label>
+                          <mat-select matSelectSearch placeholder="Search test result..." formControlName="ddlControlTestResul">
+                            <mat-option *ngFor="let item of ControlTestResultDS"
+                              [value]="item.ControlTestingResultID">{{item.ControlTestingResult}}</mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                      <mat-form-field appearance="fill" fxFlex="100%">
+                        <mat-label>Comments</mat-label>
+                        <textarea matInput formControlName="txtcontrolTestingComment"></textarea>
+                      </mat-form-field>
+                    </form>
+                  </mat-card-content>
+                </mat-card>
+              </div>
+            </div>
+          </div>
+          <!-- Row 2: Details  -->
+          <div fxLayout="row wrap" fxLayoutGap="10">
+            <div fxFlex="100" fxLayout="column">
+              <span class="headertext" fxLayout="row">Details</span>
+              <mat-card class="mat-elevation-z4" fxFlex="100">
+                <mat-card-content>
+                  <form [formGroup]="controlAssessmentForm" autocomplete="off" fxLayout="row wrap" fxLayoutGap="10">
+                    <!-- Is Control in-place -->
+                    <mat-form-field appearance="fill" fxFlex="20" *ngIf="showControlInPlace">
+                      <mat-label>Is Control in-place?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search..." formControlName="ddlControlinPlace" required>
+                        <mat-option *ngFor="let item of controlInPlaceDS" [value]="item.ControlInPaceID">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="controlAssessmentForm.get('ddlControlinPlace')?.hasError('required')">
+                        Control in-place is required
+                      </mat-error>
+                    </mat-form-field>
+                    <!-- Nature of Control -->
+                    <mat-form-field appearance="fill" fxFlex="25" *ngIf="showNatureOfControl">
+                      <mat-label>What is the Nature of Control?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search nature..." formControlName="ddlNatureofControl" required>
+                        <mat-option *ngFor="let item of NatureofControlDS" [value]="item.ControlNatureID">
+                          {{item.NatureofControl}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="controlAssessmentForm.get('ddlNatureofControl')?.hasError('required')">
+                        Nature of Control is required
+                      </mat-error>
+                    </mat-form-field>
+                    <!-- Automation -->
+                    <mat-form-field appearance="fill" fxFlex="20" *ngIf="showAutomation">
+                      <mat-label>What is the level of Automation?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search automation..." formControlName="ddlAutomation" required>
+                        <mat-option *ngFor="let item of AutomationDS" [value]="item.ControlAutomationID">
+                          {{item.LevelOfControl}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="controlAssessmentForm.get('ddlAutomation')?.hasError('required')">
+                        Level of Automation is required
+                      </mat-error>
+                    </mat-form-field>
+                    <!-- Frequency -->
+                    <mat-form-field appearance="fill" fxFlex="15" *ngIf="showFrequency">
+                      <mat-label>Is Control applied at suitable frequency?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search frequency..." formControlName="ddlFrequency" required>
+                        <mat-option *ngFor="let item of FrequencyDS" [value]="item.ControlFrequencyID">
+                          {{item.Frequency}}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngIf="controlAssessmentForm.get('ddlFrequency')?.hasError('required')">
+                        Frequency is required
+                      </mat-error>
+                    </mat-form-field>
+                    <!-- Overall Control Environment Rating chip -->
+                    <div fxFlex="15" fxLayout="column" fxLayoutAlign="start start" class="textbox-span-wrap"
+                      *ngIf="showOverallControlEnvRating">
+                      <span style="padding: 0; max-height: unset;"><b>Overall Control Environment Rating</b></span>
+                      <!-- <span fxFlex="100">Overall Control Environment Rating</span> -->
+                      <span class="TextboxSpan" fxFlex="100" style="text-align:center; border: none; padding: 0;">
+                        <span [style.background]="formData?.OverallControlEnvironmentRatingColourCode || '#eee'"
+                          [style.color]="getContrastColor(formData?.OverallControlEnvironmentRatingColourCode || '#eee')"
+                          style="border-radius: 50vh; padding-block: 0.3vh; padding-inline: 0.5vw; min-width: 80%; display: inline-block;">
+                          {{ formData?.OverallControlEnvironmentRiskRating }}
+                        </span>
+                      </span>
+                    </div>
+                  </form>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          <!-- Row 3: Evidence -->
+          <div fxLayout="row wrap" fxLayoutGap="10">
+            <!-- Self Comments -->
+            <div fxFlex="50" fxLayout="column">
+              <span class="headertext" fxLayout="row">Self Comments&nbsp;</span>
+              <mat-card class="mat-elevation-z4" fxFlex="100">
+                <mat-card-content>
+                  <form [formGroup]="savingForm" autocomplete="off">
+                    <mat-form-field appearance="fill" class="w-full" fxFlex="100%">
+                      <!-- <mat-label>Self Comments</mat-label> -->
+                      <textarea matInput formControlName="txtSavingComment" rows="4"></textarea>
+                      <mat-error *ngIf="savingForm.get('txtSavingComment')?.hasError('required')">
+                        Self Comments are required
+                      </mat-error>
+                    </mat-form-field>
+                  </form>
+                </mat-card-content>
+              </mat-card>
+            </div>
+            <!-- Evidence -->
+            <div fxFlex="49" fxLayout="column">
+              <span class="headertext" fxLayout="row">Evidence&nbsp;</span>
+              <mat-card class="mat-elevation-z4" fxFlex="100">
+                <mat-card-content fxLayout="column wrap">
+                  <form [formGroup]="FileuploadForm" autocomplete="off" fxLayout="row wrap" fxLayoutAlign="start center"
+                    fxFlex="100" fxLayoutGap="10">
+                    <mat-form-field fxFlex="70" [ngClass]="isSaveDisabled ? 'disable' : ''"
+                      matTooltip="You can attach evidence if available (optional)">
+                      <mat-label>Choose File (optional)</mat-label>
+                      <!-- Trigger button -->
+                      <button mat-icon-button matSuffix type="button" (click)="triggerFileChooser()"
+                        [disabled]="!(formData?.ISSaveEnabled && formData?.ISRMSaveEnabled && canSaveSubmitAccess())">
+                        <mat-icon>attach_file</mat-icon>
+                      </button>
+                      <input type="text" readonly matInput formControlName="display" />
+                      <!-- The actual file input -->
+                      <input #fileInput type="file" hidden accept=".xlsx,.pdf,.docx,.jpeg,.jpg,.png,.eml"
+                        (change)="onFileChosen(fileInput)">
+                    </mat-form-field>
+                    <div fxFlex="20">
+                      <button type="button" class="btn btn-primary modalColorBtn"
+                        style="min-width: 16vh;color: white !important;margin-bottom: 3vh;"
+                        [disabled]="!file_store || validFileNameErr" (click)="upload()"
+                        *ngIf="formData?.ISSaveEnabled && formData?.ISRMSaveEnabled &&  canSaveSubmitAccess()">
+                        <img src="./assets/images/icon-upload.svg" style="margin-right:0.2vw;width:21%;" alt="upload" />
+                        Upload
+                      </button>
+                    </div>
+                    <div *ngIf="validFileNameErr" style="color:red;"> Special Characters are not allowed in File name
+                    </div>
+                  </form>
+                  <span *ngIf="formData?.ISSaveEnabled && formData?.ISRMSaveEnabled &&  canSaveSubmitAccess()"
+                    style="font-weight:600;">
+                    Evidence is optional. Allowed file types: ".xlsx", ".pdf", ".docx", ".jpeg", ".jpg", ".png", ".eml"
+                    (max 10MB).
+                  </span>
+                  <br />
+                  <div fxLayout="column" class="card mt-3">
+                    <div class="card-header" fxLayout="row" style="font-weight:600;">List of Evidence files</div>
+                    <table mat-table [dataSource]="dataEvidencesSource" fxLayout="row">
+                      <ng-container matColumnDef="OriginalFileName">
+                        <td mat-cell *matCellDef="let row; let iRow = index">{{iRow + 1 + '.'}} {{row.OriginalFileName
+                          }}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="Action">
+                        <mat-cell *matCellDef="let row">
+                          <button mat-icon-button title="Download">
+                            <mat-icon (click)="downloadEvidence(row.ScheduleAssessmentEvidenceID)" aria-hidden="false"
+                              aria-label="Download" fontIcon="download"></mat-icon>
+                          </button>
+                          <button mat-icon-button title="Delete"
+                            [disabled]="!(formData?.ISSaveEnabled && formData?.ISRMSaveEnabled &&  canSaveSubmitAccess())">
+                            <mat-icon (click)="deleteEvidence(row.ScheduleAssessmentEvidenceID)" aria-hidden="false"
+                              aria-label="Delete" fontIcon="delete"></mat-icon>
+                          </button>
+                        </mat-cell>
+                      </ng-container>
+                      <tr mat-row *matRowDef="let element; columns:['OriginalFileName','Action']"></tr>
+                    </table>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+
+          <!-- Row 3: Evidence  -->
+          <div fxLayout="row wrap" fxLayoutGap="10">
+            <!-- Action Trail -->
+            <div fxFlex="100" fxLayout="column">
+              <span class="headertext" fxLayout="row">Action Trail</span>
+              <mat-card class="mat-elevation-z4" fxFlex="100">
+                <mat-card-content>
+                  <table mat-table [dataSource]="dataSourceActionTrail" class="w-full">
+
+                    <!-- Date -->
+                    <ng-container matColumnDef="CreatedDate">
+                      <th mat-header-cell *matHeaderCellDef>Date</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.CreatedDate }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Unit -->
+                    <ng-container matColumnDef="UnitName">
+                      <th mat-header-cell *matHeaderCellDef>Unit</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.UnitName }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Status -->
+                    <ng-container matColumnDef="ScheduleInherentStatus">
+                      <th mat-header-cell *matHeaderCellDef>Status</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.ScheduleInherentStatus }}
+                      </td>
+                    </ng-container>
+
+                    <!-- User -->
+                    <ng-container matColumnDef="CreatedByUser">
+                      <th mat-header-cell *matHeaderCellDef>User</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.CreatedByUser || row.CreatedBy }}
+                      </td>
+                    </ng-container>
+
+                    <!-- Comments -->
+                    <ng-container matColumnDef="comments">
+                      <th mat-header-cell *matHeaderCellDef>Comments</th>
+                      <td mat-cell *matCellDef="let row">
+                        {{ row.ActionComment }}
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row
+                      *matHeaderRowDef="['CreatedDate','UnitName','ScheduleInherentStatus','CreatedByUser','comments']">
+                    </tr>
+                    <tr mat-row
+                      *matRowDef="let row; columns: ['CreatedDate','UnitName','ScheduleInherentStatus','CreatedByUser','comments']">
+                    </tr>
+
+                  </table>
+
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+
+        </mat-dialog-content>
+      </mat-tab>
+      <!-- ========================= TAB 2: ACTION PLAN(S) ========================= -->
+      <mat-tab label="Action Plan(s) and Post Risk Treatment">
+        <mat-dialog-content fxLayout="column" fxLayoutGap="16" class="content-area">
+          <!-- Row 1: Action Implementation Plan -->
+          <div fxLayout="row wrap" fxLayoutGap="10" *ngIf="!isSaveDisabled">
+            <div fxLayout="column" fxFlex="100">
+              <span class="headertext" fxLayout="row">Action Implementation Plan</span>
+              <mat-card class="mat-elevation-z4" fxFlex="100">
+                <mat-card-content>
+                  <form [formGroup]="actionImplementationForm" autocomplete="off" fxLayout="row wrap"
+                    fxLayoutAlign="start start" fxFlex="100" fxLayoutGap="10">
+                    <mat-form-field appearance="fill" fxFlex="73">
+                      <mat-label>Identified Action</mat-label>
+                      <textarea matInput formControlName="txtIdentifiedActionComment"></textarea>
+                    </mat-form-field>
+                    <div style="width: 100%; max-width: 80%; min-width: 80%;"></div>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Control Type</mat-label>
+                      <mat-select matSelectSearch placeholder="Search control type..." formControlName="apControlTypeID">
+                        <mat-option *ngFor="let item of controlTypeDS" [value]="item.ControlTypeID">
+                          {{ item.ControlType }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Timeline</mat-label>
+                      <input matInput [matDatepicker]="picker2" placeholder="Timeline" formControlName="txtTimeline"
+                        (click)="picker2.open()" (keydown)="false">
+                      <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                      <mat-datepicker #picker2></mat-datepicker>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Status</mat-label>
+                      <mat-select matSelectSearch placeholder="Search status..." formControlName="ddlStatus">
+                        <mat-option *ngFor="let item of ActionStatusDS"
+                          [value]="item.ActionPlanStatusID">{{item.ActionPlanStatus}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Responsible Person</mat-label>
+                      <mat-select matSelectSearch placeholder="Search person..." formControlName="ddlResponsiblePerson">
+                        <mat-option *ngFor="let item of ActionResponsePersonDS"
+                          [value]="item.ActionResponsiblePersonID">{{item.Description}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Confirmation/ Verification of closure</mat-label>
+                      <mat-select matSelectSearch placeholder="Search..." formControlName="ddlConfirmation">
+                        <mat-option *ngFor="let item of ConfirmationDS"
+                          [value]="item.ControlVerificationClosureID">{{item.ControlVerificationClosure}}</mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Total Cost</mat-label>
+                      <input matInput formControlName="totalCost" inputmode="decimal" pattern="[0-9]+(\.[0-9]+)?">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Total Benefit</mat-label>
+                      <input matInput formControlName="totalBenefit" inputmode="decimal" pattern="[0-9]+(\.[0-9]+)?">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Total Net Benefit</mat-label>
+                      <input matInput formControlName="totalNetBenefit" readonly>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Total Present Value of Cost</mat-label>
+                      <input matInput formControlName="totalPresentValueCost" inputmode="decimal"
+                        pattern="[0-9]+(\.[0-9]+)?">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Total Present Value of Benefit</mat-label>
+                      <input matInput formControlName="totalPresentValueBenefit" inputmode="decimal"
+                        pattern="[0-9]+(\.[0-9]+)?">
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Benefit-Cost Ratio (BCR)</mat-label>
+                      <input matInput formControlName="benefitCostRatio" readonly>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="24">
+                      <mat-label>Project Viability</mat-label>
+                      <input matInput formControlName="projectViability" readonly>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="73">
+                      <mat-label>Comments</mat-label>
+                      <textarea matInput formControlName="ddlComments"></textarea>
+                    </mat-form-field>
+                    <div fxFlex="100" fxLayoutAlign="end center">
+                      <button mat-stroked-button color="primary" (click)="saveActionPlanRow()"
+                        [disabled]="!actionImplementationForm.valid" class="btnDarkBlue">
+                        Add
+                      </button>
+                    </div>
+                  </form>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          <!-- Row 2: Action Plan(s) table -->
+          <div fxLayout="row wrap" fxLayoutGap="10">
+            <div fxFlex="100">
+              <span class="headertext" fxLayout="row">Action Plan(s)</span>
+              <mat-card class="mat-elevation-z4">
+                <mat-card-content>
+                  <table mat-table [dataSource]="actionPlanTable" class="mat-elevation-z1 full-width">
+                    <!-- # -->
+                    <ng-container matColumnDef="index">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">#</th>
+                      <td mat-cell *matCellDef="let ap; let i = index" style="width: 5%;">{{ i + 1 }}</td>
+                    </ng-container>
+
+                    <!-- Action Column -->
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 17%;">Action</th>
+                      <td mat-cell *matCellDef="let ap" class="wrap" style="width: 20%;">
+                        <!--                       
+                      {{ ap.IdentifiedAction }} -->
+                        {{ ap?.IdentifiedAction
+                        ? (ap.IdentifiedAction.length > 30 ? (ap.IdentifiedAction | slice:0:30) + '...' :
+                        ap.IdentifiedAction)
+                        : '-' }}
+                        <button mat-icon-button aria-label="View full action"
+                          (click)="openActionInfo(ap?.IdentifiedAction)" matTooltip="View full action">
+                          <mat-icon>info</mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+
+                    <!-- Timeline -->
+                    <ng-container matColumnDef="timeline">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">Timeline</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 5%;">{{ ap.Timeline | date:'dd/MM/yyyy' }}</td>
+                    </ng-container>
+                    <!-- Status -->
+                    <ng-container matColumnDef="status">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">Status</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 5%;">
+                        {{ ap.ActionPlanStatusName || actionPlanStatusLookup[ap.ActionPlanStatusID] }}
+                      </td>
+                    </ng-container>
+                    <!-- Responsible Person -->
+                    <ng-container matColumnDef="resp">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 7%;">Responsible
+                        Person</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 7%;">
+                        {{ ap.ActionResponsiblePersonName || actionPlanRespLookup[ap.ActionResponsiblePersonID] }}
+                      </td>
+                    </ng-container>
+                    <!-- Confirmation / Verification -->
+                    <ng-container matColumnDef="confirm">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 8%;">
+                        Confirmation/ Verification</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 8%;">
+                        {{ ap.ControlVerificationClosureName || actionPlanClosureLookup[ap.ControlVerificationClosureID]
+                        }}
+                      </td>
+                    </ng-container>
+                    <!-- Control Type -->
+                    <ng-container matColumnDef="apControlType">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">Control Type
+                      </th>
+                      <td mat-cell *matCellDef="let ap" style="width: 5%;">
+                        {{ ap.ControlTypeName || controlTypeLookup[ap.ControlTypeID] }}
+                      </td>
+                    </ng-container>
+                    <!-- Total Cost -->
+                    <ng-container matColumnDef="totalCost">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">Total Cost</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 5%;">{{ ap.TotalCost }}</td>
+                    </ng-container>
+                    <!-- Total Benefit -->
+                    <ng-container matColumnDef="totalBenefit">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">Total Benefit
+                      </th>
+                      <td mat-cell *matCellDef="let ap" style="width: 5%;">{{ ap.TotalBenefit }}</td>
+                    </ng-container>
+                    <!-- Total Present Value of Cost -->
+                    <ng-container matColumnDef="totalPresentValueCost">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 6%;">Total PV Cost
+                      </th>
+                      <td mat-cell *matCellDef="let ap" style="width: 6%;">{{ ap.TotalPresentValueCost }}</td>
+                    </ng-container>
+                    <!-- Total Present Value of Benefit -->
+                    <ng-container matColumnDef="totalPresentValueBenefit">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">Total PV
+                        Benefit</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 5%;">{{ ap.TotalPresentValueBenefit }}</td>
+                    </ng-container>
+                    <!-- Total Net Benefit -->
+                    <ng-container matColumnDef="totalNetBenefit">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 5%;">Total Net
+                        Benefit</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 5%;">{{ ap.TotalNetBenefit }}</td>
+                    </ng-container>
+                    <!-- Benefit-Cost Ratio -->
+                    <ng-container matColumnDef="benefitCostRatio">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 4%;">BCR</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 4%;">{{ ap.BenefitCostRatio }}</td>
+                    </ng-container>
+                    <!-- Project Viability -->
+                    <ng-container matColumnDef="projectViability">
+                      <th mat-header-cell *matHeaderCellDef style="background-color:#2a80b8;color:#fff;"
+                        style="width: 8%;">Project
+                        Viability</th>
+                      <td mat-cell *matCellDef="let ap" style="width: 8%;">{{ ap.ProjectViability }}</td>
+                    </ng-container>
+                    <!-- Actions -->
+                    <ng-container matColumnDef="rowActions">
+                      <th mat-header-cell *matHeaderCellDef style="width:70px;background-color:#2a80b8;color:#fff;"
+                        style="width: 10%;">
+                        Actions</th>
+                      <td mat-cell *matCellDef="let ap; let i = index" class="ap-actions-cell" style="width: 10%;">
+                        <button mat-icon-button (click)="editActionPlanRow(ap)" [disabled]="isSaveDisabled"
+                          matTooltip="Edit">
+                          <mat-icon fontIcon="edit"></mat-icon>
+                        </button>
+                        <button mat-icon-button (click)="removeActionPlanRow(ap)" [disabled]="isSaveDisabled"
+                          matTooltip="Delete">
+                          <mat-icon fontIcon="delete"></mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="actionDisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: actionDisplayedColumns;"></tr>
+                  </table>
+                  <div *ngIf="!actionPlanTable || actionPlanTable.length === 0" class="no-action-plans">
+                    No action plans available.
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          <!-- ROW 3 start -->
+          <!-- ROW 3: Post Risk Treatment -->
+          <div fxLayout="row wrap" fxLayoutGap="10" *ngIf="hasActionPlans">
+            <div fxFlex="100">
+              <span class="headertext" fxLayout="row">Post Risk Treatment</span>
+              <mat-card class="mat-elevation-z4">
+                <mat-card-content>
+                  <form [formGroup]="apTreatmentForm" fxLayout="row wrap" fxLayoutGap="10" autocomplete="off">
+                    <!-- Post-Treatment Description at the top -->
+                    <mat-form-field appearance="fill" fxFlex="100">
+                      <mat-label>Post Risk Treatment Description</mat-label>
+                      <textarea matInput formControlName="postTreatmentDescription" rows="3" required></textarea>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" fxFlex="20" *ngIf="showPTControlInPlace">
+                      <mat-label>Is Control in-place?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search..." formControlName="apControlInPlace" required>
+                        <mat-option *ngFor="let item of controlInPlaceDS" [value]="item.ControlInPaceID">
+                          {{ item.Name }}
+                        </mat-option>
+                      </mat-select>
+
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="25" *ngIf="showPTNatureOfControl">
+                      <mat-label>What is the Nature of Control?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search nature..." formControlName="apNature" required>
+                        <mat-option *ngFor="let item of NatureofControlDS" [value]="item.ControlNatureID">
+                          {{ item.NatureofControl }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="20" *ngIf="showPTAutomation">
+                      <mat-label>What is the level of Automation?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search automation..." formControlName="apAutomation" required>
+                        <mat-option *ngFor="let item of AutomationDS" [value]="item.ControlAutomationID">
+                          {{ item.LevelOfControl }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="fill" fxFlex="25" *ngIf="showPTFrequency">
+                      <mat-label>Is Control applied at suitable frequency?</mat-label>
+                      <mat-select matSelectSearch placeholder="Search frequency..." formControlName="apFrequency" required>
+                        <mat-option *ngFor="let item of FrequencyDS" [value]="item.ControlFrequencyID">
+                          {{ item.Frequency }}
+                        </mat-option>
+                      </mat-select>
+                    </mat-form-field>
+                    <!-- Post Residual Risk Rating -->
+                    <div fxFlex="20" fxLayout="row" fxLayoutAlign="start center" class="textbox-span-wrap"
+                      *ngIf="showOverallControlEnvRating">
+                      <span fxFlex="100"><b>Post Residual Risk Rating</b></span>
+                      <span class="TextboxSpan" fxFlex="100" style="text-align:center; border: none;">
+                        <span [style.background]="formData?.PostTreatmentResidualRiskRatingColourCode || '#eee'"
+                          [style.color]="getContrastColor(formData?.PostTreatmentResidualRiskRatingColourCode || '#eee')"
+                          style="border-radius: 50vh; padding-block: 0.3vh; padding-inline: 0.5vw; min-width: 80%; display: inline-block;">
+                          {{ formData?.PostTreatmentResidualRiskRating }}
+                        </span>
+                      </span>
+                    </div>
+                  </form>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          </div>
+          <!-- ROW 3 end -->
+        </mat-dialog-content>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+  <!-- ===== Bottom buttons ===== -->
+  <div fxLayout="row" fxLayoutAlign="end center" fxLayoutGap="12" class="bottom-actions"
+    style="margin-top:12px; border-top: 1px solid rgb(215 215 215);">
+    <button mat-stroked-button color="primary" [disabled]="isSaveDisabled" (click)="onSave()"
+      [ngStyle]="{ 'background': isSaveDisabled ? '#bdbdbd' : '#1976d2', 'color': 'white' }"> Save </button>
+    <button mat-stroked-button class="warm" (click)="navigateToPreviousPage()">Cancel</button>
+  </div>
+</div>

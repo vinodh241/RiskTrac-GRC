@@ -1,0 +1,16 @@
+.d-flex{
+    display: flex;
+    height: calc(100% - 55px);
+    align-items: center;
+}
+mat-card {  
+    height: 100%;
+    padding: 0px;
+}
+.padd2vh{ 
+    padding: 16px;
+    height: calc(100% - 32px);
+}
+.justify-content-evenly{
+    justify-content: space-evenly;
+}

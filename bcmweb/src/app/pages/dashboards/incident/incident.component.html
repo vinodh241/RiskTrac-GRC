@@ -1,0 +1,181 @@
+<div class="mainClassRow">
+    <div>
+        <h4 style="margin: 0px;">
+            <span style="color: #cb4900; font-size: 4vh;"><strong>{{incidentAllData}}</strong></span><span style="color: #e7834a;"><strong>&nbsp;Incidents</strong></span>&nbsp;
+            <span style="font-weight: 400;">Reported in Current Quarter</span>
+        </h4>
+    </div>
+    <div class="mat-action-row">
+        <!-- <ng-container> -->
+
+        <div class="matcard col-4">
+            <mat-card layout="row" class=" ">
+                <mat-card-content>
+                    <h4>
+                        <span style="color: #005bba;"><strong>Quarter-wise Position</strong></span>&nbsp;<span style="font-weight: 400;">of Incidents Reported</span>
+                    </h4>
+                    <app-incident-graph [allData]="allData"></app-incident-graph>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <!-- </ng-container> -->
+        <!-- <ng-container> -->
+        <div class="matcard4 col-8">
+            <mat-card>
+                <mat-card-content>
+                    <h4>
+                        <span style="font-weight: 400;">Overall</span>&nbsp;<span style="color: #005bba;"><strong>Financial Loss</strong></span>&nbsp;<span style="font-weight: 500; font-size: 73%;">(in {{currency}})</span>
+                    </h4>
+                    <app-incident-ofl-graph [allData]="allData"></app-incident-ofl-graph>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <!-- </ng-container> -->
+    </div>
+
+    <div class="mat-action-row">
+        <div class="matInnerClassFirst">
+            <mat-card layout="row" class=" ">
+                <mat-card-content>
+                    <h4>
+                        <span style="color: #005bba;"><strong>Criticality</strong></span>&nbsp;<span style="font-weight: 400;">wise</span>
+                    </h4>
+                    <app-incident-cw-graph [allData]="allData"></app-incident-cw-graph>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="matInnerClassSecond">
+            <mat-card>
+                <mat-card-content>
+                    <h4>
+                        <span style="color: #005bba;"><strong>Top {{totalData}} Units</strong></span>&nbsp;<span style="font-weight: 400;">Incident wise</span>
+                    </h4>
+                    <div style="margin-top: -1.5vh;">
+                        <div class="info1 one" *ngFor="let unit of top3Data; let i = index">
+                            <div class="flex-space">
+                                <div style="font-size: 24px; color: #cbb9b9; display: inline-block; width: 10%;">{{i+1}}</div>
+                                <div style="display: inline-block; width: 60%; cursor: pointer;" matTooltip="Click here to view more information" (click)="unitDataPopup(unit.Unit)">
+                                    {{unit.Unit}}
+                                </div>
+                                <div style="font-size: 24px; margin-right: -1vw; color: orangered; display: inline-block; width: 20%;">
+                                    <strong>{{unit.Count}}</strong>
+                                </div>
+                                <div style="font-size: 24px; display: inline-block; width: 10%; margin-right: 2vh;">{{(unit.Percent)}}<span style="font-size: 69%; margin-left: 0.2vh;">%</span></div>
+                            </div>
+                            <hr class="infohr clearfix" />
+                        </div>
+                    </div>
+                    <a class="viewAllChart" (click)="viewAll()">View All</a>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="matInnerClassThird">
+            <mat-card>
+                <mat-card-content>
+                    <div *ngIf="source.length">
+                        <h4>
+                            <span style="color: #005bba;"><strong>Identification Source</strong></span>&nbsp;<span style="font-weight: 400;">Counts</span>
+                        </h4>
+                        <div>
+                            <div class="info1 one dataSetAV" *ngFor="let unitData of source; let i = index">
+                                <div matTooltip="Click here to view more information" style="cursor: pointer;" (click)="sourceDataPopup(unitData.Unit)">
+                                    {{unitData.Unit}}
+                                </div>
+                                <div style="font-size: 24px;">
+                                    {{unitData.SourceCount}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+
+    <div class="mat-action-row">
+        <div class="matInnerClassFirst">
+            <mat-card layout="row" class="inc-oorc">
+                <mat-card-content>
+                    <h4>
+                        <span style="color: #005bba;"><strong> Open & Overdue Recommendation</strong></span>&nbsp;<span style="font-weight: 400;">Count</span>
+                    </h4>
+                    <div class="thirdSecLast">
+                        <div class="rd-redbox">
+                            <div class="rd-redbox-inner" style="cursor: pointer;" matTooltip="Click here to view more information" (click)="openDataPopup()">
+                                <div>{{totalNoOfOpen}}</div>
+                                <div>Open</div>
+                            </div>
+                        </div>
+
+                        <div style="display: flex; align-items: center;">
+                            <div class="rd-progress">
+                                <div class="rd-progress-nos clearfix">
+                                    <span class="rd-progress-nos-lft" style="margin-left: 3vh;"><span class="rd-progress-nos-big">{{getDecimalData(overduerecordsPercentage ? overduerecordsPercentage : 0)}}</span>% Overdue</span>
+                                    <span class="rd-progress-nos-rgt">{{totalNoOfOverdue}}</span>
+                                    <mat-progress-bar
+                                        mode="determinate"
+                                        style="height: 4vh !important; border-radius: 3vh; width: 15vw; margin-left: 3vh; cursor: pointer;"
+                                        [value]="overduerecordsPercentage"
+                                        matTooltip="Click here to view more information"
+                                        (click)="overdueDataPopup()"
+                                    >
+                                    </mat-progress-bar>
+                                    <!-- <div id="progress-bar">
+                    <div id="progress"  style="height:4vh !important; border-radius: 3vh; width:15vw;margin-left: 3vh;cursor: pointer;"
+                        [style.height.%]='overduerecordsPercentage' aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"
+                tooltip="Click here to view more information" (click)="overdueDataPopup()"></div>
+                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- </div> -->
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="matInnerClassSecond">
+            <mat-card>
+                <mat-card-content>
+                    <h4>
+                        <span style="font-weight: 400;">Count of</span>&nbsp;<span style="color: #005bba;"><strong>Rejected Recommendations</strong></span>
+                    </h4>
+                    <div class="thirdSecLast">
+                        <div class="rd-greybox">
+                            <div class="rd-greybox-inner" style="cursor: pointer;" (click)="RejectedDataPopup()" matTooltip="Click here to view more information">
+                                <svg width="80px" height="65px" style="dominant-baseline: middle;">
+                                    <text class="stroke-text" x="50%" y="50%">{{totalNoOfRejected}}</text>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="background-img">
+                            <img src="assets/icons/rejected-rec-img.png" style="height: 130px;"/>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="matInnerClassThird">
+            <mat-card>
+                <mat-card-content>
+                    <h4>
+                        <span style="color: #005bba;"><strong> Near Miss & Potential Loss</strong></span>&nbsp;<span style="font-weight: 400;">Incidents</span>
+                    </h4>
+
+                    <div class="thirdSecLast">
+                        <app-incident-mspl-graph [allData]="allData"> </app-incident-mspl-graph>
+                        <div class="rd-nmploss" style="display: flex; margin-top: 2vh;">
+                            <aside class="d-inline-block vamiddle"></aside>
+                            <div class="d-inline-block ml-2 vamiddle">
+                                <div class="rd-nmploss-fs18" style="width: 13vw; margin-left: 1vh;">Near Miss/ Potential Loss</div>
+                                <div><span class="rd-nmploss-fs30 lh90" style="margin-left: 1vh;">{{getDecimalData(potentialLossCountPercentage ? potentialLossCountPercentage : 0)}}</span><span class="rd-nmploss-fs18">%</span></div>
+                                <div class="rd-nmploss-fs30 font-weight-bold lh90" style="color: #cb4900; margin-left: 1vh;">
+                                    <strong>{{potentialLossCount}}</strong>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</div>

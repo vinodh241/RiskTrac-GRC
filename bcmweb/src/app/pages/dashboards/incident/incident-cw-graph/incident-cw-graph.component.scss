@@ -1,0 +1,10 @@
+::ng-deep.mat-header-row{
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+.d-flex{
+    display: flex;
+    height: calc(100% - 45px);
+    align-items: center;
+}

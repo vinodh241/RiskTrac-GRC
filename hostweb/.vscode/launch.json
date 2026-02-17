@@ -1,0 +1,25 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch Host in Chrome (nginx http://localhost:5000/)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5000/",
+      "webRoot": "${workspaceFolder}",
+      "runtimeExecutable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "runtimeArgs": [
+        "--remote-debugging-port=9222",
+        "--user-data-dir=${workspaceFolder}\\.vscode\\chrome-profile"
+      ],
+      "sourceMaps": true
+    },
+    {
+      "name": "Attach to Host Chrome (9222)",
+      "type": "chrome",
+      "request": "attach",
+      "port": 9222,
+      "webRoot": "${workspaceFolder}"
+    }
+  ]
+}

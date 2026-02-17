@@ -1,0 +1,16 @@
+# RiskTrac GRC - ORM Web (Angular)
+FROM node:18-alpine AS build
+WORKDIR /app
+
+COPY package*.json ./
+RUN npm ci
+
+COPY . .
+RUN npm run build:orm
+
+# build:orm uses --base-href /orm/
+FROM nginx:alpine
+COPY --from=build /app/dist/orm /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]

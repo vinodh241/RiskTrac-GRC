@@ -1,0 +1,173 @@
+<mat-expansion-panel  *ngIf = "this.source.length" style="margin-bottom: 2vh;" [expanded]="panelOpenState" (opened)="setOpenState(source[0].NodeID)"
+    (closed)="setCloseState(source[0].NodeID)">
+    <mat-expansion-panel-header>
+        <mat-panel-title class="mat-display-4" style="font-weight: 700;font-size: 16px;">&nbsp;&nbsp;&nbsp;{{source[0].UnitName}}</mat-panel-title>
+        <label class="mat-display-2">Risk Metrics: <span style="font-size:20px;font-weight: 700;">{{source.length}}</span></label>
+        <div style="width: 100px; margin-left:10px ; ">
+            <mat-progress-bar style="height: 20px; border-radius:12px;" mode="determinate"
+                [value]='completed*100/source.length'>
+            </mat-progress-bar>
+        </div>
+        <label class="mat-display-2" style="color: #2D75A6;">&nbsp;&nbsp;{{completedPercent}} %
+            Completed</label>
+        <label class="mat-display-2">&nbsp;&nbsp;Not Started: <span
+                style="font-size:20px;font-weight: 700;">{{notstarted}}</span></label>
+        <label class="mat-display-2">&nbsp;&nbsp;In Progress: <span
+                style="font-size:20px;font-weight: 700;">{{inprogress}}</span></label>
+        <label class="mat-display-2">&nbsp;&nbsp;Submitted: <span style="font-size:20px;font-weight: 700;">{{submitted}}</span></label>
+        <!-- <label class="mat-display-2">&nbsp;&nbsp;Not Submitted: <span style="font-size:20px;font-weight: 700;">{{notsubmitted}}</span></label> -->
+        <label class="mat-display-2">&nbsp;&nbsp;Approved: <span
+                style="font-size:20px;font-weight: 700; color:green;">{{approved}}</span></label>
+        <label class="mat-display-2">&nbsp;&nbsp;Rejected: <span
+                style="font-size:20px;font-weight: 700; color:red;">{{rejected}}</span></label>
+        <label class="mat-display-2">&nbsp;&nbsp;Reviewed: <span style="font-size:20px;font-weight: 700;">{{reviewed}}</span></label>
+    </mat-expansion-panel-header>
+    <!-- <mat-toolbar style="background-color: white; color:black; height: 5.5vh;">
+        <span class="space"></span><span class="space"></span><span class="space"></span><span class="space"></span>
+        <label class="mat-display-4 prev-policy">Previous RAF Policies</label>
+        <span class="space"></span><span class="space"></span>
+        <label class="mat-display-4 curr-policy">Current RAF Policy</label>
+    </mat-toolbar> -->
+    <mat-table [dataSource]="source" >
+        <ng-container matColumnDef="level">
+            <mat-header-cell *matHeaderCellDef>Risk</mat-header-cell>
+            <mat-cell *matCellDef="let element;let i=index">
+                <div id="{{source[0].UnitName+i}}">
+                    <b>{{element.Risk}}</b>
+                    {{element.CaptionData}}
+                </div>
+            </mat-cell>
+        </ng-container>
+        <!-- <ng-container matColumnDef="q1">
+            <mat-header-cell *matHeaderCellDef class="text-center">{{(preheader &&
+                preheader.length>0)?preheader[0].Caption:"-"}}</mat-header-cell>
+            <mat-cell *matCellDef="let element" class="text-center" [style.background-color]="element.PreviousScoring?(element.PreviousScoring[0]?element.PreviousScoring[0]?.ColorCode:'#FFFFFF'):'#FFFFFF'">
+                {{element.PreviousScoring?(element.PreviousScoring[0]?element.PreviousScoring[0].MetricScore:""):""}}
+            </mat-cell>
+            <div class="risklimitbtn">risk limit</div>
+        </ng-container>
+        <ng-container matColumnDef="q2">
+            <mat-header-cell *matHeaderCellDef class="text-center">{{(preheader &&
+                preheader.length>1)?preheader[1].Caption:"-"}}</mat-header-cell>
+            <mat-cell *matCellDef="let element" class="text-center" [style.background-color]="element.PreviousScoring?(element.PreviousScoring[1]?element.PreviousScoring[1]?.ColorCode:'#FFFFFF'):'#FFFFFF'">
+                {{element.PreviousScoring?(element.PreviousScoring[1]?element.PreviousScoring[1].MetricScore:""):""}}
+            </mat-cell>
+            <div class="risklimitbtn">risk limit</div>
+        </ng-container> -->
+        <ng-container matColumnDef="q3">
+            <mat-header-cell *matHeaderCellDef class="text-center">
+                {{(preheader && preheader.length)?preheader[0].Caption:"-"}}
+            </mat-header-cell>
+            <mat-cell *matCellDef="let element" class="text-center"
+                [style.background-color]="element.PreviousScoring ? (element.PreviousScoring[0] ? element.PreviousScoring[0].ColorCode : '#FFFFFF'):'#FFFFFF'">
+                {{ element.PreviousScoring.length > 0 ? element.PreviousScoring[0].MetricScore : '' }}
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="risk-limit">
+            <mat-header-cell *matHeaderCellDef class="text-center">Risk Limits</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <div class="risk-limit" [style.background-color]="colors[0]?.ColorCode"><span
+                        class="risk-limit-left">LOW</span><span class="risk-limit-right">{{element.Limit1}}</span></div>
+                <div class="risk-limit" [style.background-color]="colors[1]?.ColorCode"><span
+                        class="risk-limit-left">MODERATE</span><span class="risk-limit-right">{{element.Limit2}}</span>
+                </div>
+                <div class="risk-limit" [style.background-color]="colors[2]?.ColorCode"><span
+                        class="risk-limit-left">CRITICAL</span><span class="risk-limit-right">{{element.Limit3}}</span>
+                </div>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="score">
+            <mat-header-cell *matHeaderCellDef class="text-center">Score</mat-header-cell>
+            <mat-cell *matCellDef="let element" style="overflow: visible;"
+            [ngStyle]="{'background-color': (element.MetricScore || element.MetricScore == 0) ? getBackgroundColor(element.MetricScore, element.Limit1, element.Limit2,element.Limit3) :''}">
+                <span class="break-word" *ngIf="disableRow(element)">{{element.MetricScore}}</span>
+              <div class="popFormandate">
+                <input mdInput type="number" min="0" class="score-input" [(ngModel)]="element.MetricScore" *ngIf="!disableRow(element) && !assessmentFlag">
+                <div class="popFormandateInner" *ngIf="element.MetricScore && element.MetricScore != 0">
+                    <span>Remarks Mandatory*</span>
+                    <span *ngIf="isActionMandatory(element) && !disableRow(element) && !assessmentFlag">
+                        <span>Action Plan Mandatory* </span>
+                        <span>Evidence Mandatory* </span>
+                    </span>
+                </div>
+              </div>
+                <mat-error *ngIf="isErrorScore" style="font-size: 14px;">{{element.errorScore}}</mat-error>
+
+                <mat-error *ngIf="element.IsScoreMandatory && !element.MetricScore">Score Required</mat-error>
+
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="remark">
+            <mat-header-cell *matHeaderCellDef>* Remarks</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <span *ngIf="disableRow(element) && !assessmentFlag">{{element.Remarks}}</span>
+                <textarea matInput class="remark-input" [(ngModel)]="element.Remarks"
+                    *ngIf="!disableRow(element) && !assessmentFlag" placeholder="Enter Remarks"></textarea>
+                <mat-error *ngIf="element.IsActionRemarks && !element.Remarks">Remarks Required
+                </mat-error>
+            </mat-cell>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="action">
+            <mat-header-cell *matHeaderCellDef>Action Plan</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <div class="evidence-container">
+                        <div class="action-plan-disp" *ngIf="disableRow(element) && !assessmentFlag">
+                            <span  class = "action-plan-disp">{{element.ActionPlan}}</span>
+
+                        </div>
+                        <textarea matInput class="action-input" [(ngModel)]="element.ActionPlan"
+                                *ngIf="!disableRow(element) && !assessmentFlag"></textarea>
+
+                    <div class="file-upload-disp"*ngIf="!assessmentFlag" >
+                        <app-file-upload [evdname]="'Risk Unit Maker'" [inputData]="element"
+                            [disabled]="isUploaddisable || element.Status == 5" [showFileIcon]="true" (isFileUploadChanged)="updateFileUploadStatus()" (filesdataOP)="OnfilesdataOP($event)">
+                        </app-file-upload>
+                    </div>
+                    <mat-error *ngIf="element.IsActionPlanMandatory">Action Plan & Evidence Required </mat-error>
+                </div>
+            </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="comments">
+            <mat-header-cell *matHeaderCellDef>Reviewer Comments</mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                {{element.CommentData?(element.CommentData.length>0?element.CommentData[0].CommentBody:''):''}}
+                <!-- {{element.CommentData?(element.CommentData.length>0?element.CommentData.length+" Previous Comments Available":"NA"):"NA"}} -->
+                <span class="spacer"></span>
+                <button mat-icon-button *ngIf="element.CommentData?(element.CommentData.length>1):false"
+                    matTooltip="View Previous Comments" class="eye-icon"
+                    (click)="showComments(element.CommentData?(element.CommentData.length>0?element.CommentData:[]):[])">
+                    <mat-icon>visibility</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+    <mat-dialog-actions >
+        <span class="spacer"></span>
+        <!-- <button mat-button mat-raised-button *ngIf="!assessmentFlag" color="primary" (click)="draft(source, collectionScheduleID)"
+            [disabled]="disableDraftButton()">Save for Later</button>&nbsp; -->
+
+
+            <button  class="btn btn-primary modalColorBtn modalColorBtnGreen"*ngIf="!assessmentFlag" color="primary" (click)="draft(source, collectionScheduleID)"
+            [disabled]="disableDraftButton()" style="    min-width: 4vh;">
+            <img src="./assets/images/icon-save.svg" style="width: 2vh;
+            margin-right: 1vh;
+            margin-bottom: -0.2vh;"/>Save for
+            Later</button>&nbsp;
+
+        <!-- <button mat-button mat-raised-button *ngIf="!assessmentFlag" color="primary" (click)="submit(source, collectionScheduleID)"
+            [disabled]="disableSubmitButton() || isErrorScore ">Submit for Review</button>&nbsp; -->
+
+            <button type="button" class="btn btn-primary modalColorBtn ms-2" *ngIf="!assessmentFlag" color="primary" (click)="submit(source, collectionScheduleID)"
+            [disabled]="disableSubmitButton() || isErrorScore " style="    min-width: 1.5vh;
+            margin-left: 1vh;
+        "><img src="./assets/images/icon-send.svg" alt="Submit for Review" style="width: 4vh;margin-bottom: -1.3vh;"> Submit for Review
+          </button>
+    </mat-dialog-actions>
+</mat-expansion-panel>

@@ -1,0 +1,36 @@
+<div class="container">
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="FileData">
+            <ng-container matColumnDef="Index">
+                <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+                <mat-cell *matCellDef="let row; let i = index"> {{i + 1}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="UploadFile">
+                <mat-header-cell *matHeaderCellDef> Uploaded File </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <a class="file-link" (click)="getFile(row, evdname)" [matTooltip]="row.FileName" matTooltipPosition="below">
+                        {{row.FileName}}
+                    </a>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Remark">
+                <mat-header-cell *matHeaderCellDef> Remark </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.Remark || '-'}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="AddIcon">
+                <mat-header-cell *matHeaderCellDef>
+                    <button mat-icon-button (click)="uploadEvidence($event)" [disabled]="disabled" matTooltip="Add File">
+                        <mat-icon aria-hidden="false" aria-label="Add" fontIcon="add"></mat-icon>
+                    </button>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <button mat-icon-button (click)="remove(row, evdname)" [disabled]="disabled" matTooltip="Delete">
+                        <mat-icon aria-hidden="false" aria-label="Delete" fontIcon="delete"></mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+</div>

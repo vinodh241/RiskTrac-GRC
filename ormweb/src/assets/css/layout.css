@@ -1,0 +1,43 @@
+/* .cardGen {border-radius: 0.3vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 100%; width: calc(100% / 3); padding: 1px;} */
+.cardGen {border-radius: 0.3vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 35vh; width: 100%; padding: 1px;}
+.cardGen .cardBody {border-radius: 0.3vh; font-size: 1.6rem;}
+.cardGen.cardGenAuto {height: auto;}
+.cardGen.cardGenAutoAccord {height: auto; min-height: 10.2%; padding: 1px 1px 0 1px;}
+.cardGen.cardGenAutoAccordRgt {height: auto; min-height: 10.1%; padding: 1px 1px 0 1px;}
+
+/* DASHBOARD CARD BOX */
+.dashboardCard > .cardGen {container-type: inline-size;}
+.dashboardCard {display: grid; grid-template-columns: repeat(3, 1fr); grid-row-gap: 1.5vh; grid-column-gap: 1vw; grid-template-rows:  50% 50%; grid-auto-rows: 1fr}
+/* END DASHBOARD CARD BOX */
+
+/* TABLE PAGE */
+.cardGen .cardBody.singleRow {background: #fff url(../images/tblBg.svg); background-position: bottom right; background-repeat: no-repeat;  background-size: 10% auto;}
+
+.cardGen .cardBody.singleRowNoimg {background: #fff }
+.h2bg {background: linear-gradient(90deg, #DBE8F0 5.21%, rgba(219, 232, 240, 0.00) 100%); border-radius: 0.3vh 0.3vh 0 0;}
+.h2bg h2 {line-height: 2.5; padding-inline: 2%;}
+.vmiddleRight.rightblStatus {right: 2%; font-size: 1.8rem; min-width: 7.5vw;}
+.vmiddleLeft.leftblStatus {left: 22%;font-size: 2vh;min-width: 10.5vw;}
+
+heightVH-4 {height: 4vh;} .heightVH-10 {height: 8vh;} .heightVH-10 {height: 10vh;} .heightVH-15 {height: 15vh;} .heightVH-18 {height: 18vh;}  .heightVH-20 {height: 20vh;} .heightVH-21 {height: 21vh;} .heightVH-22 {height: 22vh;}  .heightVH-26 {height: 26vh;} .heightVH-28 {height: 28vh;}  .heightVH-30 {height: 30vh;} .heightVH-36 {height: 36vh;} .heightVH-58 {height: 58vh;}
+
+/* QUESTION ANSWER */
+.question{margin-top: 1.4vh; font-size: 1.6rem; line-height: 1.1;}
+.question span:first-child {font-size: 2rem; font-weight: 400; float: left; margin-right: 0.3vw;}
+.answer {padding-left: 2.2vw; padding-top: 1vh; color: #5C5C5C;}
+label.options {display: block; margin-bottom: 1%; cursor: pointer; line-height: 1.2;}
+/* END QUESTION ANSWER */
+
+/* OVERALL TEST RESULTS */
+.overallTestResult {border-radius: 0.3vh; border: 1px solid #BBBBBB; background: #E2EBEE url(../images/overall-img.svg) no-repeat left top; background-size: contain; height: 12vh; background-position: 50% 0; padding: 5%;}
+.overallTxt {color: #5C5C5C; font-size: 2rem;}
+
+/* OVERALL TEST RESULTS */
+
+.blueBg {border-radius: 0.3vh; border: 1px solid #BBBBBB; background-color: #E2EBEE; padding: 5%;}
+
+.vhmiddle.leftcheckImg {left: 20%;}
+
+/* FOOTER */
+.lpFooter {background: linear-gradient(90deg, #0A58A0 0.57%, #1DA34A 100%);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); color: #fff; line-height: 2; font-size: 90%;}

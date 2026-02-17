@@ -1,0 +1,55 @@
+.mat-expansion-panel-header {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.mat-form-field {
+    width: 45vw;
+}
+
+.spacer {
+    display: flex;
+    justify-content: space-between;
+}
+.save-button {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.8vw;
+    margin-top: 15vh;
+}
+
+.rca-input {
+    width: 55%;
+}
+
+.rca-file-upload {
+    width:45%;
+    margin-left: 10px;
+}
+
+.main-details {
+    top: 0;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container {
+    margin-bottom: 0;
+}
+
+.mat-expansion-panel-header {
+    color: black !important;
+    font-size: 15px; font-weight: 700;
+}
+
+.incident{
+    display: flex;
+    justify-content: flex-start;
+    margin-left: 2vh;
+}
+
+.container-incident {
+    display: grid;
+
+    grid-template-columns: 1fr 2fr
+}

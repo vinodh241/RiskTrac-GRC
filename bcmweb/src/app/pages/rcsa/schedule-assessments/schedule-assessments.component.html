@@ -1,0 +1,228 @@
+<mat-toolbar class="fontSize">
+    <span>RCSA - Summary</span>
+    <span class="spacer"></span>
+    <span *ngIf="iSCreateScheduleAssementEnabled === 0" style="font-size: 16px;"> **Please add or enable Inherent Risks to schedule an assessment</span>
+    <span *ngIf="iSCreateScheduleAssementEnabled != 0 && prevInprogressData" style="font-size: 16px;"> **{{prevInprogressData}}</span>
+
+</mat-toolbar>
+<div class="container">
+    <mat-action-row style="padding-right: 24px;padding-bottom: 0px;padding-top: 20px;padding-left: 24px;">
+        <!-- <form [formGroup]="actionForm"> -->
+        <mat-form-field appearance="standard">
+            <mat-label>Year</mat-label>
+            <mat-select [(ngModel)]="selectedYear" (selectionChange)="yearChange()">
+                <mat-option *ngFor="let row of assessmentYear" [value]="row.ScheduledYear">{{row.ScheduledYear}}
+                </mat-option>
+            </mat-select>
+        </mat-form-field>
+
+        <span class="spacer"></span>
+        <div class="assesment-button dflexB">
+            <mat-form-field appearance="fill" *ngIf="canDownloadsearchAccess()">
+                <mat-label>Search</mat-label>
+                <input #txtSearch matInput placeholder="Eg. RCSA" (keyup)="applyFilter($event)">
+            </mat-form-field>
+            <!-- <button mat-icon-button color="primary" *ngIf="canCreateEditAccess()"
+                [style.display]="iSCreateScheduleAssementEnabled === 1 ? ''  : 'none'"
+                aria-label="New Schedule Assessment" (click)="initiateAdd()" matTooltip="Schedule New RCSA">
+                <mat-icon>add</mat-icon>
+            </button> -->
+            <div class="applyFilter addDesktop position-relative text-start me-4" *ngIf="canCreateEditAccess()">
+                <button type="button" class="btn btn-dark btnGradient ad" [style.display]="iSCreateScheduleAssementEnabled === 1 ? ''  : 'none'" data-bs-toggle="modal" aria-label="New Schedule Assessment" (click)="initiateAdd()" matTooltip="Schedule New RCSA"><span
+                    class="font-weight-bold"></span>Schedule New RCSA</button>
+                <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img src="./assets/images/icon-add-desktop.svg" style="    width: 2vh;
+                    margin-top: 1vh;
+                    margin-left: -7.2vh;"></span>
+            </div>
+            <span *ngIf="showexportData && canDownloadsearchAccess()" (click)="exportAsXLSX()" class="mat-button-wrapper"><img
+                    src="assets/icon-excel.svg" style="opacity: 1;" matTooltip="Export to Excel"></span>
+            <!-- <button (click)="exportAsXLSX()">
+                <i class="fa fa-file-excel-o" style="font-size:25px;color:blue"></i>
+            </button> -->
+        </div>
+        <!-- </form> -->
+    </mat-action-row>
+<mat-action-row style="padding: 0px;border: 0px !important;">
+    <div fxLayout="row wrap" style="padding: 0px;margin: 0px;width:100%;;" fxFlex="100" fxLayoutAlign="space-around stretch">
+        <mat-card class="mat-elevation-z4 ScheduleGroup" style="width:100%;margin: 0px;" fxFlex="25" fxFlex.sm="100" fxFlex.xs="100">
+            <div class="ScheduleGrouphead" fxLayout="row" fxLayoutGap="10px grid">
+                <span fxFlex="73"><b>{{summaryGroupHeadText}}</b> {{summaryGroupHeadSubText}}</span>
+                <span fxFlex="27"><b>{{noofUnits}}</b> {{units}}</span>
+            </div>
+            <span layout="row">
+                <hr flex />
+            </span>
+            <mat-card-content  fxLayout="column" >
+                <div  *ngIf="noofUnits=='0'" fxLayout="row" fxFlex="100" fxLayoutAlign="center center">
+                    <span [hidden]="isActionplan" class="nosummaryGrouptext">No RCSA is in In-Progress !!!</span>
+                </div>
+                <div *ngFor="let row of dataSourceInprogress" fxLayout="row" fxLayoutGap="10px grid" class="summaryinfo"
+                    fxLayoutAlign="start center">
+                    <span class="summaryGrouptext" fxFlex="40">{{row.GroupName}}</span>
+
+                    <div fxFlex="60" fxLayout="row" class="summaryStatusinfo">
+                        <span [class]="Legend1Color" *ngIf="row.Legend1Width>0" [fxFlex]="row.Legend1Width"
+                            (click)="getSnapDetails(row,row.Legend1ID)">{{row.Legend1Value}}</span>
+                        <span [class]="Legend2Color" *ngIf="row.Legend2Width>0" [fxFlex]="row.Legend2Width"
+                            (click)="getSnapDetails(row,row.Legend2ID)">{{row.Legend2Value}}</span>
+                        <span [class]="Legend3Color" [fxFlex]="row.Legend3Width"
+                            *ngIf="!IsInprogress && row.Legend3Width>0"
+                            (click)="getSnapDetails(row,row.Legend3ID)">{{row.Legend3Value}}</span>
+                    </div>
+                </div>
+
+                <br />
+                <div fxLayout="row" fxLayoutGap="10px grid" class="summaryinfo" fxLayoutAlign="start center">
+                    <div fxLayout="row" fxLayoutAlign="start center" [fxFlex]="IsInprogress?50:30">
+                        <span [class]="Legend1Color" fxFlex="5vh"></span>
+                        <span class="summaryGrouptext">{{Legend1Text}}</span>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="start center" [fxFlex]="IsInprogress?50:30">
+                        <span [class]="Legend2Color" fxFlex="5vh"></span>
+                        <span class="summaryGrouptext">{{Legend2Text}}</span>
+                    </div>
+                    <div fxLayout="row" fxLayoutAlign="start center" *ngIf="!IsInprogress">
+                        <span [class]="Legend3Color" fxFlex="5vh"></span>
+                        <span class="summaryGrouptext">{{Legend3Text}}</span>
+                    </div>
+                </div>
+            </mat-card-content>
+            <span layout="row">
+                <hr flex />
+            </span>
+            <mat-card-actions>
+
+            </mat-card-actions>
+        </mat-card>
+        <mat-card class="mat-elevation-z4" fxFlex="74" fxFlex.sm="100">
+            <mat-card-header>
+
+            </mat-card-header>
+            <mat-card-content>
+                <table id="ScheduleAssessmentTable" mat-table [dataSource]="dataSource" matSort>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="RowNumber">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.RowNumber}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="ScheduleAssessmentCode">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>RCSA Code</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ScheduleAssessmentCode}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SchedulePeriod">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Period</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.SchedulePeriod}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="ScheduleAssessmentDescription">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Description</mat-header-cell>
+                        <mat-cell *matCellDef="let row" [matTooltip]="row.ScheduleAssessmentDescription">
+                            {{row.ScheduleAssessmentDescription}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="ProposedStartDate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Proposed Start Date</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProposedStartDate| date:'dd MMM yyyy'}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="ProposedCompletionDate">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Proposed End Date</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ProposedCompletionDate| date:'dd MMM yyyy'}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="PrimaryReviewerName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Reviewer1</mat-header-cell>
+                        <mat-cell *matCellDef="let row" [matTooltip]="row.PrimaryReviewerName">
+                            {{row.PrimaryReviewerName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="SecondaryReviewerName">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Reviewer2</mat-header-cell>
+                        <mat-cell *matCellDef="let row" [matTooltip]="row.SecondaryReviewerName">
+                            {{row.SecondaryReviewerName}} </mat-cell>
+                    </ng-container>
+                    <ng-container matColumnDef="Status">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                        <mat-cell *matCellDef="let row"> {{row.ScheduleAssessmentStatusName}}
+                            {{row.ScheduleAssessmentPercentage}} </mat-cell>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="Register">
+                        <mat-header-cell *matHeaderCellDef>Risk Register</mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          <button mat-icon-button [matTooltip]= "row.ScheduleAssessmentStatusName == 'New' ? '' : 'View Risk Register'"
+                            class="eye-icon" (click)="showRiskData(row)" [disabled]="row.ScheduleAssessmentStatusName=='New'">
+                            <mat-icon>visibility</mat-icon>
+                          </button>
+                        </mat-cell>
+                    </ng-container> -->
+
+                    <ng-container matColumnDef="Action">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header style="justify-content: center;">Action</mat-header-cell>
+                        <mat-cell *matCellDef="let row" (click)="$event.stopPropagation()">
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button" [disabled]="(!canCreateEditAccess() || row.ScheduleAssessmentStatusName=='Completed')"
+                                matTooltip="Edit" color="primary" (click)="editData(row)">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button"  (click)="sendMailReminder(row)"
+                                matTooltip="Send Reminder" [disabled]="row.EmailReminderStatus == 0">
+                                <mat-icon [ngStyle]="row.EmailReminderStatus == 0 ? {'color': '#bdbdbd;'} : {'color': '#2470a3;'}">mail</mat-icon>
+                            </button>
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                *ngIf="row.ScheduleAssessmentStatusName=='Completed'" matTooltip="Completed"
+                                color="primary" (click)="getRCSACompletedDetails(row)">
+                                <mat-icon>transfer_within_a_station</mat-icon>
+                            </button>
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                *ngIf="row.ScheduleAssessmentStatusName=='In-Progress'" matTooltip="In-Progress"
+                                color="primary" (click)="getRCSAInprogressdetails(row)">
+                                <mat-icon>transfer_within_a_station</mat-icon>
+                            </button>
+
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                *ngIf="row.ScheduleAssessmentStatusID != 2 && row.ScheduleAssessmentStatusID != 3" [disabled]="row.ScheduleAssessmentStatusName=='New'"
+                                matTooltip="{{row.ScheduleAssessmentStatusName}}" color="primary">
+                                <mat-icon>transfer_within_a_station</mat-icon>
+                            </button>
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                [matTooltip]="'View Self Assessment Summary'"
+                                color="primary"
+                                [disabled]="row.ScheduleAssessmentStatusName == 'New'"
+                                [ngStyle]="{'opacity': row.ScheduleAssessmentStatusName == 'New' ? 0.3 : 1}"
+                                (click)="navigate(row)">
+                                <img src="assets/icons/selfAssessment.svg" height="70%" width="100%">
+                            </button>
+                        
+                            <mat-slide-toggle [checked]="row.IsActive" [disabled]="!(row.isAllowedToEnableDisable && canCreateEditAccess())"
+                                (change)="changeAssessmentStatus(row,$event)">
+                            </mat-slide-toggle>
+                            <!-- <button mat-icon-button color="primary" aria-label="Assessment" matTooltip="Completed"
+                                *ngIf="row.ScheduleAssessmentStatusName=='Completed'"
+                                (click)="getActionWidget(row.ScheduleAssessmentID)">
+                                <mat-icon>assessment</mat-icon>
+                            </button>
+                            <button mat-icon-button color="primary" aria-label="Assessment"  matTooltip="In-Progress"
+                                *ngIf="row.ScheduleAssessmentStatusName=='In-Progress'" (click)="getInProgressWidget()">
+                                <mat-icon>assessment</mat-icon>
+                            </button> -->
+                        </mat-cell>
+                    </ng-container>
+                    <!-- (click)="getRCSAdetails(row)" -->
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <!-- <mat-row *matRowDef="let row;  columns: displayedColumns;"></mat-row> -->
+
+                    <mat-row *matRowDef="let row; columns: displayedColumns;" (click)="disable(row)"
+                        (dblclick)="getRecord(row)"></mat-row>
+
+
+                </table>
+                <mat-paginator [pageSizeOptions]="[10, 25, 100]" class="InherentTable"></mat-paginator>
+            </mat-card-content>
+            <mat-card-actions>
+                <div fxLayout="row" fxLayoutAlign="end center">
+                    <!-- <button mat-mini-fab color="warn" aria-label="New Schedule Assessment" (click)="initiateAdd()">
+                        <mat-icon>add</mat-icon>
+                    </button> -->
+                </div>
+            </mat-card-actions>
+        </mat-card>
+    </div>
+
+</mat-action-row>
+</div>

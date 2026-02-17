@@ -1,0 +1,358 @@
+.tooltip-table {
+    border: 1px solid #ffff;
+    border-collapse: collapse;
+    margin: 10px;
+    font-size: 1.3vh;
+}
+
+
+
+.upload-button {
+    font-size: 1.3vh;
+    background-color: #2470A3;
+    color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+
+}
+.right-action{
+    display: flex;
+    align-items: center;
+}
+.makeHove{
+    position: relative;
+    margin-top: 10px;
+    cursor: pointer;
+}
+.makeHoveInner ul{
+    padding: 0px;
+    list-style-type: none;
+    white-space: nowrap;
+    font-size: 12px;
+    margin: -8px 0px 0px;
+}
+.makeHoveInner{
+    position: absolute;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-in-out;
+    top: 0px;
+    left: 30px;
+}
+.makeHove:hover .makeHoveInner{
+    opacity: 1;
+    visibility: visible;
+    transition: all 0.2s ease-in-out;
+}
+.disableText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+    color: gray;
+}
+.column{
+    margin-left: 30px;
+}
+.mat-elevation-z8{
+    max-height: 980px;
+    overflow-x: hidden !important;
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+}
+.mat-elevation-z8::-webkit-scrollbar {
+    display: none;
+}
+.mat-header-row:last-child{
+    top: 56px;
+}
+.mat-header-row{
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    z-index: 100;
+}
+.reporting-frequency-font {
+    font-weight: bold;
+}
+
+.historical {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    // font-size: 17px;
+    // font-weight: 500;
+    color: #fff;
+}
+
+.dropdown-label {
+    margin-right: 0.5rem;
+}
+
+.measured-text-space {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: transparent;
+}
+
+.measured {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.editable {
+    width: 4.5vw;
+}
+
+.measured-text {
+    // font-size: 17px;
+    // font-weight: 500;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.value-container {
+    height: 40px;
+    width: 40px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.historical-text {
+    padding-left: .5vw;
+    color: rgb(88, 160, 241);
+}
+
+.krivalue-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.krivalue {
+    height: 20px;
+    width: 20px;
+    border-radius: 12px;
+}
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 20vw;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: auto;
+    z-index: 1;
+    right: 0%;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    right: 5%;
+    border-width: 1.2vh;
+    border-style: solid;
+    width: .3vw;
+    height: .3vh;
+    transform: rotate(-90deg);
+    border-color: transparent transparent transparent black;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.mat-toolbar {
+    height: 6.4vh;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 5px !important;
+}
+
+// th.mat-header-cell,
+// td.mat-cell {
+//     text-align: center;
+//     border: 1px solid #CCC;
+//     padding: 0 !important;
+// }
+
+.mat-action-row,
+.mat-elevation-z8 {
+    margin: 0vh 4vh 0 4vh;
+}
+
+.mat-header-row {
+    min-height: 15vh;
+}
+
+.view-previous {
+    color: #6BBDC2;
+    text-decoration: underline;
+}
+
+.mat-column-indicator {
+    // max-width: 10vw;
+    width: 10vw;
+}
+
+.mat-column-Kritype {
+    width: 5vw;
+}
+
+.mat-column-Kricard,
+.mat-column-Measurmentfrequency,
+.mat-column-Reportingfrequency,
+.mat-column-status,
+.mat-column-Lastchangedby {
+    max-width: 5vw;
+}
+
+.mat-column-Target,
+.mat-column-Krivalue,
+.mat-column-action {
+    max-width: 3vw;
+}
+
+.mat-column-date {
+    width: 3vw;
+}
+
+.mat-column-Kritype,
+.mat-column-Currentvalue {
+    // max-width: 4vw;
+    width: 4vw;
+}
+
+.mat-column-Measurmentdata,
+.mat-column-Measurmentperiod {
+    max-width: 6vw;
+}
+
+.mat-column-upload,
+.mat-column-Remarks {
+    max-width: 10vw;
+}
+
+.mat-column-tresholdvalue {
+    // max-width: 20vw;
+    width: 20vw
+}
+
+.kri-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.left-container {
+    width: 20%;
+    margin-left: 20px;
+}
+
+.mat-header-cell,
+.mat-cell {
+    justify-content: center;
+
+}
+
+
+
+.mat-bgcolor {
+    background: linear-gradient(158.79deg, #2470A3 36.66%, #6BBDC2 101.11%);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    padding-top: 20px;
+}
+
+.mat-card-cont {
+    background-image: linear-gradient(to right, rgba(139, 233, 243, 0.947), rgba(244, 245, 154, 0.984))
+}
+
+.mat-card-m {
+    margin-bottom: 5px;
+    color: white;
+    background: #95D5FF20;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.sub-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 2px;
+    padding-top: 5px;
+}
+
+.right-container {
+    width: 80%;
+}
+
+.actions-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+.no-data {
+    margin-top: 20px;
+    width: 100%;
+    text-align: center;
+    font-size: 3vh;
+}
+
+.example-container {
+    height: calc(100% - 73px);
+    max-width: 100%;
+    overflow: auto;
+}
+.left-action {
+    display: flex;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.bottom-dig{
+    background-color: #e7e7e7;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    height: 45px;
+}
+
+.no-data {
+    width: 100%;
+    text-align: center;
+    font-size: 3vh;
+}

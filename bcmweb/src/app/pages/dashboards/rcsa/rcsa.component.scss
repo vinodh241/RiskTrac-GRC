@@ -1,0 +1,31 @@
+.mainClassRow{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 18.8vh);
+}
+.mat-action-row { 
+    border: 0px;
+    justify-content: flex-start;
+    position: relative;
+    padding: 0px;    
+    align-items: inherit;
+    height: calc(50% - 2vh);
+} 
+.mat-action-row:first-child{
+    margin: 0 0 2vh 0;
+
+}
+
+.mat-action-row:last-child{
+    margin: 2vh 0 0 0;
+
+}
+
+.matInnerClassFirst {
+    margin: 0 2vh 0 0;
+    width: calc(50% - 2vh);
+}
+.matInnerClassSecond {
+    margin: 0 0 0 2vh;
+    width: calc(50% - 2vh);
+}

@@ -1,0 +1,10 @@
+<label class="title">{{data.title}}</label>
+<div class="comments">
+    <div *ngFor="let comment of data.comments">
+        <label class="caption">{{utils.formatDate(comment.CreatedDate, true)}} {{comment.CreatedBy}}</label>
+        <p>{{comment.CommentBody}}</p>
+    </div>
+    <div *ngIf="noComments">
+        <label>No Previous Comments Found</label>
+    </div>
+</div>

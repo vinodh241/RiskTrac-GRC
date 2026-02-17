@@ -1,0 +1,110 @@
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.mat-elevation-z8 {
+    margin: 0px;
+}
+
+.mat-header-row {
+    min-height: 10vh;
+}
+
+.card-heading {
+    font-weight: bold;
+}
+
+.upload-card-container {
+    display: flex;
+    flex-flow: column;
+    min-height: 65vh;
+    max-height: 65vh;
+    min-width: 40vw;
+    max-width: 40vw;
+}
+
+.example-form {
+    display: flex;
+    flex-flow: column;
+    justify-content: space-between;
+    margin-top: 5vh;
+}
+
+.upload-new-container {
+    flex-direction: column;
+    margin: 5vh;
+    width: 40vw;
+    align-items: flex-start;
+}
+
+.extension {
+    font-size: 1.5vh;
+    font-weight: 800;
+}
+
+.previously-uploaded-documents {
+    margin: 5vh;
+    width: 50vw;
+}
+
+.button-container {
+    text-align: right;
+    // margin: 5vh 0 5vh 0;
+}
+
+button {
+    margin-left: 0.5em;
+}
+
+.link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.mat-column-id {
+    border-right: 1px solid #eee;
+    max-width: 2vw;
+}
+
+.mat-column-name,
+.mat-column-policyFileName,
+.mat-column-frameworkFileName {
+    border-right: 1px solid #eee;
+    // padding-right: 20px;
+    padding-left: 5px;
+    max-width: 20vw;
+}
+
+.mat-column-name {
+    display: flex;
+    justify-content: space-between;
+    padding-right: 5px;
+}
+
+.mat-column-uploadDate {
+    padding-left: 5px;
+    max-width: 6vw;
+}
+
+.text-right {
+    text-align: right;
+}
+
+.mat-header-cell {
+    border-right: 1px solid #fff;
+    background-color: #E7E7E7;
+}
+
+ .mat-cell{
+    border-right: 1px solid #eee;
+    // padding: 0 5px !important;
+ }
+
+ .mat-sort-header-content {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-left: 1vh;
+}

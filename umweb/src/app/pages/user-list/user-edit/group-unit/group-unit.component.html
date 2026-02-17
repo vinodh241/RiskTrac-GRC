@@ -1,0 +1,34 @@
+<button mat-raised-button color="primary" (click)="assignUnit()"> {{ 'groupUnit.assignUnit' | translate }} </button>
+<mat-table [dataSource]="dtSource.Units" matSort>
+    <ng-container matColumnDef="group">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'groupUnit.columns.department' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <mat-select id="row.GroupID" [(ngModel)]="row.GroupID">
+                <mat-option *ngFor="let group of dtGroups" [value]="group.GroupID" [id]="group.GroupID">
+                    {{group.Name}}
+                </mat-option>
+            </mat-select>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="unit">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'groupUnit.columns.unit' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <mat-select [(ngModel)]="row.UnitID" id="row.UnitID">
+                <mat-option *ngFor="let unit of filteredUnits(row.GroupID)" [value]="unit.UnitID" [id]="unit.UnitID">
+                    {{unit.Name}}
+                </mat-option>
+            </mat-select>
+        </mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="action">
+        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'groupUnit.columns.action' | translate }} </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+            <button mat-icon-button [title]="'common.delete' | translate" [id]="'deleteUnit'+row.GroupID">
+                <mat-icon (click)="deleteUnit(row)" aria-hidden="false" [attr.aria-label]="'common.delete' | translate" fontIcon="delete">
+                </mat-icon>
+            </button>
+        </mat-cell>
+    </ng-container>
+    <mat-header-row *matHeaderRowDef="dcUnits"></mat-header-row>
+    <mat-row *matRowDef="let row; columns: dcUnits;"></mat-row>
+</mat-table>

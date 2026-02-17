@@ -1,0 +1,128 @@
+.left{
+    display: flex;
+    flex-flow: column;
+    width: 290px;
+    height: calc(100vh - 18.8vh);
+    margin: 4vh 4vh 0 4vh;
+}
+.right{
+    display: flex;
+    flex-flow: column;
+    width: calc(100% - 290px - 12vh);
+    margin: 4vh 4vh 0 0;
+}
+.container{
+    flex-direction: initial;
+    display: -webkit-box;
+}
+.mat-card { 
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    height: 100%;    
+    overflow: hidden; 
+    background-repeat: no-repeat;
+    background-position: bottom;
+    overflow: hidden;
+    background-size: 1000px 230px;
+}
+.leftMenuButtons{
+    color: #626262;
+    text-decoration: none;
+    font-size: 4rem;
+    display: block;
+    margin-bottom: .2rem;
+    padding: 1rem;
+    display: flex;
+    border: 0px;
+    background: transparent;
+    border-left: 5px solid transparent;
+    width: 100%;
+    text-align: left;
+    align-items: center;
+    cursor: pointer;
+}
+
+.leftMenuButtons.active{
+    background-image: linear-gradient(to right , #fff, #ffffff00);
+}
+
+.leftMenuButtons.active.overallSec{
+    border-left: 5px solid #CB4900; 
+}
+.leftMenuButtons.active.raSec{
+    border-left: 5px solid #4184A9; 
+}
+.leftMenuButtons.active.rcsaSec{
+    border-left: 5px solid #5E4781; 
+}
+.leftMenuButtons.active.incidentSec{
+    border-left: 5px solid #C6453D; 
+}
+.leftMenuButtons.active.kriSec{
+    border-left: 5px solid #8B6747; 
+}
+.leftMenuButtons.overallSec{ 
+    color: #CB4900;
+}
+.leftMenuButtons.raSec{ 
+    color: #4184A9;
+}
+.leftMenuButtons.rcsaSec{ 
+    color: #5E4781;
+}
+.leftMenuButtons.incidentSec{ 
+    color: #C6453D;
+}
+.leftMenuButtons.kriSec{ 
+    color: #8B6747;
+}
+.leftMenuButtons.overallSec path {
+    fill: #CB4900;
+}
+.leftMenuButtons.raSec path {
+    fill: #4184A9;
+}
+.leftMenuButtons.rcsaSec path {
+    fill: #5E4781;
+}
+.leftMenuButtons.incidentSec path {
+    fill: #C6453D;
+}
+.leftMenuButtons.kriSec path {
+    fill: #8B6747;
+}
+.leftMenuButtons h4{
+    margin: 0px;
+}
+.leftMenuButtons svg {
+    width: 32px;
+    margin-right: .5rem;
+}
+.paddingZero{
+    padding: 0px;
+}
+.topDate{
+    background-color: #cfcfcf;
+    padding: 1vh;
+}
+.topDate span{
+    color: #8f8f8f;
+}
+.dashFilter{
+    padding: 2vh;
+}
+.dashFilter mat-card-content{
+    display: flex;
+    border-bottom: 1px solid #a7a7a7;
+}
+.dashFilter mat-card-content .w50{
+    width: calc(50% - 1vh);
+}
+.dashFilter mat-form-field{
+    width: 100%;
+} 
+.padd1vhRight{
+    padding-right: 1vh;
+}
+.padd1vhLeft{
+    padding-left: 1vh;
+}

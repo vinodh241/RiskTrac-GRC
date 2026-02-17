@@ -1,0 +1,65 @@
+<div style="height: 100%;display: flex; flex-direction:column; justify-content:space-between;" >
+    <div >
+        <mat-toolbar style="display: flex; justify-content:space-between ;align-items: center;  " >
+            <div>{{this.data.name}}</div>
+            <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+                <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+            </button>
+        </mat-toolbar>
+        <div class="mat-table-padding example-container" *ngIf="dataSource.data.length > 0; else noDataTemplate">
+            <table mat-table [dataSource]="dataSource"  matSort style="width: 100%;" class="mat-elevation-z8">
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;"> #</th>
+                    <td mat-cell *matCellDef="let element" > {{element.sno}} </td>
+                </ng-container>
+                <ng-container matColumnDef="kriCode">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px;">KRI code</th>
+                    <td mat-cell *matCellDef="let element" class="viewAll" style="padding-left: 10px;"> <button (click)="passingRoutingData(element)" style="background-color:transparent; border:none;"  class="viewAll">{{element.KRICode}}</button></td>
+                </ng-container>
+                <ng-container matColumnDef="unit">
+            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px;"> Unit </th>
+            <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Unit}} </td>
+        </ng-container>
+                <ng-container matColumnDef="period">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px;">Period</th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Period}} </td>
+                </ng-container>
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px;">Date</th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{utils.formatedDate(element.Date)}} </td>
+                </ng-container>
+                <ng-container matColumnDef="measurment">
+                    <th mat-header-cell *matHeaderCellDef style="text-align: center; border-left: 1px solid #fff;">Measurement Status</th>
+                    <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.KRI_Status}} </td>
+                </ng-container>
+                <ng-container matColumnDef="kriValue">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px;">KRI Value</th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.KRI_Value}} </td>
+                </ng-container>
+                <ng-container matColumnDef="remarks">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px;">Remarks</th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Remark}} </td>
+                </ng-container>
+                <!-- <ng-container matColumnDef="unit">
+            <th mat-header-cell *matHeaderCellDef > Unit Name </th>
+            <td mat-cell *matCellDef="let element"> {{element.unit}} </td>
+        </ng-container> -->
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:  rgb(207, 205, 205);"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"  style="cursor:pointer;"></tr>
+            </table>
+            <!-- <mat-paginator #paginator [pageSize]="5" showFirstLastButtons [pageSizeOptions]="[5,10, 25, 100]"></mat-paginator> -->
+        </div>
+        <ng-template #noDataTemplate class="example-container">
+            <p class="no-data">No Data Found</p>
+        </ng-template>
+    </div>
+    <!-- <div class="bottom-dig">
+        <button mat-stroked-button mat-dialog-close>Cancel</button>
+    </div> -->
+    <div class="modal-footer modalFooter">
+        <!-- <button mat-stroked-button mat-dialog-close>Cancel</button> -->
+        <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh" mat-dialog-close>Cancel</button>
+    </div>
+
+</div>
+<!-- (click)="closeAllPopup()" -->

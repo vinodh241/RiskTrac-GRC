@@ -1,0 +1,24 @@
+{
+    "APP_MODULES" :{
+     
+        "VENDOR_MODULE"                             : "./app/master/vendors/vendors-rt.js",
+        "SITES_MODULE"                              : "./app/master/sites/sites-rt.js",
+        "THREAT_LIBRARY_MODULE"                     : "./app/master/threat-library/threat-library-rt.js",
+		"BUSINESS_SERVICES_APPS_MODULE"             : "./app/master/business-services-apps/business-services-apps-rt.js",
+        "METRICS_LIBRARY_MODULE"                    : "./app/master/metrics-library/metrics-library-rt.js",
+        "BUSINESS_FUNCTIONS_MODULE"                 : "./app/master/business-functions/business-functions-rt.js",
+        "CRISIS_COMMS_TEMPLATE_MODULE"              : "./app/master/crisis-comms-template/crisis-comms-template-rt.js",
+        "SITE_RISK_ASSESSMENTS_MODULE"              : "./app/site-risk-assessments/site-risk-assessments-rt.js",
+        "DYNAMIC_MASTER_PAGES_MODULE"               : "./app/master/dynamic-master/dynamic-master-rt.js",
+        "BUSINESS_CONTINUITY_PLANNING_MODULE"       : "./app/business-continuity-planning/business-continuity-planning-rt.js",
+        "BCMS_TESTING_MODULE"                       : "./app/bcms-testing/bcms-testing-rt.js",
+        "INCIDENT_REPORT_MODULE"                    : "./app/incident-report/incident-report-rt.js",
+        "CRISIS_COMMUNICATION_MODULE"               : "./app/crisis-communication/crisis-communication-rt.js",
+        "COMPLIANCE_REVIEW_MODULE"                  : "./app/compliance-review/compliance-review-rt.js",
+        "REMEDIATION_TRACKER_MODULE"                : "./app/remediation-tracker/remediation-tracker-rt.js",
+        "DASHBOARD_MODULE"                          : "./app/dashboard/dashboard-rt.js",
+        "STEERING_COMMITEE_MODULE"                  : "./app/master/steering-commitee/steering-commitee-rt.js", 
+        "IN_APP_NOTIFICATION_MODULE"                : "./app/inApp-notification/inApp-notification-rt.js",
+        "RISK_RATING_MODULE"                        : "./app/master/risk-rating/risk-rating-rt.js"
+    }
+}

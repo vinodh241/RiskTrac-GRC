@@ -1,0 +1,67 @@
+<span><b>Residual Risk</b></span>
+        <mat-card class="mat-elevation-z4" >
+          <mat-card-header>
+            
+          </mat-card-header>
+          <mat-card-content>
+            <mat-table [dataSource]="dataSource" matSort>
+                <ng-container matColumnDef="Index">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                    <mat-cell *matCellDef="let row"> {{row.Index}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="RatingName">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Residual Risk</mat-header-cell>
+                    <mat-cell *matCellDef="let row">{{row.RatingName}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="RatingScore">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Color Code</mat-header-cell>
+                    <mat-cell *matCellDef="let row"><mat-icon color="#454545">image</mat-icon>  {{row.RatingScore}} </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                    <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <button mat-icon-button *ngIf="row.StatusID!=5">
+                            <mat-icon (click)="edit(row)" aria-hidden="false" aria-label="Edit">edit
+                            </mat-icon>
+                        </button>
+                        <button mat-icon-button *ngIf="row.StatusID!=5">
+                            <mat-icon (click)="edit(row)" aria-hidden="false" aria-label="Edit">delete
+                            </mat-icon>
+                        </button>
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </mat-card-content>
+          <mat-card-actions>
+            <div fxLayout="row " fxLayoutAlign="end center">
+                <button mat-mini-fab color="warn" aria-label="add Inherent Impact Rate" (click)="initiateAdd()" *ngIf="!adddg">
+                    <mat-icon>add</mat-icon>
+                </button>
+                <form [formGroup]="masterForm" autocomplete="off" *ngIf="adddg"  (ngSubmit)="save()" fxLayout="row"  fxLayoutAlign="end center" fxFlex.xs="98%"  fxFlex.lg="98%">
+                    <input formControlName="txtrateid" hidden="true">
+                    <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%" fxFlex.sm="35%">
+                        <mat-label>Color Code</mat-label>
+                        <input matInput formControlName="txtcolorcode">
+                    </mat-form-field>
+                    <!-- <mat-form-field>
+                        <input matInput [ngxMatColorPicker]="picker" formControlName="txtcolorcode" [disabled]="disabled">
+                        <ngx-mat-color-toggle matSuffix [for]="picker"></ngx-mat-color-toggle>
+                        <ngx-mat-color-picker #picker [touchUi]="touchUi" [color]="color"></ngx-mat-color-picker>
+                    </mat-form-field> -->
+                    <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%" fxFlex.sm="35%">
+                        <mat-label>Color Name</mat-label>
+                        <input matInput formControlName="txtcolorname">
+                    </mat-form-field>
+                    <button fxFlexOffset="10px" type="submit" mat-mini-fab color="warn" aria-label="Save" *ngIf="adddg" [disabled]="!masterForm.valid">
+                        <mat-icon>check</mat-icon>
+                    </button>
+                    <button mat-mini-fab fxFlexOffset="10px" class="buttongray" aria-label="Cancel" (click)="cancelForm()" *ngIf="adddg">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </form>
+                
+            </div>
+          </mat-card-actions>
+        </mat-card>

@@ -1,0 +1,342 @@
+<div  style="margin-bottom: 0px;height: calc(100% - 72px);" >
+    <mat-toolbar style="display: flex; justify-content:space-between ;align-items: center; height: 8.3vh;">
+        <div>{{this.data.kriScore[0].KRICode}}</div>
+        <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+            <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+        </button>
+    </mat-toolbar>
+
+    <div class="mat-table-padding example-container">
+        <table mat-table [dataSource]="dataSource" *ngIf="dataSource.length > 0; else noDataTemplate" matSort id="kpiScoreID" style="padding-left: 20px; padding: right 20px; padding-top:20px">
+            <ng-container matColumnDef="kricode">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none','white-space': 'nowrap'}" style="white-space: nowrap;"> KRI Code </th>
+                <td mat-cell *matCellDef="let row"> {{row.KRICode}} </td>
+            </ng-container>
+            <ng-container matColumnDef="indicator">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Indicator </th>
+                <td mat-cell *matCellDef="let row"> {{row.Indicator}} </td>
+            </ng-container>
+            <ng-container matColumnDef="Measurmentfrequency">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Measurement Frequency
+                </th>
+                <td mat-cell *matCellDef="let row"> {{row.MeasurementFrequency}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="Target">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Target</th>
+                <td mat-cell *matCellDef="let row"> {{row.KRI_Target}}</td>
+            </ng-container>
+            <ng-container matColumnDef="Kritype">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">KRI Type</th>
+                <td mat-cell *matCellDef="let row"> {{row.KRI_Type}} </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="period-t">
+                <th mat-header-cell *matHeaderCellDef >Period-T</th>
+                <td mat-cell *matCellDef="let row">
+                <div style="display: flex; justify-content:space-between;">
+                    <div>
+                        <p>{{row.Period}}</p>
+                    </div>
+                    <div>
+                        <p>{{utils.formatDate(row.Date)}}</p>
+                    </div>
+                    <input width="40px" matInput type="number" min="0" max="100" [(ngModel)]="row.Measurement"
+                            (change)="onChangeMeasurement(row)">%
+                    <div [style.background-color]="row.ColorCode" class="value-container">{{row.ThresholdValue}} </div>
+                </div>
+                </td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="tvalue-1">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.kriService.kriThresholds[0].ColorCode"
+                            class="value-container">
+                            1
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    {{row.ThresholdValue1 <= row.ThresholdValue2 ? '>=' : '<=' }} {{row.ThresholdValue1}}% </td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-2">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.kriService.kriThresholds[1].ColorCode"
+                            class="value-container">
+                            2
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.ThresholdValue2 <= row.ThresholdValue3 ? '>=' : '<=' }} {{row.ThresholdValue2}}%</td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-3">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.kriService.kriThresholds[2].ColorCode"
+                            class="value-container">
+                            3
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.ThresholdValue3 <= row.ThresholdValue4 ? '>=' : '<=' }}{{row.ThresholdValue3}}%</td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-4">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.kriService.kriThresholds[3].ColorCode"
+                            class="value-container">
+                            4
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.ThresholdValue4 <= row.ThresholdValue5 ? '>=' : '<=' }}{{row.ThresholdValue4}}% </td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-5">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-left':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.kriService.kriThresholds[4].ColorCode"
+                            class="value-container">
+                            5
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">={{row.ThresholdValue5}}% </td>
+            </ng-container>
+            <ng-container matColumnDef="period">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-right':'none'}">Period</th>
+                <td mat-cell *matCellDef="let row"> {{row.Period}} </td>
+            </ng-container>
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">Date</th>
+                <td mat-cell *matCellDef="let row"> {{utils.formatedDate(row.Date)}} </td>
+            </ng-container>
+            <ng-container matColumnDef="measurement">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">Measurement
+                </th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-form-field class="editable">
+                        <div style="display: flex;">
+                            <input matInput type="number" min="0" max="100" [(ngModel)]="row.MeasurementValue"
+                               [disabled]="true">%
+                        </div>
+                    </mat-form-field>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="krivalue">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                    [ngStyle]="{'border-top': 'none','border-left':'none'}">KRI Value</th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="row.ColorCode" class="value-container">
+                            {{row.KRI_Value}}
+                        </div>
+                    </div>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="Remarks">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Remarks</th>
+                <td mat-cell *matCellDef="let row">
+                    <mat-form-field class="example-full-width" style="width:5vw;" matTooltip={{row.Remark}}>
+                        <input [(ngModel)]="row.Remark" matInput
+                            [disabled]="true">
+                    </mat-form-field>
+
+                    <!-- <p *ngIf="row.ThresholdValue <5 && row.ThresholdValue >=1 && getRemarkData(row.Remarks)"
+                        [ngStyle]="{'color':'red'}">Remarks is required</p> -->
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Status</th>
+                <td mat-cell *matCellDef="let row">{{row.KRI_Status}}</td>
+            </ng-container>
+            <ng-container matColumnDef="upload">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Upload Evidence/th>
+                <td mat-cell *matCellDef="let row">
+                    <!-- <mat-form-field class="example-full-width" style="width:5vw"> -->
+
+                    <app-file-upload [evdname]="'Kri Scoring'" [inputData]="row"
+
+                        [showFileIcon]="true" ></app-file-upload>
+                </td>
+            </ng-container>
+            <!-- <ng-container matColumnDef="threshold-value">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+                <td mat-cell *matCellDef="let row">{{row.StatusName}}</td>
+            </ng-container> -->
+
+            <!-- <ng-container matColumnDef="tvalue-1">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center" [ngStyle]="{'border-top': 'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.service.kriThresholds[0].ColorCode"  class="value-container">
+                            1
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.Target==0?">":"<"}}
+                    {{row.ThresholdValue1}}% </td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-2">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"  [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.service.kriThresholds[1].ColorCode"  class="value-container">
+                            2
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.Target==0?"<=":">="}}{{row.ThresholdValue2}}%</td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-3">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"  [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.service.kriThresholds[2].ColorCode"  class="value-container">
+                            3
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.Target==0?"<=":">="}}{{row.ThresholdValue3}}%</td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-4">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center" [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}">
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.service.kriThresholds[3].ColorCode"  class="value-container">
+                            4
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.Target==0?"<=":">="}}{{row.ThresholdValue4}}% </td>
+            </ng-container>
+            <ng-container matColumnDef="tvalue-5">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center"  [ngStyle]="{'border-top': 'none','border-left':'none'}" >
+                    <div class="krivalue-container">
+                        <div [style.background-color]="this.service.kriThresholds[4].ColorCode"  class="value-container">
+                            5
+                        </div>
+                    </div>
+                </th>
+                <td mat-cell *matCellDef="let row">{{row.ThresholdValue5}}% </td>
+            </ng-container> -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"></th>
+                <td mat-cell *matCellDef="let row">
+                    <div class="tooltip">
+                        <p class="view-previous">View Previous Data</p>
+                        <span class="tooltiptext">
+                            <p align="start" class="historical-text">
+                                Historical Data
+                            </p>
+                            <!-- <div *ngIf="!getPreviousScoring(row)">
+                                <p style="text-align:center">Empty</p>
+                            </div> -->
+                            <div *ngIf="row.PreviousScoring?.length>0 ; else noDataTemplate">
+
+                            <table style="width:90%;" class="tooltip-table">
+                                <colgroup>
+                                    <col span="2">
+                                </colgroup>
+                                <tr class="tooltip-table">
+                                    <th></th>
+                                    <th class="tooltip-table">Period</th>
+                                    <th class="tooltip-table">Date</th>
+                                    <th class="tooltip-table">Measurement</th>
+                                    <th class="tooltip-table">KRI Value</th>
+                                </tr>
+
+                                    <tr class="tooltip-table" *ngFor="let data of getPreviousScoring(row)">
+                                        <td class="tooltip-table">
+                                            T-{{getPreviousScoring(row).indexOf(data)+1}}</td>
+                                        <td class="tooltip-table">{{data.Period}}</td>
+                                        <td class="tooltip-table">{{utils.formatedDate(data.Date)}}</td>
+                                        <td class="tooltip-table">{{data.Measurement}}%</td>
+                                        <td class="tooltip-table">
+                                            <div class="krivalue-container">
+                                                <div [style.background-color]="data.ColorCode" class="krivalue">
+                                                    <p style="text-align:center; color:black;">
+                                                        {{data.ThresholdValue}}</p>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+
+                            </table>
+                        </div>
+                        <ng-template #noDataTemplate class="example-container">
+                            <!-- <p class="no-data">No Data Found</p> -->
+                            <p style="text-align:center">Empty</p>
+                        </ng-template>
+                        </span>
+                    </div>
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="header-row-kri-code">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">KRI Code
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-indicator">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">Indicator
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-measurement-frequency">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">Measurement
+                    Frequency
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-target">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">Target
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-kri-type">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">KRI Type
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-fourth-group">
+                <th mat-header-cell *matHeaderCellDef class="text-align-center" [attr.colspan]="5"
+                    [ngStyle]="{'border-bottom':'none'}">Threshold Value</th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-second-group">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="text-align-center"
+                    [ngStyle]="{'border-bottom':'none'}"> PERIOD-T </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-remark">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2">Remarks </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-status">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2"> Status </th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-preview">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2"> </th>
+            </ng-container>
+            <ng-container matColumnDef="header-row-upload">
+                <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2">Upload Evidence</th>
+            </ng-container>
+
+            <tr mat-header-row
+                *matHeaderRowDef="['header-row-kri-code','header-row-indicator','header-row-measurement-frequency','header-row-target','header-row-kri-type', 'header-row-fourth-group', 'header-row-second-group', 'header-row-remark', 'header-row-status','header-row-upload','header-row-preview']">
+            </tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+    </div>
+    <ng-template #noDataTemplate class="example-container">
+        <p class="no-data">No Data Found</p>
+    </ng-template>
+
+    <!-- <div class="bottom-dig">
+        <button mat-stroked-button mat-dialog-close>Cancel</button>
+    </div> -->
+
+    <div class="modal-footer modalFooter">
+        <!-- <button mat-stroked-button mat-dialog-close>Cancel</button> -->
+        <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh" mat-dialog-close>Cancel</button>
+    </div>
+</div>

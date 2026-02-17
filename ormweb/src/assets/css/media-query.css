@@ -1,0 +1,149 @@
+/* NAVIGATION - UNIVERSAL */
+@media only screen and ((min-width: 992px)) {
+  .navbar-light .navbar-nav.topnav  {
+    text-align: left;
+    z-index: 99;
+  }
+
+
+  .topnav li:nth-child(1) img {width: 48%;}
+  .topnav li:nth-child(2) img {width: 16%;}
+  .topnav li:nth-child(3) img {width: 11%;}
+  .topnav li:nth-child(4) img {width: 81%;}
+  .topnav li:nth-child(5) img {width: 16%;}
+  .topnav li:nth-child(6) img {width: 80%;}
+  .topnav li:nth-child(7) img {width: 56%;}
+  .topnav li:nth-child(8) img {width: 62%;}
+  .userProfile {width: 12%;}
+}
+
+@media only screen and (max-width: 1367px) {
+    /* NAVIGATION */
+    .navbg {font-size: 100%;}
+    .topFilter {font-size: 1rem;}
+    .navbar-brand.BCMTrac img {width: 5.5em;}
+    /* .navbar-light .navbar-nav.topnav .nav-item.active a.nav-link, .navbar-light .navbar-nav.topnav .nav-item a.nav-link:hover {line-height: 1; margin-top: 2.5%;} */
+
+    .rightToggle {padding: 0;}
+    .bg-light.topmenuBg {padding: 0;}
+    .lpFooter {font-size: 60%;}
+
+    .colorStatus {width: 9vw; padding: 0.5vh 1.2% 0.5vh 3%;}
+    .colorStatus span.vmiddleLeft {font-size: 200%;}
+    /* END NAVIGATION */
+
+    /* BOX BODY */
+    .cardGen .cardBody h2 {font-size: 1.4rem;}
+    .tblContent {font-size: 1.2rem;}
+    /* END BOX BODY */
+
+    /* FORM - UNIVERSAL */
+   .lblTxt {font-size: 1rem;}
+   .mutiselectMenu select, .searchInput input { font-size: 1rem;}
+   .applyFilter button, .applyFilter button:focus, .vmiddleRight .applyFilter button, .vmiddleRight .applyFilter button:focus {font-size: 1rem; border-left: 2.4vw solid #000;}
+   .vhmiddle .applyFilter button, .vhmiddle .applyFilter button:focus {font-size: 1rem; line-height: 1.4;}
+   .form-control-plaintext.fldcolor, select:focus-visible.form-control-plaintext.fldcolor, .form-control.fldcolor {padding: 0.5rem;}
+   button, input, optgroup, select, textarea, label.col-form-label, .form-control-plaintext.fldcolor, select:focus-visible.form-control-plaintext.fldcolor, .form-control.fldcolor {font-size: 1rem;}
+   input[type="radio"] {-webkit-transform: scale(1.1); transform: scale(1.1);}
+   input[type="checkbox"] {-webkit-transform: scale(1.1); transform: scale(1.1);}
+
+   .vmiddleRight.rightblStatus {font-size: 1.3rem;}
+
+   /* END FORM - UNIVERSAL */
+
+    /* MODAL  */
+    .allModalHeader {padding: 0.5rem !important;}
+    .modalh5 {font-size: 1.6rem}
+    .close.customClose {font-size: 100%;}
+   .modalCancelBtn {font-size: 1rem;}
+   .modalColorBtn {font-size: 1rem;}
+   .modalTble {font-size: 1rem;}
+   .radioTxt {font-size: 1rem;}
+   .card-header.bgAccodion {padding: 0.2rem 1rem;}
+
+   .btn.btnAccordion {font-size: 100%; padding: 0.2vh 0.3vh;}
+   .btn.btnAccordion img {width: 1.4em;}
+   .blueCrossFilter {font-size: 1.1rem;}
+
+   .nav-item.mutitabBg button, .nav-item.mutitabBg button:focus, .nav-item.mutitabBg button:focus-visible {padding-bottom: 1.6vh; border-radius: 0.3vh 0.3vh 0 0;}
+
+
+
+      /* END MODAL  */
+  }
+
+
+/* FOR FONT SIZE */
+/* @media only screen and (max-width: 1919px) {
+    html {
+      font-size: 62.5%;
+    }
+
+    body {
+      font-size: 12px;
+    }
+
+  } */
+/* END FOR FONT SIZE */
+@media only screen and (min-width: 1919px) {
+
+  .applyFilter button, .applyFilter button:focus, .vhmiddle .applyFilter button, .applyFilter button:focus, .vmiddleRight .applyFilter button, .applyFilter button:focus, .vhmiddle .applyFilter button, .vhmiddle .applyFilter button:focus, .btn-dark:not(:disabled):not(.disabled):active {font-size: 1.4rem; line-height: 1.5; padding-block: .6rem;}
+  /* .btn-dark.ad:not(:disabled):not(.disabled):active {padding-inline: 1vw;} */
+
+  .btnGen {padding: 0.5vh 0.8vw;}
+  .btnGen.ev {padding: 0.5vh 0.8vw;}
+
+  .modalTble.seablueTble.smallTable tbody td:last-child img {width: 1.4em;}
+  input[type="radio"] {-webkit-transform: scale(1.5); transform: scale(1.5);}
+  input[type="checkbox"] {-webkit-transform: scale(1.5); transform: scale(1.5);}
+
+  .fontSize2 {font-size: 2rem;}
+
+}
+
+
+/* DASHBOARD */
+
+@container (max-width: 500px) {
+  .cardGen .cardBody .statusBoxIcon {font-size: 1.5rem; top: 28.8%;}
+}
+@container (max-width: 420px) {
+  .cardGen .cardBody .cardStatus {width: 14vw;}
+  .cardGen .cardBody .cardStatus {font-size: 1.1rem;}
+}
+
+@container (max-width: 450px) {
+  .cardGen .cardBody .cardStatus {width: 15vw; font-size: 1.3rem;}
+  .cardGen .cardBody .statusBoxIcon {font-size: 1.3rem;}
+  .cardGen .cardBody .statusBoxIcon {top: 28.8%;}
+}
+
+@container (max-width: 380px) {
+    .cardGen .cardBody {font-size: 1rem;}
+    .cardGen .cardBody h2 {font-size: 1.2rem;}
+    .cardGen .cardBody .cardParagraph{font-size: 0.8rem;}
+    .cardGen .cardBody .bcpcBtmContent h3 {font-size: 1rem;}
+    .cardGen .cardBody .bcpcBtmContent table {font-size: 0.9rem;}
+    .cardGen .cardBody h2 span {font-size: 0.7rem;}
+    .cardGen .cardBody .cardParagraph.cs {width: 54%;}
+    .cardGen .cardBody .cardParagraph.sr {width: 60%;}
+    .cardGen .cardBody .cardStatus {top:66%; font-size: 0.7rem;}
+    .cardGen .cardBody .cardStatus .cardStatusLeft.ccLeft span:nth-child(2), .cardGen .cardBody .cardStatus .cardStatusRight.csRight span:nth-child(2), .cardGen .cardBody .cardStatus .cardStatusLeft.cardOpen span:nth-child(2), .cardGen .cardBody .cardStatus .cardStatusRight.cardClose span:nth-child(2) {font-size: 1rem;}
+    .cardGen .cardBody .cardStatus .cardStatusLeft.cardOpen p, .cardGen .cardBody .cardStatus .cardStatusRight.cardClose p {font-size: 1rem;}
+    .cardGen .cardBody sup {font-size: 0.5rem;}
+    .cardGen .cardBody .statusBoxIcon {font-size: 1rem;}
+    .cardGen .cardBody .cutBox {font-size: 1rem;}
+  }
+  /* END DASHBOARD */
+
+
+
+
+
+
+
+
+
+
+
+

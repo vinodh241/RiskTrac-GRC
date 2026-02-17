@@ -1,0 +1,13 @@
+{
+  "orm": {
+    "department": "Department",
+    "departmentName": "Department Name",
+    "selectDepartment": "Select Department",
+    "searchDepartment": "Search department...",
+    "allDepartments": "All Departments",
+    "departmentRequired": "Department is required",
+    "departmentUnitValidation": "Department and Unit cannot be edited once it is saved",
+    "selectDepartmentFirst": "Select department and Unit first to start Bulk Reviewing",
+    "departmentCannotBeEdited": "Department cannot be edited once it is saved"
+  }
+}

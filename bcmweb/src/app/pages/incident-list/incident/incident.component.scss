@@ -1,0 +1,44 @@
+.mat-toolbar {
+    width: auto;
+    // margin:-24px -24px 0px -24px;
+    height: 6.4vh;
+    font-size: 2vh;
+}
+
+::ng-deep.mat-dialog-content {
+    display: flex;
+    flex-direction: row;
+    margin: 0px;
+    padding: 0px !important;
+    justify-content: space-between;
+    max-height: 90%;
+    // min-height: calc(81.5vh - 24px);
+}
+
+.left {
+    width: 70%;
+    height: 100%;
+    // min-height: 100%;
+}
+
+.right {
+    width: 28%;
+    height: 100%;
+}
+
+// ::ng-deep.minimumAdded mat-dialog-container, ::ng-deep.maximumAdded mat-dialog-container {
+//     overflow: hidden;
+// }
+::ng-deep.minimumAdded .remaining-details {
+    height: calc(100vh - 340px) !important;
+}
+
+::ng-deep.maximumAdded .remaining-details {
+    height: calc(100vh - 270px) !important;
+}
+::ng-deep .mat-tab-body-content {
+    overflow: hidden !important;
+}
+::ng-deep .mat-dialog-container {
+    overflow: hidden !important;
+}

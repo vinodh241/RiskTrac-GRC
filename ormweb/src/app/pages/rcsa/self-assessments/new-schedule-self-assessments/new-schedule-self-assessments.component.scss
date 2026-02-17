@@ -1,0 +1,259 @@
+mat-dialog-content {
+  padding: 20px 0px;
+  margin: 0;
+}
+
+.TextboxSpan {
+  padding: 20px;
+  border: 1px solid #ccc;
+}
+
+span.headertext {
+  max-height: 24px;
+  margin-bottom: 5px;
+}
+
+span.navigate {
+  cursor: pointer;
+}
+
+mat-label.gray {
+  color: rgb(145, 0, 0);
+}
+
+.back-icon {
+  -webkit-transform: scaleX(-1);
+  margin-right: 10px;
+}
+
+.disable {
+  pointer-events: none;
+  opacity: 3;
+}
+
+.mat-input-element:disabled {
+  color: rgb(84, 82, 82);
+}
+
+// .mat-select-disabled .mat-select-value {
+//     color: rgb(218 19 19 / 38%);
+// }
+
+::ng-deep.mat-select-disabled .mat-select-value {
+  color: rgb(84, 82, 82) !important;
+}
+
+/* Base styles for buttons */
+.move-buttons .buttons {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  cursor: pointer;
+  margin: 0.5em;
+  width: 7vw;
+  padding: 0.5em;
+  border-radius: 0.3em;
+  color: #fff;
+  background: linear-gradient(45deg, rgba(29, 160, 79, 0.8), rgba(11, 89, 161, 0.8));
+  outline: none;
+  border: none;
+  filter: drop-shadow(0px 5px 4px rgba(0, 0, 0, 0.5));
+  opacity: 1;
+  transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+/* Specific styles for the 'save' button */
+.move-buttons .buttons.save {
+  justify-content: center;
+  background: #0b5ed7;
+}
+
+/* Disabled state */
+.move-buttons .buttons:disabled {
+  background: #cccccc;
+  /* Gray background */
+  color: #666666;
+  /* Muted text color */
+  cursor: not-allowed;
+  /* Unclickable cursor */
+  opacity: 0.7;
+  /* Slight transparency for visual cue */
+  filter: none;
+  /* Remove drop-shadow for disabled state */
+}
+
+
+
+/*   new changes  */
+/* centered page shell like a4/a4.1 (not too narrow, not full-bleed) */
+.page-shell {
+  width: 94%;
+  max-width: 1680px;
+  margin: 0 auto;
+  /* center */
+  padding: 0 12px;
+  /* small breathing room */
+}
+
+/* make sure tabs cannot inherit a narrow flex-basis from a parent */
+.tabs-full,
+.tabs-full .mat-tab-group,
+.tabs-full .mat-tab-body-wrapper,
+.tabs-full .mat-tab-body,
+.tabs-full .mat-tab-body-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  flex: 1 1 100% !important;
+}
+
+/* a bit of vertical spacing between cards/sections */
+.content-area {
+  padding-top: 12px !important;
+}
+
+mat-card {
+  margin-bottom: 16px !important;
+}
+
+/* keep tab header aligned with content edges */
+:host ::ng-deep .mat-tab-header {
+  padding: 0 12px;
+}
+
+/* footer buttons area matches content width */
+.bottom-actions {
+  padding: 12px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.wrap {
+  white-space: normal;
+  word-break: break-word;
+}
+
+.ap-actions-cell {
+  white-space: nowrap !important;
+}
+
+.ap-actions-cell button {
+  display: inline-flex;
+  vertical-align: middle;
+}
+
+.ca-edit-desc-cell .w-full {
+  width: 100%;
+}
+
+mat-dialog-content.content-area {
+  max-height: 54vh !important;
+  min-height: 54vh;
+}
+
+button.btnDarkBlue:disabled {
+  opacity: 0.5;
+  color: #fff !important;
+  font-size: 1em;
+  background-color: #395d77 !important;
+}
+
+button.btnDarkBlue {
+  opacity: 1;
+  font-size: 1em;
+  color: #fff !important;
+  background-color: #395d77 !important;
+}
+
+.tblHead {
+  border: none;
+  // border: none;
+  border-spacing: 0;
+}
+
+.tblHead thead {
+  background-color: #2a80b8;
+  color: #fff;
+}
+
+.tblHead thead th {
+  padding-block: 1.6vh;
+}
+
+@media only screen and (min-width: 1300px) and (max-width:1366px) {
+  mat-dialog-content.content-area {
+    max-height: 38vh !important;
+    min-height: 38vh;
+  }
+}
+
+@media only screen and (min-width: 1400px) and (max-width:1536px) {
+  mat-dialog-content.content-area {
+    max-height: 44vh !important;
+    min-height: 44vh;
+  }
+}
+
+/* in component.scss */
+.disabled-field {
+  pointer-events: none;
+  /* belt & suspenders */
+  opacity: 0.6;
+}
+
+.no-action-plans {
+  padding: 12px;
+  text-align: center;
+  font-size: 14px;
+  color: #777;
+  font-style: italic;
+}
+
+.topTabTxt {
+  font-size: 1.4em;
+  position: absolute;
+  right: 2%;
+  top: 3%;
+  text-align: right;
+  color: #dd1a00;
+}
+
+.adTopTable tr th {
+  background-color: #2a80b8;
+  color: #fff;
+}
+
+// .adTopTable tr:last-child td {
+//   border-bottom-color: transparent !important;
+// }
+
+.adTopTable th,
+.adTopTable td {
+  border-right: 1px solid rgba(0, 0, 0, 0.12);
+  padding-left: 0.3vw;
+}
+
+.adTopTable td:last-child,
+.adTopTable th:last-child {
+  border-right: none;
+}
+
+/* small style for the inline post-treatment-required label */
+.post-required-label {
+  color: #dd1a00;
+  /* match topTabTxt color */
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+/* ensure the truncated action cell doesn't wrap the info icon badly */
+mat-card-content table td .ap-truncate {
+  display: inline-block;
+  max-width: calc(100% - 36px);
+  /* leave room for icon/button */
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

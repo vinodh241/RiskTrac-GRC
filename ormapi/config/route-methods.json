@@ -1,0 +1,964 @@
+{
+    "ROUTE_METHODS": [
+        {
+            "download-file": "downloadFile",
+            "validateFunction": 0
+        },
+        {
+            "download-risk-appetite-template": "downloadRiskAppetiteTemplate",
+            "validateFunction": 0
+        },
+        {
+            "generate-email": "generateEmail",
+            "validateFunction": 0
+        },
+        {
+            "get-policy-details": "getPolicyDetails",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-appetite-list": "getRiskAppetiteList",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-appetite-template-list": "getRiskAppetiteTemplateList",
+            "validateFunction": 0
+        },
+        {
+            "upload-risk-appetite": "uploadRiskAppetite",
+            "validateFunction": 0
+        },
+        {
+            "upload-risk-appetite-template": "uploadRiskAppetiteTemplate",
+            "validateFunction": 0
+        },
+        {
+            "get-info-schedule-risk-assessment": "getInfoForScheduleRiskAssessment",
+            "validateFunction": 0
+        },
+        {
+            "set-risk-assessment": "setRiskAssessment",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-assessments": "getRiskAssessment",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-metrics": "getRiskMetrics",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-metrics-maker": "getRiskMetricsMaker",
+            "validateFunction": 0
+        },
+        {
+            "set-risk-metrics-draft": "setRiskMetricsDraft",
+            "validateFunction": 0
+        },
+        {
+            "set-risk-metrics-submit": "setRiskMetricsSubmit",
+            "validateFunction": 0
+        },
+        {
+            "set-risk-metrics-review-draft": "setRiskMetricReview",
+            "validateFunction": 0
+        },
+        {
+            "set-risk-metrics-review-submit": "setRiskMetricsReview",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-assessment-details": "getRiskAsessmentDetails",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-reports-setting": "getRiskReportSetting",
+            "validateFunction": 0
+        },
+        {
+            "set-risk-reports-setting": "setRiskReportSetting",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-metric-levels": "getRiskMetricLevels",
+            "validateFunction": 0
+        },
+        {
+            "set-risk-metric-levels": "setRiskMetricLevels",
+            "validateFunction": 0
+        },
+        {
+            "get-incident-master-data": "getIncidentMasterData",
+            "validateFunction": 0
+        },
+        {
+            "set-incident-master-data": "setIncidentMasterData",
+            "validateFunction": 0
+        },
+        {
+            "get-incidents": "getIncidents",
+            "validateFunction": 0
+        },
+        {
+            "get-incident-info": "getIncidentInfo",
+            "validateFunction": 0
+        },
+        {
+            "upload-incident-evidence": "uploadIncidentEvidence",
+            "validateFunction": 0
+        },
+        {
+            "download-incident-evidence": "downloadIncidentEvidence",
+            "validateFunction": 0
+        },
+        {
+            "delete-incident-evidence": "deleteIncidentEvidence",
+            "validateFunction": 0
+        },
+        {
+            "upload-rca-evidence": "uploadRcaEvidence",
+            "validateFunction": 0
+        },
+        {
+            "download-rca-evidence": "downloadRcaEvidence",
+            "validateFunction": 0
+        },
+        {
+            "delete-rca-evidence": "deleteRcaEvidence",
+            "validateFunction": 0
+        },
+        {
+            "upload-recommendation-evidence": "uploadRecomendationEvidence",
+            "validateFunction": 0
+        },
+        {
+            "download-recommendation-evidence": "downloadRecomendationEvidence",
+            "validateFunction": 0
+        },
+        {
+            "delete-recommendation-evidence": "deleteRecomendationEvidence",
+            "validateFunction": 0
+        },
+        {
+            "set-incident": "setIncident",
+            "validateFunction": 0
+        },
+        {
+            "get-incident": "getIncidentDetails",
+            "validateFunction": 0
+        },
+        {
+            "set-recommendation-action": "setRecommendationAction",
+            "validateFunction": 0
+        },
+        {
+            "set-recommendation-status": "setRecommendationStatus",
+            "validateFunction": 0
+        },
+        {
+            "set-incident-status": "setIncidentStatus",
+            "validateFunction": 0
+        },
+        {
+            "set-incident-review": "setIncidentReview",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-master-data": "getKriMasterData",
+            "validateFunction": 0
+        },
+        {
+            "set-kri-master-data": "setKriMasterData",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-info": "getKriInfo",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-definitions": "getKri",
+            "validateFunction": 0
+        },
+        {
+            "set-kri-definition": "setKri",
+            "validateFunction": 0
+        },
+        {
+            "delete-kri-definition": "deleteKri",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-metrics-scoring": "getKriMetricsScoring",
+            "validateFunction": 0
+        },
+        {
+            "set-kri-metrics-scoring": "setKriMetricScoring",
+            "validateFunction": 0
+        },
+        {
+            "set-kri-metrics-report": "setKriMetricsReport",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-report": "getKriReport",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-historical-scoring": "getKriHistoricalScoring",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-historical-report": "getKriHistoricalReport",
+            "validateFunction": 0
+        },
+        {
+            "get-all-controlautomationscore-data": "getAllControlAutomationScore",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-controlautomationscore-data": "getAllActiveControlAutomationScore",
+            "validateFunction": 1
+        },
+        {
+            "get-controlautomationscore-by-id-data": "getControlAutomationScoreByID",
+            "validateFunction": 1
+        },
+        {
+            "add-controlautomationscore-data": "addControlAutomationScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controlautomationscore-data": "updateControlAutomationScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controlautomationscore-status": "updateControlAutomationScoreStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-controlfrequencyscore-data": "getAllControlFrequencyScore",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-controlfrequencyscore-data": "getAllActiveControlFrequencyScore",
+            "validateFunction": 1
+        },
+        {
+            "get-controlfrequencyscore-by-id-data": "getControlFrequencyScoreByID",
+            "validateFunction": 1
+        },
+        {
+            "add-controlfrequencyscore-data": "addControlFrequencyScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controlfrequencyscore-data": "updateControlFrequencyScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controlfrequencyscore-status": "updateControlFrequencyScoreStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-controlinpace-data": "getAllControlInPace",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-controlinpace-data": "getAllActiveControlInPace",
+            "validateFunction": 1
+        },
+        {
+            "get-controlinpace-by-id-data": "getControlInPaceByID",
+            "validateFunction": 1
+        },
+        {
+            "add-controlinpace-data": "addControlInPace",
+            "validateFunction": 1
+        },
+        {
+            "update-controlinpace-data": "updateControlInPace",
+            "validateFunction": 1
+        },
+        {
+            "update-controlinpace-status": "updateControlInPaceStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-controlnaturescore-data": "getAllControlNatureScore",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-controlnaturescore-data": "getAllActiveControlNatureScore",
+            "validateFunction": 1
+        },
+        {
+            "get-controlnaturescore-by-id-data": "getControlNatureScoreByID",
+            "validateFunction": 1
+        },
+        {
+            "add-controlnaturescore-data": "addControlNatureScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controlnaturescore-data": "updateControlNatureScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controlnaturescore-status": "updateControlNatureScoreStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-controltotalscore-data": "getAllControlTotalScore",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-controltotalscore-data": "getAllActiveControlTotalScore",
+            "validateFunction": 1
+        },
+        {
+            "get-controltotalscore-by-id-data": "getControlTotalScoreByID",
+            "validateFunction": 1
+        },
+        {
+            "add-controltotalscore-data": "addControlTotalScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controltotalscore-data": "updateControlTotalScore",
+            "validateFunction": 1
+        },
+        {
+            "update-controltotalscore-status": "updateControlTotalScoreStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-overallcontrolenvironmentrating-data": "getAllOverallControlEnvironmentRating",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-overallcontrolenvironmentrating-data": "getAllActiveOverallControlEnvironmentRating",
+            "validateFunction": 1
+        },
+        {
+            "get-overallcontrolenvironmentrating-by-id-data": "getOverallControlEnvironmentRatingByID",
+            "validateFunction": 1
+        },
+        {
+            "add-overallcontrolenvironmentrating-data": "addOverallControlEnvironmentRating",
+            "validateFunction": 1
+        },
+        {
+            "update-overallcontrolenvironmentrating-data": "updateOverallControlEnvironmentRating",
+            "validateFunction": 1
+        },
+        {
+            "update-overallcontrolenvironmentrating-status": "updateOverallControlEnvironmentRatingStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-config-score-and-rating": "getConfigScoreAndRating",
+            "validateFunction": 1
+        },
+        {
+            "get-all-inherentimpact-data": "getAllInherentImpactRating",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-inherentimpact-data": "getAllActiveInherentImpactRating",
+            "validateFunction": 1
+        },
+        {
+            "get-inherentimpact-by-id-data": "getInherentImpactRatingByID",
+            "validateFunction": 1
+        },
+        {
+            "add-inherentimpact-data": "addInherentImpactRating",
+            "validateFunction": 1
+        },
+        {
+            "update-inherentimpact-data": "updateInherentImpactRating",
+            "validateFunction": 1
+        },
+        {
+            "update-inherentimpact-status": "updateInherentImpactRatingStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-inherent-data": "getAllInherentLikelihoodRating",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-inherent-data": "getAllActiveInherentLikelihoodRating",
+            "validateFunction": 1
+        },
+        {
+            "get-inherent-by-id-data": "getInherentLikelihoodRatingByID",
+            "validateFunction": 1
+        },
+        {
+            "add-inherent-data": "addInherentLikelihoodRating",
+            "validateFunction": 1
+        },
+        {
+            "update-inherent-data": "updateInherentLikelihoodRating",
+            "validateFunction": 1
+        },
+        {
+            "update-inherent-status": "updateInherentLikelihoodRatingStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-overallinherentriskrating-data": "getAllOverallInherentRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-overallinherentriskrating-data": "getAllActiveOverallInherentRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "get-overallinherentriskrating-by-id-data": "getOverallInherentRiskRatingByID",
+            "validateFunction": 1
+        },
+        {
+            "add-overallinherentriskrating-data": "addOverallInherentRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "update-overallinherentriskrating-data": "updateOverallInherentRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "update-overallinherentriskrating-status": "updateOverallInherentRiskRatingStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-overallinherentriskscore-data": "getAllOverallInherentRiskScore",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-overallinherentriskscore-data": "getAllActiveOverallInherentRiskScore",
+            "validateFunction": 1
+        },
+        {
+            "get-overallinherentriskscore-by-id-data": "getOverallInherentRiskScoreByID",
+            "validateFunction": 1
+        },
+        {
+            "add-overallinherentriskscore-data": "addOverallInherentRiskScore",
+            "validateFunction": 1
+        },
+        {
+            "update-overallinherentriskscore-data": "updateOverallInherentRiskScore",
+            "validateFunction": 1
+        },
+        {
+            "update-overallinherentriskscore-status": "updateOverallInherentRiskScoreStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-riskcategory-data": "getAllRiskCategory",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-riskcategory-data": "getAllActiveRiskCategory",
+            "validateFunction": 1
+        },
+        {
+            "get-riskcategory-by-id-data": "getRiskCategoryByID",
+            "validateFunction": 1
+        },
+        {
+            "add-riskcategory-data": "addRiskCategory",
+            "validateFunction": 1
+        },
+        {
+            "update-riskcategory-data": "updateRiskCategory",
+            "validateFunction": 1
+        },
+        {
+            "update-riskcategory-status": "updateRiskCategoryStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-overallresidualriskrating-data": "getAllOverallResidualRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-overallresidualriskrating-data": "getAllActiveOverallResidualRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "get-overallresidualriskrating-by-id-data": "getOverallResidualRiskRatingByID",
+            "validateFunction": 1
+        },
+        {
+            "add-overallresidualriskrating-data": "addOverallResidualRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "update-overallresidualriskrating-data": "updateOverallResidualRiskRating",
+            "validateFunction": 1
+        },
+        {
+            "update-overallresidualriskrating-status": "updateOverallResidualRiskRatingStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-residualrisk-data": "getAllResidualRisk",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-residualrisk-data": "getAllActiveResidualRisk",
+            "validateFunction": 1
+        },
+        {
+            "get-residualrisk-by-id-data": "getResidualRiskByID",
+            "validateFunction": 1
+        },
+        {
+            "add-residualrisk-data": "addResidualRisk",
+            "validateFunction": 1
+        },
+        {
+            "update-residualrisk-data": "updateResidualRisk",
+            "validateFunction": 1
+        },
+        {
+            "update-residualrisk-status": "updateResidualRiskStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-process-data": "getAllProcess",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-process-data": "getAllActiveProcess",
+            "validateFunction": 1
+        },
+        {
+            "get-process-by-id-data": "getProcessByID",
+            "validateFunction": 1
+        },
+        {
+            "add-process-data": "addProcess",
+            "validateFunction": 1
+        },
+        {
+            "update-process-data": "updateProcess",
+            "validateFunction": 1
+        },
+        {
+            "update-process-status": "updateProcessStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-group-data": "getAllActiveGroup",
+            "validateFunction": 1
+        },
+        {
+            "get-group-by-id-data": "getGroupByID",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-unit-by-groupid-data": "getAllActiveUnitByGroupID",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-unit-data": "getAllActiveUnit",
+            "validateFunction": 1
+        },
+        {
+            "get-unit-by-id-data": "getUnitByID",
+            "validateFunction": 1
+        },
+        {
+            "get-all-inherentrisk-data": "getAllInherentRisk",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-inherentrisk-data": "getAllActiveInherentRisk",
+            "validateFunction": 1
+        },
+        {
+            "get-inherentrisk-by-id-data": "getInherentRiskByID",
+            "validateFunction": 1
+        },
+        {
+            "add-inherentrisk-data": "addInherentRisk",
+            "validateFunction": 1
+        },
+        {
+            "update-inherentrisk-data": "updateInherentRisk",
+            "validateFunction": 1
+        },
+        {
+            "update-inherentrisk-status": "updateInherentRiskStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-schedule-period-data": "getSchedulePeriod",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-reviewer-data": "getAllActiveReviewer",
+            "validateFunction": 1
+        },
+        {
+            "get-reviewer-by-id-data": "getReviewerByID",
+            "validateFunction": 1
+        },
+        {
+            "add-schedule-assessment-data": "addScheduleAssessment",
+            "validateFunction": 1
+        },
+        {
+            "update-schedule-assessment-data": "updateScheduleAssessment",
+            "validateFunction": 1
+        },
+        {
+            "update-schedule-assessment-status-data": "updateScheduleAssessmentStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-schedule-data": "getAllActiveSchedule",
+            "validateFunction": 1
+        },
+        {
+            "get-all-schedule-data": "getAllSchedule",
+            "validateFunction": 1
+        },
+        {
+            "get-all-schedule-by-id-data": "getScheduleByID",
+            "validateFunction": 1
+        },
+        {
+            "get-schedule-assessment-years-data": "getScheduleAssessmentYears",
+            "validateFunction": 1
+        },
+        {
+            "get-snapshot-for-inprogress-schedule-assessment-data": "getSnapshotForInProgressScheduleAssessment",
+            "validateFunction": 1
+        },
+        {
+            "get-snapshot-for-inprogress-schedule-assessment-details-data": "getSnapshotForInProgressScheduleAssessmentDetails",
+            "validateFunction": 1
+        },
+        {
+            "get-inprogress-schedule-assessment-for-dashboard-data": "getInProgressScheduleAssessmentForDashboard",
+            "validateFunction": 1
+        },
+        {
+            "get-scheduled-action-plan-snapshot-data": "getScheduledActionPlanSnapshot",
+            "validateFunction": 1
+        },
+        {
+            "get-scheduled-action-plan-snapshot-details-data": "getScheduledActionPlanSnapshotDetails",
+            "validateFunction": 1
+        },
+        {
+            "get-completed-schedule-assessment-for-dashboard-data": "getCompletedScheduleAssessmentForDashboard",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-action-plan-status-data": "getAllActiveActionPlanStatus",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-control-testing-result-data": "getAllActiveControlTestingResult",
+            "validateFunction": 1
+        },
+        {
+            "get-all-active-control-verification-closure-data": "getAllActiveControlVerificationClosure",
+            "validateFunction": 1
+        },
+        {
+            "get-self-assessment-summary-by-schedule-assessment-id-data": "getSelfAssessmentSummaryByScheduleAssessmentID",
+            "validateFunction": 1
+        },
+        {
+            "get-self-assessment-details-by-schedule-inherent-id-data": "getSelfAssessmentDetailsByScheduleInherentID",
+            "validateFunction": 1
+        },
+        {
+            "get-all-schedule-assessment-cards-data": "getAllScheduleAssessmentCards",
+            "validateFunction": 1
+        },
+        {
+            "get-all-schedule-assessment-by-id-data": "getScheduleAssessmentByID",
+            "validateFunction": 1
+        },
+        {
+            "get-all-schedule-assessment-summary-by-status-data": "getSelfAssessmentSummaryByStatus",
+            "validateFunction": 1
+        },
+        {
+            "manage-schedule-assessment-details-data": "manageScheduleAssessmentDetails",
+            "validateFunction": 1
+        },
+        {
+            "update-approved-schedule-inherent-risk-reviewer-details-data": "updateApprovedScheduleInherentRiskReviewerDetails",
+            "validateFunction": 1
+        },
+        {
+            "update-rejected-schedule-inherent-risk-reviewer-details-data": "updateRejectedScheduleInherentRiskReviewerDetails",
+            "validateFunction": 1
+        },
+        {
+            "get-schedule-inherent-risk-action-trail-data": "getScheduleInherentRiskActionTrail",
+            "validateFunction": 1
+        },
+        {
+            "get-action-responsible-person-data": "getActionResponsiblePerson",
+            "validateFunction": 1
+        },
+        {
+            "get-residual-risk-response-data": "getResidualRiskResponse",
+            "validateFunction": 1
+        },
+        {
+            "get-residual-risk-responsible-person-data": "getResidualRiskResponsiblePerson",
+            "validateFunction": 1
+        },
+        {
+            "get-control-type-data": "getControlType",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-inherent-risk-rating-screen": "getDataForInherentRiskRatingScreen",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-control-environment-rating-screen": "getDataForControlEnvironmentRatingScreen",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-residual-risk-rating-screen": "getDataForResidualRiskRatingScreen",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-manage-inherentrisk-screen": "getDataForManageInherentRiskScreen",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-schedule-assessment-screen": "getDataForScheduleAssessmentScreen",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-manage-schedule-assessment-screen": "getDataForManageScheduleAssessmentScreen",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-self-assessment-screen": "getDataForSelfAssessmentScreen",
+            "validateFunction": 1
+        },
+        {
+            "get-data-for-manage-self-assessment-screen": "getDataForManageSelfAssessmentScreen",
+            "validateFunction": 1
+        },
+        {
+            "submit-self-assessment-by-schedule-assessment": "submitSelfAssessmentsByScheduleAssessment",
+            "validateFunction": 1
+        },
+        {
+            "upload-rcsa": "uploadRCSAEvidence",
+            "validateFunction": 1
+        },
+        {
+            "download-rcsa": "downloadRCSAEvidence",
+            "validateFunction": 1
+        },
+        {
+            "delete-rcsa": "deleteRCSAEvidence",
+            "validateFunction": 1
+        },
+        {
+            "get-user-alerts": "getUserAlerts",
+            "validateFunction": 0
+        },
+        {
+            "update-user-alerts": "updateUserAlerts",
+            "validateFunction": 0
+        },
+        {
+            "delete-user-alerts": "deleteUserAlerts",
+            "validateFunction": 0
+        },
+        {
+            "upload-KriScoring-evidence": "uploadKriScoringEvidence",
+            "validateFunction": 0
+        },
+        {
+            "delete-KriScoring-evidence": "deleteKriScoringEvidence",
+            "validateFunction": 0
+        },
+        {
+            "download-KriScoring-evidence": "downloadKriScoringEvidence",
+            "validateFunction": 0
+        },
+        {
+            "upload-RiskUnitMaker-evidence": "uploadRiskUnitMakerEvidence",
+            "validateFunction": 0
+        },
+        {
+            "delete-RiskUnitMaker-evidence": "deleteRiskUnitMakerEvidence",
+            "validateFunction": 0
+        },
+        {
+            "download-RiskUnitMaker-evidence": "downloadRiskUnitMakerEvidence",
+            "validateFunction": 0
+        },
+        {
+            "get-Email-Reminder-Data-RA": "getEmailReminderDataRA",
+            "validateFunction": 0
+        },
+        {
+            "get-report-risk-appetite": "getReportRiskAppetite",
+            "validateFunction": 0
+        },
+        {
+            "get-dashboard-incident": "getDashboardIncident",
+            "validateFunction": 0
+        },
+        {
+            "get-report-incident": "getReportIncident",
+            "validateFunction": 0
+        },
+        {
+            "get-report-kri": "getReportKRI",
+            "validateFunction": 0
+        },
+        {
+            "get-dashboard-kri": "getDashboardKRI",
+            "validateFunction": 0
+        },
+        {
+            "get-dashboard-risk-appetite": "getDashboardRiskAppetite",
+            "validateFunction": 0
+        },
+        {
+            "get-dashboard-rcsa": "getDashboardRCSA",
+            "validateFunction": 0
+        },
+        {
+            "get-report-rcsa": "getReportRCSA",
+            "validateFunction": 0
+        },
+        {
+            "get-rcsa-master-data": "getRCSAMasterData",
+            "validateFunction": 0
+        },
+        {
+            "get-overall-dashboard": "getoveralldashboard",
+            "validateFunction": 0
+        },
+        {
+            "add-rcsa-master-data": "addRCSAMasterData",
+            "validateFunction": 0
+        },
+        {
+            "get-reminder-email-data": "getReminderEmailData",
+            "validateFunction": 0
+        },
+        {
+            "add-bulk-inherent-risk": "addBulkInherentRisk",
+            "validateFunction": 0
+        },
+        {
+            "add-kri-master": "addkrimaster",
+            "validateFunction": 0
+        },
+        {
+            "send-bulk-email-reminder": "sendEmailReminder",
+            "validateFunction": 0
+        },
+        {
+            "send-metric-kri-reminder": "sendKRIReminder",
+            "validateFunction": 0
+        },
+        {
+            "save-review-reported-kri-data": "reviewReportedKRIData",
+            "validateFunction": 0
+        },
+        {
+            "submit-kri-review": "submitKRIReview",
+            "validateFunction": 0
+        },
+        {
+            "get-kri-reported-data": "getKRIReportedData",
+            "validateFunction": 0
+        },
+        {
+            "get-overall-dashboard": "getOverallDashboardData",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-register-data": "getRiskRegisterData",
+            "validateFunction": 0
+        },
+        {
+            "get-risk-assessments-view-submitted": "getRiskAssessmentViewSubmitted",
+            "validateFunction": 0
+        },
+        {
+            "bulk-upload-kri-metrics": "bulkUploadKRIMetrics",
+            "validateFunction": 0
+        },
+        {
+            "get-all-control-library-data": "getAllControlLibraryData",
+            "validateFunction": 0
+        },
+        {
+            "get-control-library-master-data": "getControlMasterData",
+            "validateFunction": 0
+        },
+        {
+            "add-control-data": "addControlData",
+            "validateFunction": 0
+        },
+        {
+            "update-control-data": "updateControlData",
+            "validateFunction": 0
+        },
+        {
+            "add-bulk-control-data": "addBulkControlData",
+            "validateFunction": 0
+        },
+        {
+            "get-all-controltype-data": "getAllControlType",
+            "validateFunction": 0
+        },
+        {
+            "add-controltype-data": "addControlType",
+            "validateFunction": 0
+        },
+        {
+            "update-controltype-data": "updateControlType",
+            "validateFunction": 0
+        },
+        {
+            "add-corporate-objective": "addCorporateObjective",
+            "validateFunction": 0
+        },
+        {
+            "update-corporate-objective": "updateCorporateObjective",
+            "validateFunction": 0
+        },
+        {
+            "add-ad-hoc-risk-data": "addaddhocrisk",
+            "validateFunction": 0
+        },
+        {
+            "get-departments-and-units-for-schedule": "getDepartmentsAndUnitsForSchedule",
+            "validateFunction": 0
+        },
+        {
+            "get-existing-scheduled-cycles": "getExistingScheduledCycles",
+            "validateFunction": 0
+        },
+        {
+            "get-schedule-assessment-units": "getScheduleAssessmentUnits",
+            "validateFunction": 0
+        }
+    ]
+}

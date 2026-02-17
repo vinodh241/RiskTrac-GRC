@@ -1,0 +1,123 @@
+.module-card {
+    max-width: 200px;
+    min-width: 200px;
+    margin: 4vh 0px 0px 4vh;
+    float: left;
+    background-color: #EEEEEE;
+    padding-bottom: 3vh;
+    cursor: pointer;
+}
+
+.module-name {
+    margin-left: 0.8em;
+}
+
+.mat-toolbar {
+  height: 8.4vh;
+}
+
+.mat-display-4,
+.mat-display-3,
+.mat-h3,
+.mat-h4 {
+    margin: 0;
+}
+
+
+// :root {
+//   /* BACKGROUNDS IMGES */
+//   --ormBg-img : url(../images/ormbg.png);
+//   --bcmBg-img : url(../images/bcmbg.png);
+//   }
+
+  .bgSeaGreenGradient {background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);}
+
+  .cardGen.colorGeyGradient {background: url('/assets/ormbg.png') no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #FFEAC9 95.19%); background-size: 106%;}
+
+  .cardGen.colorGeyGradient .cardLink:hover {background-color: #fef1de42; backdrop-filter: blur(3px); display: block;}
+
+  .cardGen.colorGeyGradient.bcmBg {background: url('/assets/bcmbg.png') no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #E2EBF6 95.19%); background-size: 106%;}
+
+  .cardGen.colorGeyGradient.bcmBg .cardLink:hover {background-color: #dee9f145; backdrop-filter: blur(3px); display: block;}
+
+  .cardGen.colorGeyGradient.dsmBg {background: url("/assets/dsmbg.png") no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #f8e6ff95.19%); background-size: 106%;}
+
+  .cardGen.colorGeyGradient.dsmBg .cardLink:hover {background-color: #f8e6ff42; backdrop-filter: blur(3px); display: block;}
+
+
+  .cardGen.colorGeyGradient.tppBg {background: url("/assets/tptracbg.png") no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #E2EBF6 95.19%); background-size: 106%;}
+
+  .cardGen.colorGeyGradient.tppBg .cardLink:hover {background-color: #dee9f145; backdrop-filter: blur(3px); display: block;}
+
+
+
+
+
+/* .cardGen {border-radius: 0.3vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 100%; width: calc(100% / 3); padding: 1px;} */
+.cardGen {border-radius: 0.5vh 2vh 0.5vh 0.5vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 22vh; width: 100%; padding: 1px;}
+.cardGen .cardBody {border-radius: 0.5vh 2vh 0.5vh 0.5vh; font-size: 1.6rem; padding:0.4%;position: relative;}
+.cardGen.cardGenAuto {height: auto;}
+.cardGen.cardGenAutoAccord {height: auto; min-height: fit-content; padding: 1px 1px 0 1px;}
+.cardGen.cardGenAutoAccordRgt {height: auto; min-height: 10.1%; padding: 1px 1px 0 1px;}
+
+.cardLink, .cardLink:hover {text-decoration: none; color: inherit;}
+
+/* DASHBOARD CARD BOX */
+.dashboardCard > .cardGen {container-type: inline-size;}
+.dashboardCard {display: grid; grid-template-columns: repeat(2, 1fr); grid-row-gap: 2vh; grid-column-gap: 4vw; grid-template-rows:  50% 50%; grid-auto-rows: 1fr; justify-items: center;
+    align-items: center; padding: 7%;}
+.cardImg {position: absolute; right: 3%; top: 6%; box-shadow: 0px 0px 12px 0px rgba(0, 0, 0, 0.25); border: 2px solid #fff; border-radius: 1vh; width: 36%; opacity: 0.5; transition: opacity 0.3s;}
+
+.cardLink:hover .cardImg {text-decoration: none; color: inherit; opacity: 1;}
+
+// .dashboardCard h2 {font-size: 160%; font-weight: 600; padding-left: 3%; padding-top: 5%;}
+.dashboardCard h2.orm {color: #935600; font-size: 100%;
+  font-weight: 600;
+  padding-left: 3%;}
+.dashboardCard h2.bcm {color: #1154A0; font-size: 100%;
+  font-weight: 600;
+  padding-left: 3%;}
+
+.dashboardCard h2.um {color: #0C921C;; font-size: 100%;
+    font-weight: 600;
+    padding-left: 3%;
+ }
+
+.cardTable {width: 70%; position: absolute; bottom: 6%; right: 3%;}
+.cardTable td {text-align: right; padding-inline: 0.8vw; width: 60%;}
+.cardTable td:not(:first-child) {text-align: left; color: #9B1818; width: 40%;}
+
+/* END DASHBOARD CARD BOX */
+
+
+
+/* FOOTER */
+.lpFooter {background: linear-gradient(90deg, #0A58A0 0.57%, #1DA34A 100%);
+    box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.25); color: #fff; line-height: 2; font-size: 90%;}
+
+
+.textorm {
+  font-size: 160%;
+  font-weight: 600;
+  padding-left: 3%;
+  padding-top: 5%;
+  color: #935600;
+}
+
+.textbcm {
+  font-size: 160%;
+  font-weight: 600;
+  padding-left: 3%;
+  padding-top: 5%;
+  color: #935600;
+}
+
+
+.cardGen.colorGeyGradient.umBg {background:url('/assets/umbg.png')no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #E2EBF6 95.19%); background-size: 106%;}
+
+.cardGen.colorGeyGradient.umBg .cardLink:hover {background-color: #dee9f145; backdrop-filter: blur(3px); display: block;}
+
+
+
+
+

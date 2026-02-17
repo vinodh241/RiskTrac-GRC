@@ -1,0 +1,645 @@
+<ng-container>
+    <mat-toolbar class="fontSize">
+        <span>Key Risk Indicator | KRI Measurement</span>
+    </mat-toolbar>
+
+    <div class="container">
+        <div class="sidebar-container">
+            <mat-sidenav-container class="mat-sidenav-box-shadow" autosize>
+                <mat-sidenav #sidenav fixedInViewport="true" mode="side" class="mat-sidenav-class" opened
+                opened="{{ isExpanded }}">
+                <div class="left-container">
+                    <mat-card class="paddingZero">
+                        <mat-icon class="arrow-back-class" (click)="sidenav.toggle()">
+                            {{"arrow_back"}}
+                          </mat-icon>
+                        <br>
+                        <div class="total-div"  [ngStyle]="colorValue('total') && textColor()"
+							(click)="totalData()">
+                            <span>Total</span>
+                            <span style="float: right;">{{total()}}</span>
+                        </div>
+                        <div style="margin: 10px"
+                            [ngStyle]="colorValue('Measured') && colorCode()">
+                            <button class="measured-text measured-text-space"
+                                [ngStyle]="colorValue('Measured') && textColor()"
+                                (click)="measured('Measured')">
+                                <p>Measured</p>
+                                <p class="measured"
+                                    [ngStyle]="colorValue('Measured') && textColor()">
+                                    {{this.measuredData('Measured')}}</p>
+                            </button>
+                        </div>
+                        <div style="margin: 10px"
+                            [ngStyle]="colorValue('Not Measured') && colorCode()">
+                            <button class="measured-text measured-text-space"
+                                (click)="measured('Not Measured')"
+                                [ngStyle]="colorValue('Not Measured') && textColor()">
+                                <p>Not Measured</p>
+                                <p class="measured"
+                                    [ngStyle]="colorValue('Not Measured') && textColor()">
+                                    {{this.measuredData('Not Measured')}} </p>
+                            </button>
+                        </div>
+                        <div style="margin: 10px"
+                            [ngStyle]="colorValue('Reported') && colorCode()">
+                            <button class="measured-text measured-text-space"
+                                (click)="measured('Reported')"
+                                [ngStyle]="colorValue('Reported') && textColor()">
+                                <p>Reported</p>
+                                <p class="measured"
+                                    [ngStyle]="colorValue('Reported') && textColor()">
+                                    {{this.measuredData('Reported')}} </p>
+                            </button>
+                        </div>
+
+
+                        <div class="buttons-class" >
+                            <div class="ssapproved" style="margin-right: 5px"
+                            [ngStyle]="colorValueTotal('Approved','total') && colorCode()"
+                                (click)="reportedStatus('total','Approved')"> Approved
+                                <span style="float: right;" [ngStyle]="colorValueTotal('Approved','total') && textColor()">{{countReportStatus('total','Approved')}}</span>
+                            </div>
+                            <div class="ssrejected" style="margin-right: 5px"
+                            [ngStyle]="colorValueTotal('Rejected','total') && colorCode()"
+                                (click)="reportedStatus('total','Rejected')"> Rejected
+                                <span style="float: right;" [ngStyle]="colorValueTotal('Rejected','total') && textColor()">{{countReportStatus('total','Rejected')}}</span>
+                            </div>
+                            <!-- <div class="sspending"
+                                (click)="reportedStatus('total','Pending')"> Pending
+                                <span style="float: right;">{{countReportStatus('total','Pending')}}</span>
+                            </div> -->
+                        </div>
+                        <hr>
+
+
+
+                        <div >
+                            <div  class="frequency-side-class">
+                                <div style="padding-top: 15px"
+                                    [ngStyle]="colorValue('Monthly') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValue('Monthly') && textColor()"
+                                        (click)="measurementFrequencyData('Monthly')">
+                                        <h4>{{'Monthly'}} </h4>
+                                        <h4>{{measuredFrequencyCount('Monthly')}}</h4>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Monthly','Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Monthly','Measured') && textColor()"
+                                        (click)="measuredFrequency('Monthly','Measured')">
+                                        <p>Measured</p>
+                                        <p>{{MeasuredCount('Monthly','Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Monthly','Not Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Monthly','Not Measured') && textColor()"
+                                        (click)="measuredFrequency('Monthly','Not Measured')">
+                                        <p>Not Measured</p>
+                                        <p>{{MeasuredCount('Monthly','Not Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Monthly','Reported') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Monthly','Reported') && textColor()"
+                                        (click)="measuredFrequency('Monthly','Reported')">
+                                        <p>Reported</p>
+                                        <p>{{MeasuredCount('Monthly','Reported')}}</p>
+                                    </button>
+                                </div>
+                                <div class="buttons1-class">
+                                    <div class="ssapproved approved-reject-button" [ngStyle]="colorValueData('Monthly','Approved') && colorCode()"
+                                        (click)="reportedStatus('Monthly','Approved')">
+                                        Approved <span
+                                            style="float: right;" [ngStyle]="colorValueData('Monthly','Approved') && textColor()">
+                                            {{countReportStatus('Monthly','Approved')}}</span>
+                                    </div>
+                                    <div class="ssrejected approved-reject-button"  [ngStyle]="colorValueData('Monthly','Rejected') && colorCode()"
+                                        (click)="reportedStatus('Monthly','Rejected')">
+                                        Rejected <span
+                                            style="float: right;" [ngStyle]="colorValueData('Monthly','Rejected') && textColor()">{{countReportStatus('Monthly','Rejected')}}</span>
+                                    </div>
+                                    <!-- <div class="sspending" style="margin-bottom: 10px;"
+                                        (click)="reportedStatus('Monthly','Pending')">
+                                        Pending <span
+                                            style="float: right;">{{countReportStatus('Monthly','Pending')}}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div >
+                            <div  class="frequency-side-class">
+                                <div style="padding-top: 15px"
+                                    [ngStyle]="colorValue('Quarterly') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValue('Quarterly') && textColor()"
+                                        (click)="measurementFrequencyData('Quarterly')">
+                                        <h4>{{'Quarterly'}} </h4>
+                                        <h4>{{measuredFrequencyCount('Quarterly')}}</h4>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Quarterly','Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Quarterly','Measured') && textColor()"
+                                        (click)="measuredFrequency('Quarterly','Measured')">
+                                        <p>Measured</p>
+                                        <p>{{MeasuredCount('Quarterly','Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Quarterly','Not Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Quarterly','Not Measured') && textColor()"
+                                        (click)="measuredFrequency('Quarterly','Not Measured')">
+                                        <p>Not Measured</p>
+                                        <p>{{MeasuredCount('Quarterly','Not Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Quarterly','Reported') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Quarterly','Reported') && textColor()"
+                                        (click)="measuredFrequency('Quarterly','Reported')">
+                                        <p>Reported</p>
+                                        <p>{{MeasuredCount('Quarterly','Reported')}}</p>
+                                    </button>
+                                </div>
+                                <div class="buttons1-class">
+                                    <div class="ssapproved approved-reject-button" [ngStyle]="colorValueData('Quarterly','Approved') && colorCode()"
+                                        (click)="reportedStatus('Quarterly','Approved')">
+                                        Approved <span
+                                            style="float: right;" [ngStyle]="colorValueData('Quarterly','Approved') && textColor()">{{countReportStatus('Quarterly','Approved')}}</span>
+                                    </div>
+                                    <div class="ssrejected approved-reject-button" [ngStyle]="colorValueData('Quarterly','Rejected') && colorCode()"
+                                        (click)="reportedStatus('Quarterly','Rejected')">
+                                        Rejected <span
+                                            style="float: right;" [ngStyle]="colorValueData('Quarterly','Rejected') && textColor()">{{countReportStatus('Quarterly','Rejected')}}</span>
+                                    </div>
+                                    <!-- <div class="sspending" style="margin-bottom: 10px;"
+                                        (click)="reportedStatus('Quarterly','Pending')">
+                                        Pending <span
+                                            style="float: right;">{{countReportStatus('Quarterly','Pending')}}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div >
+                            <div  class="frequency-side-class">
+                                <div style="padding-top: 15px"
+                                    [ngStyle]="colorValue('Semi Annual') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValue('Semi Annual') && textColor()"
+                                        (click)="measurementFrequencyData('Semi Annual')">
+                                        <h4>{{'Semi Annual'}} </h4>
+                                        <h4>{{measuredFrequencyCount('Semi Annual')}}</h4>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Semi Annual','Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Semi Annual','Measured') && textColor()"
+                                        (click)="measuredFrequency('Semi Annual','Measured')">
+                                        <p>Measured</p>
+                                        <p>{{MeasuredCount('Semi Annual','Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Semi Annual','Not Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Semi Annual','Not Measured') && textColor()"
+                                        (click)="measuredFrequency('Semi Annual','Not Measured')">
+                                        <p>Not Measured</p>
+                                        <p>{{MeasuredCount('Semi Annual','Not Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Semi Annual','Reported') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Semi Annual','Reported') && textColor()"
+                                        (click)="measuredFrequency('Semi Annual','Reported')">
+                                        <p>Reported</p>
+                                        <p>{{MeasuredCount('Semi Annual','Reported')}}</p>
+                                    </button>
+                                </div>
+                                <div class="buttons1-class">
+                                    <div class="ssapproved approved-reject-button" [ngStyle]="colorValueData('Semi Annual','Approved') && colorCode()"
+                                        (click)="reportedStatus('Semi Annual','Approved')">
+                                        Approved <span
+                                            style="float: right;" [ngStyle]="colorValueData('Semi Annual','Approved') && textColor()">{{countReportStatus('Semi Annual','Approved')}}</span>
+                                    </div>
+                                    <div class="ssrejected approved-reject-button" [ngStyle]="colorValueData('Semi Annual','Rejected') && colorCode()"
+                                        (click)="reportedStatus('Semi Annual','Rejected')">
+                                        Rejected <span
+                                            style="float: right;" [ngStyle]="colorValueData('Semi Annual','Rejected') && textColor()">{{countReportStatus('Semi Annual','Rejected')}}</span>
+                                    </div>
+                                    <!-- <div class="sspending" style="margin-bottom: 10px;"
+                                        (click)="reportedStatus('Semi Annual','Pending')">
+                                        Pending <span
+                                            style="float: right;">{{countReportStatus('Semi Annual','Pending')}}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div >
+                            <div  class="frequency-side-class">
+                                <div style="padding-top: 15px"
+                                    [ngStyle]="colorValue('Annually') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValue('Annually') && textColor()"
+                                        (click)="measurementFrequencyData('Annually')">
+                                        <h4>{{'Annually'}} </h4>
+                                        <h4>{{measuredFrequencyCount('Annually')}}</h4>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Annually','Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Annually','Measured') && textColor()"
+                                        (click)="measuredFrequency('Annually','Measured')">
+                                        <p>Measured</p>
+                                        <p>{{MeasuredCount('Annually','Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Annually','Not Measured') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Annually','Not Measured') && textColor()"
+                                        (click)="measuredFrequency('Annually','Not Measured')">
+                                        <p>Not Measured</p>
+                                        <p>{{MeasuredCount('Annually','Not Measured')}}</p>
+                                    </button>
+                                </div>
+                                <div
+                                    [ngStyle]="colorValueData('Annually','Reported') && colorCode()">
+                                    <button class="measured-text-space measured-text"
+                                        [ngStyle]="colorValueData('Annually','Reported') && textColor()"
+                                        (click)="measuredFrequency('Annually','Reported')">
+                                        <p>Reported</p>
+                                        <p>{{MeasuredCount('Annually','Reported')}}</p>
+                                    </button>
+                                </div>
+                                <div class="buttons1-class">
+                                    <div class="ssapproved approved-reject-button" [ngStyle]="colorValueData('Annually','Approved') && colorCode()"
+                                        (click)="reportedStatus('Annually','Approved')">
+                                        Approved <span
+                                            style="float: right;" [ngStyle]="colorValueData('Annually','Approved') && textColor()">{{countReportStatus('Annually','Approved')}}</span>
+                                    </div>
+                                    <div class="ssrejected approved-reject-button" [ngStyle]="colorValueData('Annually','Rejected') && colorCode()"
+                                        (click)="reportedStatus('Annually','Rejected')">
+                                        Rejected <span
+                                            style="float: right;" [ngStyle]="colorValueData('Annually','Rejected') && textColor()">{{countReportStatus('Annually','Rejected')}}</span>
+                                    </div>
+                                    <!-- <div class="sspending" style="margin-bottom: 10px;"
+                                        (click)="reportedStatus('Annually','Pending')">
+                                        Pending <span
+                                            style="float: right;">{{countReportStatus('Annually','Pending')}}</span>
+                                    </div> -->
+                                </div>
+                            </div>
+                        </div>
+
+
+
+                    </mat-card>
+                </div>
+                </mat-sidenav>
+                <mat-sidenav-content>
+                <div class="content-container">
+                    <mat-icon (click)="sidenav.toggle()">
+                        {{"arrow_forward"}}
+                      </mat-icon>
+                </div>
+                </mat-sidenav-content>
+            </mat-sidenav-container>
+            <!-- end of left nav bar -->
+            <!-- start of right side content -->
+            <div class="right-container">
+                <mat-card class="right-mat-card">
+                    <div class="ui-g-12" style="display: flex;">
+						<div class="group-class">
+							<div class="ui-g-3" for="group" style="margin-top: 15px;font-weight: bold;">Group</div>
+							<div class="ui-g-9" style="margin-left: 10px;">
+								<mat-form-field class="dropdown-class mat-form-field-class">
+									<mat-select (selectionChange)="filterGroups($event)" [(ngModel)]="groupSelected">
+										<mat-option value="all">ALL</mat-option>
+										<mat-option *ngFor="let group of kriService?.kriMeasurementGroups"
+											[value]="group.GroupID">
+											{{group.GroupName}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+						<div class="group-class">
+							<div class="ui-g-3" for="unit" style="margin-top: 15px;font-weight: bold;">Unit</div>
+							<div class="ui-g-9" style="margin-left: 10px">
+								<mat-form-field class="dropdown-class mat-form-field-class">
+									<mat-select
+										(selectionChange)="filterUnits($event)" [(ngModel)]="unitSelected">
+										<mat-option value="all">ALL</mat-option>
+										<mat-option *ngFor="let unit of getUnitsNames(kriService?.kriMeasurementUnits)"
+											[value]="unit.UnitID">
+											{{unit.UnitName}}
+										</mat-option>
+									</mat-select>
+								</mat-form-field>
+							</div>
+						</div>
+                        <div style="width: 32%;padding-top: 14px;">
+                            <span style="font-weight: bold;"> Reporting Frequency:&nbsp;<span
+                                    class="reporting-frequency-font">{{kriService.kriMeasurmentsReportingFrequncy}}</span></span>
+                        </div>
+                        <div class=" me-4 cursor-pointer" style="width: 20vh;top: 3.5vh;position: absolute;left: 103vh;"  id="resetFilter">
+                            <i class="fa fa-refresh" aria-hidden="true"  ></i><span style="font-weight: bold;cursor: pointer;color: blue;" (click)="resetFilter()" matTooltip="Reset Filter">Reset</span>
+                            <mat-icon style="position: absolute;cursor: pointer;font-size: 18px;color: blue;margin-top: 0.4vh;" ><span (click)="resetFilter()" matTooltip="Reset Filter">refresh</span> </mat-icon>
+                        </div>
+                        <div class="searchfilter" style="width: 25%;">
+                            <div class="srhposition" style="display: flex;">
+                                <input type="text" class="searchtxtbox" placeholder="Search"
+                                    (keyup)="applyFilter($event)" matInput #input [(ngModel)]="model" placeholder="Ex: KRI-RM-001">
+                                    <mat-icon style="position: relative; top: 10px; right: 15%;">search</mat-icon>
+                            </div>
+					    </div>
+                        <div class="reporticon">
+                            <button *ngIf="dataSource.filteredData.length" mat-icon-button matTooltipPosition="right" matTooltip="Export Excel Report"
+                                (click)="exportAsExcel()">
+                                <img src="assets/icon-excel.svg" class="d-inline-block align-middle cursor-pointer" alt="">
+                            </button>
+					    </div>
+					</div>
+                </mat-card>
+                <!-- start of table -->
+                <mat-card class="mat-card-table-class">
+                    <ng-container >
+                        <table mat-table [dataSource]="dataSource">
+                            <ng-container matColumnDef="KriCode">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">KRI Code</th>
+                            <td mat-cell *matCellDef="let element">{{element.KriCode}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Indicator">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Indicator</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="block-ellipsis" [matTooltip]="element.Indicator">
+                                    {{element.Indicator}}
+                                </div>
+                            </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="MeasurementFrequency">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                                Measurement Frequency
+                            </th>
+                            <td mat-cell *matCellDef="let element" style="text-align: center;">{{element.MeasurementFrequency}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Target">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Target</th>
+                            <td mat-cell *matCellDef="let element">{{element.Target}}%</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="KriType">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">KRI Type</th>
+                            <td mat-cell *matCellDef="let element">{{element.KriType}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="threashold">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="5">
+                                Threshold Value
+                            </th>
+                            <td mat-cell *matCellDef="let element">{{element.symbol}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tvalue-1">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;" [ngStyle]="{'background-color': this.kriService.kriThresholds[0].ColorCode}">
+                                <span class="threshold-class">1</span>
+                            </th>
+                            <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': this.kriService.kriThresholds[0].ColorCode, 'text-align': 'center'}">
+                                {{element.ThresholdValue1 <= element.ThresholdValue2 ? '>=' : '<=' }}  {{element.ThresholdValue1}}%</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tvalue-2">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;"  [ngStyle]="{'background-color': this.kriService.kriThresholds[1].ColorCode}">
+                                <span class="threshold-class">2</span></th>
+                            <td mat-cell *matCellDef="let element"  [ngStyle]="{'background-color': this.kriService.kriThresholds[1].ColorCode, 'text-align': 'center'}">
+                                {{element.ThresholdValue2 <= element.ThresholdValue3 ? '>=' : '<=' }}   {{element.ThresholdValue2}}%</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tvalue-3">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;"  [ngStyle]="{'background-color': this.kriService.kriThresholds[2].ColorCode}">
+                                <span class="threshold-class">3</span></th>
+                            <td mat-cell *matCellDef="let element"  [ngStyle]="{'background-color': this.kriService.kriThresholds[2].ColorCode, 'text-align': 'center'}">
+                                {{element.ThresholdValue3 <= element.ThresholdValue4 ? '>=' : '<=' }} {{element.ThresholdValue3}}%</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tvalue-4">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center;"  [ngStyle]="{'background-color': this.kriService.kriThresholds[3].ColorCode}">
+                                <span class="threshold-class">4</span></th>
+                            <td mat-cell *matCellDef="let element"  [ngStyle]="{'background-color': this.kriService.kriThresholds[3].ColorCode, 'text-align': 'center'}">
+                                {{element.ThresholdValue4 <= element.ThresholdValue5 ? '>=' : '<=' }} {{element.ThresholdValue4}}%</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="tvalue-5">
+                                <th mat-header-cell *matHeaderCellDef style="text-align: center;"  [ngStyle]="{'background-color': this.kriService.kriThresholds[4].ColorCode}">
+                                    <span class="threshold-class">5</span></th>
+                                <td mat-cell *matCellDef="let element" [ngStyle]="{'background-color': this.kriService.kriThresholds[4].ColorCode, 'text-align': 'center'}">
+                                    ={{element.ThresholdValue5}}%</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="periodT">
+                            <th mat-header-cell *matHeaderCellDef [attr.colspan]="4">Period - T</th>
+                            <td mat-cell *matCellDef="let element">{{element.symbol}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Period">
+                            <th mat-header-cell *matHeaderCellDef>Period</th>
+                            <td mat-cell *matCellDef="let element">{{element.Period}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef>Date</th>
+                            <td mat-cell *matCellDef="let element">{{utils.formatDate(element.Date)}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="measurement">
+                            <th mat-header-cell *matHeaderCellDef>Measurement</th>
+                            <td mat-cell *matCellDef="let element" style="text-align: center;">
+                                <mat-form-field class="editable" style="width: 4vw;">
+                                    <div style="display: flex;">
+                                        <input matInput type="number" min="0" max="100" (ngModelChange)="isMeasurementInRange(element,$event)"
+                                            [(ngModel)]="element.Measurement"
+                                            [disabled]="(element.StatusName != 'Measured' && element.StatusName != 'Not Measured' && element.StatusName != 'Rejected') || utils.isReadOnlyUserORM() || utils.isRiskManagementUnit() && (department == 'all' && kriService.powerUser == true)"
+                                            autocomplete="off">%
+                                        </div>
+                                </mat-form-field>
+                                <!-- <span style="color: red;">{{ isMeasurementInRange(element.Measurement) }}</span> -->
+                            </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="kri">
+                            <th mat-header-cell *matHeaderCellDef>KRI Value</th>
+                            <td mat-cell *matCellDef="let element">
+                                <div class="krivalue-container">
+                                    <div [style.background-color]="element.ColorCode"
+                                        class="value-container">
+                                        {{element.ThresholdValue}}
+                                    </div>
+                                </div>
+                            </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Remarks">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Remarks</th>
+                            <td mat-cell *matCellDef="let element" style="text-align: center;">
+                                <mat-form-field class="example-full-width"
+                                    style="width:5vw;" matTooltip={{element.Remarks}}>
+                                    <input [(ngModel)]="element.Remarks" matInput
+                                        [disabled]="(element.StatusName != 'Measured' && element.StatusName != 'Not Measured' && element.StatusName != 'Rejected') || utils.isReadOnlyUserORM() || utils.isRiskManagementUnit() && (department == 'all' && kriService.powerUser == true) || (element.StatusName == 'Not Measured' && element.remarkdisable)"
+                                   >
+                                </mat-form-field>
+
+                                <p *ngIf="element.ThresholdValue <=5 && element.ThresholdValue >=1 && getRemarkData(element.Remarks)"
+                                    [ngStyle]="{'color':'red'}">Remarks is required</p>
+                            </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Status</th>
+                            <td mat-cell *matCellDef="let element">{{element.StatusName}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="upload">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Upload Evidence</th>
+                            <td mat-cell *matCellDef="let element">
+                                <app-file-upload
+                                    [matTooltip]="((element.StatusName=='Not Measured' && kriService.powerUser == false && !utils.isReadOnlyUserORM()) || (element.StatusName=='Not Measured' && kriService.powerUser == true && department == 'own'))  ? 'Upload Evidence will be enabled once the KRI is in Measured' : ''"
+                                    matTooltipPosition="above" [evdname]="'Kri Scoring'"
+                                    [inputData]="element"
+                                    [disabled]=" (((element.StatusName=='Not Measured' ||element.StatusName=='Reported' || element.StatusName == 'Approved' ) && kriService.powerUser == false) ||
+                                    ((element.StatusName=='Not Measured' ||element.StatusName=='Reported' )  && kriService.powerUser == true && department == 'own')) ||
+                                    (utils.isReadOnlyUserORM() || utils.isRiskManagementUnit() && (department == 'all' && kriService.powerUser == true) || (element.StatusName == 'Approved' && element.IsReported == true ))"
+                                    [showFileIcon]="true"
+                                    (filesdataOP)="OnfilesdataOP($event)">
+                                </app-file-upload>
+                            </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="prev">
+                            <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Prev Data</th>
+                            <td mat-cell *matCellDef="let element" style="text-align: center;">
+                                <div class="tooltip">
+                                    <img class="text-center"
+                                        src="assets/icons/icon-search-table.svg"
+                                        class="d-inline-block align-middle cursor-pointer"
+                                        alt="">
+                                    <span class="tooltiptext">
+                                        <p align="start" class="historical-text">
+                                            Historical Data
+                                        </p>
+                                        <div *ngIf="!getPreviousScoring(element)">
+                                            <p style="text-align:center">Empty</p>
+                                        </div>
+                                        <table style="width:90%;" class="tooltip-table" *ngIf="getPreviousScoring(element)">
+                                            <colgroup>
+                                                <col span="2">
+                                            </colgroup>
+                                            <tr class="tooltip-table">
+                                                <th class="tooltip-table"></th>
+                                                <th class="tooltip-table">Period</th>
+                                                <th class="tooltip-table">Date</th>
+                                                <th class="tooltip-table">Measurement</th>
+                                                <th class="tooltip-table">KRI Value</th>
+                                            </tr>
+                                            <tr class="tooltip-table" *ngFor="let data of getPreviousScoring(element)">
+                                                <td class="tooltip-table">
+                                                    T-{{getPreviousScoring(element).indexOf(data)+1}}</td>
+                                                <td class="tooltip-table">{{data.Period}}</td>
+                                                <td class="tooltip-table">{{utils.formatDate(data.Date)}}</td>
+                                                <td class="tooltip-table">{{data.Measurement}}%</td>
+                                                <td class="tooltip-table">
+                                                    <div class="krivalue-container">
+                                                        <div [style.background-color]="data.ColorCode" class="krivalue">
+                                                            <p style="text-align:center; color:black;">
+                                                                {{data.ThresholdValue}}</p>
+                                                        </div>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </span>
+                                </div>
+                            </td>
+                            </ng-container>
+                            <ng-container matColumnDef="checkerComments">
+                                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Checker Comments</th>
+                                <td mat-cell *matCellDef="let element" style="text-align: center;">
+                                    <button mat-icon-button matTooltip="View Previous Comments"
+                                        class="eye-icon"
+                                        (click)="showComments(element)">
+                                        <mat-icon>visibility</mat-icon>
+                                    </button>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="mainColumn"></tr>
+                            <tr mat-header-row *matHeaderRowDef="subColumn"></tr>
+                            <tr mat-row *matRowDef="let row; columns: allColumnsForData"></tr>
+                            <tr *matNoDataRow><td [attr.colspan]="allColumnsForData.length"><span style=" font-size: large;margin-left: 76vh !important;">No data found.</span></td></tr>
+                        </table>
+                        <div *ngIf="dataSource.filteredData?.length">
+                        <mat-paginator #paginator [pageSize]="10"
+                                [pageSizeOptions]="[10, 25, 50, 100]"
+                                class="InherentTable"></mat-paginator>
+                            <div style="display:flex;justify-content:end;"
+                                *ngIf="department == 'own' || kriService.powerUser == false">
+
+                                        <!-- </span> -->
+
+
+                                <span class="disableText" style="margin-top: 20px;"
+                                    *ngIf="(!isLastMonth() || utils.isReadOnlyUserORM() || (isDataModified() && !remarksFilled) || dataNotMeasured() || isReportedCount()) || !isUnitCount()">As
+                                    per current Reporting Frequency "Report KRI" button is
+                                    disabled</span>
+                                    <span style="margin-top: 2.5vh;margin-left: 1vh;cursor: pointer;" (click)="showFrequency()" matTooltip="Click here for more information">
+                                        <img src="./assets/colorkit-black.svg" class="headingIcon prs" alt="toggle" style="width:1.3vw;"
+                                            matTooltipClass="custom-tooltip">
+
+                                            <!-- <mat-icon>visibility</mat-icon> -->
+                                        </span>
+                                <button style="margin:10px;" mat-raised-button color="primary"
+                                    (click)="reportKRIs()"
+                                    matTooltip = "{{ tooltip()}}"
+                                    [disabled]="(!isLastMonth() || utils.isReadOnlyUserORM() || (isDataModified() && !remarksFilled) || dataNotMeasured() || isReportedCount()) || !isUnitCount() || (this.filteredStatus != '' && colorValues != 'total') "
+                                    >Report
+                                    KRI(s)</button>
+                                <button style="margin:10px;" mat-raised-button color="primary"
+                                    (click)="saveKRIs()" [disabled]="utils.isReadOnlyUserORM()"><img src="./assets/images/icon-application.svg"
+                                    alt="Save">Save
+                                    KRI(s)</button>
+                                <!-- <button style="margin:10px;" mat-raised-button
+                                    (click)="cancel()">Cancel</button> -->
+
+                                    <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh;height: 5vh;margin-top: 1.2vh;" (click)="cancel()">Cancel</button>
+
+                            </div>
+                        </div>
+                    </ng-container>
+                    <ng-template #noDataTemplate>
+                        <p class="no-data">No Data Found</p>
+                    </ng-template>
+                </mat-card>
+                <!-- en of table -->
+            </div>
+            <!-- end of right side content -->
+        </div>
+    </div>
+</ng-container>

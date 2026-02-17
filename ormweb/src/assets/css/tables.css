@@ -1,0 +1,107 @@
+.modalTble {font-size: 100%;}
+.modalTble tr th {background-color: #f2f2f2;}
+.modalTble tr {padding: 1vh 0.5vh; height: 4vh;}
+.modalTble tr:nth-child(odd) {background-color: #fff;}
+/* .modalTble tr td:nth-child(2){color: #8C8C8C; font-style: italic;} */
+
+.modalTble.seablueTble thead th, .modalTble.seablueTble tbody td {padding-inline: 0.3vw; line-height: 1.1;}
+.modalTble.seablueTble thead th {background-color: #99bcc6; font-weight: 600;}
+/* .modalTble.seablueTble tbody td {vertical-align: top;} */
+.modalTble.seablueTble tbody td:last-child img {width: 0.9em; margin-right: 8%; cursor: pointer;}
+.modalTble.seablueTble.smallTable tbody td:last-child img {width: 0.8em; margin-right: 8%; cursor: pointer;}
+.modalTble.seablueTble tr:nth-child(odd) {background-color: hsla(0, 0%, 100%, 0.40);}
+
+.tblContent thead th {height: 5.2vh; background-color: #E7E7E7; border: 1px solid #fff; color: #000; font-weight: 600; padding: 0.4vh 0.2vw; vertical-align: top; line-height: 1.1;}
+.tblContent thead th div {font-weight: 600;}
+.tblContent thead th:last-child {border: none;}
+.tblContent.colorBlueHead thead th {background-color: #99bcc6; border: none;}
+
+.tblContent tbody td {padding: 0.6vh 0.2vw; font-weight: 300; }
+.tblContent tbody tr {border-bottom: 1px solid #E7E7E7; transition: 0.3s;}
+.tblContent tbody tr:nth-child(even) {background-color: #e7e7e76d;}
+.tblContent tbody tr:hover, .tblContent tbody tr.active {background-color: #bce8ffa7;}
+
+.tblContent tbody tr td.tableArrow span  {display: none; right: 3%; color: #9d9d9d;}
+.tblContent tbody tr:hover td.tableArrow span, .tblContent tbody tr.active td.tableArrow span  {display: block;}
+
+.tblContent.tbleSP tbody td {vertical-align: top;}
+.tblContent.tbleSP tbody td abbr {font-weight: 600;}
+.tblContent tbody td:last-child img {width: 1em; margin-right: 8%; cursor: pointer;}
+a.tblLnk {color: #007bff; text-decoration: underline;}
+
+.tbleFilter {top: 5%; right: -1.2%; cursor: pointer;}
+.tableContent {padding-inline: 1.4%;}
+
+.fixedTbleHead{width:100%;overflow-y:auto;overflow-x:hidden}.fixedTbleHead th,.fixedTbleHead th:not([scope=row]){position:-webkit-sticky;position:sticky;top:0;z-index:2}.fixedTbleHead th[scope=row]{position:-webkit-sticky;position:sticky;left:0;z-index:1;background-color:#383d49!important}
+
+.statusID {border-radius: 50vh; padding: 0.1vh 0; font-size: 90%; max-width: 6vw; display: inline-block; min-width: 5vw; text-align: center; cursor: pointer;}
+.statusID.ongoing {background-color: #148074; color: #fff;} .statusID.closed {background-color: #E1E1E1; color: #8C8C8C;}
+.statusID.draft {background-color: #FFB26A; color: #fff;}
+/* .statusID.statusScheduled {background-color: #009FD2; color: #fff;}
+.statusID.statusInprogress {background-color: #F9983E; color: #fff;}
+.statusID.statusCompleted {background-color: #11BC56; color: #fff;} */
+.statusID.statusTpComplated {background-color: #0F6BD8; color: #fff;}
+.statusID.statusNotStarted {background-color: #E1E1E1; color: #8c8c8c;}
+
+/* below colour code is for the table status */
+.statusID.statusIReport {background-color: #FF6565; color: #fff;}
+.statusID.statusScheduled {background-color: #8E8E8E; color: #fff;}
+.statusID.statusInprogress {background-color: #318DFA; color: #fff;}
+.statusID.statusCompleted {background-color: #11BC56; color: #fff;}
+.statusID.statusPublished {background-color: #346594; color: #fff;}
+.statusID.statusDelayed {background-color: #FF2C2D; color: #fff;}
+.statusID.StatusUnderReview {background-color: #FFA73F; color: #fff;}
+.statusID.statusClosed {background-color: #22D8AC; color: #fff;}
+
+.listTbl tr {border-bottom: 1px solid #C6C6C6;}
+.listTbl tr td {padding: 0.5vh 0.3vw;}
+.listTbl tr td:first-child {font-weight: 700; vertical-align: top;}
+.listTbl tr:nth-child(even) {background-color: #f8f8f8;}
+
+.vmiddleLeft.statusdot, .statusdot {width: 0.7vw; aspect-ratio: 1 / 1; left: -42%; border-radius: 50vh;} .statusdot {left: 0; display: inline-block; margin-right: 2%;}
+.colorlegend > div {width: calc(100% / 3);}
+.vmiddleLeft.statusdot.grey, .statusdot.grey {background-color: #A0A0A0; color: #A0A0A0;}
+.vmiddleLeft.statusdot.green, .statusdot.green {background-color: #00C838; color: #00C838;}
+.vmiddleLeft.statusdot.red, .statusdot.red {background-color: #FF0000; color: #FF0000;}
+.vmiddleLeft.statusdot.orange, .statusdot.orange {background-color: #F9983E; color: #F9983E;}
+
+.grey span:nth-child(2), .green span:nth-child(2), .red span:nth-child(2) {font-size: 2.2rem; line-height: 1;}
+.grey {color: #A0A0A0;}
+.green {color: #00C838;}
+.red {color: #FF0000;}
+.orange {color: #F9983E;}
+
+.btnAddcomment {font-size: 1.6rem; color: #fff; box-shadow: 2px 5px 8px 0px rgb(0 0 0 / 21%); text-align: center; min-width: 10vw; white-space: nowrap; padding: 0.8vh 0.6vw; border-radius: 0.5vh; display: inline-block; box-shadow: 2px 5px 8px 0px rgba(0, 0, 0, 0.45); background-color: #1C9F50}
+.btnAddcomment.inactive{background-color: #1c9f5065; cursor: default;}
+.tableContent2 {padding-inline: 2.2%;}
+
+.colorlegend{color: #838383; line-height: 1;}
+.btnLightGreen {font-size: 1.6rem; color: #fff; box-shadow: 2px 5px 8px 0px rgb(0 0 0 / 21%); min-width: 12vw; padding-top: 1vh; padding-bottom: 1vh; white-space: nowrap; border-radius: 0.5vh; display: inline-block; text-align: center; box-shadow: 0.2vh 0.3vh 0.5vh 0px rgba(0, 0, 0, 0.45)}
+.btnLightGreen.inactive {background-color: #c1e1cce0;}
+.btnLightGreen.active {background-color: #1C9F50; cursor: pointer;}
+
+.smallFont {font-size: 84%}
+
+.vmiddleRight.rightAddNewRisk {right: 14%;}
+
+.vmiddleRight.revieComments {right: 2%;}
+
+.fontSize2 {font-size: 1.5rem;}
+.bdrBtm {border-bottom: 1px solid #000000;}
+
+.customtable{border: 1px solid #C0C0C0; display: flex; width: 100%;}
+.customtableheader{height: 5rem;background: #E7E7E7;}
+.subhead{font-size: 80%;}
+.subhead p {padding: 0;margin: 0;}
+.subhead p {padding: 0;margin: 0;}
+.tablebody tbody{border: 1px solid #C0C0C0;font-size: 90%;}
+.tablebody tbody tr{border-bottom: 1px solid #C0C0C0;}
+.tablebody tbody tr td{font-weight: 400;}
+.minor-bg{background-color: #D6FDFF;}
+.considerable-bg{background-color: #FFF1D6;}
+.major-bg{background-color: #FFDBDB;color: #FF0000;}
+
+
+
+
+

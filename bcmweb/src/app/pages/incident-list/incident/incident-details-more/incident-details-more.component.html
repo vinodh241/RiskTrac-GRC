@@ -1,0 +1,151 @@
+<div class="row" style="margin:20px">
+
+    <h4 style="font-weight:700;">Incident Title : <span
+            style="font-size:15px; font-weight: normal;">{{service.incident?.IncidentTitle}}</span></h4>
+</div>
+<!-- <ng-container>
+<mat-expansion-panel expanded="true">
+    <mat-expansion-panel-header>
+        <mat-panel-title>&nbsp;&nbsp;Financial Reporting <span style="color: red;">*</span> </mat-panel-title>
+    </mat-expansion-panel-header>
+    <label for="incident">Incident Approved for accounting and reporting?</label><br> -->
+    <!-- <mat-expansion-panel-header>
+    <mat-panel-title>&nbsp;&nbsp;Comments <span style="color: red;">*</span> </mat-panel-title>
+</mat-expansion-panel-header> -->
+    <!-- <div class="incident">
+        <div>
+            <input type="radio" id="yes" name="incident" value="yes" (click)="IncidentStatus('Yes')">
+            <label for="yes">Yes</label><br>
+            <input type="radio" id="no" name="incident" value="no" (click)="IncidentStatus('No')">
+            <label for="no">No</label><br>
+            <input type="radio" id="na" name="incident" value="na" (click)="IncidentStatus('NA')">
+            <label for="na">NA</label><br>
+        </div>
+
+        <div style="margin-left:36vh;">
+            <label for="comments">Comments:</label><br> -->
+            <!-- <textarea id="comments" name="comments" rows="4" cols="50"></textarea><br> -->
+            <!-- <mat-form-field style="width:178%" appearance="fill">
+                <textarea matInput formControlName="incidentTitle" [(ngModel)]="incident.IncidentTitle"></textarea>
+            </mat-form-field>
+        </div>
+    </div>
+</mat-expansion-panel>
+</ng-container> -->
+
+<ng-container class="container" *ngIf="service?.isReviewEditable">
+    <mat-expansion-panel expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>&nbsp;&nbsp;Financial Reporting <span style="color: red;">*</span> </mat-panel-title>
+        </mat-expansion-panel-header>
+        <label for="incident">Incident Approved for accounting and reporting?</label><br>
+        <!-- <mat-expansion-panel-header>
+        <mat-panel-title>&nbsp;&nbsp;Comments <span style="color: red;">*</span> </mat-panel-title>
+    </mat-expansion-panel-header> -->
+        <div class="incident">
+            <div style="margin-top:1vh">
+                <ng-container *ngFor="let item of incidentStatusList">
+                    <input type="radio" [id]="item.id" name="incident" [value]="item.id" [(ngModel)]="incident.IsFinancialLoss">
+                    <label [for]="item.id">{{item.value}}</label><br>
+                </ng-container>
+                <!-- <input type="radio" id="no" name="incident" value="no" (click)="IncidentStatus('No')">
+                <label for="no">No</label><br>
+                <input type="radio" id="na" name="incident" value="na" (click)="IncidentStatus('NA')">
+                <label for="na">NA</label><br> -->
+            </div>
+
+            <div style="margin-left:36vh;margin-top: -3vh;">
+                <label for="comments">Comments:</label><br>
+                <!-- <textarea id="comments" name="comments" rows="4" cols="50"></textarea><br> -->
+                <mat-form-field style="width:178%" appearance="fill">
+                    <textarea matInput rows="4" [(ngModel)]="incident.FinancialLossComment"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>&nbsp;&nbsp;Comments <span style="color: red;">*</span> </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field appearance="fill">
+            <textarea matInput name="text" cols="2" rows="6" [(ngModel)]="incident.Comment"></textarea>
+        </mat-form-field>
+    </mat-expansion-panel>
+    <mat-expansion-panel expanded="true">
+        <mat-expansion-panel-header>
+            <mat-panel-title>&nbsp;&nbsp;RCA <span style="color: red;">*</span></mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-form-field class="rca-input" appearance="fill">
+            <textarea matInput name="text" id="" cols="2" rows="6" [(ngModel)]="incident.RCA"></textarea>
+        </mat-form-field>
+        <app-file-upload [evdname]="'RCA'" class="rca-file-upload" [disabled]="false"></app-file-upload>
+    </mat-expansion-panel>
+    <app-recommendation [recommendations]="recommendations"></app-recommendation>
+    <div class="save-button">
+        <b *ngIf="service.isReviewInEdit || recommendations.length==0" style="color: red;"> The save button is enabled
+            once all the mandatory fields are entered</b>
+        <button mat-button mat-raised-button color="primary" (click)="saveIncidentReview()"
+            [disabled]="service.isReviewInEdit || recommendations.length==0">Save</button>
+        <button mat-stroked-button type="button" style="margin-right:1vw" (click)="service.isReviewEditable=false"
+            [disabled]="service.isReviewInEdit">Cancel</button>
+    </div>
+</ng-container>
+
+<ng-container class="container" *ngIf="!service?.isReviewEditable">
+    <div class="main-details">
+        <span class="spacer"></span>
+        <button mat-icon-button
+            [disabled]="utils.isReadOnlyUserORM() || !service.incident.Reviewer || ![2,5,11].includes(service.incident?.StatusCode)"
+            (click)="edit()">
+            <mat-icon aria-hidden="false" aria-label="Edit" fontIcon="edit"></mat-icon>
+        </button>
+    </div>
+     <mat-expansion-panel expanded="true" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>&nbsp;&nbsp;Financial Reporting</mat-panel-title>
+        </mat-expansion-panel-header>
+         <div class="container-incident" >
+            <label for="incident">Incident Approved for accounting and reporting?</label><br>
+            <div style="margin-top:1vh">
+                <!-- <p>{{service.incident.IsFinancialLoss}}</p> -->
+                <ng-container *ngFor="let item of incidentStatusList">
+                    <input type="radio" [id]="item.id" name="incident" [value]="item.id" [(ngModel)]="service.incident.IsFinancialLoss" [attr.disabled]="false">
+                    <label [for]="item.id">{{item.value}}</label><br>
+                </ng-container>
+
+                <!-- <input type="radio" id="no" name="incident" value="no" (click)="IncidentStatus('No')">
+                <label for="no">No</label><br>
+                <input type="radio" id="na" name="incident" value="na" (click)="IncidentStatus('NA')">
+                <label for="na">NA</label><br> -->
+            </div>
+
+            <div style="margin-left:21vh;">
+                <label for="comments">Comments:</label><br>
+                <!-- <textarea id="comments" name="comments" rows="4" cols="50"></textarea><br> -->
+                <!-- <mat-form-field style="width:178%" appearance="fill">
+                    <textarea matInput [(ngModel)]="incident.FinancialLossComment"></textarea>
+                </mat-form-field> -->
+        <p>{{service.incident?.FinancialLossComment}}</p>
+
+            </div>
+        </div>
+    </mat-expansion-panel>
+    <mat-expansion-panel expanded="true" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>&nbsp;&nbsp;Comments</mat-panel-title>
+        </mat-expansion-panel-header>
+        <p>{{service.incident?.Comment}}</p>
+    </mat-expansion-panel>
+    <mat-expansion-panel expanded="true" (opened)="panelOpenState = true" (closed)="panelOpenState = false">
+        <mat-expansion-panel-header>
+            <mat-panel-title>&nbsp;&nbsp;RCA</mat-panel-title>
+        </mat-expansion-panel-header>
+        <p class="rca-input">{{service.incident?.RCA}}</p>
+        <app-file-upload [evdname]="'RCA'" class="rca-file-upload" [disabled]="true"></app-file-upload>
+    </mat-expansion-panel>
+    <app-recommendation [recommendations]="service.recommendations"></app-recommendation>
+    <!-- <div class="save-button">
+        <button mat-button mat-raised-button color="primary" [disabled]="utils.isReadOnlyUserORM()" (click)="saveIncidentReview()">Save</button>
+        <button mat-stroked-button type="button" style="margin-right:1vw" (click)="service.isReviewEditable=false">Cancel</button>
+    </div> -->
+</ng-container>

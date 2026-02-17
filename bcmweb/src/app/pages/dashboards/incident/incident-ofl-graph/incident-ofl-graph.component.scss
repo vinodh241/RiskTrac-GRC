@@ -1,0 +1,39 @@
+.box {
+    position: relative;
+    width: 21vw;
+     margin-top: -30px;
+    height: calc(100% - 10px);
+    padding: 5px 15px;
+    background-color: #f1f1f1;
+    border: 1px solid #ccc;
+    margin-left: 50px;
+    border-radius: 2vh;
+    font-size: 76%;
+    border: none;
+  }
+
+  .box::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: -10px; /* Adjust the value to position the arrow */
+    transform: translateY(-50%);
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-right: 10px solid #f1f1f1; /* Same as box background color */
+    // border: none;
+  }
+  .infohr{
+    margin: 4px;
+  }
+
+  #container .highcharts-yaxis-line {
+    display: none; /* Hide y-axis line */
+}
+.d-flex{
+  display: flex;
+  height: calc(100% - 40px);
+  align-items: center;
+  justify-content: start;
+}
+

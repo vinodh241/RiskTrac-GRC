@@ -1,0 +1,593 @@
+.container{
+    background: #e3e3e3;
+}
+
+.sidebar-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    max-height: 84vh;
+}
+
+.left-container {
+    max-height: 83vh;
+}
+
+.paddingZero {
+    padding: 0px;
+    background: #E3E3E3 url(../../../assets/rcsa/rd-left-img.png) no-repeat center bottom;
+    height: 84vh;
+    overflow-y: scroll
+}
+
+.arrow-icon-class {
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 4px ;
+}
+
+.arrow-back-class {
+    float: right;
+    margin-right: 10px;
+    cursor: pointer;
+    font-weight: 600;
+    margin-top: 4px ;
+}
+.total-class {
+    margin: 10px !important;
+    background: #5f9bc3 !important;
+    padding: 10px !important;
+    font-size: 26px; cursor: pointer;
+}
+
+.buttons-class {
+    cursor: pointer;
+    display: flex;
+    margin: 10px;
+}
+
+.frequency-side-class {
+    margin: 10px;
+    background-color: #5f5f5f1a;
+}
+
+.button1-class{
+    cursor: pointer;
+    display:flex;
+    margin: 5px;
+}
+
+.mat-card-right-container {
+    background-color: #e5e5e5;
+    box-shadow: 3px 0px 25px rgba(0, 0, 0, 0.25);
+    padding: 12px;
+}
+
+.dropdown-div-class {
+    display: inline-flex;
+    width: 20%;
+}
+
+.dropdown-mat-field {
+    background: #ffffff;
+    width: 11rem;
+    height: 36px;
+}
+
+.reporting-frequency-class {
+    width: 35%;
+    padding-top: 10px
+}
+
+.search-icon-class {
+    position: relative;
+    top: 10px;
+    right: 15%;
+}
+
+.table-mat-card {
+    height: 71.5vh;
+    overflow-y: scroll;
+    margin-top: 13px;
+    padding: 7px;
+}
+
+.comment-input-class {
+    width: 8.5vw;
+    position: relative;
+    top: 10px;
+}
+
+.dashFilter .mat-form-field-flex,.dashFilter .mat-form-field-type-mat-select:not(.mat-form-field-disabled), .mat-form-field-flex{
+    border-radius: 4px 4px 0 0 !important;
+}
+.dashFilter .mat-form-field-infix {
+    top: 0px !important;
+   height: 13px !important;
+}
+
+.side-card-content {
+    padding: 0px 10px;
+    color: black;
+}
+
+.header-style{
+    margin: 5px;
+    font-size: 15px;
+    font-weight: 500;
+}
+
+.measured-text {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+.measured-text-space {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: black;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: transparent;
+}
+
+.measured {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: black;
+    margin-left: 10px;
+}
+
+.approved-reject-button {
+    margin-right: 5px !important;
+    margin-bottom: 10px !important;
+}
+
+.ssapproved, .ssrejected, .sspending {border-radius: 0.3rem; padding: 2% 1.5%; width: 44.7%; font-size: 72%; margin-right: 1px;}
+.ssapproved {background-color: #16bf6d6b;}
+.ssrejected {background-color: #ff818166;}
+.sspending {background-color: #ffffff85; margin-right: 0;}
+
+.sidebarstatus {width: 100%;}
+
+.mat-card-m {
+    margin-bottom: 5px;
+    color: white;
+    background: #95D5FF20;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.buttons1-class{
+    cursor:pointer !important;
+    display:flex !important;
+    margin: 5px !important;
+}
+
+.right-container {
+    width: 100%;
+    margin: 0px 15px
+}
+
+mat-sidenav[style] {
+    visibility: visible !important;
+}
+
+.mat-drawer {
+    transform: none !important;
+}
+
+.content-container {
+    min-height: 100vh;
+    box-sizing: border-box;
+    padding: 10px;
+    background: #E3E3E3 url(../../../assets/rcsa/rd-left-img.png) no-repeat center bottom;
+}
+
+.mat-drawer-container {
+    background-color: none !important;
+    margin-left: 20px !important
+}
+
+.mat-drawer-content {
+    overflow: hidden !important;
+}
+
+.dropdown-class ::ng-deep .mat-select-arrow-wrapper {
+    margin-top: 10px !important;
+}
+
+.dropdown-class ::ng-deep .mat-form-field-infix {
+    height: 5px !important;
+    position: relative !important;
+    bottom: 7px !important;
+}
+
+.reporting-frequency-font {
+    font-weight: bold;
+}
+
+.sidenav-contrainer-class {
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.mat-sidnav-class {
+    position: relative;
+    width: 15vw;
+}
+
+.searchfilter {width: 20%;}
+.srhposition {width: 100%;}
+.searchtxtboxicon {position: absolute; right: 7%; top: 50%; transform: translate(0, -50%); color: #737373; font-size: 120%; font-size: 400;}
+.searchtxtbox {border: none; border-radius: 3vw; padding-left: 0.5rem;}
+
+.searchtxtbox {
+    width: 100%;
+    border: 0;
+    outline: 0;
+    padding: 0.5em 0.5em;
+    /* border-bottom: 2px solid #d3d3d3; */
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.25);
+    color: #111;
+    background-color: #fff;
+    border-radius: 20px;
+    padding: 10px;
+    margin-top: 1px;
+}
+
+.reporticon {width: 3%;}
+
+// css for table
+
+th.mat-header-cell {
+    border: 1px solid #ccc!important;
+    // padding-left: 1vh;
+    align-content: center;
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    padding-left: 1vh !important;
+}
+
+th {
+    background:#E8E7E7;
+    vertical-align: top;
+    text-align: center;
+}
+
+// tooltip css
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 20vw;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: auto;
+    z-index: 5;
+    right: -10px;
+    top: 30px
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    right: 5%;
+    border-width: 1.2vh;
+    border-style: solid;
+    width: .3vw;
+    height: .3vh;
+    transform: rotate(-90deg);
+    border-color: transparent transparent transparent black;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.tooltip-table {
+    border: 1px solid #ffff;
+    border-collapse: collapse;
+    margin: 10px;
+    font-size: 1.3vh;
+    background-color: transparent;
+}
+
+.historical-text {
+    padding-left: .5vw;
+    color: rgb(88, 160, 241);
+}
+
+.krivalue-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+}
+
+.krivalue {
+    height: 20px;
+    width: 20px;
+    border-radius: 12px;
+}
+
+.mat-column-KriCode {
+    width: 5%;
+}
+
+.mat-column-Indicator {
+    min-width: 2vw !important;
+    max-width: 6vw !important;
+}
+
+.mat-column-MeasurementFrequency {
+    width: 7.3%;
+}
+
+.mat-column-Target {
+    width: 4%;
+}
+
+.mat-column-KriType {
+    width: 5%;
+}
+
+.mat-column-threashold {
+    width: 15.7%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.mat-column-periodT {
+    width: 15%;
+    text-align: center;
+    border-collapse: collapse;
+}
+
+.mat-column-Remarks {
+    width: 5%;
+}
+
+.mat-column-status {
+    width: 5%;
+}
+
+.mat-column-upload {
+    width: 8%;
+}
+
+.mat-column-prev {
+    width: 5%;
+}
+
+.mat-column-sendEmail {
+    width: 5%;
+}
+
+.mat-column-checkerComments {
+    width: 5%;
+}
+
+.mat-column-kri {
+    width: 3%;
+}
+
+.mat-column-rejectApproveBtn {
+    width: 3%;
+}
+
+.mat-column-tvalue-1 {
+    width: 4%;
+}
+
+.mat-column-tvalue-2 {
+    width: 4%;
+}
+
+.mat-column-tvalue-3 {
+    width: 4%;
+}
+
+.mat-column-tvalue-4 {
+    width: 4%;
+}
+
+.mat-column-tvalue-5 {
+    width: 5%;
+}
+
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+    padding-right: 0px !important;
+}
+
+th.mat-header-cell {
+    font-weight: bold !important;
+}
+
+tr.mat-header-row {
+    height: 5vh;
+}
+
+.value-container {
+    height: 40px;
+    width: 40px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.block-ellipsis {
+    display: block !important;
+    display: -webkit-box !important;
+    max-width: 100% !important;
+    height: 43px !important;
+    margin: 0 auto !important;
+    line-height: 1 !important;
+    -webkit-line-clamp: 3 !important;
+    -webkit-box-orient: vertical !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+.disabled-btn{
+    cursor: not-allowed;
+    opacity: 0.5; /* Adjust the opacity as needed */
+}
+
+.disabled-checkbox {
+    cursor: not-allowed;
+    opacity: 0.5; /* Adjust the opacity as needed */
+}
+
+.tickMark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.4em;
+    height: 0.8em;
+    border-style: solid;
+    border-width: 0 2px 2px 0;
+    display: inline-block;
+    padding: 3px;
+  }
+
+// radio button css
+.round {
+    position: relative;
+    width: 40%;
+}
+
+.round label {
+    background-color: #fff;
+    /* border: 1px solid #ccc; */
+    border-radius: 50%;
+    cursor: pointer;
+    left: 50%;
+    position: absolute;
+    top: 0;
+    transform: translate(-50%, 0);
+    width: 1.1vw;
+    aspect-ratio: 1 / 1;
+}
+
+.round.checkred label {
+    border: 1px solid #FF0000;
+}
+
+.round.checkDisabled label {
+    border: 1px solid grey;
+}
+
+.round.checkgreen label {
+    border: 1px solid #04BA00;
+}
+
+.round label:after {
+    border: 2px solid #fff;
+    border-top: none;
+    border-right: none;
+    content: "";
+    opacity: 0;
+    position: absolute;
+    left: 25%;
+    top: 31%;
+    transform: rotate(-45deg);
+    width: 0.5vw;
+    height: 0.5vh;
+}
+
+.round input[type="checkbox"] {
+    visibility: hidden;
+}
+
+.round.checkred input[type="checkbox"]:checked + label {
+    background-color: #FF0000;
+    border-color: #FF0000;
+}
+
+.round.checkgreen input[type="checkbox"]:checked + label {
+    background-color: #04BA00;
+    border-color: #04BA00;
+}
+
+.round input[type="checkbox"]:checked + label:after {
+    opacity: 1;
+}
+
+::ng-deep .mat-dialog-container {
+    overflow: hidden !important;
+}
+
+.btn.btnreminder, .btn.btnreminder:active, .btn.btnreminder:focus, .btn.btnreminder:hover,
+.btn.btnsave, .btn.btnsave:active, .btn.btnsave:focus, .btn.btnsave:hover,
+.btn.btnsubmit, .btn.btnsubmit:active, .btn.btnsubmit:focus, .btn.btnsubmit:hover
+{box-shadow: 2px 5px 8px 0px rgba(0, 0, 0, 0.45); padding: 0.8rem; color: #000 !important; vertical-align: middle; border-left: 3rem solid #000; position: relative;}
+
+
+.btn.btnreminder, .btn.btnreminder:active, .btn.btnreminder:focus, .btn.btnreminder:hover {
+background: linear-gradient(90deg, #61C6FF 22.16%, #A9F0FF 99.53%) !important;}
+.btn.btnsave, .btn.btnsave:active, .btn.btnsave:focus, .btn.btnsave:hover {
+background: linear-gradient(90deg, #1EFF1A 32.57%, #5EFFBB 99.71%) !important;}
+.btn.btnsubmit, .btn.btnsubmit:active, .btn.btnsubmit:focus, .btn.btnsubmit:hover {
+border-radius: 5px; background: linear-gradient(90deg, #FF7474 32.86%, #FFD0AD 105.09%) !important;}
+.btn.btnsubmit.modalBtnSbmit{padding: 0.4rem;}
+
+.btn.btnreminder span, .btn.btnsave span, .btn.btnsubmit span {position: absolute; left: -14%; top: 50%; transform: translate(0, -50%);}
+.btn.btnsubmit.modalBtnSbmit span {position: absolute; left: -60%; top: 50%; transform: translate(0, -50%);}
+
+
+// table {
+//     width: 100%;
+//     border-collapse: collapse;
+//   }
+
+//   th, td {
+//     border: 1px solid #dddddd;
+//     text-align: left;
+//     padding: 8px;
+//   }
+
+//   th {
+//     position: sticky;
+//     top: 0;
+//     background-color: #f2f2f2;
+//   }
+
+//   tbody {
+//     display: block;
+//     max-height: 300px;
+//     overflow-y: auto;
+//   }
+
+.mat-header-cell {
+    border-right: 1px solid #fff;
+    background-color: #E7E7E7;
+}
+
+ .mat-cell{
+    border-right: 1px solid #eee;
+    padding: 0 5px !important;
+ }
+
+ .mat-sort-header-content {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-left: 1vh;
+}

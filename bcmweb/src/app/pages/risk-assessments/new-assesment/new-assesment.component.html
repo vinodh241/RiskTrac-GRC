@@ -1,0 +1,148 @@
+<mat-toolbar style="width: auto; margin:-24px -24px 0px -24px; height: 8.5vh; font-size: 3.3vh;">
+    <h2 mat-dialog-title>{{copy.mode=="add"?"Schedule New Assessment":"Edit Assessment"}}</h2>
+    <span class="spacer"></span>
+    <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+        <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+    </button>
+</mat-toolbar>
+<mat-dialog-content>
+    <form autocomplete="off" style="display:flex; flex-flow: column;">
+        <br>
+        <mat-label>Latest Risk Appetite Policy</mat-label>
+        <span style="font-size: 2.5vh;">{{copy.FrameworkName}}</span>
+        <br>
+        <mat-label>Duration</mat-label><br>
+        <!-- <label>Year<span style="color: red;">*</span></label> -->
+        <div style=" display:flex;flex-direction:row;justify-content: space-between;" >
+            <div style="display:flex;flex-direction: column;">
+                <label>Year<span style="color: red;">*</span></label>
+                <mat-form-field appearance="outline">
+                    <mat-label>Year</mat-label>
+                    <!-- <mat-select [disabled]="copy.mode==='edit'" [formControl]="year"> -->
+                        <!-- <mat-option selected="true" [value]="changeData()">{{changeData()}}</mat-option> -->
+                        <!-- <mat-option *ngFor="let y of years" [value]="y">{{y}}</mat-option> -->
+                    <!-- </mat-select> -->
+                    <mat-select [formControl]="year"  [disabled]="copy.StatusID == 2 || copy.StatusID == 3  || copy.StatusID == 4 ">
+                        <mat-option *ngFor="let y of years" [value]="y.Year">{{y.Year}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div style="display:flex;flex-direction: column; align-items: space-between;">
+                <label>Quarter<span style="color: red;">*</span></label>
+                <mat-form-field appearance="outline">
+                    <mat-label>Quarter</mat-label>
+                    <!-- <mat-select [disabled]="copy.mode==='edit'" [formControl]="quater" (selectionChange)="resetValue()"> -->
+                        <!-- <mat-option>None</mat-option> -->
+                        <!-- <mat-option *ngFor="let q of quatersz" [value]="q.Quater">{{q.Quater}}</mat-option> -->
+                    <!-- </mat-select> -->
+                    <mat-select [formControl]="quater" (selectionChange)="resetValue($event)" [disabled]="copy.StatusID ==2 || copy.StatusID ==3 || copy.StatusID ==4">
+                        <!-- <mat-option>None</mat-option> -->
+                        <mat-option *ngFor="let q of filterquarter" [value]="q.Quater">{{q.Quater}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+        </div>
+        <!-- <mat-label>Duration</mat-label><br> -->
+        <div style=" display:flex;flex-direction:row ;justify-content: space-between;" *ngIf="data.mode=='add'">
+            <div style="display:flex;flex-direction: column; align-items: space-between;">
+                <label>Start Date<span style="color: red;">*</span></label>
+                <mat-form-field style="width:13vw;" appearance="outline">
+                    <input style="width:45vw;" matInput [matDatepicker]="picker1" placeholder="Start Date"
+                        [min]="quaterDetailsData()?.startQuaterDate" [max]="quaterDetailsData()?.endQuaterDate"
+                        [formControl]="startDate" (click)="picker1.open()" (keydown)="false">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div style="display:flex;flex-direction: column; align-items: space-between;">
+                <label>End Date <span style="color: red;">*</span></label>
+                <mat-form-field style="width:13vw;" appearance="outline">
+                    <input style="width:45vw;" matInput [matDatepicker]="picker2" placeholder="End Date" [min]="startDate.value"
+                        [max]="quaterDetailsData()?.endQuaterDate" [formControl]="endDate" (click)="picker2.open()"
+                        (keydown)="false">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+        <div style=" display:flex;flex-direction:row ;justify-content: space-between;"*ngIf="data.mode=='edit' ">
+            <div style="display:flex;flex-direction: column; align-items: space-between;">
+                <label>Start Date<span style="color: red;">*</span></label>
+                <mat-form-field style="width:13vw;" appearance="outline">
+                    <input style="width:45vw;" matInput [matDatepicker]="picker1" placeholder="Start Date"
+                        [min]="quaterDetailsData()?.startQuaterDate" [max]="quaterDetailsData()?.endQuaterDate"
+                        [formControl]="startDate" (click)="picker1.open()" (keydown)="false">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div style="display:flex;flex-direction: column; align-items: space-between;">
+                <label>End Date <span style="color: red;">*</span></label>
+                <mat-form-field style="width:13vw;" appearance="outline">
+                    <input style="width:45vw;" matInput [matDatepicker]="picker2" placeholder="End Date" [min]="startDate.value"
+                        [max]="quaterDetailsData()?.endQuaterDate" [formControl]="endDate" (click)="picker2.open()"
+                        (keydown)="false">
+                    <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                    <mat-datepicker #picker2></mat-datepicker>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <mat-label>Will be Reviewed by </mat-label>
+        <div>
+            Reviewer
+            <mat-slide-toggle [checked]="copy.IsReviewerUnit" (change)="copy.IsReviewerUnit = !copy.IsReviewerUnit">
+            </mat-slide-toggle>
+            Unit
+        </div>
+        <mat-form-field appearance="outline" *ngIf="copy.IsReviewerUnit">
+            <input matInput type="text" placeholder="Search by Unit" [formControl]="unitx" [matAutocomplete]="auto"
+                name="unit" (focus)="populateUnitz()" required (keydown)="editUnit($event)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUnit" (optionSelected)="changeUnit($event)">
+                <mat-option *ngFor="let unit of unitz | async" [value]="unit">
+                    {{unit.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-form-field appearance="outline" *ngIf="!copy.IsReviewerUnit">
+            <input matInput type="text" placeholder="Search by Reviewer" [formControl]="userx" [matAutocomplete]="auto"
+                value="1" (focus)="populateUserz()" required (keydown)="editUser($event)">
+            <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayUser" (optionSelected)="changeUser($event)">
+                <mat-option *ngFor="let user of userz | async" [value]="user">
+                    {{user.name}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+        <mat-error *ngIf="reviewerunit">{{reviewerunit}}</mat-error>
+
+        <div style="display:flex;flex-direction: column; align-items: space-between;">
+            <label>Enable Reminder Date<span style="color: red;">*</span></label>
+            <mat-form-field style="width:13vw;" appearance="outline">
+                <input style="width:45vw;" matInput [matDatepicker]="picker3" placeholder="Reminder Date" [min]="startDate.value"
+                    [max]="endDate.value" [formControl]="remainderDate" (click)="picker3.open()"
+                    (keydown)="false">
+                <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+                <mat-datepicker #picker3></mat-datepicker>
+            </mat-form-field>
+        </div>
+
+    </form>
+</mat-dialog-content>
+<mat-error *ngIf="saveerror">{{saveerror}}</mat-error>
+<mat-dialog-actions>
+    <span class="spacer"></span>
+    <!-- <button mat-button mat-raised-button color="primary" (click)="validateSave()">{{copy.mode=="add"?"Schedule New Assessment":"Edit Assessment"}}</button>
+    <button mat-button mat-dialog-close>Cancel</button> -->
+
+    <div class="move-buttons" >
+        <button class="buttons save" id="saveSub"  type="submit"(click)="validateSave()" style="height: 6vh;"><img src="./assets/images/icon-application.svg"
+                  alt="Save"><span style="font-size: 2.2vh;
+    font-family: 'Roboto Condensed';"> {{copy.mode=="add"?"Schedule New Assessment":"Edit Assessment"}}</span></button>
+
+        </div>
+                <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="height:6vh" mat-dialog-close>Cancel</button>
+
+
+</mat-dialog-actions>

@@ -1,0 +1,8 @@
+{
+    "ROUTE_METHODS": [
+        {
+            "getMember": "getMember",
+            "validateFunction": 0
+        }
+    ]
+}

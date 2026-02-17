@@ -1,0 +1,493 @@
+<div class="container">
+    <form class="incident-form" [formGroup]="incidentForm" *ngIf="service?.isIncidentEditable">
+        <mat-card class="matcard">
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Reporting Date</label>
+                </div>
+                <div class="reporting-date">
+                    {{reportingDate}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Department <span style="color: red;">*</span></label>
+                </div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Select a Department</mat-label>
+                    <mat-select matSelectSearch placeholder="Search department..." formControlName="groupName" [(ngModel)]="incident.GroupID"
+                        (selectionChange)="selectedUnit($event, incident)" [disabled]="incident.StatusID >= 1"
+                        [matTooltip]="incident.StatusID >= 1 ? 'Department cannot be edited once it is saved':''">
+                        <mat-option *ngFor="let group of service.info?.groups" [value]="group.GroupID">
+                            {{ group?.Name }}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <div class="form-label">
+                    <label>Unit Name <span style="color: red;">*</span></label>
+                </div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Select an Unit</mat-label>
+                    <mat-select matSelectSearch placeholder="Search unit..." formControlName="unitName" [(ngModel)]="incident.UnitID"
+                        [disabled]="incident.StatusID >= 1"
+                        [matTooltip]="incident.StatusID >= 1 ? 'Unit cannot be edited once it is saved':''">
+                        <mat-option *ngFor="let unit of filteredUnits(incident?.GroupID)" [value]="unit?.UnitID">
+                            {{unit?.Name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div class="grpvalidation" *ngIf="!isSaved">Department and Unit cannot be edited once it is saved</div>
+            <h3>Incident Information</h3>
+            <mat-divider></mat-divider>
+            <div class="form-row">
+                <div class="form-name">
+                    <label>Reporting Personnel Name <span style="color: red;">*</span></label>
+                </div>
+                <div class="reportingPersonnelName">
+                    {{incident.IncidentCode==""?service.info?.currentUserData[0].FullName:incident.ReporteeUser}}
+                </div>
+                <div class="form-label">
+                    <label>Location Type <span style="color: red;">*</span></label>
+                </div>
+                <mat-radio-group formControlName="locationType" class="radio-group" aria-label="Select an option"
+                    [(ngModel)]="incident.LocationTypeID">
+                    <mat-radio-button *ngFor="let location of service.info?.locationTypes"
+                        [value]="location.LocationTypeID">{{location.Name}}</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <br>
+            <mat-divider></mat-divider>
+            <br>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Involved team</label>
+                </div>
+                <mat-form-field appearance="fill">
+                    <textarea matInput formControlName="team" [(ngModel)]="incident.IncidentTeam"></textarea>
+                </mat-form-field>
+                <div class="form-label">
+                    <label>Incident Date <span style="color: red;">*</span></label>
+                </div>
+                 <mat-form-field appearance="fill" (click)="picker.open()">
+                    <input matInput formControlName="incidentDate" [max]="maxDate" [matDatepicker]="picker"
+                        [ngModel]="incident.IncidentDate" (dateChange)="changeIncidentDate('change', $event)"
+                        (keydown.enter)="$event.preventDefault()">
+                    <mat-datepicker-toggle matSuffix [for]=picker></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Contact:</label>
+                </div>
+                <div class="Contact">
+                    {{incident.IncidentCode==""?service.info?.currentUserData[0].MobileNumber:incident.MobileNumber}}
+                </div>
+                <div class="form-label-email">
+                    <label>Email:</label>
+                </div>
+                <div class="Email">
+                    {{incident.IncidentCode==""?service.info?.currentUserData[0].EmailID:incident.EmailID}}
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Incident Title <span style="color: red;">*</span></label>
+                </div>
+                <mat-form-field style="width:90%" appearance="fill">
+                    <textarea matInput formControlName="incidentTitle" [(ngModel)]="incident.IncidentTitle"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Incident Description<span style="color: red;">*</span></label>
+                </div>
+                <mat-form-field style="width:90%" appearance="fill">
+                    <textarea matInput formControlName="incidentDesc" [(ngModel)]="incident.Description"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Recommended Action by Unit <span style="color: red;">*</span></label>
+                </div>
+                <mat-form-field style="width:90%" appearance="fill">
+                    <textarea matInput formControlName="recommendedAction"
+                        [(ngModel)]="incident.Recommendation"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Action Taken <span style="color: red;">*</span></label>
+                </div>
+                <mat-form-field style="width:90%" appearance="fill">
+                    <textarea matInput formControlName="actionTaken" [(ngModel)]="incident.Action"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>RCA<span style="color: red;">*</span></label>
+                </div>
+                <mat-form-field style="width:90%" appearance="fill">
+                    <textarea matInput formControlName="rca" [(ngModel)]="incident.MakerRCA"></textarea>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Incident Type <span style="color: red;">*</span></label>
+                </div>
+                <div class="types">
+                    <mat-checkbox [checked]="incidentType.checked" [value]="incidentType.TypeID"
+                        (change)="incidentType.checked = !incidentType.checked"
+                        *ngFor="let incidentType of service.info?.incidentTypes">
+                        {{incidentType.Name}}
+                    </mat-checkbox>
+                </div>
+                <div class="form-label">
+                    <label>Source Of Identification <span style="color: red;">*</span></label>
+                </div>
+                <mat-radio-group formControlName="incidentSource" class="radio-group"
+                    [(ngModel)]="incident.IncidentSourceID">
+                    <mat-radio-button *ngFor="let incidentSource of service.info?.incidentSources"
+                        [value]="incidentSource.SourceID">{{incidentSource.Name}}</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Direct Loss Amount ({{ currency }})</label>
+                </div>
+                <mat-form-field appearance="fill">
+                    <input matInput type="number" formControlName="DirectLoss" [(ngModel)]="incident.DirectLoss" (change)="onChangeSAR('DirectLoss')" />
+                </mat-form-field>
+                <div class="form-label">
+                    <label>Indirect Loss Amount ({{ currency }})</label>
+                </div>
+                <mat-form-field appearance="fill">
+                    <input matInput type="number" formControlName="IndirectLoss" [(ngModel)]="incident.IndirectLoss" (change)="onChangeSAR('IndirectLoss')" />
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Recovered Amount ({{ currency }})</label>
+                </div>                
+                <mat-form-field appearance="fill">                    
+                    <input matInput type="number" formControlName="Recoveries" [(ngModel)]="incident.Recoveries" (change)="onChangeSAR('Recoveries')" />
+                </mat-form-field>
+                <div class="form-label">
+                    <label>Loss Amount ({{ currency }})</label>
+                </div>                
+                <mat-form-field appearance="fill">                     
+                    <input matInput type="number" formControlName="lossAmount" [(ngModel)]="incident.LossAmount" (change)="onChangeSAR('lossAmount')" readonly/>
+                </mat-form-field>                
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Identification Date</label>
+                </div>  
+                <mat-form-field appearance="fill" (click)="picker1.open()">
+                    <input matInput formControlName="identificationDate" [max]="maxDate" [matDatepicker]="picker1"
+                        [ngModel]="incident.IdentificationDate" (dateChange)="changeIdentificationDate('change', $event)"
+                        (keydown.enter)="$event.preventDefault()" />
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                </mat-form-field>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Aggrieved Party Details</label>
+                </div>
+                <mat-form-field appearance="fill">
+                    <input matInput formControlName="partyDetails" [(ngModel)]="incident.AggPartyDetails">
+                </mat-form-field>
+                <div class="form-label">
+                    <label>Criticality <span style="color: red;">*</span></label>
+                </div>
+                <mat-radio-group class="radio-group" aria-label="Select an option" formControlName="criticality"
+                    [(ngModel)]="incident.CriticalityID">
+                    <span *ngFor="let criticality of service.info?.incidentCriticalities" class="criticality-option">
+                        <mat-radio-button [value]="criticality.CriticalityID">{{criticality.Name}}</mat-radio-button>
+                        <mat-icon *ngIf="criticality.Description" 
+                            class="criticality-info-icon"
+                            [matTooltip]="criticality.Description"
+                            matTooltipPosition="above"
+                            matTooltipClass="criticality-tooltip">info_outline</mat-icon>
+                    </span>
+                </mat-radio-group>
+            </div>
+            <br>
+            <div class="form-row">
+                <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                <label style="font-weight: bold;">Total {{getLossTotal()}}%</label>
+                <label *ngIf="checkTotalExceeds100()" class="total-exceeds-error" style="color: red; font-weight: bold; margin-left: 10px;">
+                    ⚠️ Total exceeds 100% ({{getLossTotal()}}%) - Please adjust Loss % values
+                </label>
+                <label *ngIf="!checkTotalExceeds100()">&nbsp;&nbsp;&nbsp;&nbsp;(Select Multiple if impact applicable across)</label>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>All Units</label>
+                </div>
+                <mat-form-field appearance="fill" style="width: 300px;">
+                    <mat-label>Select Units</mat-label>
+                    <mat-select matSelectSearch placeholder="Select Units" [(ngModel)]="selectedUnitId" [ngModelOptions]="{standalone: true}">
+                        <mat-option *ngFor="let unit of getAvailableUnits()" [value]="unit.UnitID">
+                            {{unit.Name}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill" style="width: 150px; margin-left: 10px;"
+                    [class.loss-percent-error]="newLossPercent !== null && newLossPercent !== undefined && !canAddUnit()">
+                    <mat-label>Loss %</mat-label>
+                    <input matInput type="number" [(ngModel)]="newLossPercent" [ngModelOptions]="{standalone: true}" 
+                        placeholder="Loss %" min="0" max="100" 
+                        (input)="validateNewLossPercent()"
+                        [class.input-error]="newLossPercent !== null && newLossPercent !== undefined && !canAddUnit()">
+                    <mat-error *ngIf="newLossPercent !== null && newLossPercent !== undefined && !canAddUnit()">
+                        Total would exceed 100% (Current: {{getLossTotalWithoutCheck()}}% + New: {{newLossPercent}}% = {{getLossTotalWithoutCheck() + (newLossPercent || 0)}}%)
+                    </mat-error>
+                </mat-form-field>
+                <button mat-icon-button (click)="addUnit()" [disabled]="!canAddUnit()" 
+                    style="margin-left: 10px; color: green;" matTooltip="Add Unit">
+                    <mat-icon fontIcon="check"></mat-icon>
+                </button>
+                <button mat-icon-button (click)="clearAddForm()" 
+                    style="margin-left: 5px; color: red;" matTooltip="Clear">
+                    <mat-icon fontIcon="close"></mat-icon>
+                </button>
+            </div>
+            <div class="form-row" *ngIf="getAllocatedUnits().length > 0">
+                <div class="form-label"></div>
+                <div class="unit-allocation-table-wrapper" style="width: 100%;">
+                    <table mat-table [dataSource]="getAllocatedUnits()" class="unit-allocation-table">
+                        <ng-container matColumnDef="index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let unit; let i = index">{{i + 1}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="unitName">
+                            <th mat-header-cell *matHeaderCellDef>Unit Name</th>
+                            <td mat-cell *matCellDef="let unit">{{unit.Name}}</td>
+                        </ng-container>
+                        <ng-container matColumnDef="lossPercent">
+                            <th mat-header-cell *matHeaderCellDef>Loss %</th>
+                            <td mat-cell *matCellDef="let unit; let i = index">
+                                <span *ngIf="editingIndex !== i">{{unit.LossValue}}</span>
+                                <mat-form-field *ngIf="editingIndex === i" appearance="fill" style="width: 100px;"
+                                    [class.loss-percent-error]="editingIndex === i && editingLossValue !== null && editingLossValue !== undefined && wouldExceed100OnEdit(i)">
+                                    <input matInput type="number" [(ngModel)]="editingLossValue" [ngModelOptions]="{standalone: true}" 
+                                        min="0" max="100" (input)="validateEditLossPercent(i)"
+                                        [class.input-error]="editingIndex === i && editingLossValue !== null && editingLossValue !== undefined && wouldExceed100OnEdit(i)">
+                                    <mat-error *ngIf="editingIndex === i && editingLossValue !== null && editingLossValue !== undefined && wouldExceed100OnEdit(i)">
+                                        Total would exceed 100% (Current: {{getLossTotalWithoutCheck()}}%, Changing {{unit.LossValue}}% to {{editingLossValue}}% = {{getLossTotalWithoutCheck() - (unit.LossValue || 0) + (editingLossValue || 0)}}%)
+                                    </mat-error>
+                                </mat-form-field>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>Action</th>
+                            <td mat-cell *matCellDef="let unit; let i = index">
+                                <button *ngIf="editingIndex !== i" mat-icon-button (click)="startEdit(i)" matTooltip="Edit">
+                                    <mat-icon fontIcon="edit"></mat-icon>
+                                </button>
+                                <button *ngIf="editingIndex === i" mat-icon-button (click)="saveEdit(i)" 
+                                    style="color: green;" matTooltip="Save">
+                                    <mat-icon fontIcon="check"></mat-icon>
+                                </button>
+                                <button *ngIf="editingIndex === i" mat-icon-button (click)="cancelEdit()" 
+                                    style="color: red; margin-left: 5px;" matTooltip="Cancel">
+                                    <mat-icon fontIcon="close"></mat-icon>
+                                </button>
+                                <button mat-icon-button (click)="removeUnit(i)" 
+                                    style="margin-left: 5px; color: red;" matTooltip="Remove">
+                                    <mat-icon fontIcon="delete"></mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="['index', 'unitName', 'lossPercent', 'action']"></tr>
+                        <tr mat-row *matRowDef="let row; columns: ['index', 'unitName', 'lossPercent', 'action'];"></tr>
+                    </table>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-label">
+                    <label>Operational Risk Loss Event Category</label>
+                </div>
+                <div class="types losscat">
+                    <mat-checkbox [checked]="lossCat.checked" (change)="lossCat.checked = !lossCat.checked"
+                        *ngFor="let lossCat of service.info?.lossCatagories" [value]="lossCat.CategoryID">
+                        {{lossCat.Name}}</mat-checkbox>
+                </div>
+            </div>
+            <app-file-upload [evdname]="'Incident'" [disabled]="!service.incident?.Reportee"></app-file-upload>
+        </mat-card>
+        <div class="form-actions">
+            <b style="color: red;" *ngIf="incidentForm.invalid || !areAllChecked() || !isUnitValid">The save button is
+                enabled once all the mandatory fields are entered</b>
+            <div class="move-buttons">
+                <button class="buttons save" id="saveSub" type="submit"
+                    [disabled]="incidentForm.invalid || !areAllChecked() || !isUnitValid" (click)="save()"><img
+                        src="./assets/images/icon-application.svg" alt="Save">Save</button>
+            </div>
+            <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" (click)="closeDialog()"
+                style="margin-right: 1vw;height: 5.5vh;margin-top: 1.1vh;">Cancel</button>
+        </div>
+    </form>
+
+    <!-- no editable start -->
+    <div *ngIf="!service?.isIncidentEditable">
+        <mat-card class="form-view">
+            <div class="main-details">
+                <div class="left-main-details">
+                    <div class="row">
+                        <h5>Reporting Date</h5>&nbsp;&nbsp; <p>{{utils.formatDate(service.incident?.ReportingDate)}}</p>
+                    </div>
+                    <div class="row">
+                        <h5>Department</h5>&nbsp;&nbsp; <p>{{service.incident?.GroupName}}</p>
+                    </div>
+                    <div class="row">
+                        <h5>Unit Name</h5>&nbsp;&nbsp; <p>{{service.incident?.UnitName}}</p>
+                    </div>
+                </div>
+                <button mat-icon-button
+                    [disabled]="utils.isReadOnlyUserORM() || !service.incident?.Reportee || ![1,3,9,12].includes(service.incident?.StatusCode)"
+                    (click)="edit()">
+                    <mat-icon aria-hidden="false" aria-label="Edit" fontIcon="edit"></mat-icon>
+                </button>
+            </div>
+            <hr>
+            <div class="remaining-details">
+                <div class="">
+                    <div class="row">
+                        <h5>Reporting Personnel Name</h5>&nbsp;&nbsp;
+                        <p>{{service.incident?.ReporterName}}</p>
+                    </div>
+                    <div class="row">
+                        <h5>Location</h5>&nbsp;&nbsp;
+                        <p>{{service.incident?.LocationName}}</p>
+                    </div>
+                    <div class="row">
+                        <h5>Team</h5>&nbsp;&nbsp;
+                        <p class="width-20">
+                            {{service.incident?.IncidentTeam}}
+                        </p>
+                    </div>
+                </div>
+                <div class="">
+                    <div class="flex-box">
+                        <div class="">
+                            <div class="row">
+                                <h5>Incident Date</h5>&nbsp;&nbsp;<p>
+                                    {{utils.formatDate(service.incident?.IncidentDate)}}</p>
+                            </div>
+                            <div class="row">
+                                <h5>Contact</h5>&nbsp;&nbsp;<p>{{service.incident?.MobileNumber}}</p>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="row">
+                                <h5>Email</h5>&nbsp;&nbsp;<p>{{service.incident?.EmailID}}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h5>Incident Title</h5>&nbsp;&nbsp;
+                        <p class="width-20">
+                            {{service.incident?.IncidentTitle}}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <h5>Incident Description</h5>&nbsp;&nbsp;
+                        <p class="width-20">
+                            {{service.incident?.Description}}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <h5>Recommended Action by Unit</h5>&nbsp;&nbsp;
+                        <p class="width-20">
+                            {{service.incident?.Recommendation}}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <h5>Action Taken</h5>&nbsp;&nbsp;
+                        <p class="width-20">
+                            {{service.incident?.Action}}
+                        </p>
+                    </div>
+                    <div class="row">
+                        <h5>RCA</h5>&nbsp;&nbsp;
+                        <p class="width-20">
+                            {{service.incident?.MakerRCA}}
+                        </p>
+                    </div>
+                    <div class="flex-box">
+                        <div class="">
+                            <div class="row">
+                                <h5>Incident Type</h5>&nbsp;&nbsp;
+                                <div>
+                                    <p *ngFor="let inc of service?.incidentTypes">
+                                        {{inc?.Name}}&nbsp;&nbsp;
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <h5>Direct Loss Amount({{currency}})</h5>&nbsp;&nbsp;
+                                <p>{{service.incident?.DirectLoss}}</p>
+                            </div>
+                            <div class="row">
+                                <h5>Indirect Loss Amount({{currency}})</h5>&nbsp;&nbsp;
+                                <p>{{service.incident?.IndirectLoss}}</p>
+                            </div>
+                            <div class="row">
+                                <h5>Recovered Amount({{currency}})</h5>&nbsp;&nbsp;
+                                <p>{{service.incident?.Recoveries}}</p>
+                            </div>
+                            <div class="row">
+                                <h5>Loss Amount({{currency}})</h5>&nbsp;&nbsp;
+                                <p>{{service.incident?.LossAmount}}</p>
+                            </div>
+                            <div class="row">
+                                <h5>Aggrieved Party Details</h5>&nbsp;&nbsp;
+                                <p class="width-20">{{service.incident?.AggPartyDetails}}</p>
+                            </div>
+                        </div>
+                        <div class="">
+                            <div class="row">
+                                <h5>Source of Identification</h5>&nbsp;&nbsp;<p>{{service.incident?.Identification}}</p>
+                            </div>
+                            <div class="row">
+                                <h5>Identification Date</h5>&nbsp;&nbsp;<p>
+                                    {{utils.formatDate(service.incident?.IdentificationDate)}}</p>
+                            </div>
+                            <div class="row">
+                                <h5>Criticality</h5>&nbsp;&nbsp;<p>{{service.incident?.Criticality}}
+                                    <mat-icon *ngIf="getCriticalityDescription(service.incident?.CriticalityID)" 
+                                        class="criticality-info-icon"
+                                        [matTooltip]="getCriticalityDescription(service.incident?.CriticalityID)"
+                                        matTooltipPosition="right"
+                                        matTooltipClass="criticality-tooltip">info_outline</mat-icon>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h5>All Units</h5>&nbsp;&nbsp;
+                        <div>
+                            <p *ngFor="let unit of service?.impactedUnits">
+                                {{unit?.Name}} : <span
+                                    *ngIf="unit.LossValue != null">{{unit?.LossValue}}%</span>&nbsp;&nbsp;
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <h5>Operational Risk Loss event category</h5>&nbsp;&nbsp;
+                        <div>
+                            <p *ngFor="let loss of service.riskLossCategories">
+                                {{loss.Name}}&nbsp;&nbsp;
+                            </p>
+                        </div>
+                    </div>
+                    <app-file-upload [evdname]="'Incident'" [disabled]="true"></app-file-upload>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+</div>

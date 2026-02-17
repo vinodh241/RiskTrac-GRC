@@ -1,0 +1,255 @@
+<div class="login-container">
+    <img *ngIf="logoPath" [src]="logoPath" style="width: 18vw; margin-right: 2vw;" (error)="logoPath = null" />
+    <!-- login Form -->
+    <form [formGroup]="authForm" (ngSubmit)="onSubmit()" autocomplete="off" class="login-content" *ngIf="!forgotPasswordFlag && !otpFlag && !defaultUserFlag">
+        <mat-form-field appearance="fill">
+            <mat-label>Username</mat-label>
+            <input matInput formControlName="username" autocomplete="off" (contextmenu)="onRightClick($event)" required>
+            <mat-error *ngIf="!authForm.controls['username'].valid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
+            <mat-label>Password</mat-label>
+            <input matInput [type]="hide ? 'password' : 'text'" formControlName="password" autocomplete="off" (contextmenu)="onRightClick($event)"
+            onCopy="return false" onDrag="return false" onDrop="return false" onPaste="return false" required>
+            <mat-error  *ngIf="authForm.controls['password'].hasError('required')">Password is required</mat-error>
+        </mat-form-field>
+
+        <!--Adding account text field -->
+        <!--mat-form-field appearance="fill">
+            <mat-label>Account</mat-label>
+            <input matInput formControlName="accountType" autocomplete="off" (contextmenu)="onRightClick($event)" required>
+            <mat-error *ngIf="!authForm.controls['accountType'].valid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+
+        Adding account selection dropdown-->
+
+        <mat-form-field appearance="fill">
+          <mat-label>CRN</mat-label>
+          <input matInput formControlName="accountType" autocomplete="off" (contextmenu)="onRightClick($event)"  [pattern]="'^[A-Za-z0-9]+$'" required
+           />
+          <mat-error *ngIf="authForm.controls['accountType'].hasError('required')">
+            CRN is required
+          </mat-error>
+          <mat-error *ngIf="authForm.controls['accountType'].hasError('pattern')">
+            CRN should should contain (A-Z,a-z), (0-9).
+          </mat-error>
+        </mat-form-field>
+        <mat-error *ngIf="verifiyAccErr" style="font-size: medium;">{{verifiyAccErr}}</mat-error>
+
+
+        <!-- <mat-form-field class="w-20 ms-2 me-4 year-field" style="height: 5vh"> -->
+            <!-- multi-select
+                <mat-select id="financialYearId" placeholder="Select Year" multiple [(ngModel)]="selectedYearsList">
+                  <mat-option *ngFor="let item of yearsDropdownList" [value]="item.Year"
+                    [id]="item.ID">{{item.Year}}</mat-option>
+                </mat-select> -->
+            <!-- <mat-select id="financialYearId" placeholder="Select Year" [(ngModel)]="selectedYear" id="yearDropdown">
+                <mat-option *ngFor="let item of yearsDropdownList" [value]="item.Year" (click)="filterGlobalDashboardData()"
+                    [id]="item.ID">{{item.Year}}</mat-option>
+            </mat-select>
+        </mat-form-field> -->
+
+        <div class="mt-3 align-middle text-end w-100" style="margin-top: 3vh;">
+          <span [matTooltip]="!forgotPassword ? 'Forgot Password will enable once CRN Number is entered' : ''">
+            <a *ngIf="authenticationModeDetails === 3" class="font-italic float-start mt-3" style="cursor: pointer; color:#FFFFFF"
+              (click)="forgotPassword && onclickForgot()" [ngClass]="{'disabled-link': !forgotPassword}">
+          
+              <ins>Forgot Password</ins>
+            </a>
+          </span>
+          <button mat-raised-button  class="login-btn" color="primary" type="submit" [disabled]="!authForm.valid" style="float: right;">Login</button>
+				</div>
+
+        <mat-error *ngIf="apierror" style="color:#ff0000">{{apierror}}</mat-error>
+
+    </form>
+
+    <!-- OTP Form -->
+    <div class="logincontent" *ngIf="otpFlag">
+
+      <div class="lgn-head mb-3">
+        Enter One Time Password
+      </div>
+
+      <div class="input-field mt-4">
+        <input *ngFor="let digit of inputsArray; let i = index" class="otp" type="text" maxlength="1"
+          autocomplete="off"
+          [disabled]="otpDisable"
+          [id]="'digit' + (i + 1)"
+          [(ngModel)]="otpDigits[i]"
+          (ngModelChange)="onDigitChanged(i, $event)"
+          (keydown)="onBackspaceKey($event, i)" />
+      </div>
+
+      <!-- <div class="errorTxt text-center mt-2">
+        <span *ngIf="OTPmessage" [ngClass]="!OTPsuccess ? 'error' : 'success'">{{ OTPmessage }}</span>
+      </div> -->
+
+      <div class="mt-5 align-middle text-end w-100" style="    margin-top: 2vh;">
+        <mat-error *ngIf="apierrorOTP" style="font-size: 2vh;">{{apierrorOTP}}</mat-error>
+        <button type="submit" class="btn btn-primary btnlgreen sendotp px-4 py-2 mb-2"
+          [disabled]="disableButton"
+          (click)="sendOTP()">{{ ButtonForOTP }}</button>
+        <button type="submit" class="btn btn-primary btnlgreen verifyotp px-4 py-2 mb-2"
+
+        [ngClass]="disableButtonOtp ? 'verifyDisabled' : ''"
+          (click)="verifyOTP()">Verify OTP</button>
+        <div *ngIf="ButtonForOTP === 'Resend OTP' && isTimer" class="resendTxt text-center mt-2">
+          Resend OTP in <span class="otperror">{{ timeRemaining }}</span>
+        </div>
+      </div>
+    </div>
+    <!-- Forgot Password -->
+    <div *ngIf="forgotPasswordFlag" class="forgot-password-container" style="height: 68vh;">
+      <div class="lgn-head mb-3">
+        Forgot Password
+      </div>
+      <form [formGroup]="forgotPasswordForm" autocomplete="off" style="margin-top: 2vh;    ">
+        <!-- User ID -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>User Name</mat-label>
+          <input matInput type="text" formControlName="userID" id="userID" autocomplete="off" autocomplete="new-userID" required />
+          <mat-error  *ngIf="validateUserName()">   {{ validateUserName() }}
+          </mat-error>
+
+        </mat-form-field>
+
+        <!-- Email ID -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>Email ID</mat-label>
+          <input matInput type="email" formControlName="emailID"  autocomplete="off" autocomplete="new-emailID" required/>
+          <mat-error *ngIf="submitted && forgotPasswordForm.get('emailID')?.errors">
+            <div *ngIf="forgotPasswordForm.get('emailID')?.errors?.['required']">Email ID is required</div>
+            <div *ngIf="forgotPasswordForm.get('emailID')?.errors?.['email']">Enter a valid Email ID</div>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- First Name -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>First Name</mat-label>
+          <input matInput type="text" formControlName="firstName" autocomplete="off" autocomplete="new-firstName" required />
+          <mat-error *ngIf="submitted && forgotPasswordForm.get('firstName')?.errors">
+            <div *ngIf="forgotPasswordForm.get('firstName')?.errors?.['required']">First Name is required</div>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Last Name -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>Last Name</mat-label>
+          <input matInput type="text" formControlName="lastfName" autocomplete="off" autocomplete="new-lastfName" required />
+          <mat-error *ngIf="submitted && forgotPasswordForm.get('lastfName')?.errors">
+            <div *ngIf="forgotPasswordForm.get('lastfName')?.errors?.['required']">Last Name is required</div>
+            <div *ngIf="forgotPasswordForm.get('lastfName')?.errors?.['pattern']">Last Name should be valid</div>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- New Password -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>New Password</mat-label>
+
+          <input matInput type="password" formControlName="password" autocomplete="off" autocomplete="new-password" required />
+          <img
+          matSuffix
+       src="/assets/icon-key.svg"
+       class="icon-key"
+       [title]="CHANGE_PASSWORD_CONFIG?.TOOL_TIP_MESSAGE"/>
+          <mat-error *ngIf="submitted && forgotPasswordForm.get('password')?.errors">
+            <div *ngIf="forgotPasswordForm.get('password')?.errors?.['required']">New Password is required</div>
+            <div *ngIf="forgotPasswordForm.get('password')?.errors?.['minlength']">Password must be at least {{ CHANGE_PASSWORD_CONFIG_MIN_LENGTH }} characters long</div>
+            <div *ngIf="forgotPasswordForm.get('password')?.errors?.['maxlength']">New Password cannot be more than {{ CHANGE_PASSWORD_CONFIG_MAX_LENGTH }} characters long</div>
+          </mat-error>
+        </mat-form-field>
+
+
+        <!-- Confirm New Password -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>Confirm Password</mat-label>
+          <input matInput type="{{ showPassword ? 'text' : 'password' }}" formControlName="confirmPassword" autocomplete="off"  autocomplete="new-confirmPassword" required />
+          <img matSuffix [src]="showPassword? '/assets/icon-eye-field.svg': '/assets/login-show.svg'"
+          class="position-absolute email" alt="Confirm New Password" id="togglePassword"
+          (mousedown)="showPassword = true"
+          (mouseup)="showPassword = false"
+          style="width:3vh;cursor: pointer;">
+          <mat-error *ngIf="submitted && (forgotPasswordForm.get('confirmPassword')?.errors || passwordMismatch)">
+            <div *ngIf="forgotPasswordForm.get('confirmPassword')?.errors?.['required']">Confirm Password is required</div>
+            <div *ngIf="passwordMismatch">Passwords do not match</div>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- Buttons -->
+        <mat-error *ngIf="apierrorForgotPassword" style="font-size: 2.2vh !important; padding-left: 15px;">{{apierrorForgotPassword}}</mat-error>
+
+        <div class="mt-3 text-end" style="margin-top: 1vh; margin-left: 23vh;">
+          <button mat-raised-button color="warn" type="button" class="mx-2" (click)="onCancel()" style="margin-left: -5vh;">Cancel</button>
+          <button mat-raised-button color="primary" style="margin-left: 1vh;" (click)="onForgotPasswordSubmit()">Next</button>
+        </div>
+
+
+      </form>
+
+
+    </div>
+    <!-- Change Password for default user -->
+    <div *ngIf="defaultUserFlag" class="forgot-password-container">
+
+
+      <form [formGroup]="ChangePasswordForm" autocomplete="off" style="margin-top: 2vh;">
+
+        <div  class="login-success-msg mb-2">
+          <img src="/assets/login-tick.svg" alt="Success" class="login-icon">
+          <span class="login-text">You have successfully logged in</span>
+        </div>
+
+
+        <h3 class="text-left w-100 mx-0 text-white mt-3 pb-0 mb-0 font-weight-bold" >Change Password</h3>
+
+          <p *ngIf="passwordExpire" class="text-left w-100 mx-0 text-white font-weight-bold">Password has been expired. Kindly change your Password. </p>
+          <div *ngIf="!passwordExpire" class="text-left w-100 mx-0 text-white font-weight-bold" style="margin-bottom: 3vh;">In a continuing
+          effort to safeguard your account,<br>we are requesting you to change your
+          password.</div>
+        <!-- New Password -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>Old Password</mat-label>
+          <input matInput type="password" formControlName="oldpassword" autocomplete="off" autocomplete="new-oldpassword" required />
+          <mat-error *ngIf="submitted && ChangePasswordForm.get('oldpassword')?.errors">
+            <div *ngIf="ChangePasswordForm.get('oldpassword')?.errors?.['required']">Old Password is required</div>
+          </mat-error>
+        </mat-form-field>
+
+        <!-- New Password -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>New Password</mat-label>
+          <img matSuffix src="/assets/icon-key.svg" style="width: 3vmin; cursor: pointer;"
+          [title]="CHANGE_PASSWORD_CONFIG?.TOOL_TIP_MESSAGE" />
+          <input matInput type="password" formControlName="newpassword" autocomplete="off" autocomplete="new-newpassword"  required />
+          <mat-error *ngIf="submitted && ChangePasswordForm.get('newpassword')?.errors">
+            <div *ngIf="ChangePasswordForm.get('newpassword')?.errors?.['required']">New Password is required</div>                
+            <div *ngIf="ChangePasswordForm.get('newpassword')?.errors?.['minlength']">Password must be at least {{ CHANGE_PASSWORD_CONFIG_MIN_LENGTH }} characters long</div>
+            <div *ngIf="ChangePasswordForm.get('newpassword')?.errors?.['maxlength']">New Password cannot be more than {{ CHANGE_PASSWORD_CONFIG_MAX_LENGTH }} characters long</div>
+            <div *ngIf="ChangePasswordForm.controls['newpassword'].hasError('pattern') && ChangePasswordForm.controls['newpassword'].touched && 
+              ChangePasswordForm.get('newpassword')?.value.length >=  CHANGE_PASSWORD_CONFIG_MIN_LENGTH && ChangePasswordForm.get('newpassword')?.value.length <= CHANGE_PASSWORD_CONFIG_MAX_LENGTH"> Password should be matched with the password policy</div>
+          </mat-error>          
+        </mat-form-field>
+
+        <!-- Confirm New Password -->
+        <mat-form-field class="w-100 mt-3" appearance="fill">
+          <mat-label>Confirm Password</mat-label>
+          <img matSuffix [src]="showPassword ? '/assets/icon-eye-field.svg' : '/assets/login-show.svg'" style="width: 3vmin; cursor: pointer;" (mousedown)="showPassword = true" (mouseup)="showPassword = false" />
+          <input matInput type="{{ showPassword ? 'text' : 'password' }}" formControlName="confirmCPassword" autocomplete="off"  autocomplete="new-confirmCPassword" required />
+          <mat-error *ngIf="submitted && (ChangePasswordForm.get('confirmCPassword')?.errors)">
+            <div *ngIf="ChangePasswordForm.get('confirmCPassword')?.errors?.['required']">Confirm Password is required</div>
+          </mat-error>
+        </mat-form-field>
+        <!-- <mat-error > <div *ngIf="passwordMatchValidator() || apierrorChangePassword" style="font-size: 2.2vh !important;">{{changePasswordErr}}</div></mat-error> -->
+        <mat-error *ngIf="apierrorChangePassword" style="font-size: 2.2vh !important;">{{apierrorChangePassword}}</mat-error>
+
+        <!-- Buttons -->
+        <div class="mt-3 text-end" style="margin-top: 1vh; margin-left: 30vh;">
+          <button mat-raised-button color="primary" style="margin-left: 1vh;" (click)="onChangePasswordSubmit()"  
+          > Next </button>
+        </div>
+
+      </form>
+    </div>
+</div>

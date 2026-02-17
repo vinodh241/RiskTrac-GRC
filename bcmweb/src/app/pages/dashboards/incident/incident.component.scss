@@ -1,0 +1,273 @@
+
+.mainClassRow{
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 18.8vh);
+}
+.mat-action-row { 
+    border: 0px;
+    justify-content: flex-start;
+    position: relative;
+    padding: 0px;    
+    align-items: inherit;
+    height: calc(33.33% - 4vh - 10px);
+    margin: 4vh 0 0 0;
+}  
+
+.matInnerClassFirst {
+    margin: 0 1.33vh 0 0;
+    width: calc(33.33% - 2.66vh);
+}
+.matInnerClassSecond {
+    margin: 0 2.66vh 0 2.66vh;
+    width: calc(33.33% - 2.66vh);
+}
+.matInnerClassThird {
+    margin: 0 0 0 1.33vh;
+    width: calc(33.33% - 2.66vh);
+}
+.mat-card {
+    height: calc(100% - 32px);  
+}
+.mat-card-content{ 
+    height: 100%;
+}
+.thirdSecLast{
+    display: flex; 
+    justify-content: space-between;
+    height: calc(100% - 45px);                    
+    align-items: center;
+}
+// .mat-card-content>:last-child{   
+//     height: calc(100% - 45px);
+//     align-items: center;
+// }
+.matcard3,.matcard1{
+    margin-left: 4vh;
+}
+
+.info1 div {
+    font-weight: normal;
+    color: #000;
+    font-size: 13px;
+    // margin-bottom: 0;
+}
+
+.info1 h3 {
+    font-weight: bold;
+    color: #fff;
+    //font-size: 170%;
+    font-size: 1.5em;
+    // font-family: "Open Sans Condensed";
+    vertical-align: middle;
+    margin-bottom: 0;
+}
+
+.infoprogresswrapper {
+    background-color: rgba(255, 255, 255, 0.2);
+    height: 1em;
+    border-radius: 50px;
+    width: 100%;
+    overflow: hidden;
+}
+.col-4{
+    width: calc(33.33% - 2.66vh)
+}
+.col-8{
+    width: calc(66.66% - 1vh);
+    margin-left: 4vh;
+}
+.row{
+    margin: 0 0 4vh 0;
+}
+.row:last-child {
+    margin: 0 0 0 0;
+}
+.infoprogress {
+    background-color: #1FAEFF;
+    /*height:1em;*/
+    border-radius: 50px;
+    font-size: 82% !important;
+    padding-left: 2%;
+    color: #404040;
+    line-height: 1.2;
+    font-weight: bold !important;
+}
+
+::ng-deep .mat-progress-bar-fill::after {
+    // background-color: #df893e;
+    background-image: linear-gradient(to bottom right, #FFAA2E, #CB4900);
+    display: block;
+    border-radius:50vh;
+}
+
+::ng-deep .mat-progress-bar-buffer {
+    background: #E4E8EB;
+}
+
+.rd-greybox {
+    background-color: #F1F1F1;
+    height: 100px;
+    width: 100px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.45);
+    position: relative;
+}
+
+.rd-greybox-inner {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #CB4900;
+    font-weight: bold;
+    font-size: 300%;
+    text-shadow: 0px 5px 10px rgba(0, 0, 0, 0.45);
+}
+
+.rd-greybox .stroke-text {
+    font-size: 70px;
+    text-align: center;
+    text-anchor: middle;
+    stroke: #fff;
+    stroke-width: 2px;
+    fill: #C55D04;
+}
+
+.rd-redbox {
+    background-image: linear-gradient(#E5C7D7, #F6F6F6);
+    height: 100px;
+    width: 100px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.45);
+    position: relative;
+}
+
+.rd-redbox-inner {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.rd-redbox .rd-redbox-inner div {
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    vertical-align: middle;
+}
+
+.rd-redbox .rd-redbox-inner div:nth-child(1) {
+    font-weight: bold;
+    color: #C55D04;
+    font-size: 200%;
+    line-height: 90%;
+}
+
+.rd-redbox .rd-redbox-inner div:nth-child(2) {
+    color: #2d2d2d;
+    font-size: 140%;
+    line-height: 90%;
+}
+
+// .background-img {
+//     background-image: url('../../../../assets/icons/rejected-rec-img.png');
+//     background-size: 100% 100%;
+//     background-repeat: no-repeat;
+//     width: 12vw;
+//     margin-bottom: -2vh;
+// }
+
+.rd-progress {
+    font-size: 18px;
+}
+
+.rd-progress .rd-progress-nos .rd-progress-nos-lft {
+    color: #2D2D2D;
+}
+
+.rd-progress .rd-progress-nos .rd-progress-nos-rgt {
+    color: #C55D04;
+    font-size: 30px;
+    font-weight: bold;
+    float: right;
+}
+
+.rd-progress .rd-progress-nos .rd-progress-nos-big {
+    font-size: 30px;
+}
+
+.rd-progress .rd-progress-base {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.45);
+    background-color: rgba(255, 255, 255, 0.30);
+    height: 35px;
+    border-radius: 100vw;
+    width: 12vw;
+}
+
+.rd-progress .rd-progress-bar {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.45);
+    background-image: linear-gradient(to bottom right, #FFAA2E, #CB4900);
+    height: 35px;
+    border-radius: 100vw;
+}
+
+.rd-progress .rd-progress-bar::before {
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.45);
+    background-image: linear-gradient(to bottom right, #FFAA2E, #CB4900);
+    height: 35px;
+    border-radius: 100vw;
+}
+
+.rd-progress .rd-progress-bar::after {
+    // box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.45);
+    background-image: linear-gradient(to bottom right, #FFAA2E, #CB4900);
+    height: 35px;
+    border-radius: 100vw;
+}
+
+
+.flex-space{
+    display: flex;
+    // justify-content: space-around;
+}
+.vamiddle{vertical-align:middle;}
+
+.rd-nmploss{}
+.rd-nmploss aside{width:10px; height:78px; border-radius:50vw;background-image: linear-gradient(#FFAA2E, #CB4900);}
+.rd-nmploss .rd-nmploss-fs18{font-size:16px;}
+.rd-nmploss .rd-nmploss-fs30{font-size:30px;}
+
+.viewAllChart{
+    position: absolute;
+    right: 10px;
+    bottom: 0px;
+    color: blue;
+    font-style: italic;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.inc-oorc{background-image: linear-gradient(to bottom right, #fff, #FFBFBF);}
+
+.dataSetAV{
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 5px;
+    border-bottom-style: inset;
+    border-width: 1px;
+    border-color: #aca5a5;
+
+}
+.dataSetAV:first-child{
+    padding-top: 0px;
+}
+.dataSetAV:last-child{
+    border: 0px;
+}
+

@@ -1,0 +1,24 @@
+.info-content {
+  white-space: pre-line;
+  word-wrap: break-word;
+}
+
+.failed-records-label {
+  color: #f44336 !important; // Material Design red color
+  font-weight: 600;
+}
+
+.close-button {
+  background: linear-gradient(92deg, #245A8C 44.75%, #1DA34A 108.73%);
+  color: white;
+  border: none;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+  padding: 8px 24px;
+  font-weight: 500;
+  transition: opacity 0.3s ease;
+}
+
+.close-button:hover {
+  opacity: 0.9;
+}

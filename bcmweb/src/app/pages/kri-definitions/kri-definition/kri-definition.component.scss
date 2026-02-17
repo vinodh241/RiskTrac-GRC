@@ -1,0 +1,212 @@
+.mat-toolbar {
+  width: auto;
+  margin: -24px -24px 0px -24px;
+  height: 6.4vh;
+  font-size: 2vh;
+}
+
+.mat-dialog-content {
+  margin-top: 3.5%;
+}
+
+.top-section,
+.bottom-section {
+  display: flex;
+  margin-top: 2vh;
+  justify-content: space-between;
+}
+
+.mid-section {
+  display: flex;
+}
+
+.bottom-section {
+  border: solid 1px black;
+  border-radius: 5px;
+  padding: 1% 1%;
+}
+
+.groups-units {
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+}
+
+.textinput-section {
+  width: 70%;
+}
+
+.radio-section {
+  width: 60%;
+  display: flex;
+}
+
+.frequency {
+    width: 50%;
+    border: solid 1px black;
+    border-radius: 5px;
+    padding: 1% 1%;
+    margin-right: 10%;
+  }
+
+.kri-type {
+    width: 53%;
+    border: solid 1px black;
+    border-radius: 5px;
+    padding: 1% 1%;
+    margin-right: -5%;
+    margin-left: -2vh;
+}
+
+.example-radio-group {
+  display: flex;
+  flex-direction: column;
+  margin: 5px 0;
+  align-items: flex-start;
+}
+
+.define-span {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.example-radio-button {
+  margin: 5px;
+}
+
+.cancel {
+  margin-left: 5px;
+}
+
+// .value-2 {
+//   padding: 5px;
+//   background-color: aqua;
+//   border-radius: 12px;
+// }
+
+.define-bubble {
+  height: 3vh;
+  width: 1.5vw;
+  border-radius: 1.5vh;
+}
+
+.bubble-container {
+  display: flex;
+  gap: 0.5vh;
+  padding-top: 1vh;
+}
+
+.target-data {
+  width: 30%;
+}
+
+.threshold-data {
+  width: 74%;
+}
+
+.sub-text {
+  padding-top: 0.5vh;
+  font-size: 12px;
+  font-weight: 500;
+  color: rgb(36, 35, 35);
+}
+
+.sub-head {
+  font-size: 15px;
+  color: black;
+  font-weight: 700;
+}
+
+.threshold-value {
+  display: flex;
+  width: 55vw;
+}
+
+.threshold-value mat-form-field {
+  width: 3.5vw;
+  margin-top: -1.5vh;
+  margin-bottom: -1.5vh;
+  padding-left: 0.6vw;
+}
+
+.threshold-value-appearance {
+  padding-top: -2vh;
+}
+
+.each-value {
+    padding-right: 2vw;
+}
+
+.threshold-value mat-label {
+  padding-left: 0.6vw;
+}
+
+/* Base styles for buttons */
+.move-buttons .buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    cursor: pointer;
+    margin: 0.5em;
+    width: 8vw;
+    padding: 0.5em;
+    border-radius: 0.3em;
+    color: #fff;
+    background: linear-gradient(45deg, rgba(29, 160, 79, 0.8), rgba(11, 89, 161, 0.8));
+    outline: none;
+    border: none;
+    filter: drop-shadow(0px 5px 4px rgba(0, 0, 0, 0.5));
+    opacity: 1;
+    transition: opacity 0.3s ease, background-color 0.3s ease;
+}
+
+/* Specific styles for the 'save' button */
+.move-buttons .buttons.save {
+    justify-content: center;
+    background: #0b5ed7;
+}
+
+/* Disabled state */
+.move-buttons .buttons:disabled {
+    background: #cccccc; /* Gray background */
+    color: #666666;      /* Muted text color */
+    cursor: not-allowed; /* Unclickable cursor */
+    opacity: 0.7;        /* Slight transparency for visual cue */
+    filter: none;        /* Remove drop-shadow for disabled state */
+}
+.mat-dialog-content {
+    /* display: block; */
+    margin: 0 -24px !important;
+    padding: 0 24px !important;;
+    max-height: 65vh !important;;
+    overflow: auto !important;;
+    max-width: 77vw;
+    // -webkit-overflow-scrolling: touch;
+}
+
+.mat-dialog-container {
+    display: block;
+    padding: 24px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    /* overflow: auto; */
+    outline: 0;
+    width: 100%;
+    height: 100%;
+    min-height: inherit;
+    max-height: inherit;
+}
+
+::ng-deep .full-screen-modal .mat-dialog-container {
+    display: block !important;
+    padding: 24px !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    outline: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: inherit !important;
+    max-height: inherit !important;
+    overflow: hidden !important;
+  }
+

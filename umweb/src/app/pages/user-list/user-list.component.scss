@@ -1,0 +1,112 @@
+.button-container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    margin: 0 4vh 0 4vh;
+}
+
+.mat-elevation-z8 {
+    margin: 0 4vh 0 4vh;
+}
+
+.mat-header-row {
+    min-height: 10vh;
+}
+
+.mat-header-cell{
+  // min-width: 20vh;
+  padding-top: 25px;
+}
+
+.mat-column-Index {
+  min-width: 2vh;
+  text-align: center;
+  padding-left: 0;
+  padding-right: 5px;
+}
+
+// .mat-column-Name {
+//   min-width: 7vw;
+// }
+
+// .mat-column-UnitNames {
+//   min-width: 10vw;
+// }
+
+// .mat-column-Action {
+//   min-width: 13vh;
+// }
+
+.mat-column-Role,
+
+.tablestyle{
+  border-right: 1px solid #eee;
+  padding-right: 24px;
+  padding-left: 5px;
+}
+
+.table-border td, th {
+  border-right: 1px solid #f3eeee;
+  padding-left: 5px;
+}
+
+// .table-border th.spanned {
+//   border-right: none;
+// }
+
+::ng-deep.userlist{
+  height: 98vh !important;
+}
+
+button[disabled] {
+  cursor: not-allowed;
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.mat-dialog-container {
+  display: block;
+  padding: 24px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  overflow: auto;
+  outline: 0;
+  width: 100%;
+  height: 95vh !important;
+  min-height: inherit;
+  max-height: inherit;
+}
+// .mat-table-padding tr:hover td {
+//   background-color: #fffdeb;
+// }
+.mat-table-padding tr:nth-child(even) {
+  background-color: #f3f3f3;
+}
+
+::ng-deep .power-toggle .mat-slide-toggle-thumb {
+  background-color: #C24F32 !important;
+}
+
+::ng-deep .standard-toggle .mat-slide-toggle-thumb {
+  background-color: #40D790 !important;
+}
+::ng-deep .noColor-toggle .mat-slide-toggle-thumb {
+  background-color: #77828A !important;
+}
+
+::ng-deep .standardColor-toggle .mat-slide-toggle-thumb {
+  background-color: #6f79db !important;
+}
+
+.mat-header-cell {
+  padding-top: 25px;
+}
+
+
+.disableClass{
+  pointer-events: none;
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+  background-color: #CCCECF;
+}

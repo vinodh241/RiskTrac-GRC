@@ -1,0 +1,500 @@
+
+<meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1" />
+<meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport'/>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+
+<!--START NAV-->
+<mat-toolbar class="fontSize">
+    <span>Key Risk Indicator | KRI Review
+    </span>
+</mat-toolbar>
+<!-- END NAV -->
+
+<!--START SUBNAV-->
+<div class="w-100 h-7" *ngIf="!dataHide" >
+    <div class="row mx-0 subnavbg h-100">
+        <div class="col-12 px-0 h-100 position-relative subnavfilter">
+            <div class="d-flex justify-content-strart align-items-center vmiddleLeft position-absolute w-100 px-3">
+                <!-- <h1 class="pghead pr-2">Key Risk Indicator  |  KRI Measurement</h1> -->
+                <div class="d-flex justify-content-strart align-items-center pgheadfields">
+                    <div class="input-field row" style="left: 22px !important">
+                        <div class="col-3 text-right px-0" for="group" style="margin-top: 10px">Group</div>
+                        <div class="col-9 pl-1">
+                            <mat-form-field class="dropdown-class" style="background: #ffffff;
+                                width: 11rem;
+                                height: 36px;
+                                margin-top: 10px;">
+                                <mat-select (selectionChange)="filterGroups($event)" [(ngModel)]="groupSelected">
+                                    <!-- <mat-option value=""></mat-option> -->
+                                    <mat-option *ngFor="let group of kriService?.kriMeasurementGroups" [value]="group.GroupID">
+                                        {{group.GroupName}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="input-field row" style="left: 82px !important;">
+                        <div class="col-3 text-right px-0" for="unit" style="margin-top: 10px">Unit</div>
+                        <div class="col-9 pl-1">
+                            <mat-form-field class="dropdown-class" style="background: #ffffff;
+                                width: 11rem;
+                                height: 36px;
+                                margin-top: 10px;">
+                                <mat-select [disabled]="groupSelected=='all'" (selectionChange)="filterUnits($event)" [(ngModel)]="unitSelected">
+                                    <!-- <mat-option value=""></mat-option> -->
+                                    <mat-option *ngFor="let unit of getUnitsNames(kriService?.kriMeasurementUnits)" [value]="unit.UnitID">
+                                        {{unit.UnitName}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="px-1 filterFrequecy text-center" style="position: relative; left: 10vw;">
+                    <span> Reporting Frequency:&nbsp;<span
+                        class="reporting-frequency-font">{{kriService.kriMeasurmentsReportingFrequncy}}</span></span>
+                </div>
+                <div class="pr-3 filterslider"  style="position: relative; left: 11vw;">
+                </div>
+                <div class="searchfilter pr-2" [ngStyle]="kriService.powerUser == true ? {'position': 'relative', 'left': '23vw'} : {'position': 'relative', 'left': '25vw'}">
+                    <div class="w-100 position-relative">
+                        <div class="srhposition d-inline-block">
+                            <i class="fa fa-search searchtxtboxicon" aria-hidden="true"></i>
+                            <input type="text" class="searchtxtbox" placeholder="Search" (keyup)="applyFilter($event)" matInput #input [(ngModel)]="model">
+                        </div>
+                    </div>
+                </div>
+                <div class="reporticon text-right" [ngStyle]="kriService.powerUser == true ? {'position': 'relative', 'left': '24vw'} : {'position': 'relative', 'left': '27vw'}">
+                    <button *ngIf="dataSource.filteredData?.length" mat-icon-button matTooltipPosition="right"
+                    (click)="exportAsExcel()">
+                        <img src="assets/icon-excel.svg" class="d-inline-block align-middle cursor-pointer" alt="">
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!--END SUBNAV-->
+<!-- START MIDDLE CONTENT -->
+<div class="w-100 h-83 position-relative sidebar-is-reduced"  *ngIf="!dataHide">
+    <div class="container-fluid pb-3 h-100">
+        <div class="w-100 h-95">
+            <div class="d-flex justify-content-strart mx-0 h-100  position-relative">
+                <div [ngClass]="{'sidebar-is-reduced': isCollapsed, 'sidebar-is-expanded': !isCollapsed}" class="w-100 h-83 position-relative">
+                    <div class="container-fluid pb-3 h-100" style="height: 85vh !important;">
+                        <div class="w-100 h-95" style="width: 0px;">
+                            <div class="d-flex justify-content-start mx-0 h-100  position-relative">
+                                <div class="l-sidebar h-100  position-relative">
+                                    <div class="js-hamburger hamposition" (click)="toggleCollapse()">
+                                        <div class="hamburger-toggle" [ngClass]="{'is-opened': !isCollapsed}">
+                                            <span class="bar-top"></span>
+                                            <span class="bar-mid"></span>
+                                            <span class="bar-bot"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="l-sidebar__content p-2">
+                                        <div class="w-100 h-100  leftgraph c-menu js-menu scroll">
+
+                                            <h3 class="lefthead w-100 mt-4 c-menu__item" [ngStyle]="colorValue('Not Measured') && textColor()">
+                                                <span class="text-left pl-1">Total</span> <span class="w-75 text-right">{{total()}}</span>
+                                            </h3>
+                                            <div class="w-100 toptbl pb-2 c-menu__item">
+                                                <table class="w-100">
+                                                    <tbody>
+                                                        <tr (click)="measured('Measured')" [ngClass]="{'selected-row': selectedRow=== 'Measured'}">
+                                                          <td style="margin: 0; padding: 0;">Measured</td>
+                                                          <td class="text-right" style="margin: 0; padding: 0;">{{ this.measuredData('Measured') }}</td>
+                                                        </tr>
+                                                        <tr (click)="measured('Not Measured')" [ngClass]="{'selected-row': selectedRow=== 'Not Measured'}">
+                                                          <td style="margin: 0; padding: 0;" [ngStyle]="colorValue('Not Measured') && textColor()">Not Measured</td>
+                                                          <td class="text-right" style="margin: 0; padding: 0;">{{ this.measuredData('Not Measured') }}</td>
+                                                        </tr>
+                                                        <tr (click)="measured('Reported')" [ngClass]="{'selected-row': selectedRow=== 'Reported'}">
+                                                          <td style="margin: 0; padding: 0;">Reported</td>
+                                                          <td class="text-right" style="margin: 0; padding: 0;">{{ this.measuredData('Reported') }}</td>
+                                                        </tr>
+                                                      </tbody>
+                                                </table>
+                                                <div class="d-flex justify-content-between sidebarstatus text-left">
+                                                    <div class="ssapproved position-relative h-100"  (click)="reportedStatus('total','Approved')"> Approved <span class="float-right">{{countReportStatus('total','Approved')}}</span> </div>
+                                                    <div class="ssrejected position-relative h-100"  (click)="reportedStatus('total','Rejected')"> Rejected <span class="float-right">{{countReportStatus('total','Rejected')}}</span> </div>
+                                                    <div class="sspending position-relative h-100"   (click)="reportedStatus('total','Pending')" > Pending  <span class="float-right">{{countReportStatus('total','Pending')}}</span> </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="w-100 toptblbg py-1 mt-2 c-menu__item" *ngFor="let data of measurementFrequencyTotal()">
+                                                <div class="w-100">
+                                                  <div (click)="measurementFrequencyData(data.MeasurementFrequency)" [ngClass]="{'selected-row': selectedRow=== data.MeasurementFrequency}">
+                                                    <div >{{data.MeasurementFrequency}}</div>
+                                                    <div class="align-right">{{measuredFrequencyCount(data)}}</div>
+                                                  </div>
+                                                </div>
+                                                <div>
+                                                  <div (click)="measuredFrequency(data.MeasurementFrequency,'Measured')" [ngClass]="{'selected-row': selectedRow=== 'Measured'+data.MeasurementFrequency}">
+                                                    <div class="d-flex justify-content-between">
+                                                      <div>Measured</div>
+                                                      <div class="align-right">{{MeasuredCount(data,'Measured')}}</div>
+                                                    </div>
+                                                  </div>
+                                                  <div (click)="measuredFrequency(data.MeasurementFrequency,'Not Measured')" [ngClass]="{'selected-row': selectedRow=== 'Not Measured'+data.MeasurementFrequency}">
+                                                    <div class="d-flex justify-content-between">
+                                                      <div>Not Measured</div>
+                                                      <div class="align-right">{{MeasuredCount(data,'Not Measured')}}</div>
+                                                    </div>
+                                                  </div>
+                                                  <div (click)="measuredFrequency(data.MeasurementFrequency,'Reported')" [ngClass]="{'selected-row': selectedRow=== 'Reported'+data.MeasurementFrequency}">
+                                                    <div class="d-flex justify-content-between">
+                                                      <div>Reported</div>
+                                                      <div class="align-right">{{MeasuredCount(data,'Reported')}}</div>
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="d-flex justify-content-between sidebarstatus text-left">
+                                                    <div class="ssapproved position-relative h-100" (click)="reportedStatus(data.MeasurementFrequency,'Approved')"> Approved <span class="float-right">{{countReportStatus(data.MeasurementFrequency,'Approved')}}</span> </div>
+                                                    <div class="ssrejected position-relative h-100" (click)="reportedStatus(data.MeasurementFrequency,'Rejected')"> Rejected <span class="float-right">{{countReportStatus(data.MeasurementFrequency,'Rejected')}}</span> </div>
+                                                    <div class="sspending position-relative h-100"  (click)="reportedStatus(data.MeasurementFrequency,'Pending')" > Pending  <span class="float-right">{{countReportStatus(data.MeasurementFrequency,'Pending')}} </span> </div>
+                                                  </div>
+                                            </div>
+
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END LEFT CONTENT -->
+
+                <main class="l-main h-100" style="width: 1700vw;">
+                    <div class="content-wrapper content-wrapper--with-bg h-100">
+                        <div class="row mx-0 h-100">
+                            <div class="col-12 pl-0 pr-0 h-100">
+                                <div class="h-100 w-100">
+                                    <div class="cardbody h-100">
+                                        <div class="w-100 h-100" style="overflow-x: scroll;">
+                                            <table class="table table-hover cardtbl" mat-table [dataSource]="dataSource" matSort id="kpiScoreID">
+                                                <ng-container matColumnDef="rejectApproveBtn">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none','white-space': 'nowrap', 'border-right': '1px solid #cecece !important' }" style="white-space: nowrap;"> </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div class="round checkred">
+                                                            <input type="checkbox"  [id]="row.MetricID + 'a'" [checked]="row.isChecked  == false" [value]="row.isChecked" [disabled]="row.ReportStatusID == 3 || this.isReadOnly || row.KRI_Status == 'Measured' || row.KRI_Status == 'Not Measured' " (change)="reject(row,false)" />
+                                                            <!-- <input
+                                                                type="checkbox"
+                                                                [id]="row.MetricID + 'a'"
+                                                                [checked]="row.ReportStatusName == 'Rejected'"
+                                                                [value]="row.isChecked"
+                                                                [disabled]="row.StatusName == 'Measured' || row.StatusName == 'Not Measured'"
+                                                                (change)="reject(row, false)"
+                                                                [ngClass]="{'disabled-checkbox': row.StatusName == 'Measured' || row.StatusName == 'Not Measured'}"
+                                                            /> -->
+                                                            <label [for]="row.MetricID + 'a'"></label>
+                                                        </div>
+
+                                                        <div class="round checkgreen">
+                                                            <input type="checkbox"  [id]="row.MetricID + 'b'" [checked]="row.isChecked  == true" [value]="row.isChecked" [disabled]="row.ReportStatusID == 3 || this.isReadOnly  || row.KRI_Status == 'Measured' || row.KRI_Status == 'Not Measured'" (change)="approve(row,true)"/>
+                                                            <!-- <input
+                                                                type="checkbox"
+                                                                [id]="row.MetricID + 'b'"
+                                                                [checked]="row.ReportStatusName == 'Approved'"
+                                                                [value]="row.isChecked"
+                                                                [disabled]="row.StatusName == 'Measured' || row.StatusName == 'Not Measured'"
+                                                                (change)="approve(row, true)"
+                                                                [ngClass]="{'disabled-checkbox': row.StatusName == 'Measured' || row.StatusName == 'Not Measured'}"
+                                                            /> -->
+                                                            <label [for]="row.MetricID + 'b'"></label>
+                                                        </div>
+
+
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="kricode">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none','white-space': 'nowrap'}" style="white-space: nowrap;"> KRI Code </th>
+                                                    <td mat-cell *matCellDef="let row"> {{row.KriCode}} </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="indicator">
+                                                    <th mat-header-cell *matHeaderCellDef width="10" [ngStyle]="{'display': 'none'}"> Indicator </th>
+                                                    <td mat-cell *matCellDef="let row" width="10"  [matTooltip]="row.Indicator"> {{row.Indicator}} </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="Measurmentfrequency">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}"> Measurement Frequency
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row"> {{row.MeasurementFrequency}} </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="Target">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Target</th>
+                                                    <td mat-cell *matCellDef="let row"> {{row.Target}}%</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="Kritype">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">KRI Type</th>
+                                                    <td mat-cell *matCellDef="let row"> {{row.KriType}} </td>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="tvalue-1">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center "
+                                                        [ngStyle]="{'border-top': 'none','border-right':'none'}" [style.background-color]="this.kriService.kriThresholds[0].ColorCode">
+                                                            1
+                                                    </th>
+                                                    <td [style.background-color]="this.kriService.kriThresholds[0].ColorCode" mat-cell *matCellDef="let row">{{row.Target==0?">":"<"}} {{row.ThresholdValue1}}% </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="tvalue-2">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center " style="bottom: 19px"
+                                                        [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}" [style.background-color]="this.kriService.kriThresholds[1].ColorCode">
+                                                            2
+                                                    </th>
+                                                    <td [style.background-color]="this.kriService.kriThresholds[1].ColorCode" mat-cell *matCellDef="let row">{{row.Target==0?"<=":">="}}{{row.ThresholdValue2}}%</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="tvalue-3">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center " style="bottom: 19px"
+                                                        [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}" [style.background-color]="this.kriService.kriThresholds[2].ColorCode">
+                                                            3
+                                                    </th>
+                                                    <td [style.background-color]="this.kriService.kriThresholds[2].ColorCode" mat-cell *matCellDef="let row">{{row.Target==0?"<=":">="}}{{row.ThresholdValue3}}%</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="tvalue-4">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center" style="bottom: 19px"
+                                                        [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none'}" [style.background-color]="this.kriService.kriThresholds[3].ColorCode">
+                                                            4
+                                                    </th>
+                                                    <td [style.background-color]="this.kriService.kriThresholds[3].ColorCode" mat-cell *matCellDef="let row">{{row.Target==0?"<=":">="}}{{row.ThresholdValue4}}% </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="tvalue-5">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center" [style.background-color]="this.kriService.kriThresholds[4].ColorCode" style="bottom: 19px"
+                                                        [ngStyle]="{'border-top': 'none','border-left':'none'}">
+                                                            5
+                                                    </th>
+                                                    <td [style.background-color]="this.kriService.kriThresholds[4].ColorCode" mat-cell *matCellDef="let row">{{row.ThresholdValue5}}% </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="period">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                                                        [ngStyle]="{'border-top': 'none','border-right':'none','position': 'relative', 'bottom': '19px'}">Period</th>
+                                                    <td mat-cell *matCellDef="let row"> {{row.Period}} </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="date">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                                                        [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none','position': 'relative', 'bottom': '19px'}">Date</th>
+                                                    <td mat-cell *matCellDef="let row"> {{utils.formatDate(row.Date)}} </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="measurement">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                                                        [ngStyle]="{'border-top': 'none','border-left':'none','border-right':'none', 'position': 'relative', 'bottom': '19px'}">Measurement
+                                                    </th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <mat-form-field class="editable">
+                                                            <div style="display: flex;">
+                                                                <input matInput type="number" min="0" max="100" [(ngModel)]="row.Measurement"
+                                                                [disabled]="row.KRI_Status == 'Measured' || row.KRI_Status == 'Not Measured'"
+                                                                    (keyup)="onChangeMeasurement(row)" autocomplete="off">%
+                                                            </div>
+                                                        </mat-form-field>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="krivalue">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center"
+                                                        [ngStyle]="{'border-top': 'none','border-left':'none', 'position': 'relative', 'bottom': '19px'}">KRI Value</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <div class="krivalue-container">
+                                                            <div [style.background-color]="row.ColorCode" class="value-container">
+                                                                {{row.ThresholdValue}}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="Remarks">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Remarks</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <mat-form-field class="example-full-width" style="width:5vw;" matTooltip={{row.Remarks}}>
+                                                            <input [(ngModel)]="row.Remarks" matInput
+                                                                [disabled]="utils.isReadOnlyUserORM() || utils.isRiskManagementUnit() && (department == 'all' && kriService.powerUser == true)">
+                                                        </mat-form-field>
+
+                                                        <!-- <p *ngIf="row.ThresholdValue <=5 && row.ThresholdValue >=1 && getRemarkData(row.Remarks)"
+                                                            [ngStyle]="{'color':'red'}">Remarks is required</p> -->
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="status">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Status</th>
+                                                    <td mat-cell *matCellDef="let row">{{row.KRI_Status}}</td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="upload">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Upload Evidence</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <app-file-upload [inputData]="row" [evdname]="'Kri Scoring'"
+                                                        [disabled]="true" [showFileIcon]="true"></app-file-upload>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="action">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Prev Data</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <!-- {{'test data'}} -->
+                                                        <div class="tooltip">
+                                                            <img class="text-center" src="assets/icons/icon-search-table.svg" style="width: 62%;" class="d-inline-block align-middle cursor-pointer" alt="">
+                                                            <!-- <p class="view-previous">View Previous Data</p> -->
+                                                            <span class="tooltiptext">
+                                                                <p align="start" class="historical-text">
+                                                                    Historical Data
+                                                                </p>
+                                                                <div *ngIf="!getPreviousScoring(row)">
+                                                                    <p style="text-align:center">Empty</p>
+                                                                </div>
+                                                                <table style="width:90%;" class="tooltip-table" *ngIf="getPreviousScoring(row)">
+                                                                    <colgroup>
+                                                                        <col span="2">
+                                                                    </colgroup>
+                                                                    <tr class="tooltip-table">
+                                                                        <th></th>
+                                                                        <th class="tooltip-table">Period</th>
+                                                                        <th class="tooltip-table">Date</th>
+                                                                        <th class="tooltip-table">Measurement</th>
+                                                                        <th class="tooltip-table">KRI Value</th>
+                                                                    </tr>
+                                                                    <tr class="tooltip-table" *ngFor="let data of getPreviousScoring(row)">
+                                                                        <td class="tooltip-table">
+                                                                            T-{{getPreviousScoring(row).indexOf(data)+1}}</td>
+                                                                        <td class="tooltip-table">{{data.Period}}</td>
+                                                                        <td class="tooltip-table">{{utils.formatDate(data.Date)}}</td>
+                                                                        <td class="tooltip-table">{{data.Measurement}}%</td>
+                                                                        <td class="tooltip-table">
+                                                                            <div class="krivalue-container">
+                                                                                <div [style.background-color]="data.ColorCode" class="krivalue">
+                                                                                    <p style="text-align:center; color:black;">
+                                                                                        {{data.ThresholdValue}}</p>
+                                                                                </div>
+                                                                            </div>
+                                                                        </td>
+                                                                    </tr>
+                                                                </table>
+                                                            </span>
+                                                        </div>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="sendEmail">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Send Email</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button" [disabled]="this.isReadOnly" (click)="sendIndividualEmailReminder(row.MetricID)"
+                                                        matTooltip="Send Reminder">
+                                                        <mat-icon [ngStyle]="kriService.kriReviewerUser == true ? {'color': '#bdbdbd;'} : {'color': '#2470a3;'}">mail</mat-icon>
+                                                    </button>
+                                                        <!-- <span [disabled]><img class="text-center" src="assets/icons/icon-email-table.svg" style="width: 62%;" class="d-inline-block align-middle cursor-pointer" alt=""></span> -->
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="checkerComments">
+                                                    <th mat-header-cell *matHeaderCellDef [ngStyle]="{'display': 'none'}">Checker Comments</th>
+                                                    <td mat-cell *matCellDef="let row">
+                                                        <mat-form-field class="example-full-width" style="width:5vw;" >
+                                                            <input [(ngModel)]="row.CommentBody" [disabled]="isReadOnly || row.KRI_Status == 'Measured' || row.KRI_Status == 'Not Measured'" matInput>
+                                                        </mat-form-field>
+                                                        <div *ngIf="row.isChecked == false && row.CommentBody.length == 0 && row.ReportStatusID == 1 && isSaved" style="color: red;">Checker comments is mandatory</div>
+                                                        <button mat-icon-button (click)="viewPreviousComments(row)"
+                                                            matTooltip="View Previous Comments" class="eye-icon">
+                                                        <mat-icon>visibility</mat-icon>
+                                                    </button>
+                                                    </td>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-rejectApproveBtn">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">
+                                                        <div class="round checkred">
+                                                            <input type="checkbox"  id="checkred"  [checked]="checkedAll == false" [value]="checkedAll" (change)="setRejectAll(checkedAll,false)" />
+                                                            <label for="checkred"></label>
+                                                        </div>
+
+                                                        <div class="round checkgreen">
+                                                            <input type="checkbox"  id="checkgreen" [checked]="checkedAll == true" [value]="checkedAll" (change)="setApproveAll(checkedAll,true)"/>
+                                                            <label for="checkgreen"></label>
+                                                        </div>
+                                                    </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-kri-code">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">KRI Code
+                                                    </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-indicator">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">Indicator
+                                                    </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-measurement-frequency">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">Measurement
+                                                        Frequency
+                                                    </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-target">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">Target
+                                                    </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-kri-type">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" [attr.colspan]="1">KRI Type
+                                                    </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-fourth-group">
+                                                    <th mat-header-cell *matHeaderCellDef class="text-align-center" [attr.colspan]="5"
+                                                        [ngStyle]="{'text-align': 'center'}">Threshold Value</th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-second-group">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="4" class="text-align-center"
+                                                    [ngStyle]="{'text-align': 'center'}"> PERIOD-T </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-remark">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2">Remarks </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-status">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2"> Status </th>
+                                                </ng-container>
+                                                <ng-container matColumnDef="header-row-preview">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2">Prev Data</th>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="header-row-upload">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2" style="border-right: none !important">Upload Evidence</th>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="header-row-sendEmail">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2">Send Email</th>
+                                                </ng-container>
+
+                                                <ng-container matColumnDef="header-row-checkerComments">
+                                                    <th mat-header-cell *matHeaderCellDef [attr.colspan]="1" [attr.rowspan]="2">Checker Comments</th>
+                                                </ng-container>
+
+                                                <tr mat-header-row style="height: 38px !important;"
+                                                    *matHeaderRowDef="['header-row-rejectApproveBtn','header-row-kri-code','header-row-indicator','header-row-measurement-frequency','header-row-target','header-row-kri-type', 'header-row-fourth-group',
+                                                    'header-row-second-group', 'header-row-remark', 'header-row-status','header-row-upload','header-row-preview', 'header-row-sendEmail', 'header-row-checkerComments']">
+                                                </tr>
+                                                <tr mat-header-row style="height: 38px !important;" *matHeaderRowDef="displayedColumns;"></tr>
+                                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                                            </table>
+                                            <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]" class="InherentTable"></mat-paginator>
+                                            <div class="w-100 text-right py-2" style="padding-right: 10px">
+                                                <button type="button" class="btn btnreminder mr-2" (click)="sendBulkRemainder()">
+                                                    <span><img src="assets/icons/icon-email-btn.svg" style="width: 100%;" class="d-inline-block align-middle cursor-pointer" alt=""></span>Send Reminder to All Defaulter Units
+                                                </button>
+                                                <button type="button" class="btn btnsave mr-2" (click)="saveReviewerDetails()" [disabled]="this.isReadOnly">
+                                                    <span style="left: -62%;"><img src="assets/icons/icon-save-btn.svg" style="width: 100%;" class="d-inline-block align-middle cursor-pointer" alt=""></span>Save
+                                                </button>
+                                                <button type="button" class="btn btnsubmit"
+                                                [ngClass]="{'disabled-btn': !submitButton}"
+                                                [disabled]="!submitButton"
+                                                 (click)="openDialog()">
+                                                    <span style="left: -52%;"><img src="assets/icons/icon-submit-btn.svg" style="width: 100%;" class="d-inline-block align-middle cursor-pointer" alt=""></span>Submit
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <ng-template #noDataTemplate>
+                                            <p class="no-data">No Data Found</p>
+                                        </ng-template>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+
+            </div>
+        </div>
+    </div>
+</div>
+<!-- start of model for send email -->
+

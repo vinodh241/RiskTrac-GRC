@@ -1,0 +1,26 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Launch ORM in Chrome (IIS /orm/)",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:5000/",
+      "webRoot": "${workspaceFolder}",
+      "runtimeExecutable": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+      "runtimeArgs": [
+        "--remote-debugging-port=9224",
+        "--user-data-dir=${workspaceFolder}\\.vscode\\chrome-profile-orm"
+      ],
+      "sourceMaps": true,
+      "trace": true,
+      "sourceMapPathOverrides": {
+        "webpack:///./*": "${workspaceFolder}/*",
+        "webpack:///src/*": "${workspaceFolder}/src/*",
+        "webpack:///*": "${workspaceFolder}/*",
+        "/./*": "${workspaceFolder}/*",
+        "/*": "${workspaceFolder}/*"
+      }
+    }
+  ]
+}

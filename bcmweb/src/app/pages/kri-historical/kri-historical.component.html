@@ -1,0 +1,144 @@
+<mat-toolbar class="fontSize">
+    <span>Key Risk Indicator | Historical Measurements</span>
+    <span class="spacer"></span>
+</mat-toolbar>
+<div class="container">
+    <div class="actions-container">
+        <div class="left-action">
+            <div>
+                <label class="dropdown-label">Group</label>
+                <mat-form-field appearance="standard">
+                    <mat-select [(ngModel)]="kriService.kriHistoricalSelectedGroup"
+                        (selectionChange)="onGroupChange()">
+                        <mat-option value="">All</mat-option>
+                        <mat-option *ngFor="let group of getGroupList()" [value]="group.GroupID">{{group.GroupName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+            <div>
+                <label class="dropdown-label">Unit</label>
+                <mat-form-field appearance="standard">
+                    <mat-select [disabled]="!kriService.kriHistoricalSelectedGroup"
+                        [(ngModel)]="kriService.kriHistoricalSelectedUnit" (selectionChange)="onUnitChange()">
+                        <mat-option value="">All</mat-option>
+                        <mat-option *ngFor="let unit of getUnitList()" [value]="unit.UnitID">{{unit.UnitName}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <label class="dropdown-label">Year</label>
+                <mat-form-field appearance="standard">
+                    <mat-select [(ngModel)]="kriService.kriHistoricalSelectedYear"
+                        (selectionChange)="onYearChange()">
+                        <mat-option *ngFor="let year of getYearList()" [value]="year.Years">{{year.Years}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </div>
+
+            <div>
+                <label class="toggle-label" [ngClass]="{'disable-label': isMeasuredValueView}" ariaDisabled="true">Threshold </label>
+                <mat-slide-toggle [(ngModel)]="isMeasuredValueView" (change)="changeView($event)"></mat-slide-toggle>
+                <label class="toggle-label" [ngClass]="{'disable-label': !isMeasuredValueView}">Measured Value </label>
+            </div>
+        </div>
+
+        <div class="right-action">
+            <div class="form-group">
+                <mat-form-field appearance="standard">
+                    <mat-label>Search</mat-label>
+                    <input matInput #search (keyup)="applySearchFilter($event)">
+                </mat-form-field>
+                <button *ngIf="getFilteredDataLength()" mat-icon-button matTooltipPosition="right" (click)="exportAsExcel()">
+                    <img src="assets/icon-excel.svg">
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id='kriHistorical' class="mat-elevation-z8" *ngIf="kriService.kriHistoricalDataSource else noDataTemplate">
+        <table mat-table [dataSource]="kriService.kriHistoricalDataSource">
+
+            <ng-container matColumnDef="Index">
+                <th mat-header-cell *matHeaderCellDef>#</th>
+                <td mat-cell *matCellDef="let element" style="text-align: center;"> {{element.Index}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="GroupName">
+                <th mat-header-cell *matHeaderCellDef> Group Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.GroupName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="UnitName">
+                <th mat-header-cell *matHeaderCellDef> Unit Name </th>
+                <td mat-cell *matCellDef="let element"> {{element.UnitName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="KeyRiskIndicator">
+                <th mat-header-cell *matHeaderCellDef> Key Risk Indicator </th>
+                <td mat-cell *matCellDef="let element"> {{element.Description}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="MeasurementFrequencyName">
+                <th mat-header-cell *matHeaderCellDef> Measurement Frequency </th>
+                <td mat-cell *matCellDef="let element"> {{element.MeasurementFrequency}} </td>
+            </ng-container>
+
+            <ng-container *ngFor="let item of monthsColumns; let i = index" [matColumnDef]="item">
+                <th class="text-center" mat-header-cell *matHeaderCellDef> {{item}} </th>
+
+                <td class="text-center" mat-cell *matCellDef="let element"
+                    [attr.colspan]="getMonthsColspan(element.MeasurementFrequency)" [ngStyle]="{'display': getDisplayProperty(element.MeasurementFrequency, i),
+                                'background-color': isMeasuredValueView? getBackgroundColor(element, item): ''
+                                }">
+
+                    <ng-container *ngFor="let data of element?.scoring">
+                        <div *ngIf="data.Period?.startsWith(item)">
+                            <span *ngIf="!isMeasuredValueView" [style.background]="data.ColorCode"
+                                class="threshold-value">{{data.ThresholdValue}}</span>
+                                <span style="display:none;">,</span>
+                            <span *ngIf="!([undefined, null, ''].includes(data.Measurement))">{{data.Measurement}}%</span>
+                        </div>
+                    </ng-container>
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-first-group">
+                <th mat-header-cell *matHeaderCellDef style="text-align: center;" [attr.rowspan]="2">#</th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-second-group">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Group</th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-third-group">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2">Unit</th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-fourth-group">
+                <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Key Risk Indicator</th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-fifth-group">
+                <th class="measurement-header" mat-header-cell *matHeaderCellDef [attr.rowspan]="2"> Measurement Frequency</th>
+            </ng-container>
+
+            <ng-container matColumnDef="header-row-last-group">
+                <th class="text-center" mat-header-cell *matHeaderCellDef [attr.colspan]="12">Months</th>
+            </ng-container>
+
+            <tr mat-header-row
+                *matHeaderRowDef="['header-row-first-group','header-row-second-group', 'header-row-third-group','header-row-fourth-group', 'header-row-fifth-group', 'header-row-last-group']">
+            </tr>
+            <tr mat-header-row *matHeaderRowDef="monthsColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns.concat(monthsColumns);"></tr>
+        </table>
+        <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 100]">
+        </mat-paginator>
+    </div>
+    <ng-template #noDataTemplate>
+        <p class="no-data">No Data Found</p>
+    </ng-template>
+</div>

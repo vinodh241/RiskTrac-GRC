@@ -1,0 +1,110 @@
+.modalh5 {font-size: 2rem;} .modalh5 span:nth-child(1) {color: #FFF06B;}
+.greyModalBody {background-color: #F2F2F2; max-height: 66vh; overflow-y: auto; overflow-x: hidden;}
+.modal-content.modalContent {border: none; background-color: #f2f2f2; border-radius: 1vh;}
+.close.customClose {font-size: 170%; color: #fff; background: transparent; outline: none; border: 0;}
+.ModaltableContent {background-color: transparent; padding:1%; border: 1px solid #BBBBBB; border-radius: 0.3vh;}
+.ModaltableContent.tableBgWhite {background-color: #fff; padding:0.5%;}
+.ModaltableContent.ModaltableContentBlue {background-color: #CEDCE0;}
+.ModaltableContent.ModaltableContentLtBlue {background-color: #CEDCE0; border-radius: 0 0 0.3vh 0.3vh;}
+
+.ModaltableContent.ModaltableContentGrey {background-color: #F2F1E5;}
+.ModaltableContent.ModaltableContentLtGrey {background-color: #BBBBBB; border-radius: 0 0 0.3vh 0.3vh;}
+
+.allModalHeader {border-radius: 1vh 1vh 0 0;}
+
+/* .modalCancelBtn {background-color: transparent; box-shadow: none; font-size: 1.6rem; color: #030303; border: none; padding-top: 1vh; padding-bottom: 1vh; min-width: 6vw;}
+.modalColorBtn {background-color: #245A8C; box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.45); font-size: 1.6rem; border: none; padding-top: 1vh; padding-bottom: 1vh; border-radius: 0.5vh; min-width: 10vw;} */
+.modalCancelBtn {background-color: transparent; box-shadow: none; font-size: 1.6rem; color: #030303; border: none; line-height: 2.5; min-width: 6vw;}
+.modalColorBtn {background-color: #245A8C; box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.45); font-size: 1.6rem; border: none; line-height: 2.5; border-radius: 0.5vh; min-width: 13.5vw;}
+.modalColorBtn.modalColorBtnGreen {background-color: #1C9F50;} .modalColorBtn.modalColorBtnGreen:hover, .modalColorBtn.modalColorBtnGreen:active, .btn-primary.modalColorBtn.modalColorBtnGreen:not(:disabled):not(.disabled):active {background-color: #27c064;}
+.modalColorBtn.modalColorBtnOrange {background-color: #EA5400;} .modalColorBtn.modalColorBtnOrange:hover, .modalColorBtn.modalColorBtnOrange:active, .btn-primary.modalColorBtn.modalColorBtnOrange:not(:disabled):not(.disabled):active {background-color: #EA5400;}
+.modalColorBtn.modalColorBtnGrey {background-color: #c6c8c9;} .modalColorBtn.modalColorBtnGrey:hover, .modalColorBtn.modalColorBtnGrey:active, .btn-primary.modalColorBtn.modalColorBtnGrey:not(:disabled):not(.disabled):active {background-color: #c6c8c9;}
+.modalColorBtn.modalColorBtnDarkGrey {background-color: #5F6468;} .modalColorBtn.modalColorBtnDarkGrey:hover, .modalColorBtn.modalColorBtnDarkGrey:active, .btn-primary.modalColorBtn.modalColorBtnDarkGrey:not(:disabled):not(.disabled):active {background-color: #5F6468;}
+.modalColorBtn.modalColorBtnGreen.btnsave {min-width: 7vw;}
+.modalColorBtn.submitBtn{min-width: 8vw;}
+.modalColorBtn.modalColorBtnGrey.btnPrevious, .modalColorBtn.modalColorBtnDarkGrey.btnPrevious, .modalColorBtn.modalColorBtnGrey.btnNext, .modalColorBtn.modalColorBtnDarkGrey.btnNext {min-width: 8vw;}
+
+.modalColorBtn.modalColorBtnGreen img {width: 12%; cursor: pointer;}
+.modalColorBtn img {width: 16%; cursor: pointer;} .modalColorBtn img.saveImg {width: 8%; cursor: pointer;}
+.modalColorBtn.btnBig img {width: 11%; cursor: pointer;}
+
+.modal-footer.modalFooter {background-color: transparent; margin-inline: 2%; border-top: 1px solid #ccc; position: relative; padding-top: 2%; padding-bottom: 2%;}
+.modal-footer.modalFooter::before {content:""; border-top:1px solid #fff; width: 100%; top: 1px; position: absolute; left: 50%; transform: translate(-50%);} 
+
+.reviewDate {right: 2%; top: 1.2%;}
+
+.card-header.bgAccodion {background-color: #C6E9D8; border: 1px solid #BBBBBB;}
+.card-body.bodyAccordion {background-color: #E4EEF1; border: 1px solid #BBBBBB;}
+
+.btn.btnAccordion {font-size: 140%; color: #000; text-decoration: none;}
+.btn.btnAccordion:not(:disabled):not(.disabled).active, .btn.btnAccordion:not(:disabled):not(.disabled):active, .btn.btnAccordion:focus, .btn.btnAccordion:active {box-shadow: unset; color: inherit;}
+.reviewComments {border-bottom: 1px dashed #818181; margin-bottom: 1.5vh;}
+.reviewComments:last-child {border-bottom: none;}
+.reviewComments img {width: 12%;}
+
+.modaltabContentBg {background: linear-gradient(180deg, #DBE8F0 0%, rgba(169, 214, 243, 0.00) 100%);}
+.nav-item.modalTabBg button, .nav-item.modalTabBg button:focus, .nav-item.modalTabBg button:focus-visible {border: 2px solid transparent; border-radius: 0.5vh 0.5vh 0 0; background-color: #1010101c; color: #000; margin-right: 0.1vw; outline: none;}
+.nav-item.modalTabBg button.active, .nav-item.modalTabBg button.active:focus, .nav-item.modalTabBg button.active:focus-visible {background-color: #DBE8F0; border-top: 2px solid #0B59A0; border-right: 2px solid transparent; border-left: 2px solid transparent; border-bottom: 2px solid transparent; color: #000;}
+
+.divider {background-color: transparent; border-top: 1px solid #ccc; position: relative;}
+.divider::before {content:""; border-top:1px solid #fff; width: 100%; top: 1px; position: absolute; left: 50%; transform: translate(-50%);} 
+
+
+
+.btnUploadVisible {font-size: 1.6rem; color: #fff; box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.45) !important; text-align: center; padding: 0.8vh 0.3vw; border-radius: 0.5vh; display: inline-block; box-shadow: 2px 5px 8px 0px rgba(0, 0, 0, 0.45); background-color: #1C9F50}
+
+.btn-file {position: relative; overflow: hidden; margin-top: 3%;}
+.btn-file input[type=file] {position: absolute; top: 0; right: 0; min-width: 80%; min-height: 80%; text-align: right; filter: alpha(opacity=0); opacity: 0;  outline: none; background: white;cursor: pointer; display: block;}
+.issusPagination {font-size: 1.2rem; color: #000;} .issusPagination span {font-size: 1.6rem;}
+
+.modalinfoGrey {background-color: #E7E7E7; padding: 1rem 0.5rem; outline: none; outline-offset: 0; font-size: 100%; line-height: 1.3;}
+
+
+
+
+
+
+
+
+
+
+.vmiddleRight.modalheadergt {right: 5%; width: 40%;}
+
+.vmiddleRight.modalheadergtModal {right: 5%; width: 40%;}
+
+.vmiddleRight.progressRight.formodal {right: 2%; z-index: 1; width: 38%;}
+
+.modalProgressBg {background: linear-gradient(90deg, #FFE 29.92%, #FFE7E1 82.52%); border-right: 1px solid #bbb; border-bottom: 1px solid #bbb; border-left: 1px solid #bbb; border-radius: 0 0 0.3vh 0.3vh;}
+
+
+
+ /* SUCCESS + ERROR MODAL */
+.modal-body.modal-body-special {background: rgb(140,243,196) !important; background: linear-gradient(330deg, rgba(140,243,196,1) 0%, rgba(235,255,247,1) 100%) !important; border-radius: 0.7vh 12vh 0.7vh 0.7vh;}
+.modal-body.modal-body-special2 {background: rgb(255,65,65); background: radial-gradient(at top left, #f36262 2%, #fff1f1 100%) !important; border-radius: 0.7vh 12vh 0.7vh 0.7vh;}
+
+.modal-body.modal-body-pagewise {background: transparent !important; border-radius: 0.7vh 12vh 0.7vh 0.7vh;}
+.specialDialog .modal-content {background-color: transparent; background: transparent; border: none;}
+.activeKriSuccess {display: block;}
+.specialDialog {max-width: 40% !important;}
+
+.bodyContent {position: absolute; top: 42%; transform: translateY(-50%); left: 0; }
+.fineNamePosition {position: absolute; top: 50%; transform: translateY(-50%); right: 0;}
+.imgThumb {width: 30%;} .imgThumb.down {width: 60%; transform: rotateX(180deg)};
+.fontSuccess {font-size: 2.5em; color: #000 !important;}
+.fileName {font-size: 1.4em; text-align: right;}
+
+.bodyFooter {border-top: 1px solid #fff; position: absolute; bottom: 0; left: 50%; width: 94%; transform: translate(-50%, 0); text-align: right; line-height: 1.2; color: #000; font-size: 86%; padding: 3% 0;}
+.bodyFooter p span {font-weight: 600;} .bodyFooter p span.linkTxt {color: #1370DC; text-decoration: underline;}
+
+.height20vh {height: 30vh;}
+.verticalScroll {overflow-x: hidden; overflow-y: auto; width: 70%; margin-right: 5%; line-height: 1.4; font-weight: 400; color: #000 !important;}
+
+.bodyFooter {border-top: 1px solid #fff; position: absolute; bottom: 0; left: 50%; width: 94%; transform: translate(-50%, 0); text-align: right; line-height: 1.2; color: #000; font-size: 86%; padding: 3% 0;}
+.bodyFooter p.errorTxt {color: #970000; text-align: left; font-size: 114%;}
+
+.modalClose {position: absolute; top: 50%; right: 2%; transform: translateY(-50%); background-color: #8b8b8b !important; border: none !important; color: #000 !important; text-shadow: 0 1px #c1c1c1;}
+
+.form-control.noFocus:focus {box-shadow: none;}
+
+.fontSuccess {font-size: 2.5em;}
+.dateSe span {color: #1370DC;}

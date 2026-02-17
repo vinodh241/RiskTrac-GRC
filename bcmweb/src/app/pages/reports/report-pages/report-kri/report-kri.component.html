@@ -1,0 +1,161 @@
+<ng-container>
+    <mat-toolbar>
+        <div class="row">
+            <div class="incidents-font col-3">{{KRICount}} <span style="font-size: 20px;">KRIs</span>
+            </div>
+            <div class="search col-2">
+                <input matInput placeholder=" Search KRIs" class="searched-Data" [(ngModel)]="globalSearchValue"
+                    (input)="updateTable()">
+                <mat-icon matPrefix class="seacrhIconReport">search</mat-icon>
+            </div>
+            <div class="col-2" style="padding-left: 84px;">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 10px 1px 0px 1px #F2527D;">
+                    <mat-card-header>
+                        <span class="status-count" style="color: #F2527D;" *ngIf="dataSource.data.length > 0">{{notMeasured}}</span>
+                        <span class="status-count" style="color: #F2527D;" *ngIf="dataSource.data.length == 0">0</span>
+                        <span class="status-divider" style="background: #F2527D;"></span>
+                        <span class="status-type"><b>Not<br> Measured</b></span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-2">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 10px 1px 0px 1px #24b76f;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#24b76f" *ngIf="dataSource.data.length > 0">{{measured}}</span>
+                        <span class="status-count" style="color:#24b76f" *ngIf="dataSource.data.length == 0">{{measured}}</span>
+                        <span class="status-divider" style="background: #24b76f;"></span>
+                        <span class="status-type"><b>Measured</b></span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-2">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 10px 1px 0px 1px #4897ea;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#4897ea" *ngIf="dataSource.data.length > 0">{{reported}}</span>
+                        <span class="status-count" style="color:#4897ea" *ngIf="dataSource.data.length == 0">0</span>
+                        <span class="status-divider" style="background: #4897ea;"></span>
+                        <span class="status-type"><b>Reported</b></span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-2">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 10px 1px 0px 1px #4897ea;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#4897ea" *ngIf="dataSource.data.length > 0">{{approved}}</span>
+                        <span class="status-count" style="color:#4897ea" *ngIf="dataSource.data.length == 0">0</span>
+                        <span class="status-divider" style="background: #4897ea;"></span>
+                        <span class="status-type"><b>Approved</b></span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-2">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 10px 1px 0px 1px #4897ea;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#4897ea" *ngIf="dataSource.data.length > 0">{{rejected}}</span>
+                        <span class="status-count" style="color:#4897ea" *ngIf="dataSource.data.length == 0">0</span>
+                        <span class="status-divider" style="background: #4897ea;"></span>
+                        <span class="status-type"><b>Rejected</b></span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <!-- <div class="col-1" style="cursor:pointer; padding-left: 30px;" matTooltip="Export to PDF">
+                <mat-card class="icon-excel" (click)="generatePdf()">
+                    <img class="excel-img" src="assets/icon-pdf.svg" />
+                </mat-card>
+            </div> -->
+            <!-- <div class="col-1" style="cursor:pointer;" matTooltip="Export to Excel">
+                <mat-card class="icon-excel" (click)="generateExcel()">
+                    <img class="excel-img" src="assets/icon-excel.svg" />
+                </mat-card>
+            </div> -->
+            <div class="col-1" style="cursor:pointer;margin-left: 1vh;" matTooltip="Export to Excel">
+                <mat-card class="icon-excel" (click)="generateExcel()">
+                    <img class="excel-img" src="assets/icon-excel.svg" alt="Excel Icon" style="height: 4vh;
+                    width: 4vh;
+                    margin-top: -1vh;
+                    margin-bottom: -1vh;
+                    margin-left: 0.1vh;
+                    margin-right: 1vh;" />
+                </mat-card>
+            </div>
+        </div>
+    </mat-toolbar>
+    <div class="mat-elevation-z8">
+        <mat-card style="min-height: 557px;min-width: 100%;">
+            <div style="max-height: 71vh;overflow-y:scroll;overflow-x: hidden;">
+                <table mat-table [dataSource]="dataSource.data" id="KRITable">
+                    <ng-container *ngFor="let item of displayedColumns;" [matColumnDef]="item">
+                        <th mat-header-cell *matHeaderCellDef></th>
+                        <td mat-cell *matCellDef="let element; let i=index;"> <span *ngIf="item=='SNo'">{{i+1}}</span>
+                            <span *ngIf="item=='Indicator'"  [matTooltip]="element[item]">{{element[item] }}</span>
+                            <span *ngIf="item!='Indicator'">{{element[item]}}</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container *ngFor="let item of periodColumns;let i = index" [matColumnDef]="item">
+                        <th mat-header-cell *matHeaderCellDef>{{i == 3? 'KRI Value': i == 5? 'Status':
+                            item}}
+                        </th>
+                        <td mat-cell *matCellDef="let element"
+                        [style.background]="item.includes('KRI_Value')? element['ColorCode']:'#FFFFFF'">
+                            <span
+                                [ngClass]="{'threshold-value': item.includes('KRI_Value'), 'measurement-value': i == 2}">
+                                <!-- [ngStyle]="{'background-color': item.includes('KRI_Value')? element['ColorCode']: ''}"> -->
+                                {{(i == 1)? (element[item] | date :'dd MMM yyyy'): element[item]}}
+                                {{(i == 2) && !([undefined, null, ''].includes(element[item]))? '%': ''}}
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container *ngFor="let item of thresholdColumns; let i = index;" [matColumnDef]="item">
+                        <th class="text-center threshold-header" mat-header-cell *matHeaderCellDef>
+                            {{i == 0? '1': i ==1? '2': i == 2? '3': i ==3? '4': '5'}}</th>
+                        <td class="text-center" mat-cell *matCellDef="let element">
+                            <ng-container *ngIf="element[item] != undefined">
+                                {{(i == 0)? ((element[item] <= (element[thresholdColumns[i + 1]] + 1))? '>=' : '<=') : '' }}
+                                {{((i == 1) || (i == 2) || (i == 3))?  ((element[item] <= (element[thresholdColumns[i + 1]] + 1))? '>=' : '<=') : '' }}
+                                {{(i == 4) ? '=' : '' }}
+                            </ng-container>{{element[item]}}<span *ngIf="element[item] != undefined">%</span>
+                        </td>
+                    </ng-container>
+
+                    <ng-container *ngFor="let header of displayedHeaders; let i = index" [matColumnDef]="header">
+                        <ng-container *ngIf="(i < 7)">
+                            <th class="text-center threshold-header" [ngClass]="{'frequency-header': (i == 2), 'measurement-frequency': (i == 4)}"
+                                mat-header-cell *matHeaderCellDef [attr.rowspan]="2">
+                                {{i == 0? '#':i == 1? 'Unit':i == 2? 'KRI Code': i == 3? 'Indicator': i == 4?
+                                'Measurement Frequency':
+                                i ==5?
+                                'Target': 'KRI Type'}}</th>
+                        </ng-container>
+
+                        <ng-container [matColumnDef]="'test'" *ngIf="(i == 7)">
+                            <th class="text-center threshold-header" mat-header-cell *matHeaderCellDef
+                                [attr.colspan]="6">
+                                {{periodReport}}
+                            </th>
+                        </ng-container>
+                        <ng-container [matColumnDef]="'test1'" *ngIf="(i == 8)">
+                            <th class="text-center threshold-header" mat-header-cell *matHeaderCellDef
+                                [attr.colspan]="5">
+                                Threshold Value
+                            </th>
+                        </ng-container>
+                    </ng-container>
+
+                    <span>
+                        <tr mat-header-row *matHeaderRowDef="displayedHeaders; sticky: true"></tr>
+                        <tr mat-header-row *matHeaderRowDef="periodColumns.concat(thresholdColumns);"></tr>
+                        <tr *matNoDataRow><td [attr.colspan]="displayedColumns.concat(periodColumns, thresholdColumns).length"><span style="font-size: large;margin-left: 33vw;">No data found.</span></td></tr>
+                    </span>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns.concat(periodColumns, thresholdColumns)">
+                    </tr>
+
+                </table>
+            </div>
+        </mat-card>
+    </div>
+    <ng-template #noDataTemplate>
+        <p class="no-data">No Data Found</p>
+    </ng-template>
+</ng-container>

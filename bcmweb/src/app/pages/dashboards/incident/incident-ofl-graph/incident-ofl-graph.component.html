@@ -1,0 +1,104 @@
+<div class="d-flex">
+    <div id="OverallFinancialLoss" style="height: 110px; width: 20vw; align-items: center;"></div>
+    <div>
+        <!-- <p >The Risk Appetite assessment submitted by your unit has been rejected by the Reviewer. Please review and re-submit the assessment</p><br></div> -->
+        <!-- <div class="box" *ngIf="onclick" id="data">
+        This is a box with some content and an arrow on the left.
+      </div> -->
+        <div class="box" *ngIf="onclick && metricdata?.length>0" id="data">
+            <div class="info1 one" style="padding-top: 5px;">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(1)" >
+                   <span>Operational Risk Fraud: Internal or External</span> <span>{{currency}}&nbsp;<strong>{{
+                    (metricdata[0].OperationalRiskFraudInternalorExternal ? + metricdata[0].OperationalRiskFraudInternalorExternal   :0) | number : '1.0-0'}}</strong></span></div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(2)">
+                    <span>Operational Risk: other category</span><span >{{currency}}&nbsp;<strong>{{(metricdata[0].OperationalRiskothercategory ? + metricdata[0].OperationalRiskothercategory :0)| number : '1.0-0'}}</strong></span></div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(3)">
+                    <span>Near Miss or Potential Loss</span>
+                    <span >{{currency}}&nbsp;<strong>{{(metricdata[0].nearMissData ? + metricdata[0].nearMissData :0)| number : '1.0-0'}}</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(4)">
+                    <span>Revenue Leakage</span><span>{{currency}}&nbsp;<strong>{{(metricdata[0].revenueLeakage ? + metricdata[0].revenueLeakage :0 )| number: '1.0-0'}}</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(5)">
+                    <span>legal</span> <span>{{currency}}&nbsp;<strong>{{(metricdata[0].Legal ? + metricdata[0].Legal :0 )| number : '1.0-0'}}</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="box" *ngIf="onclick && metricdata?.length == 0" id="data">
+            <div class="info1 one" style="">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(1)" >
+                   <span>Operational Risk Fraud: Internal or External</span> <span>{{currency}}&nbsp;<strong>
+                    0</strong></span></div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(2)">
+                    <span>Operational Risk: other category</span><span >{{currency}}&nbsp;<strong>0</strong></span></div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(3)">
+                    <span>Near Miss or Potential Loss</span>
+                    <span >{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(4)">
+                    <span>Revenue Leakage</span><span>{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(5)">
+                    <span>legal</span> <span>{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="box" *ngIf="!onclick && this.selectedValue?.length > 0" id="data1" >
+            <div class="info1 one" style="">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(1)">
+                    <span>Operational Risk Fraud: Internal or External</span>
+                    <span>{{currency}}&nbsp;<strong>{{(this.selectedValue[0].OperationalRiskFraudInternalorExternal  ? + this.selectedValue[0].OperationalRiskFraudInternalorExternal :0) | number : '1.0-0'}}</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information" (click)="unitData(2)">
+                    <span>Operational Risk: other category</span><span>{{currency}}&nbsp;<strong>{{(this.selectedValue[0].OperationalRiskothercategory  ? + this.selectedValue[0].OperationalRiskothercategory :0) | number : '1.0-0'}}</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information"(click)="unitData(3)" >
+                    <span>Near Miss or Potential Loss</span>
+                    <span>{{currency}}&nbsp;<strong>{{(this.selectedValue[0].nearMissData  ? + this.selectedValue[0].nearMissData :0) | number : '1.0-0'}}</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information" (click)="unitData(4)">
+                    <span>Revenue Leakage</span><span>{{currency}}&nbsp;<strong>{{(this.selectedValue[0].revenueLeakage  ? + this.selectedValue[0].revenueLeakage :0) | number : '1.0-0'}}</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information" (click)="unitData(5)">
+                    <span>Legal</span> <span>{{currency}}&nbsp;<strong>{{(this.selectedValue[0].Legal  ? + this.selectedValue[0].Legal :0) | number : '1.0-0'}}</strong></span>
+                </div>
+            </div>
+        </div>
+        <div class="box" *ngIf="!onclick && this.selectedValue?.length < 0" id="data1" >
+            <div class="info1 one" style="" >
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;" matTooltip="Click here to view more information"   (click)="unitData(1)">
+                    <span>Operational Risk Fraud: Internal or External</span>
+                    <span>{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information" (click)="unitData(2)">
+                    <span>Operational Risk: other category</span><span>{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information"(click)="unitData(3)" >
+                    <span>Near Miss or Potential Loss</span>
+                    <span>{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information" (click)="unitData(4)">
+                    <span>Revenue Leakage</span><span>{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+                <hr class="infohr clearfix">
+                <div style="display:flex ;justify-content:space-between;cursor: pointer;"  matTooltip="Click here to view more information" (click)="unitData(5)">
+                    <span>Legal</span> <span>{{currency}}&nbsp;<strong>0</strong></span>
+                </div>
+            </div>
+        </div>
+    </div>

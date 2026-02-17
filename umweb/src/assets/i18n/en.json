@@ -1,0 +1,158 @@
+{
+  "app": {
+    "title": "RiskTrac | User Management",
+    "home": "Home",
+    "logout": "Logout"
+  },
+  "common": {
+    "yes": "Yes",
+    "no": "No",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "search": "Search",
+    "close": "Close",
+    "action": "Action",
+    "success": "Success",
+    "error": "Error",
+    "or": "OR",
+    "standard": "Standard",
+    "power": "Power"
+  },
+  "userList": {
+    "title": "User List",
+    "searchPlaceholder": "Eg. User, Allocated Units",
+    "assignNewUser": "Assign New User",
+    "columns": {
+      "index": "#",
+      "user": "User",
+      "allocatedUnits": "Allocated Units",
+      "module": "Module",
+      "role": "Role",
+      "isFunctionalAdmin": "Is Functional Admin?",
+      "action": "Action"
+    },
+    "tooltips": {
+      "editUser": "Edit user details",
+      "resetPassword": "Reset Password",
+      "enableDisableUser": "Enable/Disable user"
+    },
+    "dialogs": {
+      "confirmDeletion": {
+        "title": "Confirm Deletion",
+        "content": "This action will permanently delete the record.\nYou may not be able to retrieve it.\n\nDo you still want to delete it?"
+      },
+      "deleteSuccess": {
+        "title": "Success",
+        "content": "User deleted successfully."
+      },
+      "confirmResetPassword": {
+        "title": "Confirm reset password",
+        "content": "Are you sure, you want to reset the password?"
+      },
+      "confirmEnableDisable": {
+        "title": "Confirm Enable/Disable user",
+        "enableContent": "Are you sure,you want to enable the user?",
+        "disableContent": "Are you sure,you want to disable the user?"
+      },
+      "enableSuccess": "User enabled successfully ",
+      "disableSuccess": "User disabled successfully "
+    }
+  },
+  "userEdit": {
+    "addUserTitle": "Add User",
+    "editUserTitle": "Edit User",
+    "searchByUserId": "Search by User ID",
+    "searchByEmailId": "Search by Email ID",
+    "userIdPlaceholder": "username@domain",
+    "emailPlaceholder": "username@domain",
+    "searchUser": "Search User",
+    "fields": {
+      "userName": "User Name",
+      "userNamePlaceholder": "Enter User Name",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter First Name",
+      "middleName": "Middle Name",
+      "middleNamePlaceholder": "Enter Middle Name",
+      "lastName": "Last Name",
+      "lastNamePlaceholder": "Enter Last Name",
+      "jobTitle": "Job Title",
+      "jobTitlePlaceholder": "Enter Job Title",
+      "mobileNumber": "Mobile Number",
+      "mobileNumberPlaceholder": "Enter Mobile Number",
+      "emailId": "Email ID",
+      "emailIdPlaceholder": "Enter Email ID"
+    },
+    "validation": {
+      "firstNameRequired": "First name is required.",
+      "firstNamePattern": "First name should only contain letters.",
+      "middleNamePattern": "Middle name should only contain letters.",
+      "mobileRequired": "Mobile number is required.",
+      "mobilePattern": "Mobile number should only contain digits.",
+      "mobileRange": "Mobile number allowed range is {{min}}-{{max}} digits",
+      "allowedRange": "Allowed range is {{min}}-{{max}} digits",
+      "emailRequired": "Email ID is required.",
+      "emailInvalid": "Please enter a valid email address.",
+      "domainInvalid": "Please enter a valid domain.",
+      "userNameRequired": " User name is required.",
+      "userNameRange": "User name range should be in {{min}} - {{max}} characters",
+      "fillMandatoryFields": "Please fill all the mandatory fields"
+    },
+    "modules": {
+      "assignModulesTo": "Assign Module(s) to :",
+      "moduleColumn": "Module",
+      "roleColumn": "Role",
+      "selectUserRole": "Select User Role",
+      "isFunctionalAdmin": "Is Functional Admin",
+      "atLeastOneModule": "Atleast one module is required.",
+      "selectRoleDropdown": "Please select a role to proceed in the drop down"
+    },
+    "units": {
+      "assignUnitsTo": "Assign Unit(s) to :",
+      "indexColumn": "#",
+      "departmentColumn": "Department",
+      "selectDepartment": "Select Department",
+      "unitColumn": "Unit",
+      "selectUnit": "Select Unit",
+      "actionColumn": "Action",
+      "assignUnit": "+ Assign Unit",
+      "blankUnitsFound": "Blank unit(s) found.",
+      "atLeastOneUnit": "Atleast one unit is required.",
+      "removeDuplicates": "Please remove the duplicate units."
+    },
+    "userManager": {
+      "isUserManager": "is an User Manager"
+    },
+    "disabledNote": "Note: Edit is restricted for disabled user",
+    "saveUserDetails": "Save User Details",
+    "saveSuccess": {
+      "title": "Success",
+      "content": "User details saved successfully."
+    }
+  },
+  "groupUnit": {
+    "assignUnit": "Assign Unit",
+    "columns": {
+      "department": "Department",
+      "unit": "Unit",
+      "action": "Action"
+    }
+  },
+  "header": {
+    "title": "RiskTrac | User Management",
+    "homeAlt": "Home",
+    "logoutAriaLabel": "Logout",
+    "logoutText": "Logout",
+    "confirmLogout": {
+      "title": "Confirm Logout",
+      "content": "Are you sure you want to logout?"
+    },
+    "loggingOut": "Logging Out ..."
+  },
+  "confirmDialog": {
+    "yes": "Yes",
+    "no": "No"
+  }
+}

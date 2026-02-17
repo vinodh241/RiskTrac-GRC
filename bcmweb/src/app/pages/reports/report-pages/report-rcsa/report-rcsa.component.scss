@@ -1,0 +1,486 @@
+.tooltip-table {
+    border: 1px solid #ffff;
+    border-collapse: collapse;
+    margin: 10px;
+    font-size: 1.3vh;
+}
+
+
+
+.upload-button {
+    font-size: 1.3vh;
+    background-color: #2470A3;
+    color: #fff;
+    border-radius: 12px;
+    cursor: pointer;
+
+}
+
+.reporting-frequency-font {
+    font-weight: bold;
+}
+
+.historical {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+.dropdown-label {
+    margin-right: 0.5rem;
+}
+
+.measured-text-space {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    background-color: transparent;
+}
+
+.measured {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+    margin-left: 10px;
+}
+
+.editable {
+    width: 4.5vw;
+}
+
+.measured-text {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+
+}
+
+.text-align-center {
+    text-align: center;
+}
+
+.value-container {
+    height: 40px;
+    width: 40px;
+    border-radius: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.historical-text {
+    padding-left: .5vw;
+    color: rgb(88, 160, 241);
+}
+
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 20vw;
+    background-color: black;
+    color: #fff;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    right: auto;
+    z-index: 1;
+    right: 0%;
+}
+
+.tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    bottom: 100%;
+    right: 5%;
+    border-width: 1.2vh;
+    border-style: solid;
+    width: .3vw;
+    height: .3vh;
+    transform: rotate(-90deg);
+    border-color: transparent transparent transparent black;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.incidents-font {
+    color: #c93e00;
+    font-weight: 400;
+    width: 150px;
+}
+
+.mat-toolbar {
+    height: 8.4vh;
+    margin-left: 30px;
+    font-weight: 400;
+    border-radius: 10px;
+    box-shadow: 0px 3px 3px gray;
+    background: #e5e5e5 !important;
+}
+
+.searched-Data{
+    width: 180px;
+    font-weight: 400;
+    min-height: 45px;
+    font-size: 16px;
+    padding: 0px 10px;
+    color: #999999;
+}
+.searched-Data::placeholder{
+    font-size: 16px;
+    color: #999999;
+}
+.seacrhIconReport{
+    position: absolute;
+    position: absolute;
+    color: #999999;
+    right: 5px;
+    top: 10px;
+}
+th.mat-header-cell,
+td.mat-cell {
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 5px !important;
+}
+
+.mat-action-row,
+.mat-elevation-z8 {
+    margin-left: 30px;
+    width: 100%;
+    margin-top: 15px;
+    border-radius: 20px;
+}
+
+.mat-header-row {
+    min-height: 15vh;
+}
+
+.view-previous {
+    color: #6BBDC2;
+    text-decoration: underline;
+}
+
+.mat-column-indicator {
+    width: 10vw;
+
+}
+
+.mat-column-Kricard,
+.mat-column-Measurmentfrequency,
+.mat-column-Reportingfrequency,
+.mat-column-status,
+.mat-column-Lastchangedby {
+    max-width: 5vw;
+}
+
+.mat-column-Target,
+.mat-column-action {
+    max-width: 3vw;
+}
+
+.mat-column-date {
+    width: 3vw;
+}
+
+.mat-column-Currentvalue {
+    width: 4vw;
+}
+
+.mat-column-Measurmentdata,
+.mat-column-Measurmentperiod {
+    max-width: 6vw;
+}
+
+.mat-column-upload,
+.mat-column-Remarks {
+    max-width: 10vw;
+}
+
+.mat-column-tresholdvalue {
+    width: 20vw
+}
+
+.report-container {
+    display: flex;
+    flex-direction: row;
+    margin-top: 30px;
+}
+
+.left-container {
+    width: 15%;
+    margin-left: 30px;
+}
+
+.mat-header-cell,
+.mat-cell {
+    justify-content: center;
+
+}
+
+
+
+.mat-bgcolor {
+    background: linear-gradient(158.79deg, #e5e5e5 36.66%, #e3e3e3 101.11%);
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+    padding: 0px;
+}
+
+.mat-toolbar {
+    background-color: #e5e5e5;
+    color: red;
+}
+
+.mat-card-cont {
+    background-image: linear-gradient(to right, rgba(139, 233, 243, 0.947), rgba(244, 245, 154, 0.984))
+}
+
+.mat-card-m {
+    margin-bottom: 5px;
+    color: white;
+    background: #95D5FF20;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.25);
+}
+
+.sub-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 5px;
+    padding-right: 5px;
+    border-radius: 2px;
+    padding-top: 5px;
+}
+
+.right-container {
+    width: 80%;
+}
+
+.actions-container {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+}
+
+.left-action {
+    display: flex;
+    gap: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.no-data {
+    width: 100%;
+    text-align: center;
+    font-size: 3vh;
+}
+
+.incedents-font {
+    font-size: 30px;
+    margin-right: 5% !important;
+}
+
+.recommendations-font {
+    font-size: 16px;
+    font-weight: 400;
+    margin-top: auto;
+    margin-left: 2%;
+    color: black !important;
+}
+
+.fill-remaining-space {
+    flex: 1 1 auto;
+}
+
+.mat-card {
+    min-width: 70%;
+}
+
+.search {
+    background: white;
+    color: black;
+    margin-left: 40px;
+    display: flex;
+    width: 200px;
+    position: relative;
+    box-shadow: 0px 1px;
+}
+
+.row {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
+    height: 6vh;
+    background-color: #e5e5e5 !important;
+}
+
+.status-card {
+    padding: 0px;
+    font-size: 20px;
+    height: 45px;
+    margin: 0px 10px;
+    border-radius: 20px;
+    background-image: linear-gradient(to right, #dad9d9, #ffffff);
+}
+
+.status-count {
+    font-size: 30px;
+    font-weight: bold;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+h4 {
+    font-weight: 400;
+}
+
+.status-type {
+    padding: 0px 10px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.status-divider {
+    width: 1.2px;
+    height: 41px;
+    margin-top: 2px;
+}
+
+::ng-deep {
+    .mat-form-field-appearance-fill .mat-form-field-flex {
+        background: white !important;
+    }
+}
+
+.side-card-header {
+    background: #12121212;
+    padding: 10px 1px;
+    color: white;
+}
+
+.side-card-title {
+    font-size: 17px !important;
+}
+
+.side-card-content {
+    padding: 10px;
+    color: black;
+}
+
+.icon-excel {
+    min-width: 0px;
+    border-radius: 50%;
+    background: transparent;
+    box-shadow: none;
+    max-height: 32px;
+    max-width: 32px;
+}
+.excel-img{
+    height: 40px;
+    margin: -10px 0 0 -15px;
+}
+
+.circle {
+    display: inline;
+    background: green;
+    padding: 20px;
+    border-radius: 50%;
+}
+
+.dot {
+    height: 50px;
+    width: 50px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+th {
+    background: #e5e5e5;
+}
+.mat-column-code,
+.mat-column-group,
+.mat-column-unit,
+.mat-column-risk,
+.mat-column-status{
+    width: 10%;
+}
+
+::ng-deep {
+    .mat-card-header-text {
+        margin: 0px !important;
+    }
+
+    .mat-form-field-infix {
+        display: inherit !important;
+    }
+
+    .mat-header-row {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+    }
+
+}
+
+::placeholder {
+    color: black;
+    opacity: 1;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+:-ms-input-placeholder {
+    color: black;
+    font-size: 17px;
+    font-weight: 400;
+}
+
+::-ms-input-placeholder {
+    color: black;
+    font-size: 17px;
+    font-weight: 400;
+}
+tr.mat-row:hover {
+    background-color: #fffaec;
+}
+.mat-row:nth-child(even){
+    background-color: #f8f8f8;
+}
+.icon-excel {
+    width: 50px;
+    height: 68px;
+    background-color: #ccbebe;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    padding: 5px;
+}
+
+.excel-img {
+    width: 32%; /* Adjust the image size to fit within the circle */
+    height: 32%; /* Adjust the image size to fit within the circle */
+}

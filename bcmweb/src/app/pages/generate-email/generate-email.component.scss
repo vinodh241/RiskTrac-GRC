@@ -1,0 +1,35 @@
+.form-row {
+    display: flex;
+    width: 50%;
+    flex-direction: row;
+}
+
+.email-form {
+    min-height: 80vh;
+}
+
+.form-label {
+    padding: 0 10px;
+    width: 150px;
+    padding-top: 15px;
+    text-align: right;
+}
+
+.form-label-email {
+    padding-left: 3vw;
+    padding-right: -3vw;
+    width: 150px;
+    padding-top: 15px;
+    // text-align: right;
+}
+
+button {
+    margin-top: 40px;
+    width: 170px;
+}
+
+.container {
+    margin: 40px 70px;
+    text-align: center;
+    justify-content: center;
+}

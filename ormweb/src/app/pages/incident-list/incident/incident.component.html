@@ -1,0 +1,29 @@
+<mat-toolbar class="fontSize">
+    <h3>Operational Risk (OR) Incident Reporting</h3>
+    <span class="spacer"></span>
+    <button mat-icon-button *ngIf="isMax" title="Restore" (click)="minimize()">
+        <mat-icon aria-hidden="false" aria-label="Restore" fontIcon="fullscreen_exit"></mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="!isMax" title="Maximize" (click)="maximize()">
+        <mat-icon aria-hidden="false" aria-label="Maximize" fontIcon="fullscreen"></mat-icon>
+    </button>
+    <button mat-icon-button title="Close" (click)="closeDialog()" cdkFocusInitial mat-dialog-close>
+        <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close" ></mat-icon>
+    </button>
+</mat-toolbar>
+<mat-dialog-content>
+    <div class="left">
+        <mat-tab-group>
+            <mat-tab label="Incident Details">
+                <app-incident-details (close)="closeDialog()" ></app-incident-details>
+            </mat-tab>
+            <mat-tab label="Root Cause Analysis & Recommendations">
+                <app-incident-details-more></app-incident-details-more>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+    <div class="right">
+        <app-workflow-status></app-workflow-status>
+        <app-audit-trail></app-audit-trail>
+    </div>
+</mat-dialog-content>

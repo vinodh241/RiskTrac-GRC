@@ -1,0 +1,323 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+@import './assets/fonts/open-sans/open-sans-fonts.scss';
+
+@import './assets/fonts/roboto/roboto-fonts.scss';
+
+@import './assets/fonts/material-icons/material-icons-fonts.scss';
+$web-palette: (
+    50 : #e5eef4,
+    100 : #bdd4e3,
+    200 : #92b8d1,
+    300 : #669bbf,
+    400 : #4585b1,
+    500 : #2470a3,
+    600 : #20689b,
+    700 : #1b5d91,
+    800 : #165388,
+    900 : #0d4177,
+    A100 : #a9cfff,
+    A200 : #76b3ff,
+    A400 : #4397ff,
+    A700 : #2a88ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #ffffff,
+    )
+);
+
+$web-primary: mat.define-palette($web-palette);
+$web-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+$web-warn: mat.define-palette(mat.$red-palette);
+
+$web-theme: mat.define-light-theme((color: (primary: $web-primary, accent: $web-accent, warn: $web-warn)));
+@include mat.all-component-themes($web-theme);
+
+//mat-display-4                 --      display-4
+//mat-display-3                 --      display-3
+//mat-display-2                 --      display-2
+//mat-display-1                 --      display-1
+//mat-h1 mat-headline           h1      headline
+//mat-h2 mat-title              h2      title
+//mat-h3 mat-subheading-2       h3      subheading-2
+//mat-h4 mat-subheading-1       h4      subheading-1
+//mat-h5                        h5      --
+//mat-h6                        h6      --
+//mat-body mat-body-1           body    body-1
+//mat-body-strong mat-body-2    --      body-2
+//mat-small mat-caption         --      caption
+
+//level parameters: font-size , line-height , font-weight , font-family and letter-spacing
+$web-typography: mat.define-typography-config(
+    $font-family: 'Open Sans Condensed',
+    $title: mat.define-typography-level(3.5vh, 1, 300),
+    $subheading-2: mat.define-typography-level(2.5vh, 1, 700),
+    $subheading-1: mat.define-typography-level(2.5vh, 1, 300),
+    $display-4: mat.define-typography-level(2.1vh, 1, 700),
+    $display-3: mat.define-typography-level(2.1vh, 1, 400),
+    $display-2: mat.define-typography-level(1.7vh, 1, 700),
+    $button: mat.define-typography-level(2.3vh, 1, 400)
+);
+
+// $display-4:     mat.define-typography-level(112px, 1, 1000),
+// $display-3:     mat.define-typography-level(56px, 1, 1000),
+// $display-2:     mat.define-typography-level(45px, 1, 1000),
+// $display-1:     mat.define-typography-level(34px, 1, 1000),
+// $headline:      mat.define-typography-level(1.5rem, 1, 1000),
+// $title:         mat.define-typography-level(1.5rem, 1, 10),
+// $subheading-2:  mat.define-typography-level(1.2rem, 1, 500),
+// $subheading-1:  mat.define-typography-level(1rem, 1, 10),
+// $body-1:        mat.define-typography-level(1rem, 1, 10),
+// $body-2:        mat.define-typography-level(1rem, 1, 10),
+// $caption:       mat.define-typography-level(1rem, 1, 10),
+// $button:        mat.define-typography-level(1rem, 1, 10),
+// $input:         mat.define-typography-level(1rem, 1, 10)
+
+@include mat.core($web-typography);
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #F2F2F2;
+    color: black;
+    font-family: "Open Sans Condensed", "Helvetica Neue", sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.mat-action-row {
+    display: flex;
+    align-items: center;
+}
+
+.label {
+    font-size: 5.5vh;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.dark {
+    color: black;
+}
+
+.space {
+    width: 3vw;
+}
+
+.mat-h3,
+.mat-h4 {
+    margin: 0px 0px 0px 0px;
+}
+
+.mat-toolbar {
+    background-color: #2980B9;
+    color: white;
+    height: 8.4vh;
+}
+
+.mat-table {
+    width: 100%;
+    border: 0px;
+}
+
+.mat-header-row {
+    min-height: 3vh;
+}
+
+.mat-header-cell {
+    color: black;
+    font-size: 1.7vh;
+    font-weight: 700;
+}
+
+.mat-cell {
+    color: black;
+    font-size: 1.7vh;
+    font-weight: 400;
+}
+
+.mat-tooltip {
+    font-size: 1.8vh;
+}
+
+.dark>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}
+
+.success>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}
+
+.error>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}
+
+.warning>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}
+
+.btn {
+  --bs-btn-padding-x: .75rem;
+  --bs-btn-padding-y: .375rem;
+  --bs-btn-font-family: ;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-font-weight: 400;
+  --bs-btn-line-height: 1.5;
+  --bs-btn-color: #212529;
+  --bs-btn-bg: transparent;
+  --bs-btn-border-width: 1px;
+  --bs-btn-border-color: transparent;
+  --bs-btn-border-radius: .375rem;
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .15), 0 1px 1px rgba(0, 0, 0, .075);
+  --bs-btn-disabled-opacity: .65;
+  --bs-btn-focus-box-shadow: 0 0 0 .25rem rgba(var(--bs-btn-focus-shadow-rgb), .5);
+  display: inline-block;
+  padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);
+  font-family: var(--bs-btn-font-family);
+  font-size: var(--bs-btn-font-size);
+  font-weight: var(--bs-btn-font-weight);
+  line-height: var(--bs-btn-line-height);
+  color: var(--bs-btn-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
+  border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+  border-radius: var(--bs-btn-border-radius);
+  background-color: var(--bs-btn-bg);
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+.modalCancelBtn {
+  background-color: transparent;
+  box-shadow: none;
+  font-size: 1.6rem;
+  color: #030303;
+  border: none;
+  line-height: 2.5;
+  min-width: 6vw;
+}
+.btn-secondary {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: #6c757d ;
+  --bs-btn-border-color: #6c757d ;
+  --bs-btn-focus-shadow-rgb: 130, 138, 145;
+  --bs-btn-active-color: #fff;
+  --bs-btn-active-bg: #565e64;
+  --bs-btn-active-border-color: #51585e;
+  --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  --bs-btn-disabled-color: #fff;
+  --bs-btn-disabled-bg: #6c757d;
+  --bs-btn-disabled-border-color: #6c757d;
+}
+
+.btn {
+  --bs-btn-padding-x: 0.75rem;
+  --bs-btn-padding-y: 0.375rem;
+  --bs-btn-font-family: ;
+  --bs-btn-font-size: 1rem;
+  --bs-btn-font-weight: 400;
+  --bs-btn-line-height: 1.5;
+  --bs-btn-color: #212529;
+  --bs-btn-bg: transparent;
+  --bs-btn-border-width: 1px;
+  --bs-btn-border-color: transparent;
+  --bs-btn-border-radius: 0.375rem;
+  --bs-btn-hover-border-color: transparent;
+  --bs-btn-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15), 0 1px 1px rgba(0, 0, 0, 0.075);
+  --bs-btn-disabled-opacity: 0.65;
+  --bs-btn-focus-box-shadow: 0 0 0 0.25rem rgba(var(--bs-btn-focus-shadow-rgb), .5);
+  display: inline-block;
+  padding: var(--bs-btn-padding-y) var(--bs-btn-padding-x);
+  font-family: var(--bs-btn-font-family);
+  font-size: var(--bs-btn-font-size);
+  font-weight: var(--bs-btn-font-weight);
+  line-height: var(--bs-btn-line-height);
+  color: var(--bs-btn-color);
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  border: var(--bs-btn-border-width) solid var(--bs-btn-border-color);
+  border-radius: var(--bs-btn-border-radius);
+  background-color: var(--bs-btn-bg);
+  transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
+}
+
+// .btn:hover {
+//   color: var(--bs-btn-hover-color) !important;
+//   background-color: var(--bs-btn-hover-bg) !important;
+//   border-color: var(--bs-btn-hover-border-color) !important;
+// }
+
+.modal-footer>* {
+  margin: calc(var(--bs-modal-footer-gap)* .5);
+}
+
+.modal-footer {
+  display: flex;
+  flex-shrink: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-end;
+  padding: calc(var(--bs-modal-padding) - var(--bs-modal-footer-gap)* .5);
+  background-color: var(--bs-modal-footer-bg);
+  border-top: var(--bs-modal-footer-border-width) solid var(--bs-modal-footer-border-color);
+  border-bottom-right-radius: var(--bs-modal-inner-border-radius);
+  border-bottom-left-radius: var(--bs-modal-inner-border-radius);
+}
+.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: #DBDBDB !important;
+  border-radius: 0.2em;
+  color: #000;
+  border: none;
+}
+.btnGradient {background: linear-gradient(92deg, #245A8C 44.75%, #1DA34A 108.73%); transition: .4s;}
+
+
+.btn-dark:hover {
+  background-color: transparent;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}

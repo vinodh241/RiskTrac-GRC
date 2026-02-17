@@ -1,0 +1,160 @@
+<ng-container>
+    <mat-toolbar>
+        <div class="row">
+            <div class="incidents-font col-2">{{assessmentCount}} <span style="font-size: 20px;">Risk Metrics</span>
+            </div>
+            <div class="search col-2">
+                <input matInput placeholder="  Search RA" class="searched-Data" [(ngModel)]="globalSearchValue"
+                    (input)="updateTable()">
+                <mat-icon matPrefix  class="seacrhIconReport">search</mat-icon>
+            </div>
+            <div class="col-1">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 5px 1px 0px 1px #4897ea;">
+                    <mat-card-header>
+                        <span class="status-count" style="color: #4897ea;">{{reviewed}}</span>
+                        <span class="status-divider" style="background: #4897ea;"></span>
+                        <span class="status-type">Reviewed</span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-1">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 5px 1px 0px 1px #fed878;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#fed878">{{notStarted}}</span>
+                        <span class="status-divider" style="background: #fed878;"></span>
+                        <span class="status-type">Not Started</span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-1">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 5px 1px 0px 1px #97bc02;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#97bc02">{{submitted}}</span>
+                        <span class="status-divider" style="background: #97bc02;"></span>
+                        <span class="status-type">Submitted</span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-1">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 5px 1px 0px 1px #1aa35f;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#1aa35f">{{inProgress}}</span>
+                        <span class="status-divider" style="background: #1aa35f;"></span>
+                        <span class="status-type">In-Progress</span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-1">
+                <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 5px 1px 0px 1px #999999;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#999999">{{approved}}</span>
+                        <span class="status-divider" style="background: #999999;"></span>
+                        <span class="status-type">Approved</span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <div class="col-1">
+              <mat-card class="status-card" style="box-shadow: -2px 3px 3px #333333, 5px 1px 0px 1px #F2527D;">
+                    <mat-card-header>
+                        <span class="status-count" style="color:#F2527D">{{rejected}}</span>
+                        <span class="status-divider" style="background: #F2527D;"></span>
+                        <span class="status-type">Rejected</span>
+                    </mat-card-header>
+                </mat-card>
+            </div>
+            <!-- <div class="col-1" style="cursor: pointer;padding-left: 30px;" matTooltip="Export to PDF">
+                <mat-card class="icon-pdf"  (click)="generatePDF()">
+                    <img class="pdf-img" src="assets/icon-pdf.svg" />
+                </mat-card>
+            </div> -->
+            <!-- <div class="col-1" style="cursor: pointer;padding-left: 30px;" matTooltip="Export to Excel">
+                <mat-card class="icon-excel" (click)="generateExcel()">
+                    <img class="excel-img" src="assets/icon-excel.svg" />
+                </mat-card>
+            </div> -->
+             <div class="col-1" style="cursor:pointer;margin-left: 1vh;" matTooltip="Export to Excel">
+                <mat-card class="icon-excel" (click)="generateExcel()">
+                    <img class="excel-img" src="assets/icon-excel.svg" alt="Excel Icon" style="height: 4vh;
+                    width: 4vh;
+                    margin-top: -1vh;
+                    margin-bottom: -1vh;
+                    margin-left: 0.1vh;
+                    margin-right: 1vh;" />
+                </mat-card>
+            </div>
+        </div>
+    </mat-toolbar>
+    <div class="mat-elevation-z8">
+        <mat-card style="height: 557px">
+            <div style="max-height: 71vh;overflow-y:scroll">
+                <table mat-table [dataSource]="dataSource.data" matSort id="SNo">
+                    <ng-container matColumnDef="SNo">
+                        <th mat-header-cell *matHeaderCellDef> # </th>
+                        <td mat-cell *matCellDef="let row; let i = index;"> {{i+1}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="frameworkname">
+                        <th mat-header-cell *matHeaderCellDef> Framework Name</th>
+                        <td mat-cell *matCellDef="let row;" [matTooltip]="row.FrameworkName"> {{row.FrameworkName}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="startDate">
+                        <th mat-header-cell *matHeaderCellDef> Start Date </th>
+                        <td mat-cell *matCellDef="let row;"> {{row.StartDate | date: 'd MMM y':"UTC"}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="endDate">
+                        <th mat-header-cell *matHeaderCellDef> End Date </th>
+                        <td mat-cell *matCellDef="let row;"> {{row.EndDate | date: 'd MMM y':"UTC"}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="quarter">
+                        <th mat-header-cell *matHeaderCellDef> Quarter </th>
+                        <td mat-cell *matCellDef="let row;"> {{row.Quater}} </td>
+                    </ng-container>
+                    <!-- <ng-container matColumnDef="incidentType">
+                        <th mat-header-cell *matHeaderCellDef> Reviewer </th>
+                        <td mat-cell *matCellDef="let row;"> {{row.Reviewer}} </td>
+                    </ng-container>
+              -->
+              <ng-container matColumnDef="unit">
+                <th mat-header-cell *matHeaderCellDef> Unit </th>
+                <td mat-cell *matCellDef="let row;"> {{row.UnitName}} </td>
+            </ng-container>
+                <ng-container matColumnDef="riskMatric">
+                    <th mat-header-cell *matHeaderCellDef> Risk Metric</th>
+                    <td mat-cell *matCellDef="let row;">{{row.Risks}} </td>
+                </ng-container>
+
+                    <ng-container matColumnDef="score">
+                        <th mat-header-cell *matHeaderCellDef> Score </th>
+                        <td mat-cell *matCellDef="let row;">{{row.MetricScore??0}} </td>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="criticality">
+                        <th mat-header-cell *matHeaderCellDef> RAF Policy Applied </th>
+                        <td mat-cell *matCellDef="let row;"> {{row.PolicyName}} </td>
+                    </ng-container> -->
+                    <ng-container matColumnDef="status">
+                        <th mat-header-cell *matHeaderCellDef> Status </th>
+                        <td mat-cell *matCellDef="let row;"> {{row.CollectionStatusName}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length"><span style="font-size: large;margin-left: 33vw;">No data found.</span></td></tr>
+                </table>
+            </div>
+        </mat-card>
+    </div>
+</ng-container>
+<!-- <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[10, 25, 50, 100]"></mat-paginator>
+    <div style="display:flex;justify-content:end;">
+        <button style="margin:10px;" mat-raised-button color="primary" (click)="reportKRIs()"
+            [disabled]="!isLastMonth() || utils.isReadOnlyUserORM() || isDataModified() && !remarksFilled">Report
+            KRI(s)</button>
+        <button style="margin:10px;" mat-raised-button color="primary" (click)="saveKRIs()"
+            [disabled]="utils.isReadOnlyUserORM()">Save
+            KRI(s)</button>
+        <button style="margin:10px;" mat-raised-button (click)="cancel()">Cancel</button>
+    </div> -->
+
+<ng-template #noDataTemplate>
+    <p class="no-data">No Data Found</p>
+</ng-template>

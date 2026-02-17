@@ -1,0 +1,143 @@
+.mat-toolbar {
+    height: 6.4vh;
+}
+
+.mat-elevation-z8 {
+    margin: 0vh 4vh 0 4vh;
+}
+
+.mat-action-row {
+    margin: 0vh 4vh 0 4vh;
+}
+
+.mat-header-row {
+    min-height: 10vh;
+}
+.mat-slide-toggle{
+    margin-right: 5px;
+}
+.dflexB{
+    display: flex;
+    align-items: center;
+}
+.dflexB span{
+    margin-top: -7px;
+}
+.dflexB button{
+    margin: -10px 15px 0px 13px;
+}
+.mat-column-Index {
+    max-width: 2vw;
+}
+
+.mat-column-StartDate,
+.mat-column-EndDate {
+    max-width: 10vh;
+}
+
+.mat-column-XlsFile,
+.mat-column-PdfFile {
+    max-width: 10vh;
+}
+
+.mat-column-StatusName,
+.mat-column-Action {
+    max-width: 10vh;
+}
+
+.mat-column-ReviewerName,
+.mat-column-UnitName {
+    max-width: 40vh;
+}
+.mat-dialog-content {
+    font-size: 1.3vh;
+    font-weight: 700;
+    //max-height: 68vh !important;
+    overflow: auto;
+}
+
+.mat-button-wrapper{
+    cursor: pointer;
+}
+
+#file-input {
+    display: none;
+}
+
+.btnGenUp {
+    background-color: #3CBC60;
+    border-radius: 50vh;
+    min-height: 3.5vh;
+    height: 3.5vh;
+    padding: 0.2vh 0.8vw;
+    display: flex; /* Align children using flexbox */
+    align-items: center; /* Vertically center content */
+    justify-content: center; /* Horizontally center content */
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text wrapping */
+    position: relative; /* Required for label positioning */
+    width: 14vh;
+}
+
+.btnGenUp img {
+    margin-right: 1vh;
+    height: 2.5vh;
+    margin-bottom: 1vh;
+}
+
+.file-upload {
+    display: none; /* Hide the file input */
+}
+
+
+.mat-header-cell {
+    border-right: 1px solid #fff;
+    background-color: #E7E7E7;
+}
+
+ .mat-cell{
+    border-right: 1px solid #eee;
+    padding: 0 5px !important;
+ }
+
+ .mat-sort-header-content {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-left: 1vh;
+}
+
+.btnGenDown {background-color: #245A8C; border-radius: 50vh; min-height: 3.5vh; height: 3.5vh; padding: 0.2vh 0.8vw; vertical-align: middle; color: #fff; line-height: 1.5; cursor: pointer; text-wrap: nowrap;}
+
+.normalColorBtn.modalColorBtnGreen {
+    background-color: #1C9F50;
+    height: 5vh;
+    width: 10vh;
+    font-size: 13px;
+  }
+
+  .applyFilter button, .applyFilter button:focus {
+    width: 24vh;
+    min-height: 3.5vh;
+    height: 4.5vh;
+    padding: 0.3vh 0.6vw;
+    box-shadow: 0.3vh 0.4vh 0.4vh 0px rgba(0, 0, 0, 0.28);
+    border-left: 2vw solid #000;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    transition: width 2s;
+    border-radius: 0.5vh;
+    color: white;
+}
+.disable {
+    cursor: none !important;
+    opacity: 0.5 !important;
+  }
+  
+  .enable {
+    cursor: pointer !important;
+    // opacity: 0.5 !important;
+  }
+  

@@ -1,0 +1,16 @@
+<mat-card>
+    <div *ngIf="chartData.total >= 0">
+        <mat-card-title>
+            <!-- <h4 class="graphHead">{{chartData.total}} Risk Metrics </h4> -->
+
+            <h4 class="graphHead">{{chartData.total}} Risk Metrics   
+
+                <span (click)="resetFilter()" matTooltip="Reset Filter" id="resetFilter" style="color:rgb(240, 224, 224);     margin-left: 14vh">                    
+                    <mat-icon style="    position: absolute; left: 25vh;bottom: 60.3vh;">refresh</mat-icon> <i class="fa fa-refresh" aria-hidden="true"></i>Reset
+                </span>
+            </h4>
+        </mat-card-title>
+        <!-- <mat-divider></mat-divider> -->
+        <div id="container"></div>
+    </div>
+</mat-card>

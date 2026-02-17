@@ -1,0 +1,26 @@
+.viewAllChart{
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    color: blue;
+    font-style: italic;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+mat-card {  
+    height: 100%;
+    padding: 0px;
+}
+.d-flex{    
+    // display: flex;
+    // height: calc(100% - 40px);
+    align-items: center;
+}
+.padd2vh{ 
+    padding: 16px;
+    // height: calc(100% - 32px);
+}
+// .maxHighRiskContainer{
+//     height: calc(100% - 32px);
+// }

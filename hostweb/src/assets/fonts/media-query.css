@@ -1,0 +1,28 @@
+/* NAVIGATION - UNIVERSAL */
+@media only screen and ((min-width: 992px)) {
+  .navbar-light .navbar-nav.topnav  {
+    text-align: left;
+    z-index: 99;
+  }
+
+
+}
+
+@media only screen and (max-width: 1367px) {
+    /* NAVIGATION */
+    .navbg {font-size: 100%;}
+    .topFilter {font-size: 1rem;}
+    .navbar-brand.BCMTrac img {width: 5.5em;}
+    
+    .lpFooter {font-size: 60%;}
+
+    /* END NAVIGATION */
+
+}
+
+
+@media only screen and (max-width: 1420px) {
+    .topFilter {
+        font-size: 1rem;
+    }
+}

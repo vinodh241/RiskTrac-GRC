@@ -1,0 +1,88 @@
+<mat-toolbar class="fontSize">
+    <span>Manage Risk Assessments</span>
+    <span class="spacer"></span>
+    <!-- <button mat-raised-button color="primary" (click)="newAssesment()"
+    [disabled]="frameworkDataResp === 0" [matTooltip]="frameworkDataResp === 0 ? 'Please add a framework to schedule an assessment' : ''"
+    >Schedule New Assessment</button> -->
+    <div class="applyFilter addDesktop position-relative text-start me-4">
+        <button type="button" class="btn btn-dark btnGradient ad" data-bs-toggle="modal" (click)="newAssesment()"    [disabled]="frameworkDataResp === 0" [matTooltip]="frameworkDataResp === 0 ? 'Please add a framework to schedule an assessment' : ''">Schedule New Assessment</button>
+        <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img src="./assets/images/icon-add-desktop.svg" style="    width: 2vh;
+            margin-top: 1vh;"   [ngStyle]="{'margin-left':(dataSource?.data?.length || 0) > 8  ? '-2.3vh' : '-0.3vh'}"></span>
+    </div>
+</mat-toolbar>
+<div class="container" >
+    <mat-action-row style="padding-left: 0px;padding-bottom: 0px;padding-top: 20px;">
+        <mat-form-field appearance="fill">
+            <mat-label>Search</mat-label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Eg. Framework Name" #input>
+        </mat-form-field>
+        <span class="spacer"></span>
+        <!-- <div class="assesment-button"> -->
+            <!-- <div class="move-buttons" > -->
+            <!-- <button class="buttons save" id="saveSub" (click)="historical()">Historical Risk Assessments</button> -->
+            <button type="button" class="btn btn-primary modalColorBtn" id="add" style="width: 33vh;" (click)="historical()"><img src="assets/icons/icon-calender.svg" style="    margin-top: 0.4vh;
+                position: absolute;
+                width: 1%;
+                left: 172vh;"
+             alt="">Historical Risk Assessments</button>
+            <!-- <label style="color: rgb(19, 19, 191); text-decoration: underline; cursor:pointer;" (click)="historical()">Historical Risk Assessments</label> -->
+        <!-- </div> -->
+        
+    </mat-action-row>
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="Index">
+                <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.Index}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="FrameworkName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Framework Name</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.FrameworkName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="StartDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Start Date</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{utils.formatDate(row.StartDate)}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="EndDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>End Date</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{utils.formatDate(row.EndDate)}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Quarter">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Quarter</mat-header-cell>
+                <mat-cell *matCellDef="let row">Q{{row.Quater}} {{row.Year}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="ReviewerName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Reviewer User</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.FullName? row.FullName:"-"}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="UnitName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Reviewer Units</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.UnitName!=null?row.UnitName:"-"}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="SubmittedUnit">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Submitted Units</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.UnitNames}} </mat-cell>
+            </ng-container>
+            <!-- <ng-container matColumnDef="Year">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Year</mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.Year}} </mat-cell>
+            </ng-container> -->
+            <ng-container matColumnDef="StatusName">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.StatusName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Action">
+                <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <button mat-icon-button *ngIf="row.StatusName !='Completed'">
+                        <mat-icon (click)="editAssesment(row)" aria-hidden="false" aria-label="Edit" fontIcon="edit">
+                        </mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+    </div>
+</div>

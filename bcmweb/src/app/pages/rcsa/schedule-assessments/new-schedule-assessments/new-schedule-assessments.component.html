@@ -1,0 +1,111 @@
+<mat-toolbar style="width: auto; margin:-24px -24px 0px -24px; height: 8.5vh; font-size: 3.3vh;">
+  <h2 mat-dialog-title>{{copy.mode=="add" ? "Schedule New RCSA Cycle" : "Modify RCSA"}}</h2>
+  <span class="spacer"></span>
+  <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+    <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+  </button>
+</mat-toolbar>
+<mat-dialog-content>
+  <form [formGroup]="masterForm" autocomplete="off" fxLayout="row wrap" fxLayoutGap="12px grid">
+    <input formControlName="txtRateId" hidden="true">
+    <br />
+    <div class="" fxFlex="100">
+      <fieldset class="scheduler-border">
+          <legend class="col-12 px-0 col-form-label slctLbl text-left pb-0 scheduler-border">
+              Period<sup>*</sup></legend>
+              <mat-radio-group aria-label="Select an option" formControlName="schedulePeriod"
+              [disabled]="copy.ScheduleAssessmentStatusName == 'In-Progress'">
+              <mat-radio-button *ngFor="let item of AssessmentPeriodDS" [value]="item.SchedulePeriod"
+                  (click)="selectRadio()">{{item.SchedulePeriod}}
+              </mat-radio-button>
+          </mat-radio-group>
+        </fieldset>
+  </div>
+    <mat-form-field appearance="outline" fxFlex="100">
+      <mat-label>Description</mat-label>
+      <input matInput formControlName="txtDescription">
+    </mat-form-field>
+
+    <div [matTooltip]=" (copy.mode=='add' && (masterForm['controls'].schedulePeriod.value == null || ScheduleAssessStatusID == 1)) ? 'Please Select Period First' : '' " fxFlex="100" matTooltipPosition="above">
+      <mat-form-field appearance="outline" fxFlex="50" [ngClass]="(copy.mode=='add' && (masterForm['controls'].schedulePeriod.value == null || ScheduleAssessStatusID == 1)) ? 'disable' : ''" style="padding-right: 6.75px;">
+          <mat-label>Proposed Start Date</mat-label>
+          <input matInput [matDatepicker]="picker2" placeholder="Start Date"
+              formControlName="txtProsessedStartDate" (click)="picker2.open()" (keydown)="false"
+              [min]="quaterDetailsData()?.startQuaterDate" [max]="quaterDetailsData()?.endQuaterDate"
+              (dateChange)="valueChanged($event)" [disabled]="copy.ScheduleAssessmentStatusName == 'In-Progress'"
+              >
+          <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+          <mat-datepicker #picker2></mat-datepicker>
+
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" fxFlex="50" [ngClass]="(copy.mode=='add' && (masterForm['controls'].schedulePeriod.value == null || ScheduleAssessStatusID == 1)) ? 'disable' : ''" style="padding-left: 6.75px;">
+          <mat-label>Proposed End Date</mat-label>
+          <input matInput [matDatepicker]="picker1" placeholder="End Date" formControlName="txtProsessedEndDate"
+              [disabled]="copy.ScheduleAssessmentStatusName == 'In-Progress'" (click)="picker1.open()"
+              (keydown)="false" [min]="quaterDetailsData()?.startQuaterDate"
+              [max]="quaterDetailsData()?.endQuaterDate" (dateChange)="valueChanged($event)">
+          <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+          <mat-datepicker #picker1></mat-datepicker>
+      </mat-form-field>
+  </div>
+
+
+    <mat-form-field appearance="outline" fxFlex="50">
+      <mat-label>Reviewer1</mat-label>
+      <mat-select formControlName="ddlReviewer1">
+        <mat-option *ngFor="let item of reviewerDS" [value]="item.ReviewerID" [matTooltip]="item.UserEmail">
+          {{item.FirstName}} {{item.LastName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" fxFlex="50">
+      <mat-label>Reviewer2</mat-label>
+      <mat-select formControlName="ddlReviewer2">
+        <mat-option *ngFor="let item of reviewerDS" [value]="item.ReviewerID" [matTooltip]="item.UserEmail">
+          {{item.FirstName}} {{item.LastName}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <!-- start of email reminder date -->
+
+    <div fxFlex="50" [matTooltip]="(masterForm['controls'].txtProsessedStartDate.value == null || masterForm['controls'].txtProsessedEndDate.value == null) ? 'Please Select Proposed Start Date & End Date' : ''" matTooltipPosition="above">
+      <mat-form-field appearance="outline" fxFlex="100"
+          [ngClass]="(masterForm['controls'].txtProsessedStartDate.value == null || masterForm['controls'].txtProsessedEndDate.value == null) ? 'disable' : ''">
+          <mat-label>Email Reminder Date</mat-label>
+          <input matInput [matDatepicker]="picker3" placeholder="Email Reminder Date"
+              formControlName="reminderDate" (click)="picker3.open()" (keydown)="false" [min]="minDate"
+              [max]="maxDate">
+          <mat-datepicker-toggle matSuffix [for]="picker3"></mat-datepicker-toggle>
+          <mat-datepicker #picker3></mat-datepicker>
+      </mat-form-field>
+  </div>
+    <!-- end of email reminder date -->
+
+  </form>
+
+</mat-dialog-content>
+<div fxLayout="row wrap">
+  <span class="spacer"></span>
+  <mat-error *ngIf="!masterForm.valid">The save button is enabled once all the mandatory fields are entered</mat-error>
+</div>
+<mat-error >{{getError()}}</mat-error>
+<mat-dialog-actions>
+  <span class="spacer"></span>
+  <!-- <button mat-button mat-raised-button color="primary" [disabled]="!masterForm.valid"
+    (click)="validateSave()">{{copy.mode=="add"?"New RCSA":"Edit RCSA"}}</button> -->
+
+  <!-- <button mat-button mat-raised-button color="primary" [disabled]="!masterForm.valid || userSame"
+    (click)="validateSave()">Save</button>
+  <button mat-button mat-dialog-close>Cancel</button> -->
+
+  <div class="move-buttons" >
+    <button class="buttons save" id="saveSub"  type="submit"  [disabled]="!masterForm.valid || userSame" (click)="validateSave()" ><img src="./assets/images/icon-application.svg"
+              alt="Save"> Save</button>
+
+    </div>
+            <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="height: 5.7vh;" mat-dialog-close>Cancel</button>
+
+</mat-dialog-actions>

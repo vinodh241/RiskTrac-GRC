@@ -1,0 +1,121 @@
+<div class="panel-row">
+    <mat-panel-title>&nbsp;&nbsp;Recommendation(s)  <span style="color: red;">*</span></mat-panel-title>
+    <span class="spacer"></span>
+    <button mat-icon-button
+    #tooltip="matTooltip"
+    matTooltip="Click here to add Recommendations"
+    [matTooltipPosition]="position.value!"
+    matTooltipHideDelay="1000"
+        [disabled]="inEdit() || !service.isReviewEditable || !service.incident?.Reviewer || ![2,5,11].includes(service.incident?.StatusCode)"
+        (click)="add()">
+        <mat-icon aria-hidden="false" aria-label="Add" fontIcon="add"></mat-icon>
+    </button>
+</div>
+
+<div class="rec-overflow">
+    <div *ngFor="let data of recommendations">
+        <mat-expansion-panel [expanded]="data?.isEditable || data?.panelState" class="rec-expansion" (opened)="openPanel(data)" (closed)="closePanel(data)">
+            <mat-expansion-panel-header  class="rec-panel" *ngIf="!data?.isEditable">
+                <mat-panel-description class="rec-fsb">
+                    {{data?.RecommendationCode}}
+                </mat-panel-description>
+                <mat-panel-description class="rec-fsb">
+                    Assigned To: {{data?.UnitName}}
+                </mat-panel-description>
+                <mat-panel-description class="rec-fsw">
+                    Target Date: {{utils.formatDate(data?.TargetDate)}}
+                </mat-panel-description>
+                <mat-panel-description class="rec-fsw">
+                    Status: {{data?.StatusName}}
+                </mat-panel-description>
+                <!-- <span class="spacer"></span> -->
+            </mat-expansion-panel-header>
+            <p *ngIf="!data?.isEditable">{{data?.Description}}</p>
+            <mat-form-field appearance="fill" style='width:100%' class="full-width" class="input-description"
+                *ngIf="(service?.incident?.StatusCode == 6 || service?.incident?.StatusCode == 7)">
+                <mat-label>Action Taken</mat-label>
+                <textarea class="text-area" [(ngModel)]="data.Action" matInput
+                    [disabled]="!data.Reportee ||!sameReporteeUnit(data) || data.StatusCode!=1 "></textarea>
+            </mat-form-field>
+            <div *ngIf="service?.incident?.StatusCode==6 || service?.incident?.StatusCode==7">
+                <!-- <p>{{service.incident?.Recommendation}}</p> -->
+                <app-file-upload [evdname]="'Recommendation'" [recid]="data.RecommendationID"
+                    (refresh)="refresh($event)"
+                    [disabled]=" !data.Reportee || !sameReporteeUnit(data) || data.StatusCode!=1"></app-file-upload>
+            </div>
+            <div class="panel-row">
+                <button mat-raised-button color="primary" *ngIf="service?.incident?.StatusCode==6 && data.StatusCode==1"
+                    (click)="action(data)"
+                    [disabled]="!data.Reportee || !sameReporteeUnit(data)"><img src="./assets/images/icon-application.svg"
+                    alt="Save">Save</button>&nbsp;&nbsp;
+                <button mat-raised-button color="primary" *ngIf="service?.incident?.StatusCode==6 && data.StatusCode==1"
+                    (click)="claimc(data)"
+                    [disabled]=" !data.Reportee || !sameReporteeUnit(data) || isModified(data)">Claim
+                    Closed</button>
+                <button mat-raised-button color="primary" *ngIf="service?.incident?.StatusCode==6 && data.StatusCode==2"
+                    (click)="approv(data)" [disabled]="!service.incident?.Reviewer">Approve</button>&nbsp;&nbsp;
+                <button mat-raised-button color="primary" *ngIf="service?.incident?.StatusCode==6 && data.StatusCode==2"
+                    (click)="reject(data)" [disabled]="!service.incident?.Reviewer">Reject</button>
+                <span class="spacer"></span>
+                <button mat-icon-button (click)="edit(data)" *ngIf="service?.isReviewEditable && !data.isEditable"
+                    [disabled]="inEdit()">
+                    <mat-icon>edit</mat-icon>
+                </button>
+                <button mat-icon-button (click)="remove(data)" *ngIf="service?.isReviewEditable && !data.isEditable"
+                    [disabled]="inEdit()">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+            <form [formGroup]="form" (ngSubmit)="save(data)">
+                <div class="rec-input" *ngIf="data?.isEditable">
+                    <mat-form-field appearance="fill" class="input-description">
+                        <mat-label>Description *</mat-label>
+                        <textarea class="text-area" [(ngModel)]="copy.Description" matInput
+                            formControlName="desc"></textarea>
+                    </mat-form-field>
+                    <div class="rec-dropdown">
+                        <mat-form-field appearance="fill" class="full-width">
+                            <mat-label>Select Unit</mat-label>
+                            <mat-select [(ngModel)]="copy.UnitID" formControlName="unit" required>
+                                <mat-option *ngFor="let unit of service.info?.units" [value]="unit.UnitID">
+                                    {{unit.Name}}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <mat-form-field appearance="fill">
+                            <mat-label>Target Date *</mat-label>
+                            <input matInput [matDatepicker]="picker" formControlName="date" [(ngModel)]="copy.TargetDate"
+                            [min]="startDate.value" (click)="picker.open()" (keydown)="false">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div>
+                        <div>
+                            <button mat-icon-button title="Done"
+                                [ngClass]="!((form.value.unit != '-1') && form.value.desc && form.value.date)? 'disable':'select'"
+                                [matTooltip]="!((form.value.unit != '-1') && form.value.desc && form.value.date)? 'Enter all mandatory fields':''"
+                                [disabled]="(form.value.unit != '-1') && !form.value.desc && !form.value.date" type="submit">
+                                <mat-icon aria-hidden="true" aria-label="done" fontIcon="done"></mat-icon>
+                            </button>
+                            <button mat-icon-button title="Close" (click)="cancel(data)" class="cancel" cdkFocusInitial>
+                                <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </mat-expansion-panel>
+    </div>
+</div>
+
+
+
+<!-- <div class="rec-container">
+    <div><label class="mat-display-2">Recommendation</label></div>
+    <button mat-icon-button
+        [disabled]="!service.isReviewEditable || !service.incident?.Reviewer || ![2,5].includes(service.incident?.StatusCode)"
+        (click)="add()">
+        <mat-icon aria-hidden="false" aria-label="Add" fontIcon="add"></mat-icon>
+    </button>
+</div> -->

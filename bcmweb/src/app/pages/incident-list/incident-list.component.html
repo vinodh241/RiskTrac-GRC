@@ -1,0 +1,293 @@
+<mat-toolbar class="fontSize">
+    <span>Incident Listing</span>
+    <span class="spacer"></span>
+        <!-- <button type="button" class="btn btn-dark btnGradient ad" data-bs-toggle="modal" (click)="openIncident(-1)" [disabled]="!['PU','FA'].includes(role)">Report
+            New
+            Incident</button> <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img src="./assets/images/icon-add-desktop.svg"></span> -->
+            <div class="applyFilter addDesktop position-relative text-start me-4">
+                <button type="button" class="btn btn-dark btnGradient ad" data-bs-toggle="modal" (click)="openIncident(-1)" *ngIf="['PU','FA'].includes(role)">Report
+                    New
+                    Incident</button>
+                <span class="position-absolute vmiddleLeft text-white iconPositionLeft"  *ngIf="['PU','FA'].includes(role)"><img src="./assets/images/icon-add-desktop.svg" style="width: 2vh;margin-top: 1.2vh;margin-left: 2vh;"></span>
+            </div>
+        </mat-toolbar>
+<div class="container">
+    <div class=topbox>
+        <div class="left_text_container">
+        <div class="left_upper_text">
+            <div><span class="left_upper_number">{{totalIncidents}} </span><span>Incidents</span></div>
+        </div>
+        <div class="left_lower_text">{{totalRecommendations}} Recommendations</div>
+        </div>
+
+        <div class="searchfilter px-3">
+            <div class="w-100 position-relative">
+                <div class="srhposition d-inline-block">
+                    <div class="input-group">
+                        <mat-form-field class="example-form-field" appearance="fill">
+                            <mat-label>
+                                Search Incidents
+                            </mat-label>
+                            <input matInput (keyup)="applyFilter($event)" #input>
+                            <span style="position: absolute;right: 0%;top: -30%;"><mat-icon> <img src="assets/icon-search.svg" height="75%"></mat-icon></span>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="result_container">
+            <div class="result-box" [class.red]="!isOpenSelected" (click)="onChangeOpen()">
+                <div class="result-textbox">
+                    <div class="number_container">
+                        <div class="result_count" [class.redText]="!isOpenSelected">{{totalOpen}}</div>
+                        <div class="border-right" [class.red]="!isOpenSelected"></div>
+                    </div>
+                    <div class="result_status text-color">Open</div>
+                </div>
+            </div>
+            <div class="result-box" [class.orange]="!isClaimClosedSelected" (click)="onChangeClaim()">
+                <div class="result-textbox">
+                    <div class="number_container">
+                        <div class="result_count" [class.orangeText]="!isClaimClosedSelected">{{totalClaimClosed}}</div>
+                        <div class="border-right" [class.orange]="!isClaimClosedSelected"></div>
+                    </div>
+                    <div class="result_status text-color">Claimed<br>Closed</div>
+                </div>
+            </div>
+            <div class="result-box" [class.green]="!isClosedSelected" (click)="onChangeClosed()">
+                <div class="result-textbox">
+                    <div class="number_container">
+                        <div class="result_count" [class.greenText]="!isClosedSelected">{{totalClosed}}</div>
+                        <div class="border-right" [class.green]="!isClosedSelected"></div>
+                    </div>
+                    <div class="result_status text-color">Closed</div>
+                </div>
+            </div>
+        </div>
+
+          <div class="form-group mb-0 pl-2 position-relative">
+            <div class="input-group">
+            <mat-form-field class="example-form-field seachInCident" appearance="fill">
+                <mat-label>Incident Date</mat-label>
+                <div style="display: flex;align-items:center">
+                    <mat-date-range-input [formGroup]="campaignOne" [rangePicker]="campaignOnePicker">
+                        <input matStartDate placeholder="Start date" formControlName="start">
+                        <input matEndDate placeholder="End date" formControlName="end" (dateChange)="onChangeSelection()">
+                    </mat-date-range-input>
+                    <mat-datepicker-toggle matIconSuffix [for]="campaignOnePicker"></mat-datepicker-toggle>
+                </div>
+                <mat-date-range-picker #campaignOnePicker></mat-date-range-picker>
+            </mat-form-field>
+        </div>
+        <span class="cal-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+          </div>
+
+          <div class="form-group mb-0 pl-2 position-relative">
+            <div class="input-group">
+            <mat-form-field  class="example-form-field seachInCident" appearance="fill">
+                <mat-label>Reporting Date</mat-label>
+                <div style="display: flex;">
+                <input matInput [matDatepicker]="picker" [formControl]="reportingDateFilter">
+                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+                </div>
+            </mat-form-field>
+        </div>
+        <span class="cal-icon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+          </div>
+    </div>
+    <div class="mat-elevation-z8" *ngIf="dataSource; else noDataTemplate">
+        <mat-table [dataSource]="dataSource" matSort>
+            <ng-container matColumnDef="Index">
+                <mat-header-cell *matHeaderCellDef class="col-header">#</mat-header-cell>
+                <mat-cell *matCellDef="let row; let i = index"> {{(i + 1) + (paginator ? (paginator.pageIndex * paginator.pageSize) : 0) }} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="IncidentCode">
+                <mat-header-cell *matHeaderCellDef class="col-header">
+                    <div class="card1">
+                        <label class="input">
+                            <div class="input-group" style="width: 82%;">
+                                <input type="text" id="search-input" placeholder="" class="field form-control"
+                                    aria-describedby="date-design-prepend" [formControl]="codeFilter">
+                                <div class="label">
+                                    <div style="margin-right: auto;">Incident Code</div>
+                                    <div>
+                                        <mat-icon class="header-input-search"><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <label class="link" (click)="openIncident(row.IncidentID)">
+                        {{row.IncidentCode}}
+                    </label>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="IncidentTitle">
+                <mat-header-cell *matHeaderCellDef class="col-header">
+                    <div class="card1">
+                        <label class="input">
+
+                            <div class="input-group" style="width: 88%;">
+                                <input type="text" placeholder="" class="field form-control"
+                                    aria-describedby="date-design-prepend" [formControl]="titleFilter">
+                                <div class="label">
+                                    <div style="margin-right: auto;">Incident Title</div>
+                                    <div>
+                                        <mat-icon class="header-input-search"><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="cal-icon"><i class="fa fa-search searchtxtboxicon"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </label>
+                    </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" [matTooltip]="row.IncidentTitle">{{row.IncidentTitle ?
+                    row.IncidentTitle.substring(0, 40):''}}
+                    {{row.IncidentTitle ? row.IncidentTitle.length>40?"...":"" : ''}}
+                </mat-cell>
+                <mat-cell *matCellDef="let row"> <label class="link"
+                        (click)="openIncident(row.IncidentID)">{{row.IncidentTitle}}</label>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="ReportingDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="col-header">
+                    Reporting Date
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.ReportingDate}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="IncidentDate">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="col-header">
+                    Incident Date
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">{{row.IncidentDate}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="IncidentType">
+                <mat-header-cell *matHeaderCellDef class="col-header">
+                    <div class="card1">
+                        <label class="input">
+                            <div class="input-group" style="width: 88%;">
+                                <input type="text" placeholder="" class="field form-control"
+                                    aria-describedby="date-design-prepend" [formControl]="typeFilter">
+                                <div class="label">
+                                    <div style="margin-right: auto;">Incident Type</div>
+                                    <div>
+                                        <mat-icon class="header-input-search"><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="cal-icon"><i class="fa fa-search searchtxtboxicon"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </label>
+                    </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    {{getIncidentTypes(row.IncidentTypeData)}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="IncidentUnit">
+                <mat-header-cell *matHeaderCellDef class="col-header">
+                    <div class="card1">
+                        <label class="input">
+                            <div class="input-group" style="width: 88%;">
+                                <input type="text" placeholder="" class="field form-control"
+                                    aria-describedby="date-design-prepend" [formControl]="unitFilter">
+                                <div class="label">
+                                    <div style="margin-right: auto;">Incident Unit</div>
+                                    <div>
+                                        <mat-icon class="header-input-search"><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="cal-icon"><i class="fa fa-search searchtxtboxicon"
+                                    aria-hidden="true"></i>
+                            </span>
+                        </label>
+                    </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    {{row.UnitName}}
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Criticality">
+                <mat-header-cell *matHeaderCellDef class="col-header">
+                    <div class="card1">
+                        <label class="input">
+                            <div class="input-group" style="width: 76%;">
+                                <input type="text" placeholder="" class="field form-control"
+                                    aria-describedby="date-design-prepend" [formControl]="criticalityFilter">
+                                <div class="label">
+                                    <div style="margin-right: auto;">Criticality</div>
+                                    <div>
+                                        <mat-icon class="header-input-search"><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="cal-icon"><i class="fa fa-search searchtxtboxicon"
+                                    aria-hidden="true"></i></span>
+
+                        </label>
+                    </div>
+
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.CriticalityName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="IncidentStatus">
+                <mat-header-cell *matHeaderCellDef class="col-header">
+                    <div class="card1">
+                        <label class="input">
+                            <div class="input-group" style="width: 88%;">
+                                <input type="text" placeholder="" class="field form-control"
+                                    aria-describedby="date-design-prepend" [formControl]="statusFilter">
+                                <div class="label">
+                                    <div style="margin-right: auto;">Incident Status</div>
+                                    <div>
+                                        <mat-icon class="header-input-search"><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="cal-icon"><i class="fa fa-search searchtxtboxicon"
+                                    aria-hidden="true"></i></span>
+                        </label>
+                    </div>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.StatusName}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="NoOfRecommendation">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="td-center" class="col-header">
+                    # of Recommendations
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="td-center"> {{row.NoOfRecommendation}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Open">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="td-center" class="col-header">
+                    Open
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="td-center"> {{row.Open}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="ClaimClosed">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="td-center" class="col-header">
+                    Claimed Closed
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="td-center"> {{row.ClaimClosed}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="Closed">
+                <mat-header-cell *matHeaderCellDef mat-sort-header class="td-center" class="col-header">
+                    Closed
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row" class="td-center"> {{row.Closed}} </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <mat-paginator [pageSizeOptions]="[10, 25, 100]" class="InherentTable"></mat-paginator>
+    </div>
+    <ng-template #noDataTemplate>
+        <p class="no-data">No Data Found</p>
+    </ng-template>
+</div>

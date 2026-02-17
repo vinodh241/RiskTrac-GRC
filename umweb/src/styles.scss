@@ -1,0 +1,193 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+@import './assets/fonts/open-sans/open-sans-fonts.scss';
+
+@import './assets/fonts/roboto/roboto-fonts.scss';
+
+@import './assets/fonts/material-icons/material-icons-fonts.scss';
+
+$web-palette: (
+    50 : #e5eef4,
+    100 : #bdd4e3,
+    200 : #92b8d1,
+    300 : #669bbf,
+    400 : #4585b1,
+    500 : #2470a3,
+    600 : #20689b,
+    700 : #1b5d91,
+    800 : #165388,
+    900 : #0d4177,
+    A100 : #a9cfff,
+    A200 : #76b3ff,
+    A400 : #4397ff,
+    A700 : #2a88ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #ffffff,
+    )
+);
+
+$web-primary: mat.define-palette($web-palette);
+$web-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+$web-warn: mat.define-palette(mat.$red-palette);
+
+$web-theme: mat.define-light-theme((color: (primary: $web-primary, accent: $web-accent, warn: $web-warn)));
+@include mat.all-component-themes($web-theme);
+
+//mat-display-4                 --      display-4
+//mat-display-3                 --      display-3
+//mat-display-2                 --      display-2
+//mat-display-1                 --      display-1
+//mat-h1 mat-headline           h1      headline
+//mat-h2 mat-title              h2      title
+//mat-h3 mat-subheading-2       h3      subheading-2
+//mat-h4 mat-subheading-1       h4      subheading-1
+//mat-h5                        h5      --
+//mat-h6                        h6      --
+//mat-body mat-body-1           body    body-1
+//mat-body-strong mat-body-2    --      body-2
+//mat-small mat-caption         --      caption
+
+//level parameters: font-size , line-height , font-weight , font-family and letter-spacing
+$web-typography: mat.define-typography-config(
+    $font-family: 'Roboto Condensed',
+    $title: mat.define-typography-level(3.5vh, 1, 300),
+    $subheading-2: mat.define-typography-level(2.5vh, 1, 700),
+    $subheading-1: mat.define-typography-level(2.5vh, 1, 300),
+    $display-4: mat.define-typography-level(2.1vh, 1, 700),
+    $display-3: mat.define-typography-level(2.1vh, 1, 400),
+    $display-2: mat.define-typography-level(1.7vh, 1, 700),
+    $button: mat.define-typography-level(2.3vh, 1, 400)
+);
+
+// $display-4:     mat.define-typography-level(112px, 1, 1000),
+// $display-3:     mat.define-typography-level(56px, 1, 1000),
+// $display-2:     mat.define-typography-level(45px, 1, 1000),
+// $display-1:     mat.define-typography-level(34px, 1, 1000),
+// $headline:      mat.define-typography-level(1.5rem, 1, 1000),
+// $title:         mat.define-typography-level(1.5rem, 1, 10),
+// $subheading-2:  mat.define-typography-level(1.2rem, 1, 500),
+// $subheading-1:  mat.define-typography-level(1rem, 1, 10),
+// $body-1:        mat.define-typography-level(1rem, 1, 10),
+// $body-2:        mat.define-typography-level(1rem, 1, 10),
+// $caption:       mat.define-typography-level(1rem, 1, 10),
+// $button:        mat.define-typography-level(1rem, 1, 10),
+// $input:         mat.define-typography-level(1rem, 1, 10)
+
+@include mat.core($web-typography);
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #F2F2F2;
+    color: black;
+    font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.mat-action-row {
+    display: flex;
+    align-items: center;
+}
+
+.label {
+    font-size: 5.5vh;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.dark {
+    color: black;
+}
+
+.space {
+    width: 3vw;
+}
+
+.mat-h3,
+.mat-h4 {
+    margin: 0px 0px 0px 0px;
+}
+
+.mat-toolbar {
+    // background-color: #2980B9;
+    background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);
+    color: white;
+    height: 8.4vh;
+}
+
+.mat-table {
+    width: 100%;
+    border: 0px;
+}
+
+.mat-header-row {
+    min-height: 3vh;
+}
+
+.mat-header-cell {
+    color: black;
+    font-size: 1.7vh;
+    font-weight: 700;
+}
+
+.mat-cell {
+    color: black;
+    font-size: 1.7vh;
+    font-weight: 400;
+}
+
+.mat-tooltip {
+    font-size: 1.8vh;
+}
+
+.dark>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}
+
+.success>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}
+
+.error>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}
+
+.warning>mat-dialog-container {
+    background-color: #000000EE;
+    color:white;
+}

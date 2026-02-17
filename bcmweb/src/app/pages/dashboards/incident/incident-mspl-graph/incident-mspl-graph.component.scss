@@ -1,0 +1,16 @@
+.d-flex {
+    display: flex;
+}
+
+.padd2vh {
+    padding: 16px;
+}
+
+.rd-greycircle {
+    background-color: #F1F1F1;
+    height: 50px;
+    width: 50px;
+    border-radius: 100%;
+    text-align: center;
+    box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.3);
+}

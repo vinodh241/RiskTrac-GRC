@@ -1,0 +1,110 @@
+.mat-toolbar {
+    height: 6.4vh;
+}
+
+.mat-elevation-z8 {
+    margin: 4vh 4vh 0 4vh;
+}
+
+.mat-action-row {
+    margin: 0vh 4vh 0 4vh;
+}
+
+.mat-header-row {
+    min-height: 10vh;
+}
+
+.mat-column-Index {
+    max-width: 2vw;
+}
+
+.mat-column-StartDate,
+.mat-column-EndDate {
+    max-width: 10vh;
+}
+
+.mat-column-XlsFile,
+.mat-column-PdfFile {
+    max-width: 10vh;
+}
+// .mat-column-Status {
+//   max-width: 5vw;
+// }
+
+.mat-column-Status {
+  flex: 0 0 25% !important;
+}
+
+.mat-column-StatusName,
+.mat-column-Action {
+    max-width: 20vh;
+}
+
+.mat-column-ReviewerName,
+.mat-column-UnitName {
+    max-width: 40vh;
+}
+
+.container{
+    margin-top: 30px;
+}
+
+.buttongray {
+    --mdc-fab-container-color: rgba(0, 0, 0, .12);
+    --mdc-fab-icon-color: rgba(0, 0, 0, .38);
+    --mat-mdc-fab-color: rgba(0, 0, 0, .38);
+}
+
+
+.mat-row:nth-child(even){
+    background-color: #ced2d04d !important;
+  }
+  .mat-row:not(:nth-child(odd)){
+    background-color:#ffffff;
+  }
+  to
+
+  .mat-row:nth-child(2n+1){
+    background-color: #ced2d04d !important;
+  }
+  .mat-row:not(:nth-child(4n+1)){
+    background-color:#ffffff;
+  }
+  mat-table.mat-table {
+    margin-top: 10px;
+    max-height: 230px;
+    min-height: 230px;
+    overflow: auto;
+  }
+  mat-card.mat-card.mat-focus-indicator.mat-elevation-z4 {
+    padding: 0px;
+}
+mat-card-actions.mat-card-actions {
+  padding-top: 0px;
+  padding: 0px 16PX 10px 0px !important;
+}
+  .centre{
+    text-align: center !important;
+  }
+  mat-row, mat-footer-row {
+    min-height: 40px;
+}
+
+mat-cell:last-of-type, mat-header-cell:last-of-type, mat-footer-cell:last-of-type {
+  padding-right: 0px;
+}
+
+.colorbox{
+  width: 30px;
+  height: 30px;
+}
+
+.colorbox-small{
+  width: 15px;
+  height: 15px;
+  margin-right: 10px;
+}
+.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: rgba(255, 255, 255, 0.04);
+}
+

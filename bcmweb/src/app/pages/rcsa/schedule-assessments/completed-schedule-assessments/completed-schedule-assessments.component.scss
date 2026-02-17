@@ -1,0 +1,113 @@
+.ScheduleGroup {
+    background: rgb(36, 112, 163);
+    background: -moz-linear-gradient(180deg, rgba(36, 112, 163, 1) 45%, rgba(100, 181, 191, 0.9790575916230366) 100%);
+    background: -webkit-linear-gradient(180deg, rgba(36, 112, 163, 1) 45%, rgba(100, 181, 191, 0.9790575916230366) 100%);
+    background: linear-gradient(180deg, rgba(36, 112, 163, 1) 45%, rgba(100, 181, 191, 0.9790575916230366) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#2470a3", endColorstr="#64b5bf", GradientType=1);
+}
+
+.mat-toolbar {
+    height: 6.4vh;
+}
+
+.mat-elevation-z8 {
+    margin: 0vh 4vh 0 4vh;
+}
+
+.mat-action-row {
+    margin: 0vh 4vh 0 4vh;
+}
+
+.mat-header-row {
+    min-height: 10vh;
+}
+
+.mat-column-RowNumber {
+    max-width: 2vw;
+}
+
+
+.ScheduleGrouphead>span {
+    background-color: #2980b900;
+    color: white;
+    margin-top: 2vh;
+    height: 6vh;
+    font: 300 3vh / 1 Roboto Condensed;
+}
+
+// .ScheduleGrouphead>.mat-card-header-text{
+//     display: none !important;
+// }
+
+mat-card-header>div.mat-card-header-text {
+    display: none !important;
+}
+
+mat-card.mat-card.mat-focus-indicator.mat-elevation-z4.ScheduleGroup {
+    padding: 10px 10px !important;
+}
+
+span.summaryGreen {
+    cursor: pointer;
+    text-align: center;
+    height: 4vh;
+    border-radius: 3px 0 0 3px;
+    background: rgb(16, 179, 136);
+    background: -moz-linear-gradient(90deg, rgba(16, 179, 136, 1) 45%, rgba(39, 240, 168, 1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(16, 179, 136, 1) 45%, rgba(39, 240, 168, 1) 100%);
+    background: linear-gradient(90deg, rgba(16, 179, 136, 1) 45%, rgba(39, 240, 168, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#10b388", endColorstr="#27f0a8", GradientType=1);
+}
+
+span.summaryRed {
+    cursor: pointer;
+    height: 4vh;
+    text-align: center;
+    border-radius: 0 3px 3px 0;
+    background: rgb(205, 35, 35);
+    background: -moz-linear-gradient(90deg, rgba(205, 35, 35, 1) 45%, rgba(249, 134, 134, 1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(205, 35, 35, 1) 45%, rgba(249, 134, 134, 1) 100%);
+    background: linear-gradient(90deg, rgba(205, 35, 35, 1) 45%, rgba(249, 134, 134, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#cd2323", endColorstr="#f98686", GradientType=1);
+}
+
+span.summaryYellow {
+    cursor: pointer;
+    height: 4vh;
+    text-align: center;
+    border-radius: 0 3px 3px 0;
+    background: rgb(200, 124, 11);
+    background: -moz-linear-gradient(90deg, rgba(200, 124, 11, 1) 45%, rgba(249, 196, 134, 1) 100%);
+    background: -webkit-linear-gradient(90deg, rgba(200, 124, 11, 1) 45%, rgba(249, 196, 134, 1) 100%);
+    background: linear-gradient(90deg, rgba(200, 124, 11, 1) 45%, rgba(249, 196, 134, 1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#c87c0b", endColorstr="#f9c486", GradientType=1);
+}
+
+span.summaryGrouptext {
+    color: white;
+    padding: 0 8px;
+    ;
+}
+
+div.summaryStatusinfo {
+    padding: 10px;
+    //border: 1px solid #e3e5e6;
+}
+
+div.summaryinfo {
+    height: 5vh;
+    padding: 4vh;
+    //margin-top: 2vh !important;
+}
+
+.mat-header-cell,.mat-cell {
+    // border: 1px solid #CCC !important;
+    padding: 5px;
+}
+
+.mat-column-select {
+    overflow: initial;
+}
+mat-dialog-content,.Proposeddateinfo{
+    padding: 20px;
+}

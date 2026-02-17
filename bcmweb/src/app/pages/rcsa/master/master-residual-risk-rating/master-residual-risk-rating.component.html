@@ -1,0 +1,197 @@
+<mat-toolbar class="fontSize">
+    <span>Manage Residual Risk </span>
+    <span class="spacer"></span>
+</mat-toolbar>
+<div class="container">
+    <!-- <div fxLayout="row wrap" fxLayoutGap="40px grid"> -->
+    <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+        <div fxFlex="48" fxFlex.md="48" fxFlex.lg="48" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-residual-risk></app-residual-risk> -->
+            <span><b>Residual Risk</b></span>
+            <mat-card class="mat-elevation-z4" >
+                <mat-card-header>
+
+                </mat-card-header>
+                <mat-card-content style="    margin-bottom: 7.5vh;">
+                    <mat-table [dataSource]="dataSourceResidualRisk" matSort>
+                        <ng-container matColumnDef="Index">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.Index}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Risk">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Residual Risk</mat-header-cell>
+                            <mat-cell *matCellDef="let row">{{row.Risk}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="ColourName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Color</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <div class="colorbox-small" [style.background]="row.ColourCode"></div>{{row.ColourName}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="IsActive">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                            <mat-cell *matCellDef="let row"><mat-slide-toggle [checked]="row.IsActive"
+                                    (change)="changedResidualRisk(row,$event)">
+                                </mat-slide-toggle>
+                                <span *ngIf="row.IsActive">Enabled</span>
+                                <span *ngIf="!row.IsActive">Disabled</span>
+                            </mat-cell>
+                        </ng-container>
+                        <!-- <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <button mat-icon-button>
+                                    <mat-icon (click)="editResidualRisk(row)" aria-hidden="false" aria-label="Edit">edit
+                                    </mat-icon>
+                                </button>
+                            
+                            </mat-cell>
+                        </ng-container> -->
+                        <mat-header-row *matHeaderRowDef="displayedResidualRiskColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedResidualRiskColumns;"></mat-row>
+                    </mat-table>
+                </mat-card-content>
+                <mat-error *ngIf="saveResidualRiskerror">{{saveResidualRiskerror}}</mat-error>
+                <mat-card-actions>
+                    <div fxLayout="row " fxLayoutAlign="end center">
+                        <!-- <button mat-mini-fab color="warn" aria-label="add Inherent Impact Rate"
+                            (click)="initiateAddResidualRisk()" *ngIf="!addResidualRiskdg">
+                            <mat-icon>add</mat-icon>
+                        </button> -->
+               
+                        <form [formGroup]="ResidualRiskForm" autocomplete="off" *ngIf="addResidualRiskdg"
+                            (ngSubmit)="saveResidualRisk()" fxLayout="row" fxLayoutAlign="end center" fxFlex.xs="98%"
+                            fxFlex.lg="98%">
+                            <input formControlName="txtrateid" hidden="true">
+                            <mat-form-field appearance="fill" fxFlex.xs="100%" fxFlex.lg="25%" fxFlex.sm="25%">
+                                <mat-label>Residual Risk</mat-label>
+                                <input matInput formControlName="txtratename">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" fxFlex.xs="100%" fxFlex.lg="20%" fxFlex.sm="20%"
+                                fxFlexOffset="10px">
+                                <mat-label>Color Code</mat-label>
+                                <input matInput [(colorPicker)]="color" formControlName="txtcolorcode"
+                                    (colorPickerChange)="colorchangedResidualRisk()" />
+                                <div class="colorbox" [style.background]="color" matSuffix>
+                                </div>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" fxFlex.xs="100%" fxFlex.lg="25%" fxFlex.sm="25%"
+                                fxFlexOffset="10px">
+                                <mat-label>Color Name</mat-label>
+                                <input matInput formControlName="txtcolorname">
+                            </mat-form-field>
+                            <button fxFlexOffset="10px" type="submit" mat-mini-fab aria-label="Save"
+                                *ngIf="addResidualRiskdg" [disabled]="!ResidualRiskForm.valid">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px"  color="warn" aria-label="Cancel"
+                                (click)="cancelResidualRiskForm()" *ngIf="addResidualRiskdg">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </form>
+
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div fxFlex="50" fxFlex.md="50" fxFlex.lg="50" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-overall-inherent-risk-rating></app-overall-inherent-risk-rating> -->
+            <span><b>Overall Risk Rating</b></span>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-header>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <mat-table [dataSource]="dataSourceOverallRiskRating" matSort>
+                        <ng-container matColumnDef="Index">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.Index}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="OverallInherentRiskRatingName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Inherent Rating</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.OverallInherentRiskRatingName}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="OverallControlEnvironmentRatingName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Control Environment
+                                Rating</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.OverallControlEnvironmentRatingName}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="ResidualRiskName">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header>Residual Risk</mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.ResidualRiskName}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="Action">
+                            <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <button mat-icon-button>
+                                    <mat-icon (click)="editOverallRiskRating(row)" aria-hidden="false"
+                                        aria-label="Edit">edit
+                                    </mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="IsActive">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header
+                                mat-column-StatusName>Status</mat-header-cell>
+                            <mat-cell *matCellDef="let row"><mat-slide-toggle [checked]="row.IsActive"
+                                    (change)="changedOverallRiskRating(row,$event)">
+                                </mat-slide-toggle>
+                                <span *ngIf="row.IsActive">Enabled</span>
+                                <span *ngIf="!row.IsActive">Disabled</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedOverallRiskRatingColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedOverallRiskRatingColumns;"></mat-row>
+                    </mat-table>
+                </mat-card-content>
+                <mat-error *ngIf="saveOverallRiskRatingerror">{{saveOverallRiskRatingerror}}</mat-error>
+                <mat-card-actions>
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                        <button mat-mini-fab color="warn" aria-label="add Inherent Impact Rate"
+                            (click)="initiateAddOverallRiskRating()" *ngIf="!addOverallRiskRatingdg">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <form [formGroup]="OverallRiskRatingForm" autocomplete="off" *ngIf="addOverallRiskRatingdg"
+                            (ngSubmit)="saveOverallRiskRating()" fxLayout="row" fxLayoutAlign="end center"
+                            fxFlex.xs="98%" fxFlex.lg="98%">
+                            <input formControlName="txtRateId" hidden="true">
+                            <mat-form-field appearance="fill" fxFlex="25%">
+                                <mat-label>Inherent Risk</mat-label>
+                                <mat-select formControlName="ddlInherentRisk">
+                                    <mat-option *ngFor="let item of inherentRiskds"
+                                        [value]="item.OverallInherentRiskRatingID"> {{item.RiskRating}} </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" fxFlex="25%" fxFlexOffset="1%">
+                                <mat-label>Control Environment</mat-label>
+                                <mat-select formControlName="ddlControlEnvironment">
+                                    <mat-option *ngFor="let item of controlEnvironmentds"
+                                        [value]="item.OverallControlEnvironmentRatingID"> {{item.RiskRating}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <mat-form-field appearance="fill" fxFlex="25%" fxFlexOffset="1%">
+                                <mat-label>Residual Risk</mat-label>
+                                <mat-select formControlName="ddlResidualRisk">
+                                    <mat-option *ngFor="let item of residualRiskds" [value]="item.ResidualRiskID">
+                                        {{item.Risk}} </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                            <button fxFlexOffset="10px" type="submit" mat-mini-fab aria-label="Save"
+                                *ngIf="addOverallRiskRatingdg" [disabled]="!OverallRiskRatingForm.valid">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px"  color="warn" aria-label="Cancel"
+                                (click)="cancelOverallRiskRatingForm()" *ngIf="addOverallRiskRatingdg">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </form>
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>

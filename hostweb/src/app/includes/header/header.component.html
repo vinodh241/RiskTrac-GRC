@@ -1,0 +1,53 @@
+<!-- <header> -->
+    <!-- <mat-toolbar color="primary"> -->
+        <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon">
+            <mat-icon>menu</mat-icon>
+        </button> -->
+        <!-- <span>RiskTrac</span> -->
+        <!-- <div style="height: 6vh;"><img src="assets/logo-risktrac.svg" height="100%"></div>
+        <span class="spacer"></span> -->
+        <!-- <button mat-icon-button class="example-icon" aria-label="Settings">
+            <mat-icon>settings</mat-icon>
+        </button>
+        <button mat-icon-button class="example-icon" aria-label="Help">
+            <mat-icon>help</mat-icon>
+        </button> -->
+        <!-- <div style="height: 6vh;">
+            <img matTooltipPosition="below"
+            matTooltip="{{userName}}" style=" background-color: white; border-radius: 50%; margin: 0px 0.8vw;" src="assets/user.svg" height="100%">
+        </div>
+        <button mat-icon-button class="example-icon" aria-label="Logout" (click)="logout()">
+            <mat-icon>logout</mat-icon>
+        </button>
+    </mat-toolbar> -->
+
+    <div class="navbg bgSeaGreenGradient w-100 h-24" style="padding-inline: 7%;">
+			<!--START NAV-->
+			<nav class="navbar navbar-expand-lg navbar-light bg-light topmenuBg h-28">
+
+
+				<div class="w-100 h-100" style="position: relative;"><img src="assets/logo.svg" alt="RISKTRAC" style="margin-top: 2vh;width: 17vh;"> <img matTooltipPosition="below"
+          matTooltip="{{userName}}" style=" background-color: white;border-radius: 50%;margin: 0px 0.8vw;position: absolute;width: 38px;height: 38px;top: 50%;right: 0%;transform: translateY(-50%);" src="assets/user.svg" height="100%">
+            <button mat-icon-button class="example-icon" style="left: 160vh;" (click)="logout()">
+              <mat-icon style="margin-top: -3vh;">logout</mat-icon>
+          </button>
+          </div>
+          <img src="assets/changepswd.svg" *ngIf="this.authentication != 1"  (click)="changeUserPassword()" alt="RISKTRAC" style="margin: 0px 0.8vw;position: absolute;width: 38px;height: 38px;top: 50%;right: 0%;transform: translateY(-50%);right: 4%;">
+			</nav>
+
+			<div class="w-100 topFilter fontBlack pt-4 h-72 position-relative" style="padding-bottom: 1vh;font-family: 'Roboto Condensed', sans-serif !important;">
+				<p> Welcome <span class="fontWhite">to {{projectLanding}}.</span></p>
+
+        <p>
+          You have been assigned with {{moduleAccess}} modules which are “
+          <a class="fontWhite" [innerHTML]="module"></a>”  as shown below.
+          You may proceed to each module by clicking on the respective boxes in order to perform assigned tasks.
+          In case of any difficulties or impediments, please reach to the ICT service desk.
+          We are available at "<a class="fontWhite" href="mailto:{{emailIDLanding}}">{{emailIDLanding}}</a>".
+      </p>
+
+			</div>
+
+			<!-- END TABS -->
+		</div>
+<!-- </header> -->

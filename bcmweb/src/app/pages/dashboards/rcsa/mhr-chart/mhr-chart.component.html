@@ -1,0 +1,22 @@
+<mat-card flex>
+    <div  class="padd2vh"> 
+        <div style="
+        display: flex;
+        justify-content: space-between;
+    ">                
+            <h4><span style="color: #2D2D2D">Top   <span *ngIf="total >= 5">5</span><span *ngIf="total < 5">{{total}}</span>  Units with </span>  <strong style="color: #005BBA"><strong>Maximum # of High Risks</strong></strong>
+            </h4>
+            <div class="toggle-button">
+                <span>Inherent&nbsp;&nbsp;</span>
+                <mat-slide-toggle (change)="toggleValues($event)" name="status">Residual</mat-slide-toggle>
+            </div>
+        </div>
+        <div class="maxHighRiskContainer">              
+            <div class="d-flex">
+                <div id="rcsaMaxHighRiskContainer" style="height: 200px"></div>
+            </div>             
+            <a class="viewAllChart" (click)="openPopUp()" style="color: #005BBA">View All</a>
+        </div>
+    </div>
+</mat-card>  
+

@@ -1,0 +1,52 @@
+<div class="container">
+    <div class="form-row">
+        <div class="form-label">
+            <label>Name</label>
+        </div>
+        <mat-form-field style="width:90%" appearance="fill">
+            <input matInput [maxLength]="50" [(ngModel)]="emailTemplate.name" />
+        </mat-form-field>
+
+    </div>
+    <div class="form-row">
+        <div class="form-label">
+            <label>Age</label>
+        </div>
+        <mat-form-field style="width:90%" appearance="fill">
+            <input matInput [maxLength]="50" [(ngModel)]="emailTemplate.age" />
+        </mat-form-field>
+    </div>
+    <div class="form-row">
+        <div class="form-label">
+            <label>Email Id</label>
+        </div>
+        <mat-form-field style="width:90%" appearance="fill">
+            <input matInput pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}"
+                [(ngModel)]="emailTemplate.toEmailId" />
+        </mat-form-field>
+
+    </div>
+    <div class="form-row">
+        <div class="form-label">
+            <label>Details</label>
+        </div>
+        <mat-form-field style="width:90%" appearance="fill">
+            <input matInput [maxLength]="50" [(ngModel)]="emailTemplate.details" />
+        </mat-form-field>
+
+    </div>
+    <div class="form-row">
+        <div class="form-label">
+            <label>Template Type</label>
+        </div>
+        <mat-form-field style="width:90%" appearance="fill">
+            <input matInput [(ngModel)]="emailTemplate.templateType" />
+        </mat-form-field>
+
+    </div>
+    <div class="form-row" style="justify-content: right;">
+        <button mat-raised-button color="primary" type="submit" [disabled]="false" (click)="generate()">
+            Generate Email
+        </button>
+    </div>
+</div>

@@ -1,0 +1,110 @@
+<div class="container">
+  <div class="button-container">
+    <mat-form-field appearance="standard">
+      <mat-label>{{ 'common.search' | translate }}</mat-label>
+      <input id="inputSearch" matInput [(ngModel)]="inputSearch" (keyup)="applyFilter()"
+        [placeholder]="'userList.searchPlaceholder' | translate" #input>
+    </mat-form-field>
+    <span class="spacer"></span>
+    <button mat-raised-button color="primary" (click)="addUser()" style="margin-bottom: 16px;">
+      {{ 'userList.assignNewUser' | translate }}
+    </button>
+  </div>
+  <div class="mat-elevation-z8 mat-table-padding">
+    <mat-table [dataSource]="dataSource" matSort id="userListTable" class="table-border">
+      <ng-container matColumnDef="Index">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="tablestyle"
+          style="width : 2%;vertical-align: middle !important;background-color: #f3f3f3;">{{ 'userList.columns.index' | translate }}</th>
+        <td mat-cell *matCellDef="let row">{{row.Index}}</td>
+      </ng-container>
+      <ng-container matColumnDef="Name">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="tablestyle"
+          style="vertical-align: middle !important;background-color: #f3f3f3;">{{ 'userList.columns.user' | translate }}</th>
+        <td mat-cell *matCellDef="let row" [style.width]="getColumnWidth(modules.length, 'user')">{{row.Name}}</td>
+      </ng-container>
+      <ng-container matColumnDef="UnitNames">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="tablestyle"
+          style="vertical-align: middle !important;background-color: #f3f3f3;">{{ 'userList.columns.allocatedUnits' | translate }}</th>
+        <td mat-cell *matCellDef="let row" [style.width]="getColumnWidth(modules.length, 'user')">{{!row.IsUserManager ? row.UnitNames : ""}}</td>
+      </ng-container>
+      <ng-container *ngFor="let module of modules" [matColumnDef]="module + 'Name' ">
+        <ng-container *ngIf="module != modAbTpTrac">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="2" class="tablestyle" style="text-align: center;"
+            [ngStyle]="{'background-color': getBackGround(module)}"
+            [style.width]="getColumnWidth(modules.length, 'module')">{{module}} {{ 'userList.columns.module' | translate }}</th>
+        </ng-container>
+        <ng-container *ngIf="module == modAbTpTrac">
+          <th mat-header-cell *matHeaderCellDef class="tablestyle"
+            [ngStyle]="{'background-color': getBackGround(module)}" style="width : 7%;text-align: center;">{{module}} {{ 'userList.columns.module' | translate }}</th>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngFor="let module of modules" [matColumnDef]="module + 'Role'">
+        <ng-container *ngIf="module != modAbTpTrac">
+          <th mat-header-cell *matHeaderCellDef class="tablestyle" style="text-align: center;"
+            [ngStyle]="{'background-color': getBackGround(module)}">{{module}} {{ 'userList.columns.role' | translate }}</th>
+          <td mat-cell *matCellDef="let row" [ngStyle]="{'background-color': getBackGroundRow(module)}"
+            style="text-align: center;">
+            <ng-container *ngIf="hasModule(row.Modules, module)">
+              <div *ngIf="!row.IsUserManager">
+                <mat-label *ngIf="!row.IsUserManager">{{ 'common.standard' | translate }}&nbsp;</mat-label>
+                <mat-slide-toggle class="disableClass" [checked]="roleCheck(row, module)"
+                  [ngClass]="{'power-toggle': roleCheck(row, module), 'standardColor-toggle': !roleCheck(row, module)}">
+                </mat-slide-toggle>
+                <mat-label *ngIf="!row.IsUserManager">&nbsp;{{ 'common.power' | translate }}</mat-label>
+              </div>
+            </ng-container>
+            <ng-container *ngIf="row.Units.length && hasModuleNoData(row.Modules, module)">------- </ng-container>
+          </td>
+        </ng-container>
+        <ng-container *ngIf="module == modAbTpTrac">
+          <th mat-header-cell *matHeaderCellDef class="tablestyle" style="text-align: center;"
+            [ngStyle]="{'background-color': getBackGround(module)}">{{module}} {{ 'userList.columns.role' | translate }}</th>
+          <td mat-cell *matCellDef="let row" [ngStyle]="{'background-color': getBackGroundRow(module)}"
+            style="text-align: center;">
+            <ng-container *ngIf="!row.IsUserManager"> {{roleCheckDropDown(row, module)}} </ng-container>
+            <ng-container *ngIf='row.Units.length && hasModuleNoData(row.Modules, module)'>------- </ng-container>
+          </td>
+        </ng-container>
+      </ng-container>
+
+      <ng-container *ngFor="let module of modules" [matColumnDef]="module + 'Admin'">
+        <ng-container *ngIf="module != modAbTpTrac">
+          <th mat-header-cell *matHeaderCellDef class="tablestyle" style="width : 5%;text-align: center;"
+            [ngStyle]="{'background-color': getBackGround(module)}">{{ 'userList.columns.isFunctionalAdmin' | translate }}</th>
+          <td mat-cell *matCellDef="let row" [ngStyle]="{'background-color': getBackGroundRow(module)}"
+            style="text-align: center;">
+            <ng-container *ngIf="hasModule(row.Modules, module)">
+              <mat-label *ngIf="!row.IsUserManager">{{ 'common.no' | translate }}&nbsp;</mat-label>
+              <mat-slide-toggle *ngIf="!row.IsUserManager" class="disableClass"
+                [ngClass]="{'noColor-toggle': !isFunctionalAdmin(row, module), 'standard-toggle': isFunctionalAdmin(row, module)}"
+                [checked]="isFunctionalAdmin(row, module)"></mat-slide-toggle>
+              <mat-label *ngIf="!row.IsUserManager">&nbsp;{{ 'common.yes' | translate }}</mat-label>
+            </ng-container>
+            <ng-container *ngIf='row.Units.length  && hasModuleNoData(row.Modules, module)'>------- </ng-container>
+          </td>
+        </ng-container>
+      </ng-container>
+      <ng-container matColumnDef="Action">
+        <th mat-header-cell *matHeaderCellDef [attr.rowspan]="2" class="tablestyle"
+          style="width:9%;text-align: center;vertical-align: middle !important;background-color: #f3f3f3;">{{ 'userList.columns.action' | translate }}</th>
+        <td mat-cell *matCellDef="let row">
+          <button mat-icon-button (click)="editUser(row)" [disabled]="row.IsUserSelf " [id]="'edit'+row.Name"
+            [matTooltip]="'userList.tooltips.editUser' | translate">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button (click)="resetPassword(row)" [disabled]="row.IsUserSelf || row.IsUserEnabled == 0"
+            [id]="'edit'+row.Name" [matTooltip]="'userList.tooltips.resetPassword' | translate" *ngIf=" authenticationMode == 3">
+            <mat-icon> <img src="assets/reset-password.svg" height="100%"> &nbsp; </mat-icon>
+          </button>
+          <mat-slide-toggle (change)="changed($event, row)" [disabled]="row.IsUserSelf"
+            [checked]="row.IsUserEnabled == 1 ? true : false" [matTooltip]="'userList.tooltips.enableDisableUser' | translate"></mat-slide-toggle>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="matRowDefData"></tr>
+      <tr mat-header-row *matHeaderRowDef="matHeaderRowDefData"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </mat-table>
+    <mat-paginator #paginator [pageSize]="10" [pageSizeOptions]="[ 10, 20, 30, 50, 100]"></mat-paginator>
+  </div>
+  <br>
+</div>

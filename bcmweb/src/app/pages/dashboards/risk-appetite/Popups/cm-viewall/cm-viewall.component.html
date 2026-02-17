@@ -1,0 +1,83 @@
+<div style="height: 100%;display: flex; height: '80vh';  width: '75vw'; flex-direction:column; justify-content:space-between">
+    <div >
+        <mat-toolbar style="display: flex; justify-content:space-between ;align-items: center; background-image: linear-gradient(to left ,#009873, #0B65A0);" >
+            <div style="padding-left: 10px;">Count of Critical Metrics in Groups</div>
+            <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+                <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+            </button>
+        </mat-toolbar>
+        <div class="mat-table-padding data-container">
+            <table mat-table [dataSource]="combinedData"  matSort style="width: 100%;" class="mat-elevation-z8">
+                  <ng-container matColumnDef="No">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-right: 15px; width:4%;">#</th>
+                    <td mat-cell *matCellDef="let element;  let i = index" style="padding-right: 15px;" [attr.rowspan]=" getRowSpan('groupsName',i)" [style.display]="getRowSpan('groupsName', i) ? '' : 'none'">
+                      {{ getRowSerialNumber(i) }}
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="groupsName">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; width:22%; padding-left: 10px;" >Group</th>
+                    <td mat-cell *matCellDef="let element; let i = index" class="align-left-right "
+                         [attr.rowspan]=" getRowSpan('groupsName',i)" [style.display]="getRowSpan('groupsName', i) ? '' : 'none'"  >
+                      <span class="align-left link"  (click)='getGroupDetails(element.groupsName)'>{{element.groupsName}} </span>
+                      <span class="align-right" >{{element.groupCount}}</span>
+                    </td>
+                  </ng-container>
+
+                <ng-container matColumnDef="Unit" >
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; width:20%; padding-left: 10px;"> Unit </th>
+                    <!-- <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.unitName}} </td>                -->
+                    <td mat-cell *matCellDef="let element" style="padding-left: 10px;" class="align-left-right">
+                        <span class="align-left">{{element.unitName}} </span>
+                      <!-- <span class="align-right">{{element.currunitcount}}</span>                 -->
+
+                    </td>
+                  </ng-container>
+                <ng-container matColumnDef="HighRisk"  >
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px; padding-right: 5px;width:10%;"># of High Risk in Current Quarter</th>
+                    <td mat-cell *matCellDef="let element"  style="padding-right: 10px;font-size: 3.5vh; text-align: end;"><strong>
+                        <div >
+                            <span class="align-right">{{element.currhighRiskcount}}</span>
+                          </div></strong> </td>
+                </ng-container>
+                <ng-container matColumnDef="HighRiskUnit" >
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 10px; width:20%;">Overall High Risk % within Unit</th>
+                    <td mat-cell *matCellDef="let element"  style="padding-left: 15px;">
+
+                        <div style="display: flex; align-items: center;" >
+                            <mat-progress-bar  mode="determinate" style="height:2vh !important; border-radius: 3vh; width:8vw; margin-left: 1vh;" value="{{element.highRiskinUnit}}"></mat-progress-bar>
+                            <span style="margin-left: 3px;">{{element.highRiskinUnit}}%</span>
+                        </div>
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="HighRiskLastQuater" >
+                    <th mat-header-cell *matHeaderCellDef style=" border-left: 1px solid #fff; padding-left: 20px; padding-right: 5px; width:10%;"># of High Risk in Last Quater</th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 85px;"> {{element.highRiskLastQuater}} </td>
+                </ng-container>
+                <ng-container matColumnDef="IncDec">
+                    <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; padding-left: 20px;  width:12%;">% Increase or Decrease</th>
+                    <div class = 'incdec'>
+                        <td mat-cell *matCellDef="let element" style="padding-left: 40px;">
+                            <img style="vertical-align:middle;padding-bottom: 6px;" [src]="element.image"  height="25%" width="25%">
+                            <span> {{element.incdec > 0 ? element.incdec+'%' : (element.incdec === 'NA' ? 'NA' : '-')}}</span>
+                        </td>
+                    </div>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:  rgb(207, 205, 205);" ></tr>
+                <!-- <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;" ></tr> -->
+                <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"  [ngStyle]="{ 'background-color': getBackgroundColor(i) }"></tr>
+
+
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer modalFooter">
+        <!-- <button mat-stroked-button mat-dialog-close>Cancel</button> -->
+        <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh" mat-dialog-close>Cancel</button>
+    </div>
+
+</div>
+
+
+
+

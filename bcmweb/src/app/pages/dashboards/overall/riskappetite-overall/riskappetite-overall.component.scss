@@ -1,0 +1,132 @@
+.overAllIConCircle{
+    position: absolute;
+    height: 60px;
+    width: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 35px;
+    color: #fff;
+    z-index: 2;
+    left: 10px;
+    top: -10px;
+}
+.overAllIConCircle svg{
+    height: 25;
+    width: 25px;
+}
+.overAllIConCircle path{
+    fill: #ffffff
+}
+
+mat-card{
+   border-radius: 16px;
+   height: calc(100% - 60px);
+   overflow: hidden;
+}
+.h-100{
+   height: 100%;
+}
+.matcard-card{
+    // background-image: linear-gradient(#c0ddf3, #f6f6f6);
+    background-image: linear-gradient(#c8e7f9, #f6f6f6);
+    // opacity: 20%;
+    width: 200px;
+    height: 10.8vh; 
+    margin-left: -1vh;
+}
+
+.ms-10{
+    margin-left: 80px;
+    margin-bottom: 10px;
+}
+::-webkit-scrollbar {
+    width: 9px; /* width of the scrollbar */
+    height: 50px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; /* color of the track (background) */
+    border-radius: 6px;
+  }
+
+
+  ::-webkit-scrollbar-thumb {
+    background: rgb(218, 212, 212); /* color of the thumb (handle) */
+    border-radius: 6px; /* adjust the value to control the curvature */
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgb(218, 212, 212); /* color of the thumb on hover */
+  }
+
+.progrescontainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+ }
+ .progrescontainer .mainprogress{
+    max-width: 265px;
+    max-height: 110px;
+    width: 100%;
+    overflow: auto hidden;
+    margin-left: 10px;
+    margin-top: 0px;
+ }
+ .progrescontainer .mainprogress .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    margin-bottom: 8px;
+    height: 15px;
+ }
+ .progrescontainer .mainprogress .bar .contanrside{
+    font-size: 11px;
+    width: 150px;
+    text-align: end;
+    line-height: normal;
+ }
+ .progrescontainer .mainprogress .bar .mainbar {
+    height: 10px;
+    font-size: 10px;
+    background-color: transparent;
+    border-radius: 10px;
+    color: #fff;
+    transition: width 0.6s ease;
+    display: flex;
+    overflow: hidden;
+    width:37%;
+ }
+ .progrescontainer .mainprogress .bar .mainbar .progress {
+    height: 10px;
+    font-size: 10px;
+    color: #fff;
+    transition: width 0.6s ease;
+    display: flex;
+ }
+ .progrescontainer .mainprogress .bar .mainbar .progress .progress-bar1{
+    // background-color: #B10000;
+    width: 100%;
+ }
+ .progrescontainer .mainprogress .bar .mainbar .progress .progress-bar2{
+    // background-color: #FF6E05;
+    width: 100%;
+ }
+ .progrescontainer .mainprogress .bar .mainbar .progress .progress-bar3{
+    // background-color: #0B9A45;
+    width: 100%;
+    border-radius: 0px 10px 10px 0px;
+ } 
+ .gap {
+    flex-basis: 1px; /* Adjust the width of the gap here (e.g., 20px) */
+  }
+
+.toggle-button{
+   display: flex;
+   justify-content: end;
+   align-items: center;
+   font-size: 13px;
+   padding-right: 15px;
+   margin-top: -10px;
+}

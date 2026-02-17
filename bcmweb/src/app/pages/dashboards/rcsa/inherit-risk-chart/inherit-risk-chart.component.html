@@ -1,0 +1,38 @@
+
+<mat-card>
+    <div class="padd2vh"> 
+        <h4><span style="color: #005BBA"><strong>High Risk - Inherent Risk</strong></span> <span style="color: #2D2D2D"> Comparison</span> </h4>
+        <div class="d-flex" style="flex-direction: row;">
+            <div style="width: 70%;" >            
+                <div id="inheritRiskContainer" style="height: 200px;"></div>
+                <div class="legendsFordata">
+                    <div *ngFor="let bedge of legendsFordata">
+                        <span [ngStyle]="{'background-color': bedge.color}" class="squareShape"></span>
+                        <span>{{bedge.name}}</span>
+                    </div>
+                </div>
+            </div>
+            <mat-card class="rightFromChart" style="height: 200px;">
+                <div>
+                    <div class="rightFromChartHead">
+                        <p>Top {{analysisData?.length}} Units <br> which has Highest migration <br><strong> from Low/Med to High</strong></p>
+                    </div>
+                    <div *ngIf="analysisData?.length > 0">
+                        <div class="rightFromChartBodyLine" *ngFor="let data of analysisData">
+                            <h4>
+                                {{data.name}}
+                            </h4>
+                            <h3>
+                                {{data.count}}
+                            </h3>
+                        </div>  
+                    </div>
+                    <div class="nodatahe" *ngIf="analysisData?.length == 0"> 
+                        <div>No data to display</div>
+                    </div>
+                </div> 
+            </mat-card> 
+        </div>
+
+    </div>
+</mat-card> 

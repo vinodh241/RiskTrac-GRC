@@ -1,0 +1,19 @@
+
+:root {
+/* BACKGROUNDS IMGES */
+--ormBg-img : url(../images/ormbg.png);
+--bcmBg-img : url(../images/bcmbg.png);
+}
+
+.bgSeaGreenGradient {background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);}
+
+.cardGen.colorGeyGradient {background: var(--ormBg-img) no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #FFEAC9 95.19%); background-size: 106%;}
+
+.cardGen.colorGeyGradient .cardLink:hover {background-color: #fef1de42; backdrop-filter: blur(3px); display: block;}
+
+.cardGen.colorGeyGradient.bcmBg {background: var(--bcmBg-img) no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #E2EBF6 95.19%); background-size: 106%;}
+
+.cardGen.colorGeyGradient.bcmBg .cardLink:hover {background-color: #dee9f145; backdrop-filter: blur(3px); display: block;}
+
+
+

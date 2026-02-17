@@ -1,0 +1,214 @@
+<header >
+    <!-- <header  *ngIf="headerFlag"> -->
+    <mat-toolbar color="primary" class="mat-elevation-z8" style="height: 6.5vh; border-bottom: 1px solid #ffffff69;">
+        <div style="height: 4vh;"><img src="assets/logo-risktrac.svg" height="100%"></div>
+        <label class="title" style="font-size: 2.6vh;">&nbsp;| Operational Risk Management</label>
+        <span class="spacer"></span>
+        <button mat-button (click)="navigateToLanding()" [ngClass]="{'disabled-header': !headerFlag}">
+            <mat-icon> <img  src="./assets/icon-home.svg" height="100%" width="100%" style="width: 2.8vh;"></mat-icon></button>
+    <div style="margin-top: 1.3vh;height: 6.2vh;margin-bottom: 1vh;border-left: 1px solid #ffffff69;">
+             <button mat-button (click)="dashboard()" *ngIf=" isRiskManagementUnit" [ngClass]="{'active': activePage === 'dashboard','disabled-header': !headerFlag}">
+            <mat-icon> <img src="assets/icons/nav-icon-dashboard.svg" height="100%" width="100%"></mat-icon>
+            <span class="button-text">Dashboard</span>
+        </button>
+
+
+        <!-- <button mat-button (click)="riskRegister()" [ngClass]="{'active': activePage === 'risk-register','disabled-header': !headerFlag}">
+            <mat-icon> <img src="assets/icons/risk-register.svg" height="100%" width="100%"></mat-icon>
+            <span class="button-text">Risk Register</span>
+        </button> -->
+
+
+        <button mat-button [matMenuTriggerFor]="menuInherentRisk" [ngClass]="{'active': isActiveForRcsa(),'disabled-header': !headerFlag}">
+            <mat-icon> <img src="assets/rcsa/icon-main-rcsa.svg" height="100%" width="100%"></mat-icon> <span
+                class="button-text">RCSA</span></button>
+
+        <mat-menu #menuInherentRisk="matMenu" >
+            <!-- added button -->
+            <button mat-menu-item (click)="manageMasterRCSA()" *ngIf="isFunctionalAdmin" >
+                <mat-icon> <img src="assets/icons/icon-master.svg" width="100%"> </mat-icon>
+                <span>RCSA Master</span>
+            </button>
+            <!-- end -->
+            <button mat-menu-item (click)="manageInherentRisk()" *ngIf="isFunctionalAdmin" >
+                <mat-icon> <img src="assets/rcsa/nav-rcsa-manageInherentRisk.svg" width="100%"> </mat-icon>
+                <span>Manage Inherent Risk</span>
+            </button>
+            <button mat-menu-item (click)="manageControlEnvironment()" *ngIf="isFunctionalAdmin" >
+                <mat-icon> <img src="assets/rcsa/nav-rcsa-manageControlEnvironment.svg" width="100%"> </mat-icon>
+                <span>Manage Control Environment</span>
+            </button>
+            <button mat-menu-item (click)="manageResidualRisk()"*ngIf="isFunctionalAdmin">
+                <mat-icon><img src="assets/rcsa/nav-rcsa-manageResidualRisk.svg" width="100%"></mat-icon>
+                <span>Manage Residual Risk</span>
+            </button>
+            <button mat-menu-item (click)="inherentRisk()" *ngIf="isFunctionalAdmin || isStandardUser || isPowerUser">
+                <mat-icon><img src="assets/rcsa/nav-rcsa-inherentRisk.svg" width="100%"></mat-icon>
+                <span>Inherent Risk</span>
+            </button>
+            <button mat-menu-item (click)="scheduleAssessments()" *ngIf="isFunctionalAdmin || isStandardUser || isPowerUser">
+                <mat-icon><img src="assets/rcsa/nav-rcsa-scheduleAssessments.svg" width="100%"></mat-icon>
+                <span>Schedule Assessments</span>
+            </button>
+            <button mat-menu-item (click)="selfAssessments()" *ngIf="isFunctionalAdmin || isStandardUser || isPowerUser">
+                <mat-icon><img src="assets/rcsa/nav-rcsa-selfAssessments.svg" width="100%"></mat-icon>
+                <span>Self Assessments</span>
+            </button>
+        </mat-menu>
+        <button mat-button [matMenuTriggerFor]="menuIncidents" [ngClass]="{'active': isActiveForIncident(),'disabled-header': !headerFlag}"><mat-icon>
+                <img src="assets/icons/nav-icon-incident.svg" height="100%" width="100%"></mat-icon> <span
+                class="button-text">Incidents</span></button>
+        <mat-menu #menuIncidents="matMenu">
+            <button mat-menu-item (click)="incidentMaster()" *ngIf="['FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-master.svg" width="100%"></mat-icon>
+                <span>Incident Master</span>
+            </button>
+            <button mat-menu-item (click)="incidentList()">
+                <mat-icon><img src="assets/icons/icon-list.svg" width="100%"></mat-icon>
+                <span>Incident List</span>
+            </button>
+        </mat-menu>
+        <button mat-button [matMenuTriggerFor]="menuKRI" [ngClass]="{'active': isActiveForKRI(),'disabled-header': !headerFlag}"><mat-icon>
+                <img src="assets/icons/nav-icon-kri.svg" height="100%" width="100%">
+            </mat-icon>
+            <span class="button-text">
+                KRI </span></button>
+        <mat-menu #menuKRI="matMenu">
+            <button mat-menu-item (click)="kriMaster()" *ngIf="['FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-master.svg" width="100%"></mat-icon>
+                <span>KRI Master</span>
+            </button>
+            <button mat-menu-item (click)="kriDefinition()" *ngIf="['FA'].includes(role)">
+                <mat-icon><img src="assets/icons/nav-icon-kri-definition.svg" width="100%"></mat-icon>
+                <span>KRI Definitions</span>
+            </button>
+            <!-- <button mat-menu-item (click)="kriMesurementMykri()">
+                <mat-icon><img src="assets/icons/nav-icon-kri-management.svg" width="100%"></mat-icon>
+                <span>KRI Measurement</span>
+            </button> -->
+            <button mat-menu-item (click)="kriScoring()">
+                <mat-icon><img src="assets/icons/nav-icon-kri-management.svg" width="100%"></mat-icon>
+                <span>KRI Measurement</span>
+            </button>
+            <button mat-menu-item (click)="kriHistorical()" *ngIf="!isRiskManagementUnit">
+                <mat-icon><img src="assets/icons/icon-clock.svg" width="100%"></mat-icon>
+                <span>Historical Measurement</span>
+            </button>
+            <button mat-menu-item (click)="kriReporting()">
+                <mat-icon><img src="assets/icons/nav-icon-kri-reporting.svg" width="100%"></mat-icon>
+                <span>KRI Reporting</span>
+            </button>
+
+                <button mat-menu-item (click)="kriMeasurementReview()" *ngIf="!reviewFlag">
+                    <mat-icon><img src="assets/icons/icon-review.svg" width="100%"></mat-icon>
+                    <span>KRI Review</span>
+                </button>
+            <!-- <button mat-menu-item (click)="kriReview()">
+                <mat-icon><img src="assets/icons/nav-icon-kri-reporting.svg" width="100%"></mat-icon>
+                <span>KRI Review</span>
+            </button> -->
+            <button mat-menu-item (click)="kriHistoricalReporting()">
+                <mat-icon><img src="assets/icons/nav-icon-kri-historical-reported.svg" width="100%"></mat-icon>
+                <span>KRI Historical Reporting</span>
+            </button>
+        </mat-menu>
+         <button mat-button (click)="reports()" *ngIf=" isRiskManagementUnit" [ngClass]="{'active': activePage === 'reports','disabled-header': !headerFlag}">
+            <mat-icon> <img src="assets/icons/nav-icon-reports.svg" height="100%" width="100%"></mat-icon> <span
+                class="button-text">Reports</span></button>
+        <button mat-button [matMenuTriggerFor]="menuAppetite" [ngClass]="{'active': isActiveForRA(),'disabled-header': !headerFlag}"><mat-icon>
+                <img src="assets/icons/nav-icon-risk-appetite.svg" height="100%" width="100%"></mat-icon> <span
+                class="button-text">Risk
+                Appetite </span></button>
+        <mat-menu #menuAppetite="matMenu">
+            <button mat-menu-item (click)="riskAssessmentsSubmitted()" *ngIf="['SU','PU','FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-view.svg" width="100%"></mat-icon>
+                <span>View Submitted Risk Assessments</span>
+            </button>
+            <button mat-menu-item (click)="riskAppetiteDocuments()" *ngIf="['FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-upload.svg" width="100%"></mat-icon>
+                <span>Upload Risk Appetite Documents</span>
+            </button>
+            <!-- <button mat-menu-item (click)="riskAppetiteTemplates()" *ngIf="['FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-upload.svg" width="100%"></mat-icon>
+                <span>Upload Risk Appetite Template</span>
+            </button> -->
+            <button mat-menu-item (click)="manageRiskAssessments()" *ngIf="['FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-clock.svg" width="100%"></mat-icon>
+                <span>Manage Risk Assessments</span>
+            </button>
+            <button mat-menu-item (click)="viewRiskAssessments()" *ngIf="['SU'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-view.svg" width="100%"></mat-icon>
+                <span>View Risk Assessments</span>
+            </button>
+            <button mat-menu-item (click)="submitRiskAssessments()" *ngIf="['PU','FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-submit.svg" width="100%"></mat-icon>
+                <span>Submit Risk Assessments</span>
+            </button>
+            <button mat-menu-item (click)="reviewRiskAssessments()" *ngIf="['PU','FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-review.svg" width="100%"></mat-icon>
+                <span>Review Risk Assessments</span>
+            </button>
+            <button mat-menu-item (click)="riskAssessmentsHistorical()" *ngIf="['SU','PU','FA'].includes(role)">
+                <mat-icon><img src="assets/icons/icon-calender.svg" width="100%"></mat-icon>
+                <span>Historical Risk Assessments</span>
+            </button>
+            <!-- <button mat-menu-item (click)="generateEmail()">
+                <mat-icon><img src="assets/rcsa/nav-rcsa-selfAssessments.svg" width="100%"></mat-icon>
+                <span>Generate Email</span>
+            </button> -->
+        </mat-menu>
+        <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menuSettings" *ngIf="['FA'].includes(role)" [ngClass]="{'active': isActiveForSetting(),'disabled-header': !headerFlag}">
+            <mat-icon><img src="assets/icons/nav-icon-settings.svg" width="100%" height="100%"> </mat-icon>
+        </button>
+        <mat-menu #menuSettings="matMenu" >
+            <button mat-menu-item (click)="reportSettings()">
+                <mat-icon><img src="assets/icons/nav-icon-kri-management.svg" width="100%"></mat-icon>
+                <span>Report Settings</span>
+            </button>
+            <button mat-menu-item (click)="riskMetricLevels()">
+                <mat-icon><img src="assets/icons/icon-metrics.svg" width="100%"></mat-icon>
+                <span>Risk Metric Levels</span>
+            </button>
+        </mat-menu>
+
+        <button mat-icon-button class="example-icon" [matMenuTriggerFor]="menuNotifications" (click)="openBellIcon(true)"
+        #menuContacts="matMenuTrigger" [ngClass]="{'disabled-header': !headerFlag}">
+            <span [ngClass]="this.unreadItems > 0 ? 'notificationalert': ''"></span>
+            <mat-icon>
+                <img [src]="newNotifications(this.unreadItems)" width="100%" height="100%">
+            </mat-icon>
+        </button>
+    </div>
+    <div style="margin-top: 1.3vh;height: 6.2vh;margin-bottom: 1vh;border-left: 1px solid #ffffff69;">
+        <mat-menu #menuNotifications="matMenu">
+            <app-notifications *ngIf="triggerNotificationService == true" (triggerNotificationService)="setValue($event, menuContacts)" ></app-notifications>
+        </mat-menu>
+        <div style="height: 4vh;margin-top: 1.2vh;">
+            <img matTooltipPosition="below" matTooltip="{{userName}}"
+                style="background-color: white; border-radius: 50%; margin: 0px 0.8vw;" src="assets/user.svg"
+                height="100%">
+        </div>
+    </div>
+        <!-- <button mat-icon-button class="example-icon" aria-label="Logout" (click)="logout()" [ngClass]="{'disabled-header': !headerFlag}">
+            <mat-icon>logout</mat-icon>
+        </button> -->
+        <a mat-icon-button class="example-icon" aria-label="Logout" (click)="logoutUser($event)" style="cursor: pointer; text-decoration: none;">
+            <mat-icon>logout</mat-icon>
+        </a>
+        
+        <!-- Dropdown Menu -->
+        <div *ngIf="logoutflag" class="dropdown-menu dropdown-menu-dark gradientDropdown userLogin" aria-labelledby="userLogin"  (click)="logout()" 
+            style="width: 10vw; margin-left: -20vh; height: 5vh; position: absolute;top: 48px; z-index: 9999;cursor: pointer;" >
+            <div class="d-flex justify-content-start w-100 h-100">
+                <div class="menuList listOne h-100 w-100">
+                    <ul class="w-100 mb-0" style="list-style-type: none; padding-left: 0;">
+                        <li style="cursor: pointer; margin-top: -3vh; margin-right: 9vh; display: flex; align-items: center;">
+                            <mat-icon>arrow_right_alt</mat-icon>
+                            <a class="dropdown-item" style="font-size: 16px; margin-left: 5px;" >Logout</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </mat-toolbar>
+</header>

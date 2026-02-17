@@ -1,0 +1,155 @@
+.mat-toolbar {
+    height: 6.4vh;
+}
+
+th.mat-header-cell,
+td.mat-cell {
+    border-right: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+    padding: 0 5px !important;
+}
+
+.text-align-center {
+    text-align: center;
+    padding-top: 40px;
+}
+
+.mat-action-row {
+    margin: 0 4vh;
+}
+
+.mat-elevation-z8 {
+    margin: 0vh 4vh 4vh 4vh;
+}
+
+.mat-column-action {
+    max-width: 5vw;
+}
+
+.mat-column-unit {
+    max-width: 6vw;
+}
+
+.mat-column-group,
+.mat-column-Measurmentfrequency {
+    max-width: 4vw;
+}
+
+.mat-column-Reportingfrequency {
+    max-width: 3vw;
+}
+
+.mat-column-Target {
+    max-width: 2vw;
+}
+
+.mat-column-Kritype {
+    max-width: 3.5vw;
+}
+
+.mat-column-Indicator {
+    max-width: 15vw;
+}
+
+.mat-column-action {
+    justify-content: center;
+}
+
+.t-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.t-value {
+    height: 40px;
+    width: 40px;
+    border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: 700;
+}
+
+.mat-header-cell {
+    border-right: 1px solid #fff;
+    background-color: #E7E7E7;
+}
+
+ .mat-cell{
+    border-right: 1px solid #eee;
+    padding: 0 5px !important;
+ }
+
+ .mat-sort-header-content {
+    text-align: center;
+    display: flex;
+    align-items: center;
+    margin-left: 1vh;
+}
+
+::ng-deep.full-screen-modal .mat-dialog-container {
+    display: block !important;
+    padding: 24px !important;
+    border-radius: 4px !important;
+    box-sizing: border-box !important;
+    /* overflow: auto; */
+    outline: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    min-height: inherit !important;
+    overflow: hidden !important;
+    max-height: inherit !important;
+  }
+
+  .normalColorBtn.modalColorBtnGreen {
+    background-color: #1C9F50;
+    height: 5vh;
+    width: 10vh;
+    font-size: 13px;
+  }
+
+  .applyFilter button, .applyFilter button:focus {
+    width: 16vh;
+    min-height: 3.5vh;
+    height: 4.5vh;
+    padding: 0.3vh 0.6vw;
+    box-shadow: 0.3vh 0.4vh 0.4vh 0px rgba(0, 0, 0, 0.28);
+    border-left: 2vw solid #000;
+    border-right: none;
+    border-top: none;
+    border-bottom: none;
+    transition: width 2s;
+    border-radius: 0.5vh;
+    color: white;
+}
+.file-upload {
+    display: none; /* Hide the file input */
+}
+
+.btnGenUp {
+    background-color: #3CBC60;
+    border-radius: 50vh;
+    min-height: 3.5vh;
+    height: 3.5vh;
+    padding: 0.2vh 0.8vw;
+    display: flex; /* Align children using flexbox */
+    align-items: center; /* Vertically center content */
+    justify-content: center; /* Horizontally center content */
+    color: #fff;
+    cursor: pointer;
+    white-space: nowrap; /* Prevent text wrapping */
+    position: relative; /* Required for label positioning */
+    width: 14vh;
+}
+
+.btnGenUp img {
+    margin-right: 1vh;
+    height: 2.5vh;
+    margin-bottom: 1vh;
+}
+.disable {
+    cursor: none !important;
+    opacity: 0.5 !important;
+  }
+  

@@ -1,0 +1,816 @@
+<mat-toolbar class="fontSize">
+    <span>RCSA Master</span>
+    <span class="spacer"></span>
+</mat-toolbar>
+<div class="container">
+    <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+        <!-- start of residual risk -->
+        <div fxFlex="33" fxFlex.md="64" fxFlex.lg="64" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <span><b>Residual Risk</b></span>
+            <mat-card class="mat-elevation-z4" fxFlexAlign="stretch">
+                <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+                    <div fxFlex="33" fxFlex.md="45" fxFlex.lg="45" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+                        <span><b>Risk Response</b></span>
+                        <mat-card class="mat-elevation-z4" fxFlexAlign="stretch">
+                            <mat-card-header></mat-card-header>
+                            <mat-card-content>
+                                <form autocomplete="off" [formGroup]="ResidualRiskResponseGridForms">
+                                    <ng-container formArrayName="GridRows">
+                                        <mat-table [dataSource]="dataSourceResidualRiskResponse" matSort >
+                                            <ng-container matColumnDef="RowNumber">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    {{i+1}} </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="ResidualRisk">
+                                                <mat-header-cell *matHeaderCellDef style="min-width: 12vw;" mat-sort-header>Risk Response</mat-header-cell>
+                                                <mat-cell  *matCellDef="let row;let i = index" [formGroup]="row"
+                                                    style="flex: 1 1 100%;
+                                                    box-sizing: border-box;
+                                                    max-width: 41%;
+                                                    padding-right: 8px"
+                                                    class="tablecolumnspan">
+                                                    <span style="word-wrap: break-word;
+                                                    overflow-wrap: break-word;
+                                                    white-space: normal;"
+                                                        [hidden]="!ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable"
+                                                      >{{ResidualRiskResponseGridForms.get('GridRows')?.value[i].RiskResponse}}</span>
+                                                    <mat-form-field
+                                                    *ngIf="!ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable"
+                                                    [appearance]="ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                        <input matInput type="text" formControlName="RiskResponse"
+                                                        *ngIf="!ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable"
+                                                        [readonly]="ResidualRiskResponseGridForms.get('GridRows')?.value[i].isEditable">
+                                                    </mat-form-field>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Action">
+                                                <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index"  [formGroup]="row">
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Save Changes"
+                                                        color="primary"
+                                                        (click)="saveEditedResidualRiskResponseData(ResidualRiskResponseGridForms,i)"
+                                                        [disabled]="!row.valid"
+                                                        *ngIf="!ResidualRiskResponseGridForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>check_circle</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                                        matTooltip="Cancel Changes" color="warn" (click)="cancelResidualRiskResponseTable(ResidualRiskResponseGridForms,i)"
+                                                        *ngIf="!ResidualRiskResponseGridForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Edit" color="primary" (click)="editResidualRiskResponseData(ResidualRiskResponseGridForms,i)"
+                                                        *ngIf="ResidualRiskResponseGridForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Status">
+                                                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <mat-slide-toggle (change)="changedResidualRiskResponse(row,$event)"
+                                                    [checked]="ResidualRiskResponseGridForms.get('GridRows')?.value[i]?.IsActive">
+                                                    </mat-slide-toggle>
+                                                    <span  *ngIf="ResidualRiskResponseGridForms.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                                    <span *ngIf="!ResidualRiskResponseGridForms.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayResidualRiskResponseColumns"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayResidualRiskResponseColumns;"></mat-row>
+                                        </mat-table>
+                                    </ng-container>
+                                </form>
+                            </mat-card-content>
+                            <mat-error *ngIf="saveResidualRiskResponseError">{{saveResidualRiskResponseError}}</mat-error>
+                            <mat-error *ngIf="exceedCharLenErr && type == 'RiskResponse'">{{exceedCharLenErr}}</mat-error>
+                            
+                            <mat-card-actions class="">
+                                <div fxLayout="row" fxLayoutAlign="end center">
+                                    <button mat-mini-fab color="warn" aria-label="add Residual Risk Response"
+                                    (click)="initiatAddResidualRiskResponse()" *ngIf="!addResidualRiskResponse">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <form [formGroup]="residualRiskResponseForm" autocomplete="off"  *ngIf="addResidualRiskResponse">
+                                        <input formControlName="residualRiskResponseID" hidden="true">
+                                        <mat-form-field appearance="fill" fxFlexOffset="10px">
+                                            <mat-label>Risk Response</mat-label>
+                                            <input matInput formControlName="residualRiskResponse">
+                                        </mat-form-field>
+                                        <button fxFlexOffset="10px" mat-mini-fab [disabled]="!residualRiskResponseForm.valid"
+                                            aria-label="add risk category" *ngIf="addResidualRiskResponse" (click)="saveResidualRiskResponseData()">
+                                            <mat-icon>check</mat-icon>
+                                        </button>
+                                        <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="close Residual Risk"
+                                        *ngIf="addResidualRiskResponse" (click)="cancelResidualRiskResponse()">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </form>
+                                </div>
+                            </mat-card-actions>
+
+                        </mat-card>
+                    </div>
+                    <!-- start of risk responsible person  -->
+                    <div fxFlex="33" fxFlex.md="45" fxFlex.lg="45" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+                        <span><b>Responsible Person</b></span>
+                        <mat-card class="mat-elevation-z4" fxFlexAlign="stretch" style="padding: 0px 0px 16px 0px !important">
+                            <mat-card-header></mat-card-header>
+                            <mat-card-content>
+                                <form autocomplete="off"  [formGroup]="ResidualRiskResponsibleForms">
+                                    <ng-container formArrayName="GridRows">
+                                        <mat-table [dataSource]="dataSourceResidualRiskResponsible">
+                                            <ng-container matColumnDef="RowNumber">
+                                                <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                                                <mat-cell [ngClass]="(!ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsActive && ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsDeleted) ? 'disable-color' : ''"  [matTooltip]="(!ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsActive && ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsDeleted) ? 'Your Power User Access or Unit Access is removed by the User Manager' : ''" *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    {{i+1}} </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="ResponsiblePerson">
+                                                <!-- <mat-header-cell *matHeaderCellDef mat-sort-header>Responsible Person</mat-header-cell> -->
+                                                <mat-header-cell *matHeaderCellDef class="col-header">
+                                                    <div class="card1">
+                                                        <label class="input">
+                                                            <div class="input-group" style="width: 82%;">
+                                                                <input type="text" id="search-input" placeholder="" class="field form-control"
+                                                                    aria-describedby="date-design-prepend" [formControl]="residualResponsiblePersonFilter">
+                                                                <div class="label">
+                                                                    <div style="margin-right: auto;margin-top: 22px;">Responsible Person</div>
+                                                                    <div>
+                                                                        <mat-icon><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row" fxFlex
+                                                class="tablecolumnspan">
+                                                <span [ngClass]="(!ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsActive && ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsDeleted) ? 'disable-color' : ''"  [matTooltip]="(!ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsActive && ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsDeleted) ? 'Your Power User Access or Unit Access is removed by the User Manager' : ''"
+                                                    [hidden]="!ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable">{{ResidualRiskResponsibleForms.get('GridRows')?.value[i].ResponsiblePerson}}
+                                                </span>
+                                                <mat-form-field
+                                                [hidden]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable"
+                                                [appearance]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                    <input matInput type="text" formControlName="ResponsiblePerson"
+                                                    [hidden]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable"
+                                                    [readonly]="ResidualRiskResponsibleForms.get('GridRows')?.value[i].isEditable">
+                                                </mat-form-field>
+                                            </mat-cell>
+                                            </ng-container>
+                                           
+                                            <ng-container matColumnDef="Status">
+                                                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <mat-slide-toggle [checked]="ResidualRiskResponsibleForms.get('GridRows')?.value[i]?.IsActive"
+                                                    (change)="changedResidualRiskResponsiblePerson(row,$event)"
+                                                    [disabled]="(!ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsActive && ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsDeleted)"
+                                                    [matTooltip]="(!ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsActive && ResidualRiskResponsibleForms.get('GridRows')?.value[i].IsDeleted) ? 'Your Power User Access or Unit Access is removed by the User Manager' : ''">
+                                                    </mat-slide-toggle>
+                                                    <span *ngIf="ResidualRiskResponsibleForms.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                                    <span *ngIf="!ResidualRiskResponsibleForms.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayRiskResponsiblePerson"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayRiskResponsiblePerson;"></mat-row>
+                                        </mat-table>
+                                    </ng-container>
+                                </form>
+                            </mat-card-content>
+                            <mat-error *ngIf="saveResidualRiskResponsiblePersonError">{{saveResidualRiskResponsiblePersonError}}</mat-error>
+                            <mat-card-actions class="">
+                                <div fxLayout="row" fxLayoutAlign="end center">
+                                    <button mat-mini-fab color="warn" aria-label="add reviewer"
+                                    (click)="initiatAddResidualRiskResponsiblePerson()" *ngIf="!addResidualRiskResponsiblePerson">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <form autocomplete="off" [formGroup]="residualRiskResponsiblePersonForm">
+                                        <!-- <input  hidden="true" formControlName="ResidualRiskResponsiblePersonID">
+                                        <mat-form-field appearance="fill" fxFlexOffset="10px" *ngIf="addResidualRiskResponsiblePerson">
+                                            <mat-label>Responsible Person</mat-label>
+                                            <input matInput formControlName="ResponsiblePerson">
+                                        </mat-form-field> -->
+                                        <label *ngIf="addResidualRiskResponsiblePerson" for="ResidualResponsiblePerson" style="margin-top: 1.5vh;">Select Person:</label>
+                                        <mat-form-field style="margin: -2vh 0.5vw;" *ngIf="addResidualRiskResponsiblePerson">
+                                            <mat-select id="ResidualResponsiblePerson" [(ngModel)]="selectedResponsiblePerson" [ngModelOptions]="{standalone: true}" name="user">
+                                                <mat-option *ngFor="let user of residualResponsiblePersonDropdownData" [value]="user">
+                                                    {{user.FullName}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <button fxFlexOffset="10px" mat-mini-fab [disabled]="selectedResponsiblePerson == null"
+                                            aria-label="add risk category" *ngIf="addResidualRiskResponsiblePerson"
+                                            (click)="saveResidualRiskResponsiblePersonData()">
+                                            <mat-icon>check</mat-icon>
+                                        </button>
+                                        <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="add reviewer"
+                                        *ngIf="addResidualRiskResponsiblePerson" (click)="cancelResidualRiskResponsiblePerson()">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </form>
+                                </div>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                    <!-- end of risk responsible person -->
+                </div>
+            </mat-card>
+        </div>
+        <!-- start of Control Testing  -->
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <span><b>Control Testing</b></span>
+            <mat-card class="mat-elevation-z4" fxFlexAlign="stretch">
+                    <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+                    <div fxFlex="33" fxFlex.md="90" fxFlex.lg="90" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+                        <span><b>Control Test Result</b></span>
+                        <mat-card class="mat-elevation-z4" fxFlexAlign="stretch">
+                            <mat-card-header></mat-card-header>
+                            <mat-card-content>
+                                <form autocomplete="off" [formGroup]="ControlTestResultForms">
+                                    <ng-container formArrayName="GridRows">
+                                        <mat-table [dataSource]="dataSourceControlTestResult" matSort>
+                                            <ng-container matColumnDef="RowNumber" >
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    {{i+1}} </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="ControlTestingResult">
+                                                <mat-header-cell *matHeaderCellDef style="min-width: 42%;" mat-sort-header>Test Result</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" style="flex: 1 1 100%;
+                                                box-sizing: border-box;
+                                                max-width: 41%;
+                                                padding-right: 8px"
+                                                    class="tablecolumnspan" [formGroup]="row" >
+                                                    <span style="word-wrap: break-word;
+                                                    overflow-wrap: break-word;
+                                                    white-space: normal;"
+                                                    [hidden]="!ControlTestResultForms.get('GridRows')?.value[i].isEditable">{{ControlTestResultForms.get('GridRows')?.value[i].ControlTestingResult}}</span>
+                                                    <mat-form-field *ngIf="!ControlTestResultForms.get('GridRows')?.value[i].isEditable"
+                                                    [appearance]="ControlTestResultForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                        <input matInput type="text" formControlName="ControlTestingResult"
+                                                        *ngIf="!ControlTestResultForms.get('GridRows')?.value[i].isEditable"
+                                                        [readonly]="ControlTestResultForms.get('GridRows')?.value[i].isEditable">
+                                                    </mat-form-field>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Action">
+                                                <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Save Changes"
+                                                        color="primary"
+                                                        [disabled]="!row.valid"
+                                                        (click)="saveEditedControlTestResultData(ControlTestResultForms, i)"
+                                                        *ngIf="!ControlTestResultForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>check_circle</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                                        matTooltip="Cancel Changes" color="warn" (click)="cancelControlTestResultTable(ControlTestResultForms, i)"
+                                                        *ngIf="!ControlTestResultForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Edit" color="primary" (click)="editControlTestResultData(ControlTestResultForms, i)"
+                                                        *ngIf="ControlTestResultForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Status">
+                                                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <mat-slide-toggle (change)="changedControlTestResult(row, $event)"
+                                                    [checked]="ControlTestResultForms.get('GridRows')?.value[i]?.IsActive">
+                                                    </mat-slide-toggle>
+                                                    <span *ngIf="ControlTestResultForms.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                                    <span *ngIf="!ControlTestResultForms.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayControlTestResult"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayControlTestResult;"></mat-row>
+                                        </mat-table>
+                                    </ng-container>
+                                </form>
+                            </mat-card-content>
+                            <mat-error *ngIf="saveControlTestResultError">{{saveControlTestResultError}}</mat-error>
+                            <mat-error *ngIf="exceedCharLenErr && type == 'ControlTestingResult'">{{exceedCharLenErr}}</mat-error>
+
+                            <mat-card-actions class="">
+                                <div fxLayout="row" fxLayoutAlign="end center">
+                                    <button mat-mini-fab color="warn" aria-label="add reviewer"
+                                    *ngIf="!addControlTestResult" (click)="initiatAddControlTestResult()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <form [formGroup]="controlTestResultForm" autocomplete="off" *ngIf="addControlTestResult">
+                                        <input formControlName="ControlTestingResultID" hidden="true">
+                                        <mat-form-field appearance="fill" fxFlexOffset="10px" >
+                                            <mat-label>Control Test Result</mat-label>
+                                            <input matInput formControlName="ControlTestingResult">
+                                        </mat-form-field>
+                                        <button fxFlexOffset="10px" mat-mini-fab [disabled]="!controlTestResultForm.valid"
+                                            aria-label="add risk category" *ngIf="addControlTestResult" (click)="saveControlTestResultData()">
+                                            <mat-icon>check</mat-icon>
+                                        </button>
+                                        <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="add reviewer"
+                                        *ngIf="addControlTestResult" (click)="cancelControlTestResult()">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </form>
+                                </div>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                    </div>
+                <!-- </mat-card-content> -->
+            </mat-card>
+        </div>
+    </div>
+    <!-- start of Action -->
+    <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+        <!-- start of status -->
+        <div fxFlex="33" fxFlex.md="98" fxFlex.lg="98" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <span><b>Action Implementation Plan</b></span>
+            <mat-card class="mat-elevation-z4" fxFlexAlign="stretch">
+                <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+                    <div fxFlex="33" fxFlex.md="30" fxFlex.lg="30" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+                        <span><b>Status</b></span>
+                        <mat-card class="mat-elevation-z4" fxFlexAlign="stretch">
+                            <mat-card-header></mat-card-header>
+                            <mat-card-content>
+                                <form [formGroup]="ActionPlanStatusForms" autocomplete="off">
+                                    <ng-container formArrayName="GridRows">
+                                        <mat-table [dataSource]="dataSourceActionPlanStatus" matSort>
+                                            <ng-container matColumnDef="RowNumber">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    {{i+1}} </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="ActionPlanStatus">
+                                                <mat-header-cell *matHeaderCellDef style="min-width: 42%;" mat-sort-header>Plan Status</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" style="flex: 1 1 100%;
+                                                    box-sizing: border-box;
+                                                    max-width: 41%;
+                                                    padding-right: 8px"
+                                                    [formGroup]="row"
+                                                    class="tablecolumnspan">
+                                                    <span style="word-wrap: break-word;
+                                                    overflow-wrap: break-word;
+                                                    white-space: normal;"
+                                                    [hidden]="!ActionPlanStatusForms.get('GridRows')?.value[i].isEditable">{{ActionPlanStatusForms.get('GridRows')?.value[i].ActionPlanStatus}}</span>
+                                                    <mat-form-field
+                                                    *ngIf="!ActionPlanStatusForms.get('GridRows')?.value[i].isEditable"
+                                                    [appearance]="ActionPlanStatusForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                        <input matInput type="text" formControlName="ActionPlanStatus"
+                                                        *ngIf="!ActionPlanStatusForms.get('GridRows')?.value[i].isEditable"
+                                                        [readonly]="ActionPlanStatusForms.get('GridRows')?.value[i].isEditable">
+                                                    </mat-form-field>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Action">
+                                                <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Save Changes"
+                                                        color="primary"
+                                                        [disabled]="!row.valid"
+                                                        (click)="saveEditedActionPlanStatusData(ActionPlanStatusForms, i)"
+                                                        *ngIf="!ActionPlanStatusForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>check_circle</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                                        matTooltip="Cancel Changes" color="warn" (click)="cancelActionPlanStatusTable(ActionPlanStatusForms, i)"
+                                                        *ngIf="!ActionPlanStatusForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Edit" color="primary" (click)="editActionPlanStatus(ActionPlanStatusForms, i)"
+                                                        *ngIf="ActionPlanStatusForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Status">
+                                                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <mat-slide-toggle
+                                                    [checked]="ActionPlanStatusForms.get('GridRows')?.value[i]?.IsActive"
+                                                    (change)="changedActionStatus(row, $event)">
+                                                    </mat-slide-toggle>
+                                                    <span *ngIf="ActionPlanStatusForms.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                                    <span *ngIf="!ActionPlanStatusForms.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayActionPlanStatus"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayActionPlanStatus;"></mat-row>
+                                        </mat-table>
+                                    </ng-container>
+                                </form>
+                            </mat-card-content>
+                            <mat-error *ngIf="saveActionPlanStatusError">{{saveActionPlanStatusError}}</mat-error>
+                            <mat-error *ngIf="exceedCharLenErr && type == 'ActionPlanStatus'">{{exceedCharLenErr}}</mat-error>
+                            <mat-card-actions class="">
+                                <div fxLayout="row" fxLayoutAlign="end center">
+                                    <button mat-mini-fab color="warn" aria-label="add reviewer" *ngIf="!addActionPlanStatus"
+                                    (click)="initiatAddActionStatus()">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <form autocomplete="off" [formGroup]="actionPlanStatusForm" *ngIf="addActionPlanStatus">
+                                        <input  hidden="true" formControlName="ActionPlanStatusID">
+                                        <mat-form-field appearance="fill" fxFlexOffset="10px">
+                                            <mat-label>Plan Status</mat-label>
+                                            <input matInput formControlName="ActionPlanStatus">
+                                        </mat-form-field>
+                                        <button fxFlexOffset="10px" mat-mini-fab
+                                            aria-label="add risk category" *ngIf="addActionPlanStatus" (click)="saveActionStatusData()">
+                                            <mat-icon>check</mat-icon>
+                                        </button>
+                                        <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="add reviewer"
+                                            *ngIf="addActionPlanStatus" (click)="cancelActionPlanStatus()">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </form>
+                                </div>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                    <div fxFlex="33" fxFlex.md="30" fxFlex.lg="30" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+                        <span><b>Responsible Person</b></span>
+                        <mat-card class="mat-elevation-z4" fxFlexAlign="stretch" style="padding: 0px 0px 16px 0px !important">
+                            <mat-card-header></mat-card-header>
+                            <mat-card-content>
+                                <form [formGroup]="ActionPlanResponsiblePersonForms" autocomplete="off">
+                                    <ng-container formArrayName="GridRows">
+                                        <mat-table [dataSource]="dataSourceActionPlanResponsiblePerson">
+                                            <ng-container matColumnDef="RowNumber">
+                                                <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row"
+                                                [ngClass]="(!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsActive && ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsDeleted) ? 'disable-color' : ''"  [matTooltip]="(!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsActive && ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsDeleted) ? 'Your Power User Access or Unit Access is removed by the User Manager' : ''">
+                                                    {{i + 1}} </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="ActionResponsiblePerson">
+                                                <!-- <mat-header-cell *matHeaderCellDef mat-sort-header>Responsible Person</mat-header-cell> -->
+                                                <mat-header-cell *matHeaderCellDef class="col-header">
+                                                    <div class="card1">
+                                                        <label class="input">
+                                                            <div class="input-group" style="width: 82%;">
+                                                                <input type="text" id="search-input" placeholder="" class="field form-control"
+                                                                    aria-describedby="date-design-prepend" [formControl]="actionResponsiblePersonFilter">
+                                                                <div class="label">
+                                                                    <div style="margin-right: auto;margin-top: 22px;">Responsible Person</div>
+                                                                    <div>
+                                                                        <mat-icon><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                </mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" fxFlex [formGroup]="row"
+                                                    class="tablecolumnspan">
+                                                    <span [ngClass]="(!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsActive && ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsDeleted) ? 'disable-color' : ''"  [matTooltip]="(!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsActive && ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsDeleted) ? 'Your Power User Access or Unit Access is removed by the User Manager' : ''"
+                                                    [hidden]="!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable">{{ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].Description}}</span>
+                                                    <mat-form-field
+                                                    [hidden]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable"
+                                                    [appearance]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                        <input matInput type="text" formControlName="Description"
+                                                        [hidden]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable"
+                                                        [readonly]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].isEditable">
+                                                    </mat-form-field>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <!-- <ng-container matColumnDef="Action">
+                                                <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Save Changes"
+                                                        (click)="saveEditedActionPlanResponsiblePersonData(ActionPlanResponsiblePersonForms,i)"
+                                                        [disabled]="!row.valid"
+                                                        *ngIf="!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.isEditable"
+                                                        color="primary">
+                                                        <mat-icon>check_circle</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                                        matTooltip="Cancel Changes" color="warn" (click)="cancelActionPlanResponsiblePersonTable(ActionPlanResponsiblePersonForms,i)"
+                                                        *ngIf="!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Edit" color="primary" (click)="editActionPlanResponsiblePerson(ActionPlanResponsiblePersonForms,i)"
+                                                        *ngIf="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container> -->
+                                            <ng-container matColumnDef="Status">
+                                                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <mat-slide-toggle [checked]="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.IsActive"
+                                                    (change)="changedActionResponsiblePerson(row, $event)"
+                                                    [disabled]="!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.IsActive && ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.IsDeleted"
+                                                    [matTooltip]="(!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsActive && ActionPlanResponsiblePersonForms.get('GridRows')?.value[i].IsDeleted) ? 'Your Power User Access or Unit Access is removed by the User Manager' : ''">
+                                                    </mat-slide-toggle>
+                                                    <span *ngIf="ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                                    <span *ngIf="!ActionPlanResponsiblePersonForms.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayActionPlanResponsiblePerson"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayActionPlanResponsiblePerson;"></mat-row>
+                                        </mat-table>
+                                    </ng-container>
+                                </form>
+                            </mat-card-content>
+                            <mat-error *ngIf="saveActionPlanResponsiblePersonError">{{saveActionPlanResponsiblePersonError}}</mat-error>
+                            <mat-card-actions class="">
+                                <div fxLayout="row" fxLayoutAlign="end center">
+                                    <button mat-mini-fab color="warn" aria-label="add reviewer"
+                                    (click)="initiatAddActionResponsiblePerson()" *ngIf="!addActionPlanResponsiblePerson">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <form [formGroup]="actionPlanRespnsiblePersonForm" autocomplete="off" *ngIf="addActionPlanResponsiblePerson">
+                                        <!-- <input formControlName="ActionResponsiblePersonID" hidden="true">
+                                        <mat-form-field appearance="fill" fxFlexOffset="10px">
+                                            <mat-label>Responsible Person</mat-label>
+                                            <input matInput formControlName="Description">
+                                        </mat-form-field> -->
+                                        <label *ngIf="addActionPlanResponsiblePerson" for="ActionResponsiblePerson" style="margin-top: 1.5vh;">Select Person:</label>
+                                        <mat-form-field style="margin: -2vh 0.5vw;" *ngIf="addActionPlanResponsiblePerson">
+                                            <mat-select id="ActionResponsiblePerson" [(ngModel)]="selectedActionResponsiblePerson" [ngModelOptions]="{standalone: true}" name="user">
+                                                <mat-option *ngFor="let user of actionResponsiblePersonDropdownData" [value]="user">
+                                                    {{user.FullName}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                        <button fxFlexOffset="10px" mat-mini-fab [disabled]="selectedActionResponsiblePerson == null"
+                                            aria-label="add risk category" *ngIf="addActionPlanResponsiblePerson"
+                                            (click)="saveActionResponsiblePersonData()">
+                                            <mat-icon>check</mat-icon>
+                                        </button>
+                                        <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="add reviewer"
+                                        *ngIf="addActionPlanResponsiblePerson" (click)="cancelActionPlanResponsiblePerson()">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </form>
+                                </div>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                    <div fxFlex="33" fxFlex.md="30" fxFlex.lg="30" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+                        <span><b>Confirmation/Verification of Closure</b></span>
+                        <mat-card class="mat-elevation-z4" fxFlexAlign="stretch">
+                            <mat-card-header></mat-card-header>
+                            <mat-card-content>
+                                <form [formGroup]="ActionPlanVerificationForms" autocomplete="off">
+                                    <ng-container formArrayName="GridRows">
+                                        <mat-table [dataSource]="dataSourceActionPlanVerification" matSort>
+                                            <ng-container matColumnDef="RowNumber">
+                                                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    {{i + 1}} </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="ActionVerification">
+                                                <mat-header-cell *matHeaderCellDef style="min-width: 42%;" mat-sort-header>Verification of closure</mat-header-cell>
+                                                <mat-cell  *matCellDef="let row;let i = index" style="flex: 1 1 100%;
+                                                    box-sizing: border-box;
+                                                    max-width: 41%;
+                                                    padding-right: 8px"
+                                                    [formGroup]="row"
+                                                    class="tablecolumnspan">
+                                                    <span style="word-wrap: break-word;
+                                                    overflow-wrap: break-word;
+                                                    white-space: normal;"
+                                                    [hidden]="!ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable">{{ActionPlanVerificationForms.get('GridRows')?.value[i].ControlVerificationClosure}}</span>
+                                                    <mat-form-field
+                                                    *ngIf="!ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable"
+                                                    [appearance]="ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                                        <input matInput type="text" formControlName="ControlVerificationClosure"
+                                                        *ngIf="!ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable"
+                                                         [readonly]="ActionPlanVerificationForms.get('GridRows')?.value[i].isEditable">
+                                                    </mat-form-field>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Action">
+                                                <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Save Changes"
+                                                        [disabled]="!row.valid"
+                                                        (click)="saveEditedActionPlanVerificationData(ActionPlanVerificationForms, i)"
+                                                        *ngIf="!ActionPlanVerificationForms.get('GridRows')?.value[i]?.isEditable"
+                                                        color="primary">
+                                                        <mat-icon>check_circle</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                                        matTooltip="Cancel Changes" color="warn" (click)="cancelActionPlanVerificationTable(ActionPlanVerificationForms,i)"
+                                                        *ngIf="!ActionPlanVerificationForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>cancel</mat-icon>
+                                                    </button>
+
+                                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                                        matTooltip="Edit" color="primary" (click)="editActionPlanVerification(ActionPlanVerificationForms, i)"
+                                                        *ngIf="ActionPlanVerificationForms.get('GridRows')?.value[i]?.isEditable">
+                                                        <mat-icon>edit</mat-icon>
+                                                    </button>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <ng-container matColumnDef="Status">
+                                                <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                                    <mat-slide-toggle
+                                                    [checked]="ActionPlanVerificationForms.get('GridRows')?.value[i]?.IsActive"
+                                                    (change)="changedActionVerification(row, $event)">
+                                                    </mat-slide-toggle>
+                                                    <span  *ngIf="ActionPlanVerificationForms.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                                    <span  *ngIf="!ActionPlanVerificationForms.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                                </mat-cell>
+                                            </ng-container>
+                                            <mat-header-row *matHeaderRowDef="displayActionPlanVerification"></mat-header-row>
+                                            <mat-row *matRowDef="let row; columns: displayActionPlanVerification;"></mat-row>
+                                        </mat-table>
+                                    </ng-container>
+                                </form>
+                            </mat-card-content>
+                            <mat-error *ngIf="saveActionPlanVerificationError">{{saveActionPlanVerificationError}}</mat-error>
+                            <mat-error *ngIf="exceedCharLenErr && type == 'ControlVerificationClosure'">{{exceedCharLenErr}}</mat-error>
+
+                            <mat-card-actions class="">
+                                <div fxLayout="row" fxLayoutAlign="end center">
+                                    <button mat-mini-fab color="warn" aria-label="add reviewer"
+                                    (click)="initiatAddActionVerification()" *ngIf="!addActionPlanVerification">
+                                        <mat-icon>add</mat-icon>
+                                    </button>
+                                    <form [formGroup]="actionPlanVerificationForm" autocomplete="off" *ngIf="addActionPlanVerification">
+                                        <input formControlName="ControlVerificationClosureID" hidden="true">
+                                        <mat-form-field appearance="fill" fxFlexOffset="10px">
+                                            <mat-label>Verification of closure</mat-label>
+                                            <input matInput formControlName="ControlVerificationClosure">
+                                        </mat-form-field>
+                                        <button fxFlexOffset="10px" mat-mini-fab
+                                            aria-label="add risk category" *ngIf="addActionPlanVerification"
+                                            (click)="saveActionVerificationData()">
+                                            <mat-icon>check</mat-icon>
+                                        </button>
+                                        <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="add reviewer"
+                                        *ngIf="addActionPlanVerification"
+                                        (click)="cancelActionPlanVerification()">
+                                            <mat-icon>close</mat-icon>
+                                        </button>
+                                    </form>
+                                </div>
+                            </mat-card-actions>
+                        </mat-card>
+                    </div>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <!-- end of Action -->
+    <!-- start of reviwer card -->
+    <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <span><b>Reviewers</b></span>
+            <mat-card class="mat-elevation-z4" fxFlexAlign="stretch" style="padding: 0px 0px 16px 0px !important">
+                <mat-card-header></mat-card-header>
+                <mat-card-content>
+                    <form [formGroup]="ReviewerForms" autocomplete="off">
+                        <ng-container formArrayName="GridRows">
+                            <mat-table [dataSource]="dataSourceReviewer" >
+                                <ng-container matColumnDef="RowNumber">
+                                    <mat-header-cell *matHeaderCellDef>#</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index"  [formGroup]="row" [ngClass]="(!ReviewerForms.get('GridRows')?.value[i].IsActive && ReviewerForms.get('GridRows')?.value[i].IsDeleted) || (ReviewerForms.get('GridRows')?.value[i].isLinked) ? 'disable-color' : ''"
+                                    [matTooltip]="(!ReviewerForms.get('GridRows')?.value[i].IsActive && ReviewerForms.get('GridRows')?.value[i].IsDeleted) ? 
+                                    'Your Power User Access or Unit Access is removed by the User Manager' :  
+                                    (ReviewerForms.get('GridRows')?.value[i].isLinked ? 'The user is currently mapped to an ongoing Assessment - ' + 
+                                      ReviewerForms.get('GridRows')?.value[i].ScheduleAssessmentCodes + '.Kindly remove the mapping to enable editing of these details' : '')">
+                                  
+                                        {{i + 1}}  </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Reviewer">
+                                    <!-- <mat-header-cell *matHeaderCellDef mat-sort-header>Reviewer</mat-header-cell> -->
+                                    <mat-header-cell *matHeaderCellDef class="col-header">
+                                        <div class="card1">
+                                            <label class="input">
+                                                <div class="input-group" style="width: 82%;">
+                                                    <input type="text" id="search-input" placeholder="" class="field form-control"
+                                                        aria-describedby="date-design-prepend" [formControl]="reviewerFilter">
+                                                    <div class="label">
+                                                        <div style="margin-right: auto;margin-top: 22px;">Reviewer</div>
+                                                        <div>
+                                                            <mat-icon><img src="assets/icon-search.svg" height="50%"></mat-icon>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </label>
+                                        </div>
+                                    </mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" fxFlex [formGroup]="row"
+                                        class="tablecolumnspan">
+                                        <span [ngClass]="(!ReviewerForms.get('GridRows')?.value[i].IsActive && ReviewerForms.get('GridRows')?.value[i].IsDeleted) || (ReviewerForms.get('GridRows')?.value[i].isLinked) ? 'disable-color' : ''"  
+                                            [matTooltip]="(!ReviewerForms.get('GridRows')?.value[i].IsActive && ReviewerForms.get('GridRows')?.value[i].IsDeleted) ? 
+                                            'Your Power User Access or Unit Access is removed by the User Manager' :  
+                                            (ReviewerForms.get('GridRows')?.value[i].isLinked ? 'The user is currently mapped to an ongoing Assessment - ' + 
+                                            ReviewerForms.get('GridRows')?.value[i].ScheduleAssessmentCodes + '.Kindly remove the mapping to enable editing of these details' : '')"
+                                            [hidden]="!ReviewerForms.get('GridRows')?.value[i].isEditable">{{ReviewerForms.get('GridRows')?.value[i].Description}}</span>
+                                        <mat-form-field
+                                            [hidden]="ReviewerForms.get('GridRows')?.value[i].isEditable"
+                                            [appearance]="ReviewerForms.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="text" formControlName="Description"
+                                            [hidden]="ReviewerForms.get('GridRows')?.value[i].isEditable"
+                                            [readonly]="ReviewerForms.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <!-- <ng-container matColumnDef="Action">
+                                    <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            matTooltip="Save Changes"
+                                            color="primary"
+                                            [disabled]="!row.valid"
+                                            (click)="saveEditedReviewerData(ReviewerForms,i)"
+                                            *ngIf="!ReviewerForms.get('GridRows')?.value[i]?.isEditable">
+                                            <mat-icon>check_circle</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                            matTooltip="Cancel Changes" color="warn" (click)="cancelReviewerTable(ReviewerForms, i)"
+                                            *ngIf="!ReviewerForms.get('GridRows')?.value[i]?.isEditable">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            matTooltip="Edit" color="primary" (click)="editReviewer(ReviewerForms, i)"
+                                            *ngIf="ReviewerForms.get('GridRows')?.value[i]?.isEditable">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                    </mat-cell>
+                                </ng-container> -->
+                                <ng-container matColumnDef="Status">
+                                    <mat-header-cell *matHeaderCellDef>Status</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        <mat-slide-toggle
+                                        [checked]="ReviewerForms.get('GridRows')?.value[i]?.IsActive"
+                                        (change)="changedReviewer(row, $event)"
+
+                                        [disabled]="(!ReviewerForms.get('GridRows')?.value[i].IsActive && ReviewerForms.get('GridRows')?.value[i].IsDeleted) || ReviewerForms.get('GridRows')?.value[i].isLinked"
+
+                                        [matTooltip]="(!ReviewerForms.get('GridRows')?.value[i].IsActive && ReviewerForms.get('GridRows')?.value[i].IsDeleted) ? 
+                                    'Your Power User Access or Unit Access is removed by the User Manager' :  
+                                    (ReviewerForms.get('GridRows')?.value[i].isLinked ? 'The user is currently mapped to an ongoing Assessment - ' + 
+                                      ReviewerForms.get('GridRows')?.value[i].ScheduleAssessmentCodes + '.Kindly remove the mapping to enable editing of these details' : '')">
+                                        </mat-slide-toggle>
+                                        <span *ngIf="ReviewerForms.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                        <span *ngIf="!ReviewerForms.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                    </mat-cell>
+                                </ng-container>
+                                <mat-header-row *matHeaderRowDef="displayReviewer"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayReviewer;"></mat-row>
+                            </mat-table>
+                        </ng-container>
+                    </form>
+                </mat-card-content>
+                <mat-error *ngIf="saveReviewerError">{{saveReviewerError}}</mat-error>
+                <mat-card-actions class="">
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                        <button mat-mini-fab color="warn" aria-label="add reviewer"
+                        *ngIf="!addReviewer" (click)="initiatAddReviewer()">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <form [formGroup]="reviewerForm" autocomplete="off" *ngIf="addReviewer">
+                            <!-- <input formControlName="ReviewerID" hidden="true">
+                            <mat-form-field appearance="fill" fxFlexOffset="10px">
+                                <mat-label>Reviewer</mat-label>
+                                <input matInput formControlName="Description">
+                            </mat-form-field> -->
+                            <label *ngIf="addReviewer" for="Reviewers" style="margin-top: 1.5vh;">Select Reviewer:</label>
+                            <mat-form-field style="margin: -2vh 0.5vw;" *ngIf="addReviewer">
+                                <mat-select id="Reviewers" [(ngModel)]="selectedReviewer" [ngModelOptions]="{standalone: true}" name="user">
+                                    <mat-option *ngFor="let user of reviewersDropdownData" [value]="user">
+                                        {{user.FullName}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                            <button fxFlexOffset="10px" mat-mini-fab [disabled]="selectedReviewer == null"
+                                aria-label="add risk category" *ngIf="addReviewer" (click)="saveReviewerData()">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="add reviewer"
+                            *ngIf="addReviewer" (click)="cancelReviewer()">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </form>
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+    <!-- end of reviewer card -->
+</div>

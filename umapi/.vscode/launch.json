@@ -1,0 +1,24 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      // Runs app-server.js directly (like npm start)
+      "type": "pwa-node",
+      "request": "launch",
+      "name": "Debug with VS Code",
+      "program": "${workspaceFolder}/app-server.js",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      // Attach to process started with `npm run dev`
+      "type": "pwa-node",
+      "request": "attach",
+      "name": "Attach to Nodemon (dev)",
+      "port": 9002,
+      "restart": true,
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

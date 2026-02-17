@@ -1,0 +1,107 @@
+<!-- <mat-toolbar>
+    <h3>Bulk Approval/Rejection </h3>
+    <span class="spacer"></span>
+    <button mat-icon-button *ngIf="isMax" title="Restore" (click)="minimize()">
+        <mat-icon aria-hidden="false" aria-label="Restore" fontIcon="fullscreen_exit"></mat-icon>
+    </button>
+    <button mat-icon-button *ngIf="!isMax" title="Maximize" (click)="maximize()">
+        <mat-icon aria-hidden="false" aria-label="Maximize" fontIcon="fullscreen"></mat-icon>
+    </button>
+    <button mat-icon-button title="Close" (click)="closeDialog()" cdkFocusInitial mat-dialog-close>
+        <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close" ></mat-icon>
+    </button>
+</mat-toolbar>
+<br>
+<mat-dialog-content>
+    <div class="col-12 position-relative">
+        <div class="row mx-0">
+            <div class="col-12">
+                <p class="modalPargraph">
+                    <span class="txtSmall">Its <span class="txtredSemi"> mandatory</span> to provide <span class="txtredSemi">comments</span> on <span class="txtredSemi">Rejection</span> and <span class="txtGreen">non-mandatory</span> for <span class="txtGreen">Approval</span>.</span><br><br>
+                We noticed few Rejected KRIs do not contain mandatory comments. Please provide your generic comments which will be used for the KRIs with
+                blank comment data.<br><br>
+                <span class="txtSmall"><b>Please note:</b> KRIs where comments are available, we will not replace them with generic Rejection Comments.</span>
+                </p>
+            </div>
+        </div>
+        <div class="row mx-0 pt-4">
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Generic Comments for Bulk Rejection <sup>*</sup></label>
+                    <textarea class="form-control fldcolor modalrejectFld" id="exampleFormControlTextarea1" placeholder="..." rows="5"></textarea>
+                  </div>
+
+            </div>
+
+            <div class="col-6">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1">Generic Comments for Bulk Approval</label>
+                    <textarea class="form-control fldcolor modalapprovedFld" id="exampleFormControlTextarea1" placeholder="..." rows="5"></textarea>
+                  </div>
+
+            </div>
+
+        </div>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions style="float: right;">
+    <button type="button" class="btn btnsubmit modalBtnSbmit mr-2" (click)="submit()"><span><img src="assets/icons/icon-submit-btn.svg" style="width: 100%;" class="d-inline-block align-middle cursor-pointer" alt="" ></span>Submit</button>
+	<button type="button" class="btn btnCancel" data-dismiss="modal">Cancel</button>
+</mat-dialog-actions> -->
+<div style="height: 65vh;display: flex; flex-direction:column; justify-content:space-between;"  [formGroup]="defineKRIForm" >
+    <div style="margin-top: -3.3vh;width: 51vw;margin-left: -4vh;">
+        <mat-toolbar style="display: flex; justify-content:space-between ;align-items: center;     background-image: linear-gradient(to left, #0B65A0, #009873);" >
+            <div> <h3>Bulk Approval/Rejection </h3></div>
+            <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+                <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+            </button>
+        </mat-toolbar>
+        <div class="mat-table-padding example-container" style="margin-left: 7vh;margin-top: 3vh;margin-right: 5vh;" >
+            <!-- <mat-dialog-content> -->
+                <div class="col-12 position-relative">
+                    <div class="row mx-0">
+                        <div class="col-12">
+                            <p class="modalPargraph">
+                                <span class="txtSmall">Its <span class="txtredSemi" style="color: #e62222;"> mandatory</span> to provide <span class="txtredSemi" style="color: #e62222;">comments</span> on <span class="txtredSemi" style="color: #e62222;">Rejection</span> and <span class="txtGreen" style="color: #009873;">non-mandatory</span> for <span class="txtGreen" style="color: #009873;">Approval</span>.</span><br><br>
+                           <span style="font-size: 18px;"> We noticed few Rejected KRIs do not contain mandatory comments. Please provide your generic comments which will be used for the KRIs with
+                            blank comment data.</span><br><br>
+                            <span class="txtSmall"><b>Please note:</b> KRIs where comments are available, we will not replace them with generic Rejection Comments.</span>
+                            </p>
+                        </div>
+                    </div>
+                    <div class="row mx-0 pt-4" style="display: flex;">
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="bulkRejectionTextarea">Generic Comments for Bulk Rejection <sup>*</sup></label>
+                                <textarea class="form-control fldcolor modalrejectFld" style="height: 16vh;width: 33vh;margin-top: 2vh;font-family: 'Roboto Condensed';" id="bulkRejectionTextarea"  formControlName="bulkRejectionTextareaData" ></textarea>
+                                <mat-error *ngIf="(submitted || f['bulkRejectionTextareaData'].touched) && f['bulkRejectionTextareaData'].errors">Bulk Reject comments is
+                                    required</mat-error>
+                            </div>
+                        </div>
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label for="bulkApprovalTextarea">Generic Comments for Bulk Approval</label>
+                                <textarea class="form-control fldcolor modalapproveFld" style="height: 16vh;width: 33vh;margin-top: 2vh;font-family: 'Roboto Condensed';" id="bulkApprovalTextareaData" formControlName="bulkApprovalTextareaData"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <!-- </mat-dialog-content> -->
+            <!-- <mat-paginator #paginator [pageSize]="5" showFirstLastButtons [pageSizeOptions]="[5,10, 25, 100]"></mat-paginator> -->
+        </div>
+    </div>
+    <!-- <div class="bottom-dig" style="margin-left: 71vh;display: flex;justify-content: space-between;">
+            <button mat-stroked-button mat-dialog-close>Cancel</button>
+        </div> -->
+
+        <div class="modal-footer modalFooter">
+            <button type="button" class="btn btnsubmit modalBtnSbmit mr-2" (click)="submit()"><span><img src="assets/icons/icon-submit-btn.svg" style="width: 100%;" class="d-inline-block align-middle cursor-pointer" alt="" ></span>Submit</button>
+
+            <!-- <button mat-stroked-button mat-dialog-close>Cancel</button> -->
+            <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh" mat-dialog-close>Cancel</button>
+        </div>
+
+</div>
+<!-- (click)="closeAllPopup()" -->

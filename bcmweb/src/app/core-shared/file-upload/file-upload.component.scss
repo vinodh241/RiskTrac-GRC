@@ -1,0 +1,35 @@
+.container {
+    height: auto;
+    width: 100%;
+}
+
+.mat-elevation-z8 {
+    margin: 2vh;
+}
+
+.mat-column-Index,
+.mat-column-AddIcon {
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px;
+    flex: initial;
+}
+
+.link {
+    font-style: oblique;
+    cursor: pointer;
+    text-decoration: underline;
+    color: blue;
+    max-width: 60px;
+    word-wrap: break-word;
+}
+
+
+.mat-header-row{
+    z-index: 1;
+}
+.material-icons { 
+    font-size: 20px;
+}

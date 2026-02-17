@@ -1,0 +1,657 @@
+{
+    "ROUTE_METHODS": [        
+        {
+            "get-vendor-details" : "getVendorDetails",
+            "validateFunction"   :  0
+        },
+        {
+            "get-site-master"    : "getSiteMaster",
+            "validateFunction"   : 0
+        },
+        {
+            "get-site-master-info"  : "getSiteMasterInfo",
+            "validateFunction"      : 0
+        },
+        {
+            "add-site-master"   : "addSiteMaster",
+            "validateFunction"  : 0
+        },
+        {
+            "update-site-master"    : "updateSiteMaster",
+            "validateFunction"      : 0
+        },
+        {
+            "delete-site-master"    : "deleteSiteMaster",
+            "validateFunction"      : 0
+        },
+        {
+            "get-threat-master"    : "getThreatMaster",
+            "validateFunction"   : 0
+        },
+        {
+            "get-threat-master-info"    : "getThreatMasterInfo",
+            "validateFunction"          : 0
+        },
+        {
+            "add-threat-master"     : "addThreatMaster",
+            "validateFunction"      : 0
+        },
+        {
+            "update-threat-master"    : "updateThreatMaster",
+            "validateFunction"      : 0
+        },
+        {
+            "delete-threat-master"    : "deleteThreatMaster",
+            "validateFunction"      : 0
+        },
+        {
+            "get-businessServicesAndApps-master":"getBusinessServicesAppsMaster",
+            "validateFunction":0
+        },
+        {
+            "get-businessServicesAndApps-master-info":"getBusinessServicesAppsMasterInfo",
+            "validateFunction":0
+        },
+        {
+            "add-businessServicesAndApps-master":"addBusinessServicesAppsMaster",
+            "validateFunction":0
+        },
+        {
+            "update-businessServicesAndApps-master":"updateBusinessServicesAppsMaster",
+            "validateFunction":0
+        },
+        {
+            "delete-businessServicesApps-master":"deleteBusinessServicesAppsMaster",
+            "validateFunction":0
+        },
+        {
+            "get-metrics-master":"getMetricsMaster",
+            "validateFunction":0
+        },
+        {
+            "get-metrics-master-info":"getMetricsMasterInfo",
+            "validateFunction":0
+        },
+        {
+            "add-metric-master":"addMetricMaster",
+            "validateFunction":0
+        },
+        {
+            "update-metric-master":"updateMetricMaster",
+            "validateFunction":0
+        },
+        {
+            "delete-metric-master":"deleteMetricMaster",
+            "validateFunction":0
+        },
+        {
+            "add-vendor-master":"addVendorMaster",
+            "validateFunction":0
+        },
+        {
+            "get-business-function-master" : "getBusinessFunctionsMaster",
+            "validateFunction":0
+        },
+        {
+            "add-business-functions-master" : "addBusinessFunctionsMaster",
+            "validateFunction":0
+        },
+        {
+            "get-vendor-details" : "getVendorDetails",
+            "validateFunction"   :  0
+        },
+        {
+            "get-crisis-comms-master"                   : "getCrisisCommsMaster",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-crisis-comms-master-info"              : "getCrisisCommsMasterInfo",
+            "validateFunction"                          : 0
+        },
+        {
+            "add-crisis-comms-master"                   : "addCrisisCommsMaster",
+            "validateFunction"                          : 0
+        },
+        {
+            "update-crisis-comms-master"                : "updateCrisisCommsMaster",
+            "validateFunction"                          : 0
+        },
+        {
+            "delete-crisis-comms-master"                : "deleteCrisisCommsMaster",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-risk-data"                             : "getRiskData",
+            "validateFunction"                          : 0
+        },
+        {
+            "save-risk-response"                        : "saveRiskResponse",
+            "validateFunction"                          : 0
+        },
+        {
+            "submit-risk-response"                      : "submitRiskResponse",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-site-risk-assessments-list"            : "getSiteRiskAssessmentsList",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-site-risk-assessments-info"            : "getSiteRiskAssessmentsInfo",
+            "validateFunction"                          : 0
+        },
+        {
+            "add-site-risk-assessment"                  : "addSiteRiskAssessment",
+            "validateFunction"                          : 0
+        },
+        {
+            "update-site-risk-assessment"               : "updateSiteRiskAssessment",
+            "validateFunction"                          : 0
+        },
+        {
+            "delete-site-risk-assessment"               : "deleteSiteRiskAssessment",
+            "validateFunction"                          : 0
+        },
+        {
+            "add-new-custom-threat"                     : "addNewCustomThreat",
+            "validateFunction"                          : 0
+        },
+        {
+            "update-new-custom-threat"                  : "updateNewCustomThreat",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-application-support-details"           : "getApplicationSupportDetails",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-business-function-master-info"         : "getBusinessFunctionMasterInfo",
+            "validateFunction"                          : 0
+        },
+        {
+            "addWebPageConfiguration"                   : "addWebPageConfiguration",
+            "validateFunction"                          : 0
+        },
+        {
+            "getWebPageConfiguration"                   : "getWebPageConfiguration",
+            "validateFunction"                          : 0
+        },         
+        {
+            "execProcedure"                             : "execProcedure",
+            "validateFunction"                          : 0
+        },
+        {
+            "addData"                                   : "addData",
+            "validateFunction"                          : 0
+        }, 
+        {
+            "getInfoMasterFields"                       : "getInfoMasterFields",
+            "validateFunction"                          : 0
+        },
+        {
+            "addWebPageControlConfiguration"            : "addWebPageControlConfiguration",
+            "validateFunction"                          : 0
+        },
+        {
+            "getWebPageControlConfiguration"            : "getWebPageControlConfiguration",
+            "validateFunction"                          : 0
+        },
+        {
+            "getPageDetails"                            : "getPageDetails",
+            "validateFunction"                          : 0
+        },
+        {
+            "editData"                                  : "editData",
+            "validateFunction"                          : 0
+        },
+        {
+            "getEditControlInfo"                        : "getEditControlInfo",
+            "validateFunction"                          : 0
+        },
+        {
+            "editRecordStatus"                          : "editRecordStatus",
+            "validateFunction"                          : 0
+        },
+        {
+            "getAllWebPageControlConfiguration"         : "getAllWebPageControlConfiguration",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-site-risk-assessments-details"         : "getSiteRiskAssessmentsDetails",
+            "validateFunction"                          : 0
+        },
+        {
+            "review-risk-response"                      : "reviewRiskResponse",
+            "validateFunction"                          : 0
+        },
+        {
+            "submit-review-risk-response"               : "submitReviewRiskResponse",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-risk-assessment-action-trail"          : "getRiskAssessmentActionTrail",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-site-assessments-for-report"           : "getSiteRiskAssessmentsForReport",
+            "validateFunction"                          : 0
+        },
+        {
+            "upload-risk-evidence"                      : "uploadRiskEvidence",
+            "validateFunction"                          : 0
+        },
+        {
+            "download-risk-evidence"                    : "downloadRiskEvidence",
+            "validateFunction"                          : 0
+        },
+        {
+            "getUpdatedToken"                           :"getUpdatedToken",
+            "validateFunction"                          : 0
+        },
+        {
+            "update-vendor-master"                      : "updateVendorMaster",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-overall-risk-rating"                   : "getOverAllRiskRating",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-bcms-tests-list"                       : "getBcmsTestsList",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-bcms-add-test-info"                    : "getBcmsAddTestInfo",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-site-risk-assessments-draft-report"    : "getSiteRiskAssessmentsDraftReport",
+            "validateFunction"                          : 0
+        },
+        {
+           "delete-custom-threat"                       : "deleteCustomThreat",
+           "validateFunction"                           : 0
+        },
+        {
+            "publish-site-assessment"                   : "publishSiteAssessment",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-crisis-communications-list"            : "getCrisisCommunicationsList",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-create-crisis-message-info"            : "getCreateCrisisMessageInfo",
+            "validateFunction"                          : 0
+        },
+        {
+            "create-crisis-message"                     : "createCrisisMessage",
+            "validateFunction"                          : 0
+        },
+        {
+            "update-crisis-message"                     : "updateCrisisMessage",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-crisis-communication-data"             : "getCrisisCommunicationData",
+            "validateFunction"                          : 0
+        },
+        {
+            "upload-crisis-attachment"                  : "uploadCrisisAttachment",
+            "validateFunction"                          : 0
+        },
+        {
+            "download-crisis-attachment"                : "downloadCrisisAttachment",
+            "validateFunction"                          : 0
+        },
+        {
+            "send-crisis-communication"                 : "sendCrisisCommunication",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-incidents-report-list"                 : "getIncidentsReportList",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-create-incident-info"                  : "getIncidentReportInfo",
+            "validateFunction"                          : 0
+        },
+        {
+            "create-new-incident-report"                : "CreateNewIncidentReport",
+            "validateFunction"                          : 0
+        },
+        {
+            "update-incident-report"                    : "updateIncidentReport",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-incident-report-data"                  : "getIncidentReportData",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-incident-action-trials"                : "getIncidentActionTrails",
+            "validateFunction"                          : 0
+        },
+        {
+            "review-incident-report"                    : "reviewIncidentReport",
+            "validateFunction"                          : 0
+        },
+        {
+            "submit-incident-report-for-review"         : "submitIncidentReportForReview",
+            "validateFunction"                          : 0
+        },
+        {
+            "download-incident-consolidated-reports"    : "getIncidentConsolidatedReportData",
+            "validateFunction"                          : 0
+        },
+        {
+            "upload-incident-evidence"                  : "uploadIncidentEvidence",
+            "validateFunction"                          : 0
+        },
+        {
+            "download-incident-evidence"                : "downloadIncidentEvidence",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-initiate-review"                       : "getInitiateReview",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-business-profile-questions"            : "getBusinessProfileQuestions",
+            "validateFunction"                          : 0
+        },
+        {
+            "get-business-continuity-plans-review-list" : "getBusinessContinuityPlansReviewList",
+            "validateFunction"                          : 0
+        },
+        {
+            "add-bcms-test"     : "addBcmsTest",
+            "validateFunction"  : 0
+        },
+        {
+            "update-bcms-test"  : "updateBcmsTest",
+            "validateFunction"  : 0
+        },
+        {
+            "get-bcms-test-data"    : "getBcmsTestData",
+            "validateFunction"      : 0
+        },
+        {
+            "update-bcms-test-status"   : "updateBcmsTestStatus",
+            "validateFunction"          : 0
+        },
+        {
+            "get-participant-report-data"   : "getParticipantReportData",
+            "validateFunction"              : 0
+        },
+        {
+            "save-participant-report"   : "saveParticipantReport",
+            "validateFunction"          : 0
+        },
+        {
+            "submit-participant-report" : "submitParticipantReport",
+            "validateFunction"          : 0
+        },
+        {
+            "review-participant-report" : "reviewParticipantReport",
+            "validateFunction"          : 0
+        },
+        {
+            "get-observer-report-data"  : "getObserverReportData",
+            "validateFunction"          : 0
+        },
+        {
+            "save-observer-report"      : "saveObserverReport",
+            "validateFunction"          : 0
+        },
+        {
+            "submit-observer-report"    : "submitObserverReport",
+            "validateFunction"          : 0
+        },
+        {
+            "review-observer-report"    : "reviewObserverReport",
+            "validateFunction"          : 0
+        },
+        {
+            "get-publish-report-data"   : "getPublishReportData",
+            "validateFunction"          : 0
+        },
+        {
+            "save-publish-report-data"   : "savePublishReportData",
+            "validateFunction"           : 0
+        },
+        {
+            "publish-test-report"       : "publishTestReport",
+            "validateFunction"          : 0
+        },
+        {
+            "validate-bcms-time-duration"   : "validateBcmsTimeDuration",
+            "validateFunction"              : 0
+        },
+        {
+            "download-test-export-draft"    : "downloadTestExportDraft",
+            "validateFunction"              : 0
+        },
+        {
+            "get-bcms-review-comments"      : "getBcmsReviewComments",
+            "validateFunction"              : 0
+        },
+        {
+            "upload-bcmstest-evidence"      : "uploadTestEvidence",
+            "validateFunction"              : 0
+        },
+        {
+            "download-bcmstest-evidence"    : "downloadTestEvidence",
+            "validateFunction"              : 0
+        },
+        {
+            "get-business-process-details"          : "getBusinessProcessDetails",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-business-process-info-list"        : "getBusinessProcessInfoList",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-impact-assessment-details"          : "getImpactAssessmentDetails",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-resource-requirement-details"      : "getResourceRequirementDetails",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-recovery-process-details"          : "getRecoveryProcessDetails",
+            "validateFunction"                      : 0
+        },
+        {   
+            "save-process-activity-details"         : "saveProcessActivityDetails",
+            "validateFunction"                      : 0
+        },
+        {   
+            "save-impact-assessmentdetails"         : "saveImpactAssessmentDetails",
+            "validateFunction"                      : 0
+        },
+        {   
+            "save-resource-requirements-details"    : "saveResourceRequirementsDetails",
+            "validateFunction"                      : 0
+        },
+        {   
+            "save-recovery-process-details"         : "saveRecoveryProcessDetails",
+            "validateFunction"                      : 0
+        },
+        {   
+            "submit-review"                         : "submitReview",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-review-comments"                   : "getReviewComments",
+            "validateFunction"                      : 0
+        },
+        {
+            "publish-BCP"                           : "publishBCP",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-bcp-consolidated-report"           : "getBCPConsolidatedReport",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-complete-bcp-draft-report"         : "getBCPDraftResponse",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-business-continuity-plans-list"    : "getBusinessContinuityPlansList",
+            "validateFunction"                      : 0
+        },
+        {
+            "initiate-review"                        : "initiateReview",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-compliance-reviews-list"           : "getComplianceReviewsList",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-compliance-reviews-info"           : "getComplianceReviewsInfo",
+            "validateFunction"                      : 0
+        },
+        {
+            "view-compliance-review-dashboard"      : "viewComplianceReviewDashboard",
+            "validateFunction"                      : 0
+        },
+        {
+            "add-new-compliance-review"             : "addNewComplianceReview",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-action-item-List"                   : "getActionItemList",
+            "validateFunction"                      : 0
+        },
+        {
+            "save-action-item-details"              : "saveActionItemDetails",
+            "validateFunction"                      : 0
+        },
+        {
+            "add-update-new-action-item"            : "addUpdateNewActionItem",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-action-item-data"                  : "getActionItemData",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-action-item-info"                  : "getActionItemInfo",
+            "validateFunction"                      : 0
+        },
+        {
+            "request-action-item-extention"         : "requestActionItemExtention",
+            "validateFunction"                      : 0
+        },
+        {
+            "upload-action-item-attachment"         : "uploadActionItemAttachment",
+            "validateFunction"                      : 0
+        },
+        {
+            "download-action-item-attachment"       : "downloadActionItemAttachment",
+            "validateFunction"                      : 0
+        },
+        {
+            "save-business-function-profile"        : "saveBusinessFunctionProfile",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-dependencies-info"                 : "getDependenciesInfo",
+            "validateFunction"                      : 0
+        },
+        {
+            "save-dependencies"                     : "saveDependencies",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-risk-mitigation-info"              : "getRiskMitigationInfo",
+            "validateFunction"                      : 0
+        },
+        {
+            "save-risk-mitigation"                  : "saveRiskMitigation",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-staff-contact-info"                : "getStaffContactInfo",
+            "validateFunction"                      : 0
+        },
+        {
+            "save-staff-contact"                    : "saveStaffContactDetails",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-complete-BCP-details"              : "getCompleteBCPDetails",
+            "validateFunction"                      : 0
+        },
+        {
+            "update-action-item"                    : "updateActionItem",
+            "validateFunction"                      : 0
+        },
+        {
+            "delete-action-item-attachment"         : "deleteActionItemAttachment",
+            "validateFunction"                      : 0
+        },
+        {
+            "submit-action-item-response"           : "submitActionItemResponse",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-action-items-comments"             : "get-action-items-comments",
+            "validateFunction"                      : 0
+        },
+        {
+            "review-action-item-response"           : "reviewActionItemResponse",
+            "validateFunction"                      : 0
+        },
+        {
+            "delete-action-item"                    : "deleteActionItem",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-global-dashboard-data"             : "getGlobalDashboardData",
+            "validateFunction"                      : 0
+        },
+        {
+            "add-bulk-business-services-master"     : "addBulkBusinessServicesMaster",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-steering-commitee-master"          : "getSteeringCommiteeMaster",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-steering-commitee-master-info"     : "getSteeringCommiteeMasterInfo",
+            "validateFunction"                      : 0
+        },
+        {
+            "add-steering-commitee-master"          : "addSteeringCommiteeMaster",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-user-alerts"                       : "getUserAlerts",
+            "validateFunction"                      : 0
+        },
+        {
+            "update-user-alerts"                    : "updateUserAlerts",
+            "validateFunction"                      : 0
+        },
+        {
+            "delete-user-alerts"                    : "deleteUserAlerts",
+            "validateFunction"                      : 0
+        },
+        {
+            "get-data-for-overall-risk-rating"      : "getDataForOverallRiskRating",
+            "validateFunction"                      : 0
+        },
+        {
+            "manage-overall-risk-rating"            : "manageOverallRiskRating",
+            "validateFunction"                      : 0
+        }
+    ]
+}
+

@@ -1,0 +1,56 @@
+{
+    "ROUTE_METHODS": [
+        {
+            "get-user-details-from-ad"  : "getUserDetailsFromAD",
+            "validateFunction"          : 1
+        },
+        {
+            "get-users"                 : "getUsers",
+            "validateFunction"          : 1
+        },       
+        {
+            "delete-user"               : "deleteUser",
+            "validateFunction"          : 1
+        },
+        {
+            "get-assigned-user-info"    : "getAssignedUserInfo",
+            "validateFunction"          : 1
+        },
+        {
+            "add-assign-user"           : "addAssignUser",
+            "validateFunction"          : 1
+        },
+        {
+            "logout"                    : "updateUserLogout",
+            "validateFunction"          : 0
+        },
+        {
+            "get-All-Accounts-Name"     : "getAllAccountsName",
+            "validateFunction"          : 0
+        },
+        {
+            "reset-password"            : "resetPassword",
+            "validateFunction"          : 0
+        },
+        {
+            "enable-disable-user"       : "enableDisableUser",
+            "validateFunction"          : 0
+        },
+        {
+            "change-password-user"      : "changePasswordUser",
+            "validateFunction"          : 0
+        },
+        {
+            "send-otp-for-change-password"  : "sendOTPForChangePassword",
+            "validateFunction"              : 0
+        },
+        {
+            "get-password-history-data"     : "getPasswordHistoryData",
+            "validateFunction"              : 0
+        },
+        {
+            "verify-OTP-for-login"          : "verifyOTPForLogin",
+            "validateFunction"              : 0
+        }
+    ]
+}

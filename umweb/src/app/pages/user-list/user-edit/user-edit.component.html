@@ -1,0 +1,315 @@
+<div style="border-radius: 5px;">
+    <mat-toolbar>
+        <h2 mat-dialog-title> {{copy.mode=="add"? ('userEdit.addUserTitle' | translate) : ('userEdit.editUserTitle' | translate)}} </h2>
+        <span class="spacer"></span>
+        <button mat-icon-button [title]="'common.close' | translate" cdkFocusInitial mat-dialog-close id="closeUserPopup">
+            <mat-icon aria-hidden="false" [attr.aria-label]="'common.close' | translate" fontIcon="close"></mat-icon>
+        </button>
+    </mat-toolbar>
+    <div class = 'dialog-content'style="height: 78vh;display:flex;">
+        <div class="left" style="margin-top: -12px; " >
+            <mat-card style="background-color: #F2F2F2;" >
+                <!-- AD authentication -->
+                <div style="padding: 20px; flex-direction: column;" *ngIf = 'this.authenticationMode == 1'>
+                    <form [formGroup]="searchForm" (ngSubmit)="onSubmit()" autocomplete="off">
+                        <div class="row-wise">
+                            <mat-form-field appearance="outline"  class="bg-transparent" >
+                                <mat-label> {{ 'userEdit.searchByUserId' | translate }} </mat-label>
+                                <input matInput id="userid" formControlName="userid" [placeholder]="'userEdit.userIdPlaceholder' | translate">
+                            </mat-form-field>
+                            &nbsp; <span style="margin-top: 3vh;"> <mat-label>{{ 'common.or' | translate }}</mat-label></span> &nbsp;
+                            <mat-form-field appearance="outline"   class="bg-transparent">
+                                <mat-label> {{ 'userEdit.searchByEmailId' | translate }} </mat-label>
+                                <input matInput id="emailid" formControlName="emailid" [placeholder]="'userEdit.emailPlaceholder' | translate" >
+                            </mat-form-field>
+                        </div>
+                        <div class="row-wise top-bottom-space">
+                            <mat-error *ngIf="searcherror">{{searcherror}}</mat-error>
+                            <span class="spacer"></span>
+                            <button mat-raised-button color="primary" type="submit" [disabled]="copy.mode=='edit'" id="searchUser">
+                                 <img src="assets/search.svg" height="50%" alt="Save"> &nbsp;{{ 'userEdit.searchUser' | translate }} </button>
+                        </div>
+                    </form>
+                    <br>
+                    <div class="row-wise">
+                        <div class="w-50">
+                            <mat-form-field appearance="outline"  class="bg-transparent field-two left"  >
+                                <mat-label> {{ 'userEdit.fields.firstName' | translate }} </mat-label>
+                                <input matInput id="FirstName" [placeholder]="'userEdit.fields.firstNamePlaceholder' | translate" #FirstName="ngModel" name="FirstName" [(ngModel)]="copy.FirstName" (ngModelChange)="updateFullADName()"  required [disabled]="copy.IsUserEnabled == 0">
+                            </mat-form-field> 
+                        </div>
+                        <div class="w-50">
+                            <mat-form-field appearance="outline"  class="bg-transparent field-two right" >
+                                <mat-label> {{ 'userEdit.fields.middleName' | translate }} </mat-label>
+                                <input matInput id="MiddleName" [placeholder]="'userEdit.fields.middleNamePlaceholder' | translate" name="MiddleName" [(ngModel)]="copy.MiddleName" (ngModelChange)="updateFullADName()" [disabled]="copy.IsUserEnabled == 0">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                        <div class="row-wise">
+                        <div class="w-50">
+                            <mat-form-field appearance="outline" class=" top-bottom-space bg-transparent field-two left">
+                                <mat-label> {{ 'userEdit.fields.lastName' | translate }} </mat-label>
+                                <input matInput id="LastName" [placeholder]="'userEdit.fields.lastNamePlaceholder' | translate" name="LastName" [(ngModel)]="copy.LastName"
+                                    (ngModelChange)="updateFullADName()" [disabled]="copy.IsUserEnabled == 0">
+                            </mat-form-field>
+                        </div>
+                        <div class="w-50">
+                            <mat-form-field appearance="outline" class="bg-transparent field-two right">
+                                <mat-label>{{ 'userEdit.fields.jobTitle' | translate }}</mat-label>
+                                <input matInput id="Designation" [placeholder]="'userEdit.fields.jobTitlePlaceholder' | translate" name="Designation" [(ngModel)]="copy.Designation"
+                                    [disabled]="copy.IsUserEnabled == 0">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row-wise">
+                        <div class="w-50">
+                            <mat-form-field appearance="outline" class="bg-transparent field-two left">
+                                <mat-label> {{ 'userEdit.fields.mobileNumber' | translate }} </mat-label>
+                                <input matInput id="MobileNumber" [placeholder]="'userEdit.fields.mobileNumberPlaceholder' | translate" #MobileNumber="ngModel" name="MobileNumber" [(ngModel)]="copy.MobileNumber"  required [disabled]="copy.IsUserEnabled == 0">
+                            </mat-form-field>&nbsp; &nbsp;
+                        </div>
+                        <div class="w-50">
+                            <mat-form-field appearance="outline" class="bg-transparent field-two right">
+                                <mat-label> {{ 'userEdit.fields.emailId' | translate }} </mat-label>
+                                <input matInput id="EmailID" [placeholder]="'userEdit.fields.emailIdPlaceholder' | translate" #EmailID="ngModel" name="EmailID" [(ngModel)]="copy.EmailID" required email [disabled]="copy.IsUserEnabled == 0">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <!-- Local Authentication -->
+                <div style="flex-direction: column;" *ngIf = 'this.authenticationMode == 3'>
+                    <form [formGroup]="searchFormLocal" (ngSubmit)="onSubmit()" autocomplete="off">
+                        <mat-form-field appearance="outline" style="width: 100%;" class="bg-transparent">
+                            <mat-label>{{ 'userEdit.fields.userName' | translate }}</mat-label>
+                            <input matInput id="FirstName" formControlName="userName" [placeholder]="'userEdit.fields.userNamePlaceholder' | translate" required>
+                        </mat-form-field>
+                        <span style="font-size: smaller;">
+                            <mat-error *ngIf="validateUserName() && searchFormLocal.controls['userName'].touched">{{validateUserName()}} </mat-error>
+                        </span>
+                        <div class="row-wise">
+                            <div class="w-50">
+                                <mat-form-field appearance="outline"  class="bg-transparent field-two left">
+                                    <mat-label>{{ 'userEdit.fields.firstName' | translate }}</mat-label>
+                                    <input matInput id="FirstName" formControlName="fName" [placeholder]="'userEdit.fields.firstNamePlaceholder' | translate" required>
+                                </mat-form-field>
+                                <span style="font-size: smaller;">
+                                    <mat-error *ngIf="(searchFormLocal.controls['fName'].hasError('required') && searchFormLocal.controls['fName'].touched)">
+                                        {{ 'userEdit.validation.firstNameRequired' | translate }}
+                                    </mat-error>
+                                    <mat-error *ngIf="searchFormLocal.controls['fName'].hasError('pattern') && searchFormLocal.controls['fName'].touched">
+                                        {{ 'userEdit.validation.firstNamePattern' | translate }}
+                                    </mat-error>
+                                </span>
+                            </div>
+                            <div class="w-50">
+                                <mat-form-field appearance="outline"  class="bg-transparent field-two right">
+                                    <mat-label>{{ 'userEdit.fields.middleName' | translate }}</mat-label>
+                                    <input matInput id="MiddleName" formControlName="mName" [placeholder]="'userEdit.fields.middleNamePlaceholder' | translate">
+                                </mat-form-field>
+                                <span style="font-size: smaller;">
+                                    <mat-error *ngIf="(searchFormLocal.controls['mName'].hasError('pattern') && searchFormLocal.controls['mName'].touched)">
+                                        {{ 'userEdit.validation.middleNamePattern' | translate }}
+                                    </mat-error>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row-wise">
+                            <div class="w-50">
+                                <mat-form-field appearance="outline" class="bg-transparent field-two left">
+                                <mat-label>{{ 'userEdit.fields.lastName' | translate }}</mat-label>
+                                <input matInput id="LastName" formControlName="lName" [placeholder]="'userEdit.fields.lastNamePlaceholder' | translate" required>
+                                </mat-form-field>
+                            </div>                       
+                            <div class="w-50">
+                                <mat-form-field appearance="outline" class="bg-transparent field-two right">
+                                <mat-label>{{ 'userEdit.fields.jobTitle' | translate }}</mat-label>
+                                <input matInput id="DesignationLocal" formControlName="Designation" [placeholder]="'userEdit.fields.jobTitlePlaceholder' | translate">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="row-wise">
+                            <div class="w-50">
+                                <mat-form-field appearance="outline" class="bg-transparent field-two left">
+                                    <mat-label>{{ 'userEdit.fields.mobileNumber' | translate }}</mat-label>
+                                    <input matInput id="MobileNumber" formControlName="mobNo" [placeholder]="allowedRange" required>
+                                </mat-form-field>
+                               <span style="font-size: smaller;">
+                                    <mat-error *ngIf="(searchFormLocal.controls['mobNo'].hasError('required') && searchFormLocal.controls['mobNo'].touched) ">
+                                        {{ 'userEdit.validation.mobileRequired' | translate }}
+                                    </mat-error>
+                                    <mat-error *ngIf="searchFormLocal.controls['mobNo'].hasError('pattern') && searchFormLocal.controls['mobNo'].touched">
+                                        {{ 'userEdit.validation.mobilePattern' | translate }}
+                                    </mat-error>
+                                    <mat-error *ngIf="validateMobNoLength()"> {{validateMobNoLength()}}</mat-error>
+                                </span>
+                            </div>
+                            <div class="w-50">
+                                <mat-form-field appearance="outline"  class="bg-transparent field-two right">
+                                    <mat-label>{{ 'userEdit.fields.emailId' | translate }}</mat-label>
+                                    <input matInput id="EmailID" formControlName="userEmailId" [placeholder]="'userEdit.emailPlaceholder' | translate" required>
+                                </mat-form-field>
+                                <span style="font-size: smaller;">
+                                    <mat-error *ngIf="(searchFormLocal.controls['userEmailId'].hasError('required') && searchFormLocal.controls['userEmailId'].touched)">
+                                        {{ 'userEdit.validation.emailRequired' | translate }}
+                                    </mat-error>
+                                    <mat-error *ngIf="searchFormLocal.controls['userEmailId'].hasError('email') && searchFormLocal.controls['userEmailId'].touched">
+                                        {{ 'userEdit.validation.emailInvalid' | translate }}
+                                    </mat-error>
+                                    <ng-container *ngIf="validateMobNo[0].validateEmailIDDomain == true" >
+                                        <mat-error *ngIf="validateDomainAddressEmailID() "> {{validateDomainAddressEmailID()}}</mat-error>
+                                    </ng-container>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                    <div  style=" margin-top: 1vh; font-size: medium;">
+                        <span>  <mat-error *ngIf = 'errorMessage'>  {{this.errorMessage}} </mat-error> </span>
+                    </div>
+                </div>
+                <div  style=" margin-top: 5vh; font-size: medium;">
+                    <span>     <mat-error *ngIf="saveerror">{{saveerror}}</mat-error>  </span>
+                </div>
+            </mat-card>
+        </div>
+        <div class="right" style="  margin-top: -12px;">
+            <mat-card style=" height: 39vh; background-color: #F2F2F2;" >
+                <div matTooltip="{{fullName}}" matTooltipPosition="above">
+                    <span> {{ 'userEdit.modules.assignModulesTo' | translate }} <strong>{{fullName.length > 25 ? fullName.substring(0, 25) + '...' : fullName}}</strong></span>
+                </div>
+                <div class="mat-elevation-z8 modules">
+                    <mat-table [dataSource]="copy.Modules" matSort class="rd-tbl mat-table-padding">
+                        <ng-container matColumnDef="select">
+                            <mat-header-cell *matHeaderCellDef >
+                                <mat-checkbox style ="background-color: white;" [checked]="isAllSelected()" [indeterminate]="isSomeSelected()" [disabled]="copy.IsUserManager  || copy.IsUserEnabled == 0" (change)="toggleAllSelection($event)"></mat-checkbox>
+                            </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <mat-checkbox [id]="'Checked' + row.ModuleAbbreviation" [disabled]="copy.IsUserManager || copy.IsUserEnabled == 0" [checked]="row.IsSelected" (change)="changeModule(row)">
+                                </mat-checkbox>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="module">
+                            <mat-header-cell *matHeaderCellDef> {{ 'userEdit.modules.moduleColumn' | translate }} </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                {{row.ModuleAbbreviation}}
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="role">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header > {{ 'userEdit.modules.roleColumn' | translate }} </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <ng-container *ngIf="row.ModuleAbbreviation !== modAbTpTrac">
+                                    <mat-label>{{ 'common.standard' | translate }}&nbsp; &nbsp;</mat-label>
+                                        <mat-slide-toggle [id]="'URole' + row.ModuleAbbreviation" [disabled]="copy.IsUserManager || !row.IsSelected  || copy.IsUserEnabled == 0"
+                                        [ngClass]="{'power-toggle': row.RoleID==4, 'standardColor-toggle': row.RoleID!=4}"
+                                         [checked]="row.RoleID==4" (change)="changeRole(row)"></mat-slide-toggle>
+                                    <mat-label>&nbsp; &nbsp;{{ 'common.power' | translate }}</mat-label>
+                                </ng-container>
+                                <ng-container *ngIf="row.ModuleAbbreviation === modAbTpTrac">
+                                        <mat-form-field appearance="fill" class="filter-field" style="margin-top: -35px; width: 10vw; height: 1.5vh;">
+                                            <mat-label>{{ 'userEdit.modules.selectUserRole' | translate }}</mat-label>
+                                            <mat-select [(ngModel)]="row.RoleID" (selectionChange)="roleFilter($event.value, row)" [disabled]="copy.IsUserManager || !row.IsSelected  || copy.IsUserEnabled == 0">
+                                                <mat-option *ngFor="let role of userRoles" [value]="role.AuditorRoleID" >{{ role.AuditorRoleName }}</mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+                                </ng-container>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="admin">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'userEdit.modules.isFunctionalAdmin' | translate }} </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <ng-container *ngIf="row.ModuleAbbreviation !== modAbTpTrac">
+                                    <mat-label>{{ 'common.no' | translate }}&nbsp;&nbsp;</mat-label>
+                                    <mat-slide-toggle [id]="'FAdmin' + row.ModuleAbbreviation" [disabled]="copy.IsUserManager || !row.IsSelected || row.RoleID==5  || copy.IsUserEnabled == 0" 
+                                    [ngClass]="{'noColor-toggle': !row.IsFunctionalAdmin, 'standard-toggle': row.IsFunctionalAdmin}"
+                                    [checked]="row.IsFunctionalAdmin" (change)="row.IsFunctionalAdmin=!row.IsFunctionalAdmin"></mat-slide-toggle>
+                                    <mat-label>&nbsp; &nbsp;{{ 'common.yes' | translate }}</mat-label>
+                                </ng-container>
+                            </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="dcModules; sticky: true;" [style.background-color]="headerRowColor"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: dcModules;"></mat-row>
+                    </mat-table>
+                </div>
+                &nbsp;
+               <span> <mat-error *ngIf="moduleerror">{{moduleerror}}</mat-error> </span>
+            </mat-card>
+            <mat-card style="height: 30vh; background-color: #F2F2F2; margin-top: 1vh;">
+                <div matTooltip="{{fullName}}" matTooltipPosition="above">
+                    <span> {{ 'userEdit.units.assignUnitsTo' | translate }} <strong>{{fullName.length > 25 ? fullName.substring(0, 25) + '...' : fullName}}</strong></span>
+                </div>
+                <div class="mat-elevation-z8 units" style ="background-color: white; " *ngIf="copy && groups && units">
+                    <mat-table [dataSource]="copy.Units" matSort class="mat-table-padding">
+                        <ng-container matColumnDef="id">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'userEdit.units.indexColumn' | translate }} </mat-header-cell>
+                            <mat-cell *matCellDef="let row"> {{row.id}} </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="group">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'userEdit.units.departmentColumn' | translate }} </mat-header-cell>
+                            <mat-cell *matCellDef="let row" >
+                                <mat-select id="row.GroupID" [(ngModel)]="row.GroupID" [disabled]="copy.IsUserManager  || copy.IsUserEnabled == 0" (ngModelChange)="onGroupChange(row)" [placeholder]="'userEdit.units.selectDepartment' | translate">
+                                    <mat-option *ngFor="let group of groups" [value]="group.GroupID">
+                                        {{group.Name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="unit">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'userEdit.units.unitColumn' | translate }} </mat-header-cell>
+                            <mat-cell *matCellDef="let row">
+                                <mat-select id="row.UnitID" [(ngModel)]="row.UnitID" [disabled]="copy.IsUserManager || copy.IsUserEnabled == 0" [placeholder]="'userEdit.units.selectUnit' | translate"
+                                    >
+                                    <mat-option *ngFor="let unit of filteredUnits(row.GroupID)" [value]="unit.UnitID" (click)="duplicateUnits(unit.UnitID)">
+                                        {{unit.Name}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-cell>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> {{ 'userEdit.units.actionColumn' | translate }} </mat-header-cell>
+                            <mat-cell *matCellDef="let row" >
+                                <button mat-icon-button [disabled]="copy.IsUserManager || copy.IsUserEnabled == 0" [title]="'common.delete' | translate">
+                                    <mat-icon (click)="deleteUnit(row)" aria-hidden="false" [attr.aria-label]="'common.delete' | translate" fontIcon="delete">
+                                    </mat-icon>
+                                </button>
+                            </mat-cell>
+                        </ng-container>
+                        <mat-header-row *matHeaderRowDef="dcUnits; sticky: true;" [style.background-color]="headerRowColor"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: dcUnits;" [style.backgroundColor]="dupUnitIDs.has(row.UnitID) ?  '#ec6565' : ''" style = "min-height: 28px !important;"></mat-row>
+                    </mat-table>
+                </div>
+                <div class="row-wise">
+                    <mat-error *ngIf="uniterror" style="margin-top : 15px">{{uniterror}}</mat-error>
+                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                     <mat-dialog-actions >
+                        <button mat-raised-button color="primary" (click)="assignUnit()" [disabled]="copy.IsUserManager" style="margin-bottom: 20px; background-color: #1C9F50;" 
+                        *ngIf = "canAccess()">{{ 'userEdit.units.assignUnit' | translate }} </button>
+                    </mat-dialog-actions>
+                </div>
+            </mat-card>
+        </div>
+    </div>
+    <div style=" height: 1px;width: 100%; background-color: #efe6e69c; "></div>
+    <mat-dialog-actions>
+        <div>
+            <img src="assets/usermanager.svg" style="height:4vh;     margin-bottom: -1vh;"> &nbsp;
+            <mat-checkbox id="UserManager" [checked]="copy.IsUserManager" (change)="changeUserManager()"
+                [disabled]='copy.IsUserEnabled == 0'>
+                <div matTooltip="{{fullName}}" matTooltipPosition="above">
+                    <span> <strong>{{fullName.length > 25 ? fullName.substring(0, 25) + '...' : fullName}}</strong>: {{ 'userEdit.userManager.isUserManager' | translate }}</span>
+                </div>
+            </mat-checkbox>
+            <span *ngIf="copy.IsUserEnabled == 0" style="     padding-left: 79px;color: red;">
+                {{ 'userEdit.disabledNote' | translate }}
+            </span>
+        </div>
+        <span class="spacer"></span>
+        <button mat-button mat-dialog-close id="CancelPopup">{{ 'common.cancel' | translate }}</button> &nbsp;
+        <div class="applyFilter addDesktop position-relative text-start me-4">
+            <button type="button" class="btn btn-dark btnGradient ad" data-bs-toggle="modal"
+                style="color: white;cursor: pointer;" (click)="validateSave()" id="SaveUserDetails" *ngIf="canAccess()">
+                {{ 'userEdit.saveUserDetails' | translate }}
+            </button>
+            <span class="position-absolute vmiddleLeft text-white iconPositionLeft">
+                <img src="assets/save.svg" height="100%" alt="Save" style="width: 2vh;"> </span>
+        </div>
+    </mat-dialog-actions>
+</div>

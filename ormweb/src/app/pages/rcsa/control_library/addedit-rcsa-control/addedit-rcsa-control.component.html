@@ -1,0 +1,84 @@
+<mat-toolbar style="width:auto;margin:-24px -24px 0 -24px;height:8.5vh;font-size:3.3vh;">
+  <h2 mat-dialog-title>{{ copy?.mode === 'add' ? 'New Control' : 'Edit Control' }}</h2>
+  <span class="spacer"></span>
+  <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+    <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+  </button>
+</mat-toolbar>
+
+<mat-dialog-content>
+  <form [formGroup]="masterForm" autocomplete="off" fxLayout="row wrap" fxLayoutGap="12px grid">
+    <!-- hidden ID for edit -->
+    <input formControlName="txtControlId" hidden>
+
+    <!-- Department -->
+    <mat-form-field appearance="outline" fxFlex="50">
+      <mat-label>Department</mat-label>
+      <mat-select matSelectSearch placeholder="Search department..." formControlName="ddlGroup" (selectionChange)="groupOnChange()" [disabled]="copy?.mode === 'edit'"
+        [matTooltip]="selectedGroupName" matTooltipPosition="above">
+        <mat-option *ngFor="let item of groupDS" [value]="item.GroupID">
+          {{ item.Name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="masterForm.get('ddlGroup')?.hasError('required')">
+        Department is required
+      </mat-error>
+    </mat-form-field>
+
+
+    <!-- Unit (filtered by Department) -->
+    <mat-form-field appearance="outline" fxFlex="50">
+      <mat-label>Unit</mat-label>
+      <mat-select matSelectSearch placeholder="Search unit..." formControlName="ddlUnit" [disabled]="copy?.mode === 'edit'" [matTooltip]="selectedUnitName"
+        matTooltipPosition="above">
+        <mat-option *ngFor="let item of unitDS" [value]="item.UnitID">
+          {{ item.Name }}
+        </mat-option>
+      </mat-select>
+      <mat-error *ngIf="masterForm.get('ddlUnit')?.hasError('required')">
+        Unit is required
+      </mat-error>
+    </mat-form-field>
+
+
+    <!-- Control Type -->
+    <mat-form-field appearance="outline" fxFlex="50">
+      <mat-label>Control Type</mat-label>
+      <mat-select matSelectSearch placeholder="Search control type..." formControlName="ddlControlType">
+        <mat-option *ngFor="let item of controlTypeDS" [value]="item.ControlTypeID">{{ item.ControlType }}</mat-option>
+      </mat-select>
+      <mat-error *ngIf="masterForm.get('ddlControlType')?.hasError('required')">Control type is required</mat-error>
+    </mat-form-field>
+
+    <!-- Description -->
+    <mat-form-field appearance="outline" fxFlex="100">
+      <mat-label>Control Description</mat-label>
+      <textarea matInput rows="4" formControlName="txtDescription"
+        placeholder="e.g. Firewall services needs to be updated"></textarea>
+      <mat-hint align="end">{{ masterForm.get('txtDescription')?.value?.length || 0 }}/1000</mat-hint>
+      <mat-error *ngIf="masterForm.get('txtDescription')?.hasError('required')">Description is required</mat-error>
+    </mat-form-field>
+  </form>
+</mat-dialog-content>
+
+<div fxLayout="row wrap">
+  <span class="spacer"></span>
+  <mat-error *ngIf="!masterForm.valid">
+    The save button is enabled once all the mandatory fields are entered
+  </mat-error>
+</div>
+
+<mat-error *ngIf="saveerror">{{ saveerror }}</mat-error>
+
+<mat-dialog-actions>
+  <span class="spacer"></span>
+  <div class="move-buttons">
+    <button class="buttons save" id="saveSub" [disabled]="!masterForm.valid" (click)="validateSave()">
+      <img src="./assets/images/icon-application.svg" alt="Save">Save
+    </button>
+  </div>
+  <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel"
+    style="margin-right:1vh;height:5.5vh;margin-top:-0.2vh;" mat-dialog-close>
+    Cancel
+  </button>
+</mat-dialog-actions>

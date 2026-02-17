@@ -1,0 +1,129 @@
+# RiskTrac GRC - Docker Compose
+# Server: 10.0.1.32
+# Access app at http://10.0.1.32 (nginx port 80)
+# API ports: 6001 authapi, 6002 umapi, 6003 ormapi, 6004 bcmapi
+# Docker Hub: vinod9072/imagename:v1
+
+version: "3.8"
+
+services:
+  authapi:
+    image: vinod9072/authapi:v1
+    build:
+      context: ./authapi
+      dockerfile: Dockerfile
+    container_name: risktrac-authapi
+    ports:
+      - "6001:6001"
+    environment:
+      - PORT=6001
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  umapi:
+    image: vinod9072/umapi:v1
+    build:
+      context: ./umapi
+      dockerfile: Dockerfile
+    container_name: risktrac-umapi
+    ports:
+      - "6002:6002"
+    environment:
+      - PORT=6002
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  ormapi:
+    image: vinod9072/ormapi:v1
+    build:
+      context: ./ormapi
+      dockerfile: Dockerfile
+    container_name: risktrac-ormapi
+    ports:
+      - "6003:6003"
+    environment:
+      - PORT=6003
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  bcmapi:
+    image: vinod9072/bcmapi:v1
+    build:
+      context: ./bcmapi
+      dockerfile: Dockerfile
+    container_name: risktrac-bcmapi
+    ports:
+      - "6004:6004"
+    environment:
+      - PORT=6004
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  hostweb:
+    image: vinod9072/hostweb:v1
+    build:
+      context: ./hostweb
+      dockerfile: Dockerfile
+    container_name: risktrac-hostweb
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  umweb:
+    image: vinod9072/umweb:v1
+    build:
+      context: ./umweb
+      dockerfile: Dockerfile
+    container_name: risktrac-umweb
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  ormweb:
+    image: vinod9072/ormweb:v1
+    build:
+      context: ./ormweb
+      dockerfile: Dockerfile
+    container_name: risktrac-ormweb
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  bcmweb:
+    image: vinod9072/bcmweb:v1
+    build:
+      context: ./bcmweb
+      dockerfile: Dockerfile
+    container_name: risktrac-bcmweb
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  nginx:
+    image: vinod9072/risktrac-nginx:v1
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: risktrac-nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - authapi
+      - umapi
+      - ormapi
+      - bcmapi
+      - hostweb
+      - umweb
+      - ormweb
+      - bcmweb
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+networks:
+  risktrac-net:
+    driver: bridge

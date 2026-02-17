@@ -1,0 +1,128 @@
+// mat-dialog-container {
+//   width: 90% !important;
+//   padding: 0;
+//   min-width: 90vw !important;
+// }
+.info-dialog-card {
+  max-width: 100%;
+  width: 100%;
+  min-width: 100%;
+  /* ensure content is readable and has padding */
+  padding: 0 !important;
+  // margin: -24px;
+}
+
+.info-message {
+  white-space: pre-wrap; /* preserve line breaks, wrap text */
+  word-break: break-word; /* avoid overflow for very long unbroken strings */
+  font-size: 14px;
+  color: rgba(0,0,0,0.87);
+  padding: 8px 0;
+}
+
+.mat-card-header-text {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+mat-card-header {
+  background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);
+    color: white;
+    height: 6.4vh;
+
+}
+
+h3.htitle {
+  height: 100%;
+  font-weight: 400;
+  margin-bottom: 0;
+  padding-block: 2vh;
+}
+
+/* ***************************************** */
+
+/* template-dialog.component.scss - replaced with a robust flex column layout */
+
+.info-dialog-card {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: 48rem;    /* ~768px default */
+  box-sizing: border-box;
+  padding: 0;
+  border-radius: 6px;
+  background: #fff;
+  overflow: hidden;    /* keep overflow inside .card-body */
+}
+
+/* Ensure mat-card header/content/actions always span full card width */
+.info-dialog-card > mat-card-header,
+.info-dialog-card > mat-card-content,
+.info-dialog-card > mat-card-actions {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header */
+mat-card-header {
+  background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);
+  color: #fff;
+  padding: 0.6rem 1rem;
+  display: block;
+}
+
+h3.htitle {
+  margin: 0;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.25;
+}
+
+/* Body: flexible, scrollable, constrained by viewport */
+.card-body {
+  padding: 0.75rem 1rem;
+  box-sizing: border-box;
+  overflow: auto;
+  flex: 1 1 auto; /* grow to fill remaining vertical space */
+  max-height: calc(80vh - 6.5rem); /* header + actions ~6.5rem; keep dialog within viewport */
+  background: transparent;
+}
+
+/* Message text scales with browser text size (rem) */
+.info-message {
+  font-size: 1rem;
+  line-height: 1.45;
+  color: rgba(0,0,0,0.87);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* Footer / actions */
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.5rem 1rem 0.75rem 1rem;
+  background: transparent;
+}
+
+.close-btn {
+  min-width: 4.5rem;
+  height: 2.6rem;
+  font-size: 0.95rem;
+}
+
+/* Fallback: keep mat-dialog-container centered if it applies extra padding */
+:host ::ng-deep .mat-dialog-container {
+  padding: 0 !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Small screens */
+@media (max-width: 420px) {
+  .info-dialog-card { max-width: 94vw; }
+  .info-message { font-size: 0.95rem; }
+}

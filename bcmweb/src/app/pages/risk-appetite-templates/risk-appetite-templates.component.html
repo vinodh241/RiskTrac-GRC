@@ -1,0 +1,77 @@
+<mat-toolbar class="fontSize">
+    <span>Upload Risk Appetite Template</span>
+</mat-toolbar>
+<div class="container">
+    <div class="left">
+        <p><b>Upload New Risk Appetite Template</b></p>
+        <div class="mat-elevation-z8">
+            <form class="raf-template-form">
+                <mat-form-field class="example-full-width" appearance="fill">
+                    <mat-label>RAF Template</mat-label>
+                    <input matInput placeholder="File name" readonly="readonly"
+                        onclick="document.getElementById('uploadRAFTemplate').click();" [value]="filename" required>
+                    <input class="form-control" id="uploadRAFTemplate" type="file"
+                        name="RAF Framework Excel" (onFileSelected)="getFrameworkDetails()" ng2FileSelect [uploader]="uploader"
+                        (click)="onFileClick($event)"
+                        style="display: none;" />
+                </mat-form-field>
+                <div *ngIf="invalidfile" style="color: red;"> Invalid file extension. Please attach
+                    file with ".xlsx" extension</div>
+                <div *ngIf="invalidfilesize" style="color: red;"> File Size should be less than 50MB</div>
+
+                <mat-error *ngIf="uploaderror" style="color: red;">{{uploaderror}}</mat-error>
+
+                <div style="display:flex; justify-content:flex-end">
+                    <button mat-raised-button type="submit" color="primary"
+                        (click)="validateDetails()" [disabled]="invalidfile">Upload Template to ORM</button>
+                    <button style="margin-left:10px;" mat-raised-button (click)="onCancel()">Cancel</button>
+                </div>
+            </form>
+        </div>
+        <!-- <div class="mat-elevation-z8">
+            <input class="form-control" id="uploadRAFFramework" type="file"
+                name="RAF Framework Excel" (change)="getFrameworkDetails()" ng2FileSelect [uploader]="uploader"
+                style="display: none;" />
+            <button mat-button onclick="document.getElementById('uploadRAFFramework').click();">Browse</button>
+            <input type="button" value="Chose File"
+                    onclick="document.getElementById('uploadRAFFramework').click();" />&nbsp;
+            <div *ngIf="invalidfile"> Invalid file extension. Please attach
+                file with ".xlsx" extension</div>
+            <div *ngIf="invalidfilesize"> File Size should be less than 50MB</div>
+
+            <div style="display:flex; justify-content:flex-end">
+                <button mat-raised-button (click)="upload()">Upload Template to ORM</button>
+                <button style="margin-left:10px;" mat-raised-button>Cancel</button>
+            </div>
+        </div> -->
+    </div>
+    <div class="right">
+        <p><b>Previously Uploaded Templates</b></p>
+        <div class="mat-elevation-z8 raf-template-list">
+            <mat-table [dataSource]="dataSource">
+                <ng-container matColumnDef="id" >
+                    <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        {{row.id}}
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="template-name">
+                    <mat-header-cell *matHeaderCellDef>Template Name</mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        <a (click)="downloadTemplate(row)" class="link">{{row.FileName}}</a>
+                    </mat-cell>
+                </ng-container>
+                <ng-container matColumnDef="upload-on">
+                    <mat-header-cell *matHeaderCellDef> Uploaded On </mat-header-cell>
+                    <mat-cell *matCellDef="let row">
+                        {{utils.formatDate(row.CreatedDate)}}
+                    </mat-cell>
+                </ng-container>
+                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+            <mat-paginator [pageSizeOptions]="[10, 20, 50, 100]" aria-label="Select page of dataList" class="InherentTable">
+            </mat-paginator>
+        </div>
+    </div>
+</div>

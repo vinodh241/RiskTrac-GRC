@@ -1,0 +1,739 @@
+<mat-toolbar class="fontSize">
+    <span>Control Environment Rating</span>
+    <span class="spacer"></span>
+</mat-toolbar>
+<div class="container ">
+    <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-control-in-pace></app-control-in-pace> -->
+            <span><b>Control In-Place</b></span>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-header>
+
+                </mat-card-header>
+                <mat-card-content>
+
+                    <form [formGroup]="GridFormsControlInPlace" autocomplete="off">
+                        <ng-container formArrayName="GridRows">
+                            <mat-table [dataSource]="dataSourceControlInPlace" matSort>
+                                <ng-container matColumnDef="Index">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        {{GridFormsControlInPlace.get('GridRows')?.value[i].RowNumber}} </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="RatingName">
+                                    <mat-header-cell *matHeaderCellDef style="min-width: 14vw;" mat-sort-header>Control
+                                        In-Place</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row" style="flex: 1 1 100%; box-sizing: border-box; max-width: 41%; padding-right: 8px">
+                                        <span class="tablecolumnspan" style="word-wrap: break-word; overflow-wrap: break-word; min-width: 12vw;  white-space: normal;"
+                                            [hidden]="!GridFormsControlInPlace.get('GridRows')?.value[i].isEditable">{{GridFormsControlInPlace.get('GridRows')?.value[i].Name}}</span>
+                                        <mat-form-field [appearance]="GridFormsControlInPlace.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="text" formControlName="Name" [hidden]="GridFormsControlInPlace.get('GridRows')?.value[i].isEditable"
+                                                [readonly]="GridFormsControlInPlace.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Action">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            matTooltip="Save Changes"
+                                            (click)="saveEditControlInPlaceData(GridFormsControlInPlace,i)"
+                                            *ngIf="!GridFormsControlInPlace.get('GridRows')?.value[i]?.isEditable"
+                                            [disabled]="!row.valid" color="primary">
+                                            <mat-icon>check_circle</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                            matTooltip="Cancel Changes" color="warn"
+                                            (click)="CancelControlInPlace(GridFormsControlInPlace,i)"
+                                            *ngIf="!GridFormsControlInPlace.get('GridRows')?.value[i]?.isEditable">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            *ngIf="GridFormsControlInPlace.get('GridRows')?.value[i]?.isEditable"
+                                            matTooltip="Edit" color="primary"
+                                            (click)="editControlInPlaceData(GridFormsControlInPlace,i)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Status">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        <mat-slide-toggle
+                                            [checked]="GridFormsControlInPlace.get('GridRows')?.value[i]?.IsActive"
+                                            (change)="changedControlInPlace(row,$event)">
+                                        </mat-slide-toggle>
+
+                                        <span *ngIf="GridFormsControlInPlace.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                        <span *ngIf="!GridFormsControlInPlace.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedControlInPlaceColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedControlInPlaceColumns;"></mat-row>
+                            </mat-table>
+                        </ng-container>
+                    </form>
+                </mat-card-content>
+
+                <mat-error *ngIf="saveControlInPlaceError">{{saveControlInPlaceError}}</mat-error>
+                <mat-error *ngIf="exceedCharLenErr && type == 'Name'">{{exceedCharLenErr}}</mat-error>
+
+                <mat-card-actions>
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                        <button mat-mini-fab color="warn" aria-label="add Inherent Impact Rate"
+                            (click)="initiatAddControlInPace()" *ngIf="!addControlInPlaceDialog">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <form [formGroup]="masterControlInPlaceForm" autocomplete="off" *ngIf="addControlInPlaceDialog"
+                            (ngSubmit)="saveControlInPlaceData()" fxLayout="row" fxLayoutAlign="end center"
+                            fxFlex.xs="98%" fxFlex.lg="98%">
+                            <input formControlName="txtRateId" hidden="true">
+                            <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                                fxFlex.sm="35%">
+                                <mat-label>Name</mat-label>
+                                <input matInput formControlName="txtRateName">
+                            </mat-form-field>
+                            <button fxFlexOffset="10px" type="submit" mat-mini-fab aria-label="Save"
+                                *ngIf="addControlInPlaceDialog" [disabled]="!masterControlInPlaceForm.valid">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="Cancel"
+                                (click)="cancelControlInPace()" *ngIf="addControlInPlaceDialog">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </form>
+
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-control-nature-score></app-control-nature-score> -->
+            <span><b>Control Nature Score</b></span>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-header>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <form [formGroup]="GridFormsControlNatureScore" autocomplete="off">
+                        <ng-container formArrayName="GridRows">
+                            <mat-table [dataSource]="dataSourceControlNatureScore" matSort>
+                                <ng-container matColumnDef="Index">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        {{GridFormsControlNatureScore.get('GridRows')?.value[i].RowNumber}} </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="RatingName">
+                                    <mat-header-cell *matHeaderCellDef style="min-width: 23vh;" mat-sort-header>Control Nature</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" style="flex: 1 1 100%;
+                                    box-sizing: border-box;
+                                    max-width: 34%;
+                                    padding-right: 8px" [formGroup]="row">
+                                       <span class="tablecolumnspan" style="word-wrap: break-word;
+                                       overflow-wrap: break-word;
+                                       white-space: normal;"  [hidden]="!GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable">{{GridFormsControlNatureScore.get('GridRows')?.value[i].NatureofControl}}</span>
+                                        <mat-form-field
+                                            [appearance]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="text" formControlName="NatureofControl" [hidden]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable"
+                                                [readonly]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="RatingScore">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        <mat-form-field
+                                            [appearance]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="Score"
+                                                [readonly]="GridFormsControlNatureScore.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Action">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                                    <mat-cell *matCellDef="let row ;let i = index" [formGroup]="row">
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            matTooltip="Save Changes"
+                                            (click)="saveEditControlNatureScoreData(GridFormsControlNatureScore,i)"
+                                            [disabled]="!row.valid"
+                                            *ngIf="!GridFormsControlNatureScore.get('GridRows')?.value[i]?.isEditable"
+                                            color="primary">
+                                            <mat-icon>check_circle</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                            matTooltip="Cancel Changes" color="warn"
+                                            (click)="CancelControlNatureScore(GridFormsControlNatureScore,i)"
+                                            *ngIf="!GridFormsControlNatureScore.get('GridRows')?.value[i]?.isEditable">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            *ngIf="GridFormsControlNatureScore.get('GridRows')?.value[i]?.isEditable"
+                                            matTooltip="Edit" color="primary"
+                                            (click)="editControlNatureScoreData(GridFormsControlNatureScore,i)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <!-- <button mat-icon-button>
+                            <mat-icon (click)="editControlNatureScore(row)" aria-hidden="false" aria-label="Edit" fontIcon="edit">
+                            </mat-icon>
+                        </button> -->
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Status">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index"><mat-slide-toggle color="#3f9f94"
+                                            [checked]="GridFormsControlNatureScore.get('GridRows')?.value[i]?.IsActive"
+                                            (change)="changedControlNatureScore(row,$event)">
+                                        </mat-slide-toggle>
+                                        <span
+                                            *ngIf="GridFormsControlNatureScore.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                        <span
+                                            *ngIf="!GridFormsControlNatureScore.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row *matHeaderRowDef="displayedControlNatureScoreColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedControlNatureScoreColumns;"></mat-row>
+                            </mat-table>
+                        </ng-container>
+                    </form>
+                </mat-card-content>
+
+                <mat-error *ngIf="saveControlNatureScoreerror">{{saveControlNatureScoreerror}}</mat-error>
+                <mat-error *ngIf="exceedCharLenErr && type == 'ControlNatureScore'">{{exceedCharLenErr}}</mat-error>
+
+
+                <mat-card-actions>
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                        <button mat-mini-fab color="warn" aria-label="add Control Nature Score"
+                            (click)="initiatAddControlNatureScore()" *ngIf="!addControlNatureScoredg">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <form [formGroup]="controlNatureScoreForm" autocomplete="off" *ngIf="addControlNatureScoredg"
+                            (ngSubmit)="saveControlNatureScore()" fxLayout="row" fxLayoutAlign="end center"
+                            fxFlex.xs="98%" fxFlex.lg="98%">
+                            <input formControlName="txtRateId" hidden="true">
+                            <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                                fxFlex.sm="35%">
+                                <mat-label>Rating</mat-label>
+                                <input matInput formControlName="txtRateName">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                                fxFlex.sm="35%">
+                                <mat-label>Score</mat-label>
+                                <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="txtratescore">
+                            </mat-form-field>
+                            <button fxFlexOffset="10px" type="submit" mat-mini-fab aria-label="Save"
+                                *ngIf="addControlNatureScoredg" [disabled]="!controlNatureScoreForm.valid">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px"  color="warn" aria-label="Cancel"
+                            (click)="cancelControlNatureScore()" *ngIf="addControlNatureScoredg">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                            <!-- <button mat-mini-fab fxFlexOffset="10px" class="warn" aria-label="Cancel"
+                                (click)="cancelControlNatureScore()" *ngIf="addControlNatureScoredg">
+                                <mat-icon>close</mat-icon>
+                            </button> -->
+                        </form>
+
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-control-automation-score></app-control-automation-score> -->
+            <span><b>Control Automation Score</b></span>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-header>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <form [formGroup]="GridFormsControlAutomationScore" autocomplete="off">
+                        <ng-container formArrayName="GridRows">
+                            <mat-table [dataSource]="dataSourceControlAutomationScore" matSort>
+                                <ng-container matColumnDef="Index">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        {{GridFormsControlAutomationScore.get('GridRows')?.value[i].RowNumber}}
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="RatingName">
+                                    <mat-header-cell *matHeaderCellDef style="min-width: 23vh;" mat-sort-header>Level of
+                                        Control</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index"  style="flex: 1 1 100%;
+                                    box-sizing: border-box;
+                                    max-width: 34%;
+                                    padding-right: 8px" [formGroup]="row">
+                                        <span class="tablecolumnspan" style="word-wrap: break-word;
+                                        overflow-wrap: break-word;
+                                        white-space: normal;"   [hidden]="!GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable">{{GridFormsControlAutomationScore.get('GridRows')?.value[i].LevelOfControl}}</span>
+                                        <mat-form-field
+                                            [appearance]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="text" formControlName="LevelOfControl" [hidden]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable"
+                                                [readonly]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="RatingScore">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        <mat-form-field
+                                            [appearance]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="Score"
+                                                [readonly]="GridFormsControlAutomationScore.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Action">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                                    <mat-cell *matCellDef="let row ;let i = index" [formGroup]="row">
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            matTooltip="Save Changes"
+                                            (click)="saveEditControlAutomationScoreData(GridFormsControlAutomationScore,i)"
+                                            *ngIf="!GridFormsControlAutomationScore.get('GridRows')?.value[i]?.isEditable"
+                                            color="primary" [disabled]="!row.valid">
+                                            <mat-icon>check_circle</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                            matTooltip="Cancel Changes" color="warn"
+                                            (click)="CancelControlAutomationScore(GridFormsControlAutomationScore,i)"
+                                            *ngIf="!GridFormsControlAutomationScore.get('GridRows')?.value[i]?.isEditable">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            *ngIf="GridFormsControlAutomationScore.get('GridRows')?.value[i]?.isEditable"
+                                            matTooltip="Edit" color="primary"
+                                            (click)="editControlAutomationScoreData(GridFormsControlAutomationScore,i)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <!-- <button mat-icon-button>
+                            <mat-icon (click)="editControlAutomationScore(row)" aria-hidden="false" aria-label="Edit" fontIcon="edit">
+                            </mat-icon>
+                        </button> -->
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Status">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index">
+                                        <mat-slide-toggle color="#3f9f94"
+                                            [checked]="GridFormsControlAutomationScore.get('GridRows')?.value[i]?.IsActive"
+                                            (change)="changedControlAutomationScore(row,$event)">
+                                        </mat-slide-toggle>
+                                        <span
+                                            *ngIf="GridFormsControlAutomationScore.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                        <span
+                                            *ngIf="!GridFormsControlAutomationScore.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="displayedControlAutomationScoreColumns"></mat-header-row>
+                                <mat-row
+                                    *matRowDef="let row; columns: displayedControlAutomationScoreColumns;"></mat-row>
+                            </mat-table>
+                        </ng-container>
+                    </form>
+                </mat-card-content>
+
+                <mat-error *ngIf="saveControlAutomationScoreerror">{{saveControlAutomationScoreerror}}</mat-error>
+                <mat-error *ngIf="exceedCharLenErr && type == 'ControlAutomationScore'">{{exceedCharLenErr}}</mat-error>
+
+                <mat-card-actions>
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                        <button mat-mini-fab color="warn" aria-label="add Control Automation Score"
+                            (click)="initiatAddControlAutomationScore()" *ngIf="!addControlAutomationScoredg">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <form [formGroup]="controlAutomationScoreForm" autocomplete="off"
+                            *ngIf="addControlAutomationScoredg" (ngSubmit)="saveControlAutomationScore()" fxLayout="row"
+                            fxLayoutAlign="end center" fxFlex.xs="98%" fxFlex.lg="98%">
+                            <input formControlName="txtRateId" hidden="true">
+                            <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                                fxFlex.sm="35%">
+                                <mat-label>Rating</mat-label>
+                                <input matInput formControlName="txtRateName">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                                fxFlex.sm="35%">
+                                <mat-label>Score</mat-label>
+                                <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="txtratescore" (keypress)="keyPressNumber($event)">
+                            </mat-form-field>
+                            <button fxFlexOffset="10px" type="submit" mat-mini-fab  aria-label="Save"
+                                *ngIf="addControlAutomationScoredg" [disabled]="!controlAutomationScoreForm.valid">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px"  color="warn" aria-label="Cancel"
+                                (click)="cancelControlAutomationScore()" *ngIf="addControlAutomationScoredg">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </form>
+
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+    <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-control-frequency-score></app-control-frequency-score> -->
+            <span><b>Control Frequency Score</b></span>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-header>
+
+                </mat-card-header>
+                <mat-card-content>
+                    <form [formGroup]="GridFormsControlFrequencyScore" autocomplete="off">
+                        <ng-container formArrayName="GridRows">
+                            <mat-table [dataSource]="dataSourceControlFrequencyScore" matSort>
+                                <ng-container matColumnDef="Index">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        {{GridFormsControlFrequencyScore.get('GridRows')?.value[i].RowNumber}}
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="RatingName">
+                                    <mat-header-cell *matHeaderCellDef  style="min-width: 23vh;"  mat-sort-header>Frequency</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" style="flex: 1 1 100%;
+                                    box-sizing: border-box;
+                                    max-width: 34%;
+                                    padding-right: 8px" [formGroup]="row">
+                                        <span class="tablecolumnspan"  style="word-wrap: break-word;
+                                        overflow-wrap: break-word;
+                                        white-space: normal;" [hidden]="!GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable">{{GridFormsControlFrequencyScore.get('GridRows')?.value[i].Frequency}}</span>
+                                        <mat-form-field
+                                            [appearance]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="text" formControlName="Frequency" [hidden]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable"
+                                                [readonly]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="RatingScore">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                        <mat-form-field
+                                            [appearance]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable? 'none' : 'legacy'">
+                                            <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="Score"
+                                                [readonly]="GridFormsControlFrequencyScore.get('GridRows')?.value[i].isEditable">
+                                        </mat-form-field>
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Action">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                                    <mat-cell *matCellDef="let row ;let i = index" [formGroup]="row">
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            matTooltip="Save Changes"
+                                            (click)="saveEditControlFrequencyScoreData(GridFormsControlFrequencyScore,i)"
+                                            *ngIf="!GridFormsControlFrequencyScore.get('GridRows')?.value[i]?.isEditable"
+                                            [disabled]="!row.valid" color="primary">
+                                            <mat-icon>check_circle</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                            matTooltip="Cancel Changes" color="warn"
+                                            (click)="CancelControlFrequencyScore(GridFormsControlFrequencyScore,i)"
+                                            *ngIf="!GridFormsControlFrequencyScore.get('GridRows')?.value[i]?.isEditable">
+                                            <mat-icon>cancel</mat-icon>
+                                        </button>
+
+                                        <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                            *ngIf="GridFormsControlFrequencyScore.get('GridRows')?.value[i]?.isEditable"
+                                            matTooltip="Edit" color="primary"
+                                            (click)="editControlFrequencyScoreData(GridFormsControlFrequencyScore,i)">
+                                            <mat-icon>edit</mat-icon>
+                                        </button>
+                                        <!-- <button mat-icon-button>
+                            <mat-icon (click)="editControlFrequencyScore(row)" aria-hidden="false" aria-label="Edit" fontIcon="edit">
+                            </mat-icon>
+                        </button> -->
+                                    </mat-cell>
+                                </ng-container>
+                                <ng-container matColumnDef="Status">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                    <mat-cell *matCellDef="let row;let i = index">
+                                        <mat-slide-toggle color="#3f9f94"
+                                            [checked]="GridFormsControlFrequencyScore.get('GridRows')?.value[i]?.IsActive"
+                                            (change)="changedControlFrequencyScore(row,$event)">
+                                        </mat-slide-toggle>
+                                        <span
+                                            *ngIf="GridFormsControlFrequencyScore.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                        <span
+                                            *ngIf="!GridFormsControlFrequencyScore.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <mat-header-row
+                                    *matHeaderRowDef="displayedControlFrequencyScoreColumns"></mat-header-row>
+                                <mat-row
+                                    *matRowDef="let row; columns: displayedControlFrequencyScoreColumns;"></mat-row>
+                            </mat-table>
+                        </ng-container>
+                    </form>
+                </mat-card-content>
+
+                <mat-error *ngIf="saveControlFrequencyScoreerror">{{saveControlFrequencyScoreerror}}</mat-error>
+                <mat-error *ngIf="exceedCharLenErr && type == 'ControlFrequencyScore'">{{exceedCharLenErr}}</mat-error>
+
+                <mat-card-actions>
+                    <div fxLayout="row" fxLayoutAlign="end center">
+                        <button mat-mini-fab color="warn" aria-label="add Control Frequency Score"
+                            (click)="initiatAddControlFrequencyScore()" *ngIf="!addControlFrequencyScoredg">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                        <form [formGroup]="controlFrequencyScoreForm" autocomplete="off"
+                            *ngIf="addControlFrequencyScoredg" (ngSubmit)="saveControlFrequencyScore()" fxLayout="row"
+                            fxLayoutAlign="end center" fxFlex.xs="98%" fxFlex.lg="98%">
+                            <input formControlName="txtRateId" hidden="true">
+                            <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                                fxFlex.sm="35%">
+                                <mat-label>Rating</mat-label>
+                                <input matInput formControlName="txtRateName">
+                            </mat-form-field>
+                            <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                                fxFlex.sm="35%">
+                                <mat-label>Score</mat-label>
+                                <input matInput type="number" min="0"  (keypress)="keyPressNumber($event)" formControlName="txtratescore">
+                            </mat-form-field>
+                            <button fxFlexOffset="10px" type="submit" mat-mini-fab  aria-label="Save"
+                                *ngIf="addControlFrequencyScoredg" [disabled]="!controlFrequencyScoreForm.valid">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px"  color="warn" aria-label="Cancel"
+                                (click)="cancelControlFrequencyScore()" *ngIf="addControlFrequencyScoredg">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </form>
+
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-control-total-score></app-control-total-score> -->
+            <span><b>Control Total Score</b></span>
+            <mat-card class="mat-elevation-z4 formulaCard">
+                <mat-card-header>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="content formulacontent">
+                        <span><b>Computation Formula</b></span>
+                        <div class="tag-box">
+                            <ul fxLayout="row wrap">
+                                <li *ngFor="let item of controlTotalScoreTags">
+                                    {{item?.ConfigDisplay}} <mat-icon *ngIf="iseditControlTotalScoredg"
+                                        (click)="RemoveControlTotalScoreData(item)">close</mat-icon>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </mat-card-content>
+                <mat-error *ngIf="saveControlTotalScoreerror">{{saveControlTotalScoreerror}}</mat-error>
+                <mat-card-actions>
+                    <div fxLayout="row" fxLayoutAlign="end end">
+                        <div class="content" fxLayout="row wrap" fxLayoutAlign="start center">
+
+                            <div class="tag-box-items" *ngIf="iseditControlTotalScoredg">
+                                <span *ngIf="iseditControlTotalScoredg"><b>Scores</b></span>
+                                <ul fxLayout="row wrap">
+                                    <li *ngFor="let a of controlTotalScoresourcedatascore; let index = index"
+                                        (click)="addControlTotalScoretagitem(a)">
+                                        {{ a.ConfigDisplay }}
+                                    </li>
+                                </ul>
+                            </div>
+
+                            <div class="tag-box-items" *ngIf="iseditControlTotalScoredg">
+                                <span *ngIf="iseditControlTotalScoredg"><b>Operstors</b></span>
+                                <ul fxLayout="row wrap">
+                                    <li *ngFor="let a of controlTotalScoresourcedataoperator; let index = index"
+                                        (click)="addControlTotalScoretagitem(a)">
+                                        {{ a.ConfigDisplay }}
+                                    </li>
+                                </ul>
+                            </div>
+                            <button fxFlexOffset="10px" mat-mini-fab aria-label="Save"
+                                (click)="saveControlTotalScoreData()" *ngIf="iseditControlTotalScoredg">
+                                <mat-icon>check</mat-icon>
+                            </button>
+                            <button mat-mini-fab fxFlexOffset="10px"  color="warn" aria-label="Cancel"
+                                (click)="CancelControlTotalScore()" *ngIf="iseditControlTotalScoredg">
+                                <mat-icon>close</mat-icon>
+                            </button>
+                        </div>
+                        <button mat-icon-button *ngIf="!iseditControlTotalScoredg">
+                            <mat-icon (click)="editControlTotalScoreinitiate()" aria-hidden="false"
+                                aria-label="Edit">edit
+                            </mat-icon>
+                        </button>
+
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+        <div fxFlex="33" fxFlex.md="32" fxFlex.lg="32" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+            <!-- <app-overall-control-environment-rating></app-overall-control-environment-rating> -->
+            <span><b>Overall Control Environment Rating</b></span>
+            <mat-card class="mat-elevation-z4">
+                <mat-card-header>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="content">
+                        <mat-table [dataSource]="dataSourceOverallControlEnvironmentRating" matSort>
+                            <ng-container matColumnDef="RowNumber">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.RowNumber}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="RatingName">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Rating</mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.RiskRating}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Computation">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Computation</mat-header-cell>
+                                <mat-cell *matCellDef="let row"> {{row.Computationtext}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="ColorCode">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Color</mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    <div class="colorbox-small" [style.background]="row.ColourCode"></div>
+                                    {{row.ColourName}}
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Status">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                <mat-cell *matCellDef="let row;let i = index"><mat-slide-toggle [checked]="row.IsActive"
+                                        (change)="changedOverallControlEnvironmentRating(row,$event)">
+                                    </mat-slide-toggle>
+                                    <span *ngIf="row.IsActive">Enabled</span>
+                                    <span *ngIf="!row.IsActive">Disabled</span> </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Action">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                                <mat-cell *matCellDef="let row">
+                                    <button mat-icon-button>
+                                        <mat-icon (click)="editOverallControlEnvironmentRating(row)" aria-hidden="false"
+                                            aria-label="Edit" fontIcon="edit">
+                                        </mat-icon>
+                                    </button>
+                                </mat-cell>
+                            </ng-container>
+                            <mat-header-row
+                                *matHeaderRowDef="displayedOverallControlEnvironmentRatingColumns"></mat-header-row>
+                            <mat-row
+                                *matRowDef="let row; columns: displayedOverallControlEnvironmentRatingColumns;"></mat-row>
+                        </mat-table>
+                    </div>
+                </mat-card-content>
+
+                <mat-error *ngIf="saveOverallControlEnvironmentRatingerror">{{saveOverallControlEnvironmentRatingerror}}</mat-error>
+                <mat-error *ngIf="exceedCharLenErr && type == 'OverallControlEnvironmentRating'">{{exceedCharLenErr}}</mat-error>
+
+
+
+                <mat-card-actions>
+                    <div class="content" *ngIf="iseditOverallControlEnvironmentRatingdg">
+                        <div class="tag-box">
+                            <form [formGroup]="OverallControlEnvironmentRatingForm" autocomplete="off"
+                                *ngIf="iseditOverallControlEnvironmentRatingdg" fxLayout="row"
+                                fxLayoutAlign="start center" fxFlex.xs="98%" fxFlex.lg="98%">
+                                <input formControlName="txtRateId" hidden="true">
+                                <mat-form-field appearance="fill" fxFlex.xs="100%" fxFlex.lg="30%" fxFlex.sm="30%">
+                                    <mat-label>Rating Name</mat-label>
+                                    <input matInput formControlName="txtRateName" autocomplete="off">
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" fxFlex.xs="100%" fxFlex.lg="30%" fxFlex.sm="30%"
+                                    fxFlexOffset="10px">
+                                    <mat-label>Color Code</mat-label>
+                                    <input matInput [(colorPicker)]="color" formControlName="txtcolorcode"
+                                        (colorPickerChange)="colorchangedOverallControlEnvironmentRating()" />
+                                    <div class="colorbox" [style.background]="color" matSuffix>
+                                    </div>
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" fxFlex.xs="100%" fxFlex.lg="30%" fxFlex.sm="30%"
+                                    fxFlexOffset="10px">
+                                    <mat-label>Color Name</mat-label>
+                                    <input matInput formControlName="txtcolorname" />
+                                </mat-form-field>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="content" *ngIf="iseditOverallControlEnvironmentRatingdg && beforeEditedFormulatext!=''">
+                        <span><b>Current Computation Formula</b></span>
+                        <div class="tag-box beforeeditcomputedtext">
+                            <span>{{beforeEditedFormulatext}}</span>
+                        </div>
+                    </div>
+                    <div class="content" *ngIf="iseditOverallControlEnvironmentRatingdg">
+                        <span><b>Computation Formula</b></span>
+                        <div class="tag-box">
+                            <ul fxLayout="row wrap">
+                                <li *ngFor="let item of tagsOverallControlEnvironmentRating">
+                                    {{item?.ConfigDisplay}} <mat-icon *ngIf="iseditOverallControlEnvironmentRatingdg"
+                                        (click)="RemoveOverallControlEnvironmentRatingData(item)">close</mat-icon>
+                                </li>
+                                <input type="text" #customtxt *ngIf="isCustomTextEnabled"
+                                    (keyup.enter)="addOverallControlEnvironmentRatingCustomText(customtxt.value)" (keyup.escape)="CancelCustomtext()" />
+                            </ul>
+                        </div>
+                    </div>
+                    <div fxLayout="row" *ngIf="iseditOverallControlEnvironmentRatingdg">
+                        <div class="content" fxLayout="row wrap">
+                            <div class="tag-box-items">
+                                <span *ngIf="iseditOverallControlEnvironmentRatingdg"><b>Scores</b></span>
+                                <ul fxLayout="row wrap">
+                                    <li *ngFor="let a of sourcedatascoreOverallControlEnvironmentRating; let index = index"
+                                        (click)="addOverallControlEnvironmentRatingtagitem(a)">
+                                        {{ a.ConfigDisplay }}
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="content" fxLayout="row wrap" fxLayoutAlign="start center"
+                        *ngIf="iseditOverallControlEnvironmentRatingdg">
+                        <div class="tag-box-items" *ngIf="iseditOverallControlEnvironmentRatingdg" fxFlex="70%"
+                            fxFlex.md="70%" fxFlex.sm="100%">
+                            <span *ngIf="iseditOverallControlEnvironmentRatingdg"><b>Operstors</b></span>
+                            <ul fxLayout="row wrap">
+                                <li *ngFor="let a of sourcedataoperatorOverallControlEnvironmentRating; let index = index"
+                                    (click)="addOverallControlEnvironmentRatingtagitem(a)">
+                                    {{ a.ConfigDisplay }}
+                                </li>
+                            </ul>
+                        </div>
+
+
+                        <button fxFlexOffset="10px" mat-mini-fab aria-label="Save"
+                            *ngIf="iseditOverallControlEnvironmentRatingdg"
+                            (click)="saveOverallControlEnvironmentRatingData()">
+                            <mat-icon>check</mat-icon>
+                        </button>
+                        <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="Cancel"
+                            (click)="CancelOverallControlEnvironmentRating()"
+                            *ngIf="iseditOverallControlEnvironmentRatingdg">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </div>
+                    <div fxLayout="row" class="content" fxLayoutAlign="end center">
+
+                        <button mat-mini-fab color="warn" aria-label="add new"
+                            (click)="initiateAddOverallControlEnvironmentRating()"
+                            *ngIf="!iseditOverallControlEnvironmentRatingdg">
+                            <mat-icon>add</mat-icon>
+                        </button>
+                    </div>
+                </mat-card-actions>
+            </mat-card>
+        </div>
+    </div>
+</div>

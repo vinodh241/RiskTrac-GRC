@@ -1,0 +1,458 @@
+<mat-toolbar>
+  <span>Risk Register</span>
+  <span class="spacer"></span>
+</mat-toolbar>
+
+<div class="container">
+  <!-- Filters -->
+  <div class="filter-row">
+    <mat-form-field appearance="fill" class="filter-field">
+      <mat-label>Department</mat-label>
+      <mat-select matSelectSearch placeholder="Search department..." (selectionChange)="groupFilter($event.value)">
+        <mat-option [value]="''">All Departments</mat-option>
+        <mat-option *ngFor="let g of groupsData" [value]="g.GroupID">{{ g.GroupName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="filter-field">
+      <mat-label>Unit</mat-label>
+      <mat-select matSelectSearch placeholder="Search unit..." (selectionChange)="unitFilter($event.value)">
+        <mat-option [value]="''">All Units</mat-option>
+        <mat-option *ngFor="let u of filteredUnitData" [value]="u.UnitID">{{ u.UnitName }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="filter-field">
+      <mat-label>Year</mat-label>
+      <mat-select matSelectSearch placeholder="Search year..." [multiple]="true" [(ngModel)]="selectedYear" (selectionChange)="yearFilter($event.value)">
+        <mat-option *ngFor="let y of yearData" [value]="y">{{ y }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="filter-field">
+      <mat-label>Quarter</mat-label>
+      <mat-select matSelectSearch placeholder="Search quarter..." [multiple]="true" (selectionChange)="quarterFilter($event.value)">
+        <mat-option *ngFor="let q of quarterData" [value]="q">{{ q }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="fill" class="search-field">
+      <mat-label>Search</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Search risk id / title" />
+    </mat-form-field>
+
+    <div class="summary-count">
+      <strong>{{ filteredCount }}</strong> <small>Inherent Risk(s)</small>
+    </div>
+
+    <button mat-icon-button matTooltip="Export" (click)="exportAsXLSX()" aria-label="Export">
+      <mat-icon>download</mat-icon>
+    </button>
+  </div>
+
+  <!-- Main table with sort & pagination -->
+  <mat-card>
+    <mat-card-content>
+      <div class="table-wrap">
+        <table mat-table [dataSource]="dataSource" matSort id="rcsaTable" class="mat-elevation-z2 rrTable">
+
+          <!-- RCSA Code -->
+          <ng-container matColumnDef="RCSACode">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>RCSA Code</th>
+            <td mat-cell *matCellDef="let row">{{ row.RCSACode }}</td>
+          </ng-container>
+
+          <!-- Risk Code -->
+          <ng-container matColumnDef="SLNO">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Risk Code</th>
+            <td mat-cell *matCellDef="let row">{{ row.SLNO }}</td>
+          </ng-container>
+
+          <!-- Department -->
+          <ng-container matColumnDef="GroupName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Department</th>
+            <td mat-cell *matCellDef="let row">{{ row.GroupName }}</td>
+          </ng-container>
+
+          <!-- Unit -->
+          <ng-container matColumnDef="UnitName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Unit</th>
+            <td mat-cell *matCellDef="let row">{{ row.UnitName }}</td>
+          </ng-container>
+
+          <!-- Period -->
+          <ng-container matColumnDef="SchedulePeriod">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Period</th>
+            <td mat-cell *matCellDef="let row">{{ row.SchedulePeriod }}</td>
+          </ng-container>
+
+          <!-- Overall Inherent Risk Rating -->
+          <ng-container matColumnDef="OverallInherentRiskRating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Inherent<br>RiskRating</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="rating-pill" [ngStyle]="{'background': row.OverallInherentRiskColor 
+                            || '#eee', 'color': getContrastColor(row.OverallInherentRiskColor || '#ddd')}">
+                {{ row.OverallInherentRiskRating }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Overall Control Environment Risk Rating -->
+          <ng-container matColumnDef="OverallControlEnvironmentRiskRating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Control<br>EnvironmentRating</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="rating-pill" [ngStyle]="{'background': row.OverallControlEnvironmentRatingColourCode 
+                              || '#eee', 'color': getContrastColor(row.OverallControlEnvironmentRatingColourCode || '#ddd')}">
+                {{ row.OverallControlEnvironmentRiskRating }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Residual Risk Rating -->
+          <ng-container matColumnDef="ResidualRiskRating">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Residual<br>RiskRating</th>
+            <td mat-cell *matCellDef="let row">
+              <span class="rating-pill" [ngStyle]="{'background': row.ResidualRiskRatingColourCode 
+                             || '#eee', 'color': getContrastColor(row.ResidualRiskRatingColourCode || '#ddd')}">
+                {{ row.ResidualRiskRating }}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Status -->
+          <ng-container matColumnDef="ScheduleInherentRiskStatusName">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
+            <td mat-cell *matCellDef="let row">{{ row.ScheduleInherentRiskStatusName }}</td>
+          </ng-container>
+
+          <!-- Age -->
+          <ng-container matColumnDef="riskAge">
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>Risk Age</th>
+            <td mat-cell *matCellDef="let row">{{ row.RiskAge }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;" (click)="openSummary(row)"></tr>
+        </table>
+      </div>
+
+      <mat-paginator [pageSizeOptions]="[10, 25, 50]" showFirstLastButtons
+        aria-label="Risk register paginator"></mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- SUMMARY DIALOG TEMPLATE (opened by MatDialog) -->
+<ng-template #summaryDialog>
+  <div class="dialog-root">
+    <div class="dialog-toolbar">
+
+      <div class="dialog-title">
+        <h2>{{ selectedRisk?.RCSACode }} — {{ selectedRisk?.Risk || selectedRisk?.SLNO }}</h2>
+        <!-- <div class="meta">
+          <span *ngIf="selectedRisk">Owner: {{ selectedRisk?.RiskOwner }}</span> |
+          <span *ngIf="selectedRisk">Status: {{ selectedRisk?.ScheduleInherentRiskStatusName }}</span>
+        </div> -->
+      </div>
+      <button mat-icon-button (click)="closeSummaryDialog()"><mat-icon>close</mat-icon></button>
+    </div>
+
+    <div class="dialog-body" *ngIf="selectedRisk">
+      <div class="meta mb4">
+        <span *ngIf="selectedRisk">Owner: <b>{{ selectedRisk?.RiskOwner }}</b></span>
+        <span *ngIf="selectedRisk">Status: <b>{{ selectedRisk?.ScheduleInherentRiskStatusName }}</b></span>
+      </div>
+      <!-- === SECTION: Identification & Context === -->
+      <h3 class="section-title">Identification &amp; Context</h3>
+      <div class="card-grid">
+        <mat-card class="info-card">
+          <div class="label">RCSA Code</div>
+          <div class="value">{{ selectedRisk?.RCSACode }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Risk Code</div>
+          <div class="value">{{ selectedRisk?.SLNO }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Risk</div>
+          <div class="value">{{ selectedRisk?.Risk }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Risk Category</div>
+          <div class="value">{{ selectedRisk?.RiskCategoryName || selectedRisk?.RiskCategory }}</div>
+        </mat-card>
+
+        <mat-card class="info-card">
+          <div class="label">Department</div>
+          <div class="value">{{ selectedRisk?.GroupName }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Unit</div>
+          <div class="value">{{ selectedRisk?.UnitName }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Process</div>
+          <div class="value">{{ selectedRisk?.ProcessName || selectedRisk?.Process }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Period</div>
+          <div class="value">{{ selectedRisk?.SchedulePeriod }}</div>
+        </mat-card>
+
+        <mat-card class="info-card">
+          <div class="label">Status</div>
+          <div class="value">{{ selectedRisk?.ScheduleInherentRiskStatusName }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Risk Age</div>
+          <div class="value">{{selectedRisk?.RiskAge || 'NA'}}</div>
+        </mat-card>
+      </div>
+
+      <!-- === SECTION: Inherent Risk Assessment === -->
+      <h3 class="section-title">Inherent Risk Assessment</h3>
+      <div class="card-grid">
+        <mat-card class="info-card">
+          <div class="label">Overall Inherent Risk Rating</div>
+          <div class="value">
+          <span class="rating-pill" [ngStyle]="{ 'background': selectedRisk.OverallInherentRiskColor 
+                                || '#eee', 'color': getContrastColor(selectedRisk.OverallInherentRiskColor || '#eee')}">
+            {{ selectedRisk.OverallInherentRiskRating }}
+          </span>
+          </div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Control EnvironmentRating</div>
+          <div class="value">
+            <span class="rating-pill" [ngStyle]="{'background': selectedRisk.OverallControlEnvironmentRatingColourCode 
+                          || '#eee', 'color': getContrastColor(selectedRisk.OverallControlEnvironmentRatingColourCode || '#ddd')}">
+              {{ selectedRisk.OverallControlEnvironmentRiskRating }}
+            </span>
+          </div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Residual Risk Rating</div>
+          <div class="value">
+            <span class="rating-pill" [ngStyle]="{'background': selectedRisk.ResidualRiskRatingColourCode 
+                                    || '#eee', 'color': getContrastColor(selectedRisk.ResidualRiskRatingColourCode || '#ddd')}">
+              {{ selectedRisk.ResidualRiskRating }}
+            </span>
+          </div>
+        </mat-card>
+      </div>
+
+      <!-- Controls -->
+       <mat-divider class="mt4"></mat-divider>
+      <div class="section">
+        <h4>Controls</h4>
+        <table mat-table [dataSource]="selectedRisk._parsedControls" class="inner-table rrTablePopup"
+          *ngIf="selectedRisk._parsedControls?.length">
+          <ng-container matColumnDef="ControlCode">
+            <th mat-header-cell *matHeaderCellDef>Code</th>
+            <td mat-cell *matCellDef="let c">{{ c.ControlCode || c.ControlCodeName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ControlDescription">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let c">{{ c.ControlDescription }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ControlType">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let c">{{ c.ControlType }}</td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="['ControlCode','ControlDescription','ControlType']"></tr>
+          <tr mat-row *matRowDef="let row; columns: ['ControlCode','ControlDescription','ControlType'];"></tr>
+        </table>
+        <div *ngIf="!selectedRisk._parsedControls?.length" class="muted">No controls recorded.</div>
+      </div>
+
+      <!-- === SECTION: Control Environment (Existing Controls) === -->
+      <h3 class="section-title">Control Environment (Existing Controls)</h3>
+      <div class="card-grid">
+        <mat-card class="info-card">
+          <div class="label">Control In Place</div>
+          <div class="value">{{ selectedRisk?.ControlInPaceName || selectedRisk?.ControlInPace }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Control Nature</div>
+          <div class="value">{{ selectedRisk?.ControlNatureName }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Control Automation</div>
+          <div class="value">{{ selectedRisk?.ControlAutomationName }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Control Frequency</div>
+          <div class="value">{{ selectedRisk?.ControlFrequencyName }}</div>
+        </mat-card>
+
+        <mat-card class="info-card">
+          <div class="label">Control Testing Result</div>
+          <div class="value">{{ selectedRisk?.ControlTestingResultName }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Control Testing Result Comment</div>
+          <div class="value">{{ selectedRisk?.ControlTestingResultComment }}</div>
+        </mat-card>
+      </div>
+
+      <!-- === SECTION: Residual Risk Assessment === -->
+      <h3 class="section-title">Residual Risk Assessment</h3>
+      <div class="card-grid">
+        <mat-card class="info-card">
+          <div class="label">Residual Risk Response</div>
+          <div class="value">{{ selectedRisk?.ResidualRiskResponseName }}</div>
+        </mat-card>
+        <mat-card class="info-card">
+          <div class="label">Residual Risk Responsible Person</div>
+          <div class="value">{{ selectedRisk?.ResidualRiskResponsiblePersonName }}</div>
+        </mat-card>
+      </div>       
+
+      <mat-divider class="mt4"></mat-divider>
+
+      <!-- Action Plans -->
+      <div class="section">
+        <h4>Action Plans</h4>
+        <table mat-table [dataSource]="selectedRisk._parsedActionPlans" class="inner-table rrTablePopup"
+          *ngIf="selectedRisk._parsedActionPlans?.length">
+          <!-- 1. ScheduleActionPlanID -->
+          <ng-container matColumnDef="ScheduleActionPlanID">
+            <th mat-header-cell *matHeaderCellDef style="width: 5%;">ID</th>
+            <td mat-cell *matCellDef="let a" style="width: 5%;">{{ a.ScheduleActionPlanID }}</td>
+          </ng-container>
+          <!-- 2. IdentifiedAction -->
+          <ng-container matColumnDef="IdentifiedAction">
+            <th mat-header-cell *matHeaderCellDef style="width: 13%; max-width: 13%; white-space: pre-wrap;">Identified Action</th>
+            <td mat-cell *matCellDef="let a" style="width: 13%; max-width: 13%; white-space: pre-wrap;">
+              {{ a.IdentifiedAction || a.IdentifiedActionTitle }}
+            </td>
+          </ng-container>
+          <!-- 3. ControlType -->
+          <ng-container matColumnDef="ControlType">
+            <th mat-header-cell *matHeaderCellDef style="width: 8%; max-width: 8%; white-space: pre-wrap;">Control Type</th>
+            <td mat-cell *matCellDef="let a" style="width: 8%; max-width: 8%; white-space: pre-wrap;">{{ a.ControlType }}</td>
+          </ng-container>
+          <!-- 4. Timeline -->
+          <ng-container matColumnDef="Timeline">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">Timeline</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">
+              {{ a.Timeline | date: 'dd-MM-yyyy' }}
+            </td>
+          </ng-container>
+          <!-- 5. ActionPlanStatusName -->
+          <ng-container matColumnDef="ActionPlanStatusName">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">Status</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.ActionPlanStatusName }}</td>
+          </ng-container>
+          <!-- 6. ActionResponsiblePersonName -->
+          <ng-container matColumnDef="ActionResponsiblePersonName" >
+            <th mat-header-cell *matHeaderCellDef style="width: 10%; max-width: 10%; white-space: pre-wrap;">Responsible Person</th>
+            <td mat-cell *matCellDef="let a" style="width: 10%; max-width: 10%; white-space: pre-wrap;">{{ a.ActionResponsiblePersonName }}</td>
+          </ng-container>
+          <!-- 7. ControlVerificationClosureName -->
+          <ng-container matColumnDef="ControlVerificationClosureName">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">Confirmation/ Verification of Closure</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.ControlVerificationClosureName }}</td>
+          </ng-container>
+          <!-- 8. TotalCost -->
+          <ng-container matColumnDef="TotalCost">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">Total Cost</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.TotalCost }}</td>
+          </ng-container>
+          <!-- 9. TotalBenefit -->
+          <ng-container matColumnDef="TotalBenefit">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">Total Benefit</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.TotalBenefit }}</td>
+          </ng-container>
+          <!-- 10. TotalNetBenefit -->
+          <ng-container matColumnDef="TotalNetBenefit">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">Total Net Benefit</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.TotalNetBenefit }}</td>
+          </ng-container>
+          <!-- 11. TotalPresentValueCost -->
+          <ng-container matColumnDef="TotalPresentValueCost">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">PV Cost</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.TotalPresentValueCost }}</td>
+          </ng-container>
+          <!-- 12. TotalPresentValueBenefit -->
+          <ng-container matColumnDef="TotalPresentValueBenefit">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">PV Benefit</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.TotalPresentValueBenefit }}</td>
+          </ng-container>
+          <!-- 13. BenefitCostRatio -->
+          <ng-container matColumnDef="BenefitCostRatio">
+            <th mat-header-cell *matHeaderCellDef style="width: 6%; max-width: 6%; white-space: pre-wrap;">BCR</th>
+            <td mat-cell *matCellDef="let a" style="width: 6%; max-width: 6%; white-space: pre-wrap;">{{ a.BenefitCostRatio }}</td>
+          </ng-container>
+          <!-- 14. ActionPlanComments -->
+          <ng-container matColumnDef="ActionPlanComments">
+            <th mat-header-cell *matHeaderCellDef style="width: 10%; max-width: 10%; white-space: pre-wrap;">Comments</th>
+            <td mat-cell *matCellDef="let a" style="width: 10%; max-width: 10%; white-space: pre-wrap;">{{ a.ActionPlanComments }}</td>
+          </ng-container>
+          <!-- Header Row -->
+          <tr mat-header-row
+            *matHeaderRowDef="[
+                    'ScheduleActionPlanID', 'IdentifiedAction', 'ControlType', 'Timeline', 'ActionPlanStatusName', 'ActionResponsiblePersonName', 'ControlVerificationClosureName',
+                    'TotalCost', 'TotalBenefit', 'TotalNetBenefit', 'TotalPresentValueCost', 'TotalPresentValueBenefit', 'BenefitCostRatio', 'ActionPlanComments']">
+          </tr>
+          <!-- Data Row -->
+          <tr mat-row
+            *matRowDef="let row; columns: [
+                    'ScheduleActionPlanID', 'IdentifiedAction', 'ControlType', 'Timeline', 'ActionPlanStatusName', 'ActionResponsiblePersonName', 'ControlVerificationClosureName',
+                    'TotalCost', 'TotalBenefit', 'TotalNetBenefit', 'TotalPresentValueCost', 'TotalPresentValueBenefit', 'BenefitCostRatio', 'ActionPlanComments']">
+          </tr>
+        </table>
+        <div *ngIf="!selectedRisk._parsedActionPlans?.length" class="muted">
+          No action plans recorded.
+        </div>
+      </div>
+
+      <mat-divider class="mt4"></mat-divider>
+
+      <!-- Post Risk Treatment -->
+      <div class="section">
+        <h4>Post Risk Treatment</h4>
+        <table mat-table [dataSource]="selectedRisk._postRiskTreatment" class="inner-table rrTablePopup"
+          *ngIf="selectedRisk._postRiskTreatment?.length">
+          <ng-container matColumnDef="Description">
+            <th mat-header-cell *matHeaderCellDef>Description</th>
+            <td mat-cell *matCellDef="let p">{{ p.Description }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ControlInPaceName">
+            <th mat-header-cell *matHeaderCellDef>Control In Place</th>
+            <td mat-cell *matCellDef="let p">{{ p.ControlInPaceName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ControlNatureName">
+            <th mat-header-cell *matHeaderCellDef>Control Nature</th>
+            <td mat-cell *matCellDef="let p">{{ p.ControlNatureName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ControlAutomationName">
+            <th mat-header-cell *matHeaderCellDef>Automation</th>
+            <td mat-cell *matCellDef="let p">{{ p.ControlAutomationName }}</td>
+          </ng-container>
+          <ng-container matColumnDef="ControlFrequencyName">
+            <th mat-header-cell *matHeaderCellDef>Control Frequency</th>
+            <td mat-cell *matCellDef="let p">{{ p.ControlFrequencyName }}</td>
+          </ng-container>        
+          <ng-container matColumnDef="ResidualRiskRating">
+            <th mat-header-cell *matHeaderCellDef>Residual</th>
+            <td mat-cell *matCellDef="let p">
+              <span class="rating-pill" [ngStyle]="{'background': p.ResidualRiskRatingColourCode 
+                                         || '#eee', 'color': getContrastColor(p.ResidualRiskRatingColourCode || '#ddd')}">
+                {{ p.ResidualRiskRating }}
+              </span>
+            </td>
+          </ng-container>        
+          <tr mat-header-row
+            *matHeaderRowDef="['Description','ControlInPaceName','ControlNatureName','ControlAutomationName','ControlFrequencyName','ResidualRiskRating']">
+          </tr>
+          <tr mat-row
+            *matRowDef="let row; columns: ['Description','ControlInPaceName','ControlNatureName','ControlAutomationName','ControlFrequencyName','ResidualRiskRating'];">
+          </tr>
+        </table>
+        <div *ngIf="!selectedRisk._postRiskTreatment?.length" class="muted">No post-treatment recorded.</div>
+      </div>
+    </div>
+  </div>
+</ng-template>

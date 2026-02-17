@@ -1,0 +1,50 @@
+<div class="container">
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="FileData">
+            <ng-container matColumnDef="Index">
+                <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+                <mat-cell *matCellDef="let row; let i = index"> {{i + 1}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="UploadFile">
+                <mat-header-cell *matHeaderCellDef> File </mat-header-cell>
+                <ng-container *matCellDef="let row">
+                    <td *ngIf="showFileIcon; else fileName"> <a class="link" matTooltipPosition="below"
+                            matTooltip="{{row.FileName}}" matTooltipClass="tooltip-fulltext"
+                            (click)="getFile(row, evdname)">
+                            <mat-icon style="color: black;padding: 0 10px;">description</mat-icon>
+                        </a> </td>
+                    <ng-template #fileName>
+                        <td>
+                            <a class="link" (click)="getFile(row, evdname)">
+                                {{row.FileName}}
+                            </a>
+                        </td>
+                    </ng-template>
+                </ng-container>
+
+            </ng-container>
+            <ng-container matColumnDef="Remark">
+                <mat-header-cell *matHeaderCellDef> Remark </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{row.Remark}} </mat-cell>
+            </ng-container>
+            <!-- <ng-container matColumnDef="CreatedDate">
+                <mat-header-cell *matHeaderCellDef> Uploaded On </mat-header-cell>
+                <mat-cell *matCellDef="let row"> {{utils.formatDate(row.CreatedDate, true)}} </mat-cell>
+            </ng-container> -->
+            <ng-container matColumnDef="AddIcon">
+                <mat-header-cell *matHeaderCellDef>
+                    <button mat-icon-button (click)="uploadEvidence($event)" [disabled]="disabled">
+                        <mat-icon aria-hidden="false" aria-label="Add" fontIcon="add"></mat-icon>
+                    </button>
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <button mat-icon-button (click)="remove(row, evdname)" [disabled]="disabled">
+                        <mat-icon aria-hidden="false" aria-label="Delete" fontIcon="delete"></mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+    </div>
+</div>

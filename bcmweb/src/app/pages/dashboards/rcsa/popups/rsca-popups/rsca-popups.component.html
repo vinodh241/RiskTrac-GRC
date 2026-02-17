@@ -1,0 +1,54 @@
+<mat-toolbar class="mat-tool-bar"  >
+    {{data.title}}
+    <button mat-icon-button title="Close" cdkFocusInitial mat-dialog-close>
+        <mat-icon aria-hidden="false" aria-label="Close" fontIcon="close"></mat-icon>
+    </button>
+</mat-toolbar>
+<div class="mat-table-padding matViewTable">
+    <table  mat-table [dataSource]="listdata"  matSort style="width: 100%;"  class="mat-elevation-z8">
+        <ng-container matColumnDef="srno">
+            <th mat-header-cell *matHeaderCellDef style="width: 5%;">#</th>
+            <td mat-cell *matCellDef="let element; let i = index"> {{i+1}}</td>
+        </ng-container>
+        <ng-container matColumnDef="RCSACode">
+            <th mat-header-cell *matHeaderCellDef>RCSA Code </th>
+            <td mat-cell *matCellDef="let element;">{{element.RCSACode ? element.RCSACode : 'N.A'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="SLNO">
+            <th mat-header-cell *matHeaderCellDef>SLNO</th>
+            <td mat-cell *matCellDef="let element;">{{element.SLNO ? element.SLNO : 'N.A'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="Units">
+            <th mat-header-cell *matHeaderCellDef > Unit </th>
+        <td mat-cell *matCellDef="let element">{{element.Units ? element.Units : 'N.A'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="Risk">
+            <th mat-header-cell *matHeaderCellDef > Risk </th>
+            <td mat-cell *matCellDef="let element">{{element.Risk ? element.Risk : 'N.A'}} </td>
+        </ng-container>
+        <ng-container matColumnDef="ScheduleInherentRiskStatusName">
+            <th mat-header-cell *matHeaderCellDef>Status </th>
+            <td mat-cell *matCellDef="let element;">{{element.ScheduleInherentRiskStatusName ? element.ScheduleInherentRiskStatusName : 'N.A'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="InherentRiskRating">
+            <th mat-header-cell *matHeaderCellDef > Inherent Risk Rating </th>
+            <td mat-cell *matCellDef="let element">{{element.InherentRiskRating ? element.InherentRiskRating : 'N.A'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="ResidualRiskRating">
+            <th mat-header-cell *matHeaderCellDef > Residual Risk Rating</th>
+            <td mat-cell *matCellDef="let element">{{element.ResidualRiskRating ? element.ResidualRiskRating : 'N.A'}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"  style="height:40px;"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;" style="height:35px;"></tr>
+    </table>
+
+
+</div>
+<!--
+<div class="bottom-dig">
+    <button mat-stroked-button mat-dialog-close>Cancel</button>
+</div> -->
+<div class="modal-footer modalFooter">
+    <!-- <button mat-stroked-button mat-dialog-close>Cancel</button> -->
+    <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh" mat-dialog-close>Cancel</button>
+</div>

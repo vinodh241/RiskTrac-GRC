@@ -1,0 +1,29 @@
+.spacer {
+    flex: 1 1 auto;
+}
+
+.mat-toolbar {
+  background-color: #2470a3;
+  color: white;
+  height: 10.8vh;
+}
+.bgSeaGreenGradient {background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);}
+
+.cardGen.colorGeyGradient {background: var(--ormBg-img) no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #FFEAC9 95.19%); background-size: 106%;}
+
+.cardGen.colorGeyGradient .cardLink:hover {background-color: #fef1de42; backdrop-filter: blur(3px); display: block;}
+
+.cardGen.colorGeyGradient.bcmBg {background: var(--bcmBg-img) no-repeat 60% 36%, linear-gradient(85deg, #FFFFFF 10.97%, #E2EBF6 95.19%); background-size: 106%;}
+
+.cardGen.colorGeyGradient.bcmBg .cardLink:hover {background-color: #dee9f145; backdrop-filter: blur(3px); display: block;}
+
+.help {display: inline-block; width: 1.3em; aspect-ratio: 1 / 1; background-color: #fff; color: #000; text-align: center; border-radius: 50vh; vertical-align: middle;}
+
+
+.fontWhite {color: #fff; text-decoration:none;}
+.fontWhite:hover {color: #fff; text-decoration:underline;}
+.topFilter.fontBlack {color: #000; line-height: 1.3;}
+
+
+
+.bg-light.topmenuBg {border-bottom: 1px solid #ffffff69; position: relative;}

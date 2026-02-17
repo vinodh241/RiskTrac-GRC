@@ -1,0 +1,169 @@
+.mat-toolbar {
+    height: 6.4vh;
+}
+
+.container{
+
+    padding: 20px 20px;
+}
+
+.mat-slide-toggle{
+  margin-right: 5px;
+}
+.Grouptable{
+    margin-bottom: 20px;
+}
+.mat-row:nth-child(even){
+    background-color: #ced2d04d !important;
+  }
+  .mat-row:not(:nth-child(odd)){
+    background-color:#ffffff;
+  }
+  to
+
+  .mat-row:nth-child(2n+1){
+    background-color: #ced2d04d !important;
+  }
+  .mat-row:not(:nth-child(4n+1)){
+    background-color:#ffffff;
+  }
+  mat-table.mat-table {
+    margin-top: 10px;
+    max-height: 230px;
+    min-height: 230px;
+    overflow: auto;
+  }
+  .formulacontent{
+    margin-top: 10px;
+    max-height: 240px;
+    min-height: 240px;
+    overflow: auto;
+  }
+
+  .content p{
+    font-size: 15px;
+}
+
+.content ul{
+    display: flex;
+    padding: 7px;
+    margin: 0px 0;
+    border-radius: 5px;
+    // border: 1px solid #ffffff;
+}
+.content span{
+    margin-left: 12px;
+}
+.content ul li{
+   list-style: none;
+   margin: 4px 3px;
+   align-items: center;
+   border-radius: 5px;
+   background: #f2f2f2;
+   padding: 5px 8px 5px 10px;
+   border: 1px solid #e3d1e1;
+
+}
+.content :where(li,li mat-icon){
+    display: flex;
+    align-items: center;
+}
+.content ul li mat-icon{
+    height: 20px;
+    width: 20px;
+    color: #808080;
+    cursor: pointer;
+    font-size: 12px;
+    margin-left: 8px;
+    border-radius: 50%;
+    background: #dfdfdf;
+    justify-content: center;
+ }
+
+ .content ul input{
+    flex: 1;
+    border: none;
+    outline: none;
+    padding: 5px;
+    font-size: 16px;
+ }
+ .tag-box-items ul li{
+    cursor: pointer;
+ }
+
+ .formulaCard{
+    background: #F9f6ed;
+ }
+
+ .mat-column-Index {
+  flex: 0 0 5% !important;
+}
+.mat-column-RowNumber {
+  flex: 0 0 5% !important;
+}
+
+.mat-column-Status {
+  flex: 0 0 20% !important;
+}
+
+.mat-column-Action> button {
+  width: 5vh;
+}
+
+.mat-column-ColorCode {
+  max-width: 5vw;
+}
+.colorbox-small{
+  width: 15px;
+  height: 15px;
+  margin-right: 5px;
+}
+.colorbox{
+  width: 30px;
+  height: 30px;
+}
+.mat-card {
+  padding: 16px 0;
+}
+
+.mat-card-actions {
+  padding: 8px 16px;
+}
+
+.mat-cell {
+  margin-right: 6px;
+  overflow: hidden;
+}
+.tablecolumnspan{
+  overflow-wrap:normal;
+}
+
+.mat-column-RatingScore {
+  max-width: 3vw;
+}
+input.ng-star-inserted {
+  border: 1px solid #0e0000 !important;
+  border-radius: 5px;
+}
+.beforeeditcomputedtext{
+  margin: 10px 0px !important;
+}
+// .save-button {
+//   background-color: rgb(217, 217, 97);
+//   color: aliceblue;
+//   width: 3vh;
+//   height: 3vh;
+// }
+
+// .cancel-button {
+//   margin-left: 4px;
+//   background-color: rgb(173, 173, 228);
+//   color: grey;
+//   width: 3vh;
+//   height: 3vh;
+// }
+
+// .flex {
+//   display: flex;
+//   align-items: center;
+// }

@@ -1,0 +1,57 @@
+body {
+    // height: fit-content;
+    overflow:none;
+}
+
+.mat-header-cell {
+    background-color: rgb(184, 181, 181);
+    // height:14px;
+    height: 10px !important;
+}
+
+.viewAll{
+    color: #1b61d1;
+    cursor: pointer;
+}
+
+
+::ng-deep.mat-expansion-panel-body {
+    padding: 0px !important;
+}
+
+
+
+
+::ng-deep.mat-expansion-panel-content {
+    max-height: 50vh;
+}
+
+
+.mat-row:nth-child(even){
+    background-color: rgb(233, 233, 230);
+    // height: 10px;
+}
+        
+.mat-row:nth-child(odd){
+    background-color: rgb(225, 223, 223);
+    // height: 10px;
+}
+
+.expansion-bg{
+    background-image:  linear-gradient(to right,#f2b4b4, #faf9f9 ,#adf28d)
+}
+
+.expansion-bg2{
+    background-image:  linear-gradient(to right,#adf28d, #faf9f9,#f2b4b4)
+
+}
+
+th.mat-header-cell:first-of-type, td.mat-cell:first-of-type, td.mat-footer-cell:first-of-type {
+    padding-left: 15px;
+}
+th.mat-header-cell:last-of-type, td.mat-cell:last-of-type, td.mat-footer-cell:last-of-type {
+    padding-right: 15px;
+}
+.mat-expansion-panel-header{    
+    padding: 0 15px;
+}

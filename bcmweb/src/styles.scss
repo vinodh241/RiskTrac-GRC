@@ -1,0 +1,354 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+@use '@angular/material' as mat;
+@include mat.core();
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue. Available color palettes: https://material.io/design/color/
+
+@import './assets/fonts/open-sans/open-sans-fonts.scss';
+@import './assets/fonts/roboto/roboto-fonts.scss';
+@import './assets/fonts/material-icons/material-icons-fonts.scss';
+// @import './modal.css';
+@import './assets/css/modal.css';
+// @import './assets/';
+@import "./assets/css/layout.css";
+@import "./assets/css/nav.css";
+
+$web-palette: (
+    50 : #e5eef4,
+    100 : #bdd4e3,
+    200 : #92b8d1,
+    300 : #669bbf,
+    400 : #4585b1,
+    500 : #2470a3,
+    600 : #20689b,
+    700 : #1b5d91,
+    800 : #165388,
+    900 : #0d4177,
+    A100 : #a9cfff,
+    A200 : #76b3ff,
+    A400 : #4397ff,
+    A700 : #2a88ff,
+    contrast: (50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #ffffff,
+    )
+);
+
+$web-primary: mat.define-palette($web-palette);
+$web-accent: mat.define-palette(mat.$blue-palette, A200, A100, A400);
+$web-warn: mat.define-palette(mat.$red-palette);
+
+$web-theme: mat.define-light-theme((color: (primary: $web-primary, accent: $web-accent, warn: $web-warn)));
+@include mat.all-component-themes($web-theme);
+
+//mat-display-4                 --      display-4
+//mat-display-3                 --      display-3
+//mat-display-2                 --      display-2
+//mat-display-1                 --      display-1
+//mat-h1 mat-headline           h1      headline
+//mat-h2 mat-title              h2      title
+//mat-h3 mat-subheading-2       h3      subheading-2
+//mat-h4 mat-subheading-1       h4      subheading-1
+//mat-h5                        h5      --
+//mat-h6                        h6      --
+//mat-body mat-body-1           body    body-1
+//mat-body-strong mat-body-2    --      body-2
+//mat-small mat-caption         --      caption
+
+//level parameters: font-size , line-height , font-weight , font-family and letter-spacing
+$web-typography: mat.define-typography-config($font-family: 'Roboto Condensed',
+        $title: mat.define-typography-level(3.5vh, 1, 300),
+        $subheading-2: mat.define-typography-level(2.5vh, 1, 700),
+        $subheading-1: mat.define-typography-level(2.5vh, 1, 300),
+        $display-4: mat.define-typography-level(2.1vh, 1, 700),
+        $display-3: mat.define-typography-level(2.1vh, 1, 400),
+        $display-2: mat.define-typography-level(1.7vh, 1, 700),
+        $button: mat.define-typography-level(2.3vh, 1, 400));
+
+// $display-4:     mat.define-typography-level(112px, 1, 1000),
+// $display-3:     mat.define-typography-level(56px, 1, 1000),
+// $display-2:     mat.define-typography-level(45px, 1, 1000),
+// $display-1:     mat.define-typography-level(34px, 1, 1000),
+// $headline:      mat.define-typography-level(1.5rem, 1, 1000),
+// $title:         mat.define-typography-level(1.5rem, 1, 10),
+// $subheading-2:  mat.define-typography-level(1.2rem, 1, 500),
+// $subheading-1:  mat.define-typography-level(1rem, 1, 10),
+// $body-1:        mat.define-typography-level(1rem, 1, 10),
+// $body-2:        mat.define-typography-level(1rem, 1, 10),
+// $caption:       mat.define-typography-level(1rem, 1, 10),
+// $button:        mat.define-typography-level(1rem, 1, 10),
+// $input:         mat.define-typography-level(1rem, 1, 10)
+
+@include mat.core($web-typography);
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background-color: #F2F2F2;
+    color: black;
+    font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+        // background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);
+
+}
+
+.mat-action-row {
+    display: flex;
+    align-items: center;
+}
+
+.label {
+    font-size: 5.5vh;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.dark {
+    color: black;
+}
+
+.space {
+    width: 3vw;
+}
+.rscaComponent tbody tr:nth-child(even) {
+    background-color: #f8f8f8;
+}
+.mat-h3,
+.mat-h4 {
+    margin: 0px 0px 0px 0px;
+}
+
+.mat-toolbar {
+    // background-color: #2980B9;
+    background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);
+    color: white;
+    height: 6.4vh;
+}
+
+.mat-table {
+    width: 100%;
+    border: 0px;
+}
+
+.mat-header-row {
+    min-height: 3vh;
+}
+
+.mat-header-cell {
+    color: black;
+    font-size: 1.8vh;
+    font-weight: 700;
+}
+
+.matViewTable thead th{
+    position: sticky;
+    top:0px;
+}
+.mat-cell {
+    color: black;
+    font-size: 1.8vh;
+    font-weight: 400;
+}
+#InfoComponent, #WaitComponent, #RiskMetricsComponent, #ConfirmDialogComponent, #MetricsComponent, .dark > mat-dialog-container  {
+    padding: 24px !important;
+}
+.mat-tooltip {
+    font-size: 1.8vh;
+}
+
+.dark>mat-dialog-container {
+    background-color: #000000EE;
+    color: white;
+}
+.dashFilter .mat-form-field-flex,.dashFilter .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex{
+    background-color: #ffffff;
+    width: 100% !important;
+    border-radius: 0px;
+}
+.dashFilter .mat-form-field-infix{
+    top: -5px;
+    width: 100% !important;
+}
+.dashFilter .mat-select-arrow-wrapper{
+    top: 7px;
+    position: relative;
+}
+
+.success>mat-dialog-container {
+    background-color: #000000EE;
+    color: white;
+}
+
+.error>mat-dialog-container {
+    background-color: #000000EE;
+    color: white;
+}
+
+.warning>mat-dialog-container {
+    background-color: #000000EE;
+    color: white;
+}
+
+.history>mat-dialog-container {
+    padding: 0;
+}
+
+.custom-radio .mat-radio-container {
+    background-color: white;
+    border-radius: 20px;
+}
+
+.custom-radio .mat-radio-button {
+    border: opx;
+}
+
+.custom-radio .mat-radio-outer-circle {
+    border: 0px !important;
+}
+
+.mat-menu-panel {
+    // background: linear-gradient(180deg, #2470A3 20.02%, #72AED5 100%);
+    color: #fff;
+    background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%); box-shadow: 0px 1vh 2vh 0px rgba(0, 0, 0, 0.25); border-radius: 0.3vh 0.3vh 4vh 0.3vh;padding: 2vh 1vw; right: 0;margin-top: 1vh;
+
+}
+
+.mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]) {
+    background-color: #ffffff1c;
+}
+.mat-menu-item {
+    color: #FFF;
+}
+
+.mat-dialog-container {
+    border-radius: 10px !important;
+}
+
+.tooltip-fulltext {
+    word-break: break-all !important;
+    white-space: normal !important;
+}
+
+.file-upload-disp .mat-elevation-z8 {
+    box-shadow: 0px 0px !important;
+    border: 1px solid #d4d4d4;
+}
+.InherentTable .mat-form-field-appearance-fill .mat-select-arrow-wrapper {
+    height: 3px;
+}
+.seachInCident .mat-form-field-infix {
+    padding: 0.25em 0 0em 0 !important;
+    border: 0px !important;
+}
+.seachInCident .mat-button-base{
+    margin-top: -5px !important;
+}
+.app-risk-unit .mat-expansion-indicator{
+    top: -3px;
+    position: relative;
+}
+.app-risk-unit.mat-expanded .mat-expansion-indicator{
+    top: 3px;
+}
+.tooltip .tooltiptext{
+    z-index: 5;
+}
+.headTotalFS{
+    font-size: 4vh;
+}
+.highcharts-credits{
+    display: none;
+}
+.mriMeasure .mat-column-header-row-indicator, .mriMeasure .mat-column-indicator {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  flex: 0 0 150px !important;
+  width: 150px !important;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
+#OverallFinancialLoss, #OverallFinancialLoss svg, #OverallFinancialLoss > *{
+    overflow: visible !important;
+}
+#OverallFinancialLoss .highcharts-data-label{
+    opacity: 1;
+}
+#OverallFinancialLoss .highcharts-data-labels{
+    transform: translate(115px, 13px) !important;
+}
+#OverallFinancialLoss .highcharts-data-label text{
+    font-size: 11px !important;
+}
+ .toggleInRAOnly .mat-slide-toggle-thumb {
+      height: 14px !important;
+      width: 14px !important;
+      margin-top: 4px;
+      margin-left: 2px;
+      background: dodgerblue;
+    }
+    .toggleInRAOnly  .mat-slide-toggle-thumb-container {
+      width: 25px !important;
+      height: 25px !important;
+    }
+
+    .toggleInRAOnly  .mat-slide-toggle-bar {
+      width: 35px !important;
+      height: 17px !important;
+      border-radius: 10px !important;
+      background: #e9e6e6!important;
+      border: 1px solid darkgray !important;
+   }
+   .toggleInRAOnly  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+    background-color: #448aff;
+    /* margin-right: 5vh; */
+    margin-left: 4px;
+    /* margin-bottom: 21vh; */
+}
+.modal-footer.modalFooter {background-color: transparent; margin-inline: 2%; border-top: 1px solid #ccc; position: relative; padding-top: 2%; padding-bottom: 2%;}
+.modal-footer.modalFooter::before {content:""; border-top:1px solid #fff; width: 100%; top: 1px; position: absolute; left: 50%; transform: translate(-50%);}
+
+.bgSeaGreenGradient {background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);}
+
+.btnGradient {background: linear-gradient(92deg, #245A8C 44.75%, #1DA34A 108.73%); transition: .4s;}
+
+.cardGen.colorGeyGradient {background: linear-gradient(85deg, #A5A5A5 10.97%, rgba(255, 255, 255, 0.00) 95.19%);}
+
+.colorGredient {background: linear-gradient(112deg, #E0BFFF 16.18%, #CCE8FF 91.48%);}
+
+.bgwhite {background-color: #fff;}
+.bgBlueGrey {background-color: #ebeef0;}
+.fontSize {
+    font-size: 3vh;
+    font-weight: 400;
+}

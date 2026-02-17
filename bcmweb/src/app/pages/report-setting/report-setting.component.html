@@ -1,0 +1,121 @@
+<mat-toolbar class="fontSize">
+    <span>Report Setting</span>
+    <span class="spacer"></span>
+    <!-- <button mat-raised-button color="primary" (click)="addRow()">Add New</button> -->
+    <div class="applyFilter addDesktop position-relative text-start me-4">
+        <button type="button" class="btn btn-dark btnGradient ad" data-bs-toggle="modal" (click)="addRow()">Add New</button>
+        <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img src="./assets/images/icon-add-desktop.svg" style="    width: 2vh;margin-top: 1.2vh;"></span>
+    </div>
+</mat-toolbar>
+<div class="container">
+    <div style="width:100%; display: flex;">
+        <mat-card class="mat-card">
+            <img src="./assets/images/icon-bcpc.svg"  style="height: 3vh;"/> <span style="margin-left: 1vh;font-weight: bold;">Set Reporting Frequency</span>
+            <mat-radio-button style="padding-left:30px;font-weight: bold;" [checked]="true">Quarterly</mat-radio-button>
+        </mat-card>
+    </div>
+    <div>
+        <mat-table style="width:100%;" [dataSource]="dataSource" class="mat-elevation-z8">
+            <ng-container matColumnDef="idx">
+                <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <div *ngIf="row.idx !=='base'">
+                        {{row.idx}}
+                    </div>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="cycle">
+                <mat-header-cell *matHeaderCellDef>T<br>Reporting Cycle</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-checkbox [(ngModel)]="row.T0"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="cycle-1">
+                <mat-header-cell *matHeaderCellDef>T-1<br>Reporting Cycle</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-checkbox [(ngModel)]="row.T1"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="cycle-2">
+                <mat-header-cell *matHeaderCellDef>T-2<br>Reporting Cycle</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-checkbox [(ngModel)]="row.T2"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="risk-metric">
+                <mat-header-cell *matHeaderCellDef>Risk Metric Level</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-radio-group [(ngModel)]="row.RiskMetricLevel" class="custom-radio">
+                        <mat-radio-button *ngFor="let level of zones" color="primary" [checked]="isChecked(row, level)" class="metric-level-radio"
+                            [ngStyle]="{'background-color': level.ColorCode}"
+                            [ngClass]="(row.RiskMetricLevel !== level.RiskMetricLevel)? 'applyOpactiy': ''"
+                            [value]="level.RiskMetricLevel">
+                            {{level.RiskMetricZone}}
+                        </mat-radio-button>
+                        <!-- <mat-radio-button [value]="1">{{zones[0]?zones[0].RiskMetricZone:''}}</mat-radio-button>
+                        <mat-radio-button [value]="2">{{zones[1]?zones[1].RiskMetricZone:''}}</mat-radio-button>
+                        <mat-radio-button [value]="3">{{zones[2]?zones[2].RiskMetricZone:''}}</mat-radio-button> -->
+                    </mat-radio-group>
+                </mat-cell>
+            </ng-container>
+            <!-- <ng-container matColumnDef="is-escalation-mandatory">
+                <mat-header-cell *matHeaderCellDef>Escalation Mandatory</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-checkbox [(ngModel)]="row.IsEscalationMandatory"></mat-checkbox>
+                </mat-cell>
+            </ng-container> -->
+            <ng-container matColumnDef="escalation">
+                <mat-header-cell *matHeaderCellDef>
+                    Escalation
+                </mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <div style="display:flex; margin-top: 2vh; flex-direction: column;">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Escalation</mat-label>
+                            <input matInput [(ngModel)]="row.Escalation" type="text">
+                        </mat-form-field>
+                    </div>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="is-report-action-mandatory">
+                <mat-header-cell *matHeaderCellDef>Reporting Action Mandatory</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-checkbox [(ngModel)]="row.IsActionMandatory"></mat-checkbox>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="report-action">
+                <mat-header-cell *matHeaderCellDef>Reporting Action</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <mat-form-field appearance="outline" style="margin-top: 2vh;">
+                        <mat-label>Reporting Action</mat-label>
+                        <input matInput [(ngModel)]="row.Action" type="text">
+                    </mat-form-field>
+
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="action">
+                <mat-header-cell *matHeaderCellDef>Action</mat-header-cell>
+                <mat-cell *matCellDef="let row">
+                    <button class="icon-btn" (click)="removeRow(row)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        </mat-table>
+        <br>
+    </div>
+    <div style="display:flex; justify-content:flex-end; margin-bottom: 2vh;">
+        <!-- <p>Default: When any of these setting does not match, this setting will be applied</p> -->
+        <span class="spacer"></span>
+        <!-- <button style="margin-right:12px;" mat-raised-button color="primary" (click)="save()">Save</button> -->
+        <div class="move-buttons" >
+        <button class="buttons save" id="saveSub" (click)="save()" ><img src="./assets/images/icon-application.svg"
+                  alt="Save">Save</button>
+
+        </div>
+                <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh;height: 6vh;margin-top: 0.8vh;" (click)="cancel()">Cancel</button>
+        <!-- <button mat-raised-button (click)="cancel()">Cancel</button> -->
+    </div>
+</div>
