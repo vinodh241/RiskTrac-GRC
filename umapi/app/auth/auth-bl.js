@@ -41,7 +41,7 @@ class AuthBl {
      * @param {*} response 
      */
     async getPublicKey(request, response){
-        logger.log('info', 'AuthBl : getPublicKey : Execution started.');
+        if (global.logger) global.logger.log('info', 'AuthBl : getPublicKey : Execution started.');
 
         try {
             var requestBody                 = request.body;
@@ -50,7 +50,7 @@ class AuthBl {
             const API_RESPONSE_OBJ          = await sendRequestToAuthAPIApplication(requestBody, '/auth-management/auth/get-Key');
 
             if(CONSTANT_FILE_OBJ.APP_CONSTANT.UNDEFINED != API_RESPONSE_OBJ && CONSTANT_FILE_OBJ.APP_CONSTANT.NULL != API_RESPONSE_OBJ  && CONSTANT_FILE_OBJ.APP_CONSTANT.ONE === API_RESPONSE_OBJ.success){
-                logger.log('info', 'AuthBl : getPublicKey : Get public key successfully');
+                if (global.logger) global.logger.log('info', 'AuthBl : getPublicKey : Get public key successfully');
                 
                 API_RESPONSE_OBJ.result.OTPLength                           = APP_CONFIG.OTP_CONFIG.NUMBER_OF_DIGITS_IN_OTP;
                 API_RESPONSE_OBJ.result.ResentOTPTime                       = APP_CONFIG.OTP_CONFIG.RESEND_OTP_TIME_IN_SECONDS;
@@ -64,7 +64,11 @@ class AuthBl {
                 API_RESPONSE_OBJ.result.MFA_CONFIG_IS_MFA                   = APP_CONFIG.MFA_CONFIG.IS_MFA;
                 API_RESPONSE_OBJ.result.LOGIN_PAGE_DATA                     = APP_CONFIG.LOGIN_PAGE_DATA;
                 
-                absolutePathForPublicKey    = PATH.join(process.cwd(), PUBLIC_KEY_FILE_PATH_UM);
+                absolutePathForPublicKey    = PATH.join(APP_CONFIG.APP_SERVER.PATH, PUBLIC_KEY_FILE_PATH_UM);
+                if (!FILE_SYSTEM.existsSync(absolutePathForPublicKey)) {
+                    if (global.logger) global.logger.log('error', 'AuthBl : getPublicKey : Public key file not found : ' + absolutePathForPublicKey);
+                    return response.status(200).json({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Public key file not found' } });
+                }
                 publicKeyUM                 = FILE_SYSTEM.readFileSync(absolutePathForPublicKey, "utf8");
 
                 API_RESPONSE_OBJ.result.publicKeyUM     = publicKeyUM;     
@@ -80,7 +84,7 @@ class AuthBl {
                });
 
             } else {
-                logger.log('error', 'AuthBl : getPublicKey : Execution end. : Error details : Error from Auth application module, for more details check Auth application module API log.');
+                if (global.logger) global.logger.log('error', 'AuthBl : getPublicKey : Execution end. : Error details : Error from Auth application module, for more details check Auth application module API log.');
                 return response.status(CONSTANT_FILE_OBJ.APP_CONSTANT.TWO_HUNDRED).json({
                     success : CONSTANT_FILE_OBJ.APP_CONSTANT.ZERO,
                     message : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
@@ -92,7 +96,7 @@ class AuthBl {
                 });
             }
         } catch (error) {
-            logger.log('error', 'AuthBl : getPublicKey : Execution end. : Got unhandled error. : Error details : '+error);
+            if (global.logger) global.logger.log('error', 'AuthBl : getPublicKey : Execution end. : Got unhandled error. : Error details : '+error);
             return response.status(CONSTANT_FILE_OBJ.APP_CONSTANT.TWO_HUNDRED).json({
                 success : CONSTANT_FILE_OBJ.APP_CONSTANT.ZERO,
                 message : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
