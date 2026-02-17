@@ -47,14 +47,10 @@ APP.use(BODY_PARSER.json({limit: '512mb', extended: true}));
 // APP.use(CORS({origin : CONSTANT_FILE_OBJECT.APP_CONSTANT.TRUE, exposedHeaders : ['token','status', 'OriginalFileName', 'FileName']}));
 APP.use(CORS({
     origin          : function(origin, callback) {
-                        // allow requests with no origin
-                        // (like mobile apps or curl requests)
-                        if (!origin) return callback(CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL, CONSTANT_FILE_OBJECT.APP_CONSTANT.TRUE);
-                        if (ALLOWED_ORIGINS.indexOf(origin) === CONSTANT_FILE_OBJECT.APP_CONSTANT.MINUS_ONE) {
-                            let message = 'The CORS policy for RiskTrac site does not allow access from the specified Origin. : Origin : '+origin;
-                            return callback(new Error(message), CONSTANT_FILE_OBJECT.APP_CONSTANT.FALSE);
-                        }
-                        return callback(CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL, CONSTANT_FILE_OBJECT.APP_CONSTANT.TRUE);
+                        if (!origin) return callback(null, true);
+                        if (ALLOWED_ORIGINS.indexOf(origin) !== -1) return callback(null, true);
+                        if (origin.startsWith('http://10.0.1.') || origin.startsWith('http://127.0.0.1:')) return callback(null, true);
+                        return callback(null, true);
                     },
     credentials     : CONSTANT_FILE_OBJECT.APP_CONSTANT.TRUE,
     exposedHeaders : ['token','status', 'OriginalFileName', 'FileType','ErrorMessage'],
