@@ -67,3 +67,35 @@ Then open: **http://10.0.1.32:8080**
 - **bcmapi:** Same – remove `"gulp-util":"3.0.8"` from `dependencies` and from `devDependencies` if present. Then run `npm install` in each module if you need a clean lockfile.
 
 These removals are optional; the app runs correctly with gulp-util still listed.
+
+---
+
+## Troubleshooting: 502 Bad Gateway on `/umapi/user-management/auth/get-key` or `/login`
+
+**What it means:** The browser reaches nginx at `http://10.0.1.32:8080`, but nginx cannot get a valid response from the **umapi** backend (User Management API). So the failure is between nginx and the umapi container, not in the frontend.
+
+**Checks:**
+
+1. **Ensure all containers are running**
+   ```bash
+   docker compose ps
+   ```
+   Confirm `risktrac-umapi` (and `risktrac-authapi`) are **Up**.
+
+2. **Inspect umapi logs**
+   ```bash
+   docker compose logs umapi
+   ```
+   Look for startup errors (e.g. missing config, DB, or authapi unreachable).
+
+3. **Restart umapi**
+   ```bash
+   docker compose restart umapi
+   ```
+
+4. **Full stack restart**
+   ```bash
+   docker compose down && docker compose up -d
+   ```
+
+**Frontend:** The login page now shows a clear message when the auth service returns 502/503/504: *"Authentication service is temporarily unavailable. Please check that the User Management API (umapi) is running and try again."*

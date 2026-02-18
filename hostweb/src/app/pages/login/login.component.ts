@@ -4,7 +4,7 @@ import { Component, Inject, Injectable, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
-import { catchError, from, interval, map, Observable, tap } from 'rxjs';
+import { catchError, interval, map, Observable, tap } from 'rxjs';
 import { InfoComponent } from 'src/app/includes/utilities/popups/info/info.component';
 import { WaitComponent } from 'src/app/includes/utilities/popups/wait/wait.component';
 import { UtilsService } from 'src/app/services/utils/utils.service';
@@ -374,12 +374,18 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  private handleError<T>(operation = 'operation', result?: any) {
-    this.closeWait()
-    return (error: any): Observable<any> => {
-      console.error(error);
-      return from(result);
-    };
+  private handleError(error: any) {
+    this.closeWait();
+    const status = error?.status;
+    if (status === 502 || status === 503 || status === 504) {
+      this.apierror = 'Authentication service is temporarily unavailable. Please check that the User Management API (umapi) is running and try again.';
+    } else if (error?.error?.error?.errorMessage) {
+      this.apierror = error.error.error.errorMessage;
+    } else if (error?.message) {
+      this.apierror = error.message;
+    } else {
+      this.apierror = 'An error occurred. Please try again.';
+    }
   }
 
   getErrorMessage() {
