@@ -68,7 +68,14 @@ services:
     environment:
       - PORT=6003
       - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USER=${DB_USER:-sqldev}
+      - DB_SERVER=${DB_SERVER:-10.0.1.22}
+      - DB_PORT=${DB_PORT:-1433}
+      - DB_NAME=${DB_NAME:-SE_GRC}
       - NOTIFICATION_DB_PASSWORD=${NOTIFICATION_DB_PASSWORD:-${DB_PASSWORD}}
+      - NOTIFICATION_DB_SERVER=${NOTIFICATION_DB_SERVER:-${DB_SERVER:-10.0.1.22}}
+      - NOTIFICATION_DB_PORT=${NOTIFICATION_DB_PORT:-${DB_PORT:-1433}}
+      - NOTIFICATION_DB_NAME=${NOTIFICATION_DB_NAME:-${DB_NAME:-SE_GRC}}
     networks:
       - risktrac-net
     restart: unless-stopped

@@ -40,17 +40,8 @@ function getKeyFallbackResultSync() {
         return JSON.stringify({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Service temporarily unavailable' } });
     }
 }
-APP.use(function getKeyFirst(req, res, next) {
-    var p = (req.url && req.url.split('?')[0]) || (req.path || '');
-    if (p.endsWith('/')) p = p.slice(0, -1);
-    if ((req.method === 'POST' || req.method === 'GET') && (p === '/user-management/auth/get-key')) {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.end(getKeyFallbackResultSync());
-        return;
-    }
-    next();
-});
+// get-key is handled by Express route getKeyHandler below (calls authapi for full config + publicKey).
+// Do not intercept here or the login page never gets authapi's publicKey.
 
 /**
  * Swagger UI Configuration
@@ -207,14 +198,8 @@ function getKeyResponseBody() {
         return JSON.stringify({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Service temporarily unavailable' } });
     }
 }
+// Pass all requests to Express so get-key is handled by getKeyHandler (calls authapi for publicKey).
 var SERVER = HTTP.createServer(function (req, res) {
-    var p = (req.url && req.url.split('?')[0]) || '';
-    if (p.endsWith('/')) p = p.slice(0, -1);
-    if ((req.method === 'POST' || req.method === 'GET') && p === '/user-management/auth/get-key') {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(getKeyResponseBody());
-        return;
-    }
     APP(req, res);
 });
 // Minimal console logger so startup can log without exiting when real logger/DB fail
