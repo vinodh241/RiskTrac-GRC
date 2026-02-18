@@ -5,11 +5,11 @@ var dbConfigObject  = require('../../config/db-config.js');
 var utilityAppObject = new UTILITY_APP();
 
 try {
-    var clearTextPassword   = utilityAppObject.decryptDataByPrivateKey(dbConfigObject.password);
-    // console.log("clearTextPassword : "+clearTextPassword);
-    if(clearTextPassword === null){
-        logger.log('error', 'dbConnection.js : Password for database connection is null in dbConnection class.');
-        // console.log("Password for database connection is null in dbConnection class. Please check dbConfig file into './config/' path");
+    var clearTextPassword   = (typeof process !== 'undefined' && process.env && process.env.DB_PASSWORD)
+        ? process.env.DB_PASSWORD
+        : utilityAppObject.decryptDataByPrivateKey(dbConfigObject.password);
+    if (clearTextPassword === null || clearTextPassword === undefined || clearTextPassword === '') {
+        logger.log('error', 'dbConnection.js : Password for database connection is null. Set DB_PASSWORD env or use encrypted password in config.');
         process.exit(0);
     }
     dbConfigObject.password = clearTextPassword;

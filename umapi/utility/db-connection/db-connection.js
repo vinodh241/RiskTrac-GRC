@@ -6,10 +6,12 @@ var utilityAppObject = new UTILITY_APP();
 
 function connectPool() {
     try {
-        var clearTextPassword = utilityAppObject.decryptDataByPrivateKey(dbConfigObject.password);
-        if (clearTextPassword === null) {
+        var clearTextPassword = (typeof process !== 'undefined' && process.env && process.env.DB_PASSWORD)
+            ? process.env.DB_PASSWORD
+            : utilityAppObject.decryptDataByPrivateKey(dbConfigObject.password);
+        if (clearTextPassword === null || clearTextPassword === undefined || clearTextPassword === '') {
             var log = (typeof global !== 'undefined' && global.logger && global.logger.log) ? global.logger : null;
-            if (log) log.log('error', 'dbConnection.js : Password for database connection is null.');
+            if (log) log.log('error', 'dbConnection.js : Password for database connection is null. Set DB_PASSWORD env or use encrypted password in config.');
             return Promise.reject(new Error('Database password is null'));
         }
         dbConfigObject.password = clearTextPassword;

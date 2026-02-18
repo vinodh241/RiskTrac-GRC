@@ -17,13 +17,25 @@
 
 From project root `RiskTrac-GRC`:
 
+**1. Set database password for APIs (required):**  
+Create a `.env` file in the project root with your SQL Server password so APIs can connect:
 ```bash
-# Build and run all services
-docker-compose up -d --build
+echo "DB_PASSWORD=RegXTrac1234" > .env
+# Or create .env with: DB_PASSWORD=your_actual_password
+```
+Do not commit `.env`; add it to `.gitignore` if needed.
 
-# View logs
+**2. Build and run:**
+```bash
+docker-compose up -d --build
+```
+
+**3. View logs:**
+```bash
 docker-compose logs -f
 ```
+
+APIs (authapi, umapi, ormapi, bcmapi) use `DB_PASSWORD` from the environment when set; otherwise they decrypt the password from config (requires `config/certs/private.pem` in each API image).
 
 **Access:**
 - App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
