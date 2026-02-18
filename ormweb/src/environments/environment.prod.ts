@@ -2,7 +2,7 @@ export const environment = {
   dummyData: false,
   production: true,
   umapiUrl: 'umapi',
-  ormapiUrl: 'ormapi',
+  ormapiUrl: '/ormapi',
   hostUrl: "http://10.0.1.32:8080",
   bcmapiUrl: 'bcmapi',
   currency: 'INR',
