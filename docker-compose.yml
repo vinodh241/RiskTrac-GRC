@@ -18,6 +18,10 @@ services:
     environment:
       - PORT=6001
       - DB_PASSWORD=${DB_PASSWORD}
+      - DB_USER=${DB_USER:-sqldev}
+      - DB_SERVER=${DB_SERVER:-10.0.1.22}
+      - DB_PORT=${DB_PORT:-1433}
+      - DB_NAME=${DB_NAME:-SE_GRC}
     networks:
       - risktrac-net
     restart: unless-stopped

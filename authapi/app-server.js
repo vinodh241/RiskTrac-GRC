@@ -120,21 +120,21 @@ APP.listen(appPortNo, async function () {
 
   /**
    * Connecting to database by connection pooling logic :: Start
+   * Non-fatal: if DB fails, app stays up so container does not restart loop; login will fail with clear error.
    */
   try {
     var {
       poolConnectionObject,
     } = require("./utility/db-connection/db-connection.js");
-    // Setting pool connection object in global variable
     global.poolConnectionObject = await poolConnectionObject;
+    logger.log("info", "Database Connected......");
   } catch (error) {
-    // console.log('appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : '+error.stack);
+    console.error("Auth API: DB connection failed (app staying up):", error && (error.message || error));
     logger.log(
       "error",
-      "appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : " +
-        error
+      "appIndex.js : Data Base not connected : " + (error && (error.message || error))
     );
-    process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
+    global.poolConnectionObject = null;
   }
 });
 
