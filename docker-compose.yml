@@ -1,8 +1,7 @@
 # RiskTrac GRC - Docker Compose
 # Server: 10.0.1.32
-# API ports: 6001 authapi, 6002 umapi, 6003 ormapi, 6004 bcmapi (expose and access via your reverse proxy or port mapping)
+# Access app at http://10.0.1.32:8080 (nginx). API ports: 6001 authapi, 6002 umapi, 6003 ormapi, 6004 bcmapi
 # Docker Hub: vinod9072/imagename:v1
-# Nginx/reverse proxy: run separately (e.g. docker run or host nginx); not included in this compose.
 name: risktrac-grc
 
 services:
@@ -138,6 +137,27 @@ services:
       context: ./bcmweb
       dockerfile: Dockerfile
     container_name: risktrac-bcmweb
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
+  nginx:
+    image: vinod9072/nginx:v1
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: risktrac-nginx
+    ports:
+      - "8080:80"
+    depends_on:
+      - authapi
+      - umapi
+      - ormapi
+      - bcmapi
+      - hostweb
+      - umweb
+      - ormweb
+      - bcmweb
     networks:
       - risktrac-net
     restart: unless-stopped
