@@ -11,8 +11,9 @@
 | 6002 | UM API (direct) |
 | 6003 | ORM API (direct) |
 | 6004 | BCM API (direct) |
+| 8080 | Nginx (main entry; app at http://host:8080) |
 
-(Nginx is not in this compose; run your own reverse proxy if needed.)
+**If `docker compose config --services` does not list nginx** (e.g. you only see authapi, umapi, ormapi, bcmapi, hostweb, umweb, ormweb, bcmweb), the compose file on the server is outdated. Either pull the latest repo, or run from project root: `chmod +x scripts/add-nginx-to-compose.sh && ./scripts/add-nginx-to-compose.sh` to add the nginx service. Then `docker compose build nginx && docker compose up -d nginx`.
 
 ## Quick Start
 

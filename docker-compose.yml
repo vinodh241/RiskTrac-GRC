@@ -20,7 +20,6 @@ services:
       - DB_SERVER=${DB_SERVER:-10.0.1.22}
       - DB_PORT=${DB_PORT:-1433}
       - DB_NAME=${DB_NAME:-SE_GRC}
-    # No volume for certs: authapi auto-generates keys in /app/config/certs (writable in container). After container recreate, refresh login page to get new public key.
     networks:
       - risktrac-net
     restart: unless-stopped
