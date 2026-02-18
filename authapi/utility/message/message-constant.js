@@ -11,6 +11,9 @@ const MESSAGE_CONSTANT = {
    /** Unable to read or parse the request */
    INCORRECT_REQUEST                            : "Invalid request.",
 
+   /** Decryption failed (e.g. missing or invalid private key on server) */
+   DECRYPTION_FAILED                            : "Server configuration error. Please contact administrator.",
+
    /** Page time out, (Page expired) */
    PAGE_EXPIRED                                 : "Webpage has expired, kindly refresh the page.",
 

@@ -129,6 +129,10 @@ class AuthBl {
             /**
              * Decrypting user name and password by private key : END
              */
+            if (userNamePasswordInClearText === CONSTANT_FILE_OBJ.APP_CONSTANT.NULL || userNamePasswordInClearText === CONSTANT_FILE_OBJ.APP_CONSTANT.UNDEFINED || typeof userNamePasswordInClearText !== 'string' || userNamePasswordInClearText.trim() === '') {
+                logger.log('error', 'AuthBl : updateUserLogin : Decryption failed or empty payload.');
+                return response.status(CONSTANT_FILE_OBJ.APP_CONSTANT.TWO_HUNDRED).json(unsuccessfulResponse(CONSTANT_FILE_OBJ.APP_CONSTANT.NULL, MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.DECRYPTION_FAILED));
+            }
             
             /**
              * Separating user name, password and serverPagetime : START

@@ -22,6 +22,9 @@ services:
       - DB_SERVER=${DB_SERVER:-10.0.1.22}
       - DB_PORT=${DB_PORT:-1433}
       - DB_NAME=${DB_NAME:-SE_GRC}
+    volumes:
+      # Mount certs so private.pem (and public.pem, secret.pem) are available for login decryption
+      - ./authapi/config/certs:/app/config/certs:ro
     networks:
       - risktrac-net
     restart: unless-stopped
