@@ -11,9 +11,9 @@ const FILE_TYPE             = require('file-type');
 const EXCELJS_OBJ           = require('exceljs');
 const Client                = require('ssh2-sftp-client');
 const pdf                   = require('pdf-parse');
-const SECRET_KEY_FILE_PATH  = "/config/certs/secret.pem";
-const PRIVATE_KEY_FILE_PATH = "/config/certs/private.pem"; 
-const PUBLIC_KEY_FILE_PATH  = "/config/certs/public.pem";
+const SECRET_KEY_FILE_PATH  = "config/certs/secret.pem";
+const PRIVATE_KEY_FILE_PATH = "config/certs/private.pem";
+const PUBLIC_KEY_FILE_PATH  = "config/certs/public.pem";
 const COMMON_DB             = require('./data-base-utility/common-db.js');
 
 var commonDbObject = CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;

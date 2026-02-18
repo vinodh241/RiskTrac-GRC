@@ -7,9 +7,9 @@ const MESSAGE_FILE_OBJ      = require('./message/message-constant.js');
 const CONSTANT_FILE_OBJ     = require('./constants/constant.js');
 const APP_CONFIG            = require('../config/app-config.js');
 
-const SECRET_KEY_FILE_PATH  = "/config/certs/secret.pem";
-const PRIVATE_KEY_FILE_PATH = "/config/certs/private.pem"; 
-const PUBLIC_KEY_FILE_PATH  = "/config/certs/public.pem";
+const SECRET_KEY_FILE_PATH  = "config/certs/secret.pem";
+const PRIVATE_KEY_FILE_PATH = "config/certs/private.pem";
+const PUBLIC_KEY_FILE_PATH  = "config/certs/public.pem";
 
 module.exports = class UtilityApp {
     constructor() {
