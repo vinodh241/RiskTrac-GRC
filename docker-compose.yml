@@ -108,6 +108,7 @@ services:
       - risktrac-net
     restart: unless-stopped
 
+  # Use only image name vinod9072/risktrac-nginx:v1 (build with: docker compose build nginx)
   nginx:
     image: vinod9072/risktrac-nginx:v1
     build:

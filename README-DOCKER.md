@@ -45,7 +45,7 @@ docker-compose build
 docker-compose push
 ```
 
-Or build and tag individually:
+Or build and tag individually (use **risktrac-nginx** for nginx, not `nginx`):
 
 ```bash
 docker build -t vinod9072/authapi:v1 ./authapi
@@ -62,6 +62,12 @@ docker push vinod9072/authapi:v1
 docker push vinod9072/umapi:v1
 # ... etc
 ```
+
+**Nginx: one image only.** The nginx image must be tagged only as `vinod9072/risktrac-nginx:v1`. Do **not** use `vinod9072/nginx:v1` when building. If you see both tags (same image ID), remove the extra one:
+```bash
+docker rmi vinod9072/nginx:v1
+```
+Build nginx with: `docker compose build nginx` or `docker build -t vinod9072/risktrac-nginx:v1 ./nginx`.
 
 ## Stop
 
