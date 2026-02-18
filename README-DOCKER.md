@@ -35,7 +35,17 @@ docker-compose up -d --build
 docker-compose logs -f
 ```
 
-APIs (authapi, umapi, ormapi, bcmapi) use `DB_PASSWORD` from the environment when set; otherwise they decrypt the password from config (requires `config/certs/private.pem` in each API image).
+APIs use `DB_PASSWORD` from the environment when set; otherwise they decrypt the password from config. **umapi** can run with no values in `config/db-config.js` if these env vars are set:
+
+| Env var | Description | Default |
+|---------|-------------|---------|
+| `DB_PASSWORD` | SQL Server password | (required if config empty) |
+| `DB_USER` | SQL user | sqldev |
+| `DB_SERVER` or `DB_HOST` | Server IP/host | 10.0.1.22 |
+| `DB_PORT` | Port | 1433 |
+| `DB_NAME` or `DB_DATABASE` | Database name | SE_GRC |
+
+Optional for notification DB: `NOTIFICATION_DB_PASSWORD`, `NOTIFICATION_DB_SERVER`, `NOTIFICATION_DB_USER`, `NOTIFICATION_DB_PORT`, `NOTIFICATION_DB_NAME` (each falls back to the main `DB_*` value).
 
 **Access:**
 - App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
