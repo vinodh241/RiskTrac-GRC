@@ -4,7 +4,11 @@ WORKDIR /app
 
 COPY package*.json ./
 COPY .npmrc ./
-RUN npm install --legacy-peer-deps
+# Retry npm install on transient network errors (ECONNRESET)
+RUN npm config set fetch-retries 5 && \
+    npm config set fetch-retry-mintimeout 20000 && \
+    npm config set fetch-timeout 300000 && \
+    (npm install --legacy-peer-deps || npm install --legacy-peer-deps || npm install --legacy-peer-deps)
 
 COPY . .
 RUN npm run build:orm
