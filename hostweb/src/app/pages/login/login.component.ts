@@ -167,6 +167,10 @@ export class LoginComponent implements OnInit {
   }
 
   public onSubmit(): void {
+    if (!this.publicKey) {
+      this.apierror = 'Login configuration not loaded. Please refresh the page (Ctrl+F5) and try again.';
+      return;
+    }
     if (this.authForm.valid) {
       this.openWait()
       let username = this.authForm.value.username

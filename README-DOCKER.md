@@ -61,6 +61,25 @@ docker compose up -d --force-recreate umapi
 
 **Auth API – certificates for login:** Login uses authapi’s key pair; authapi **auto-generates** `private.pem` and `public.pem` in the container at startup (no host volume). After deploying or recreating authapi, **refresh the login page once** (Ctrl+F5) so the app fetches the current public key from get-key; then login should work.
 
+**Troubleshooting – Unable to login**
+
+1. **Refresh the login page (Ctrl+F5 or clear cache)**  
+   The app must load the current public key from get-key. If you see "Invalid or expired login session" or login fails right after a deploy, do a full refresh and try again.
+
+2. **Check that authapi and umapi are running and reachable**
+   ```bash
+   docker ps
+   docker logs risktrac-authapi --tail 30
+   docker logs risktrac-umapi --tail 30
+   ```
+   In authapi logs you should see "Database Connected......" and optionally "Auth API: generated new certs...". In umapi, no "Database password is null" or connection errors.
+
+3. **Confirm umapi can call authapi**  
+   umapi uses `AUTH_SERVICE_URL` (default in compose: `http://authapi:6001`). If get-key fails, the login page may not get the public key. Check umapi logs for errors when calling authapi.
+
+4. **Database and credentials**  
+   Ensure `.env` has the correct `DB_PASSWORD` (and `DB_SERVER`, `DB_USER`, `DB_NAME` if different). The SQL user (e.g. `sqldev`) must exist and have access to the `SE_GRC` database. Use valid application user credentials (as stored in your DB).
+
 **Access:**
 - App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
 - User Management: http://10.0.1.32:8080/um/
