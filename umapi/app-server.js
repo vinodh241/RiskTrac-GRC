@@ -226,6 +226,7 @@ SERVER.listen(appPortNo, async function() {
         global.notificationlogger = consoleLogger;
     }
 
+    try { require('./utility/ensure-umapi-certs.js').ensureSecretPem(); } catch (_) {}
     logger.log('info', 'App is listening on port : ' + appPortNo);
     APP.set("moduleConfig", SYSTEM_CONFIG);
     try {
