@@ -38,7 +38,7 @@ docker-compose logs -f
 # Login (once)
 docker login
 
-# Build all
+# Build all (nginx service is named risktrac-nginx so only one image tag is created)
 docker-compose build
 
 # Tag and push (use your username vinod9072)
@@ -71,7 +71,7 @@ docker push vinod9072/umapi:v1
   ```
 - **To build nginx** (creates only the one image):
   ```bash
-  docker compose build nginx
+  docker compose build risktrac-nginx
   ```
   Or from repo root: `./scripts/build-nginx.sh` or `docker build -t vinod9072/risktrac-nginx:v1 ./nginx`.
 

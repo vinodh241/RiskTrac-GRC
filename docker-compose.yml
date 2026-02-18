@@ -3,6 +3,8 @@
 # Access app at http://10.0.1.32:8080 (nginx; use 8080 if host port 80 is in use)
 # API ports: 6001 authapi, 6002 umapi, 6003 ormapi, 6004 bcmapi
 # Docker Hub: vinod9072/imagename:v1
+# Service name is risktrac-nginx (not "nginx") so only one image tag is produced: vinod9072/risktrac-nginx:v1
+name: risktrac-grc
 
 services:
   authapi:
@@ -108,12 +110,9 @@ services:
       - risktrac-net
     restart: unless-stopped
 
-  # Use only image name vinod9072/risktrac-nginx:v1 (build with: docker compose build nginx)
-  nginx:
+  # Single image only — build separately: docker build -t vinod9072/risktrac-nginx:v1 ./nginx
+  risktrac-nginx:
     image: vinod9072/risktrac-nginx:v1
-    build:
-      context: ./nginx
-      dockerfile: Dockerfile
     container_name: risktrac-nginx
     ports:
       - "8080:80"
