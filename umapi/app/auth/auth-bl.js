@@ -131,6 +131,20 @@ class AuthBl {
                 accountName = API_RESPONSE_OBJ.result.accountName;
                 accountGUID = API_RESPONSE_OBJ.result.accountGUID;
 
+                if (typeof global !== 'undefined' && (global.poolConnectionObject == null || global.poolConnectionObject === undefined)) {
+                    logger.log('error', 'AuthBl : updateUserLogin : Database not connected. Cannot complete login.');
+                    return response.status(503).json({
+                        success : CONSTANT_FILE_OBJ.APP_CONSTANT.ZERO,
+                        message : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
+                        result  : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
+                        token   : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
+                        error   : {
+                            errorCode       : CONSTANT_FILE_OBJ.APP_CONSTANT.NULL,
+                            errorMessage    : (MESSAGE_FILE_OBJ.MESSAGE_CONSTANT && MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.DB_UNAVAILABLE_FOR_LOGIN) || 'Database connection unavailable. Please try again later.'
+                        }
+                    });
+                }
+
                 /**
                  * Fetching User Id from data base by user name : START
                  */

@@ -76,6 +76,9 @@ const MESSAGE_CONSTANT = {
    /** Login unsuccessful  */
    LOGIN_UNSUCCESS                              : "The username or password you entered is incorrect. Please try again.",
 
+  /** Database not connected - login cannot be completed */
+   DB_UNAVAILABLE_FOR_LOGIN                     : "Database connection unavailable. Please try again later.",
+
    /** Logout successful*/
    LOGOUT_SUCCESS                               : "Logout successful.",
 

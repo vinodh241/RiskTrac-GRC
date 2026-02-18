@@ -17,13 +17,18 @@
 
 From project root `RiskTrac-GRC`:
 
-**1. Set database password for APIs (required):**  
-Create a `.env` file in the project root with your SQL Server password so APIs can connect:
+**1. Set database connection for APIs (required):**  
+Create a `.env` file in the project root with your SQL Server details. Example for the default dev DB:
 ```bash
-echo "DB_PASSWORD=RegXTrac1234" > .env
-# Or create .env with: DB_PASSWORD=your_actual_password
+# Copy and paste (or run as one block). Do not commit .env.
+DB_SERVER=10.0.1.22
+DB_NAME=SE_GRC
+DB_USER=sqldev
+DB_PASSWORD=RegXTrac1234
+DB_PORT=1433
 ```
-Do not commit `.env`; add it to `.gitignore` if needed.
+To create `.env` in one go:  
+`printf 'DB_SERVER=10.0.1.22\nDB_NAME=SE_GRC\nDB_USER=sqldev\nDB_PASSWORD=RegXTrac1234\nDB_PORT=1433\n' > .env`
 
 **2. Build and run:**
 ```bash
