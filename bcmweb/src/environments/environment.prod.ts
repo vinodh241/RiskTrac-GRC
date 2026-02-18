@@ -3,7 +3,7 @@ export const environment = {
   production: true,
   umapiUrl:'umapi',
   ormapiUrl:'ormapi',
-  hostUrl: "http://risktrac.secureyes.net:5000",
+  hostUrl: "http://10.0.1.32:8080",
   bcmapiUrl:'bcmapi',
   currency: 'SAR'
   };

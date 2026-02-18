@@ -2,10 +2,10 @@ export const environment = {
   production: true,
   domain: "secureyesdev.com",
   umapiUrl: "umapi",
-  hostUrl: "http://risktracdev.secureyes.net:5000",
-  userManagementUrl: "http://risktracdev.secureyes.net:5000/user-management",
-  ormUrl: "http://risktracdev.secureyes.net:5000/orm",
-  bcmUrl: "http://risktracdev.secureyes.net:5000/bcm",
-  dmsUrl: "http://risktracdev.secureyes.net:5000/dms",
-  tppUrl: "http://risktracdev.secureyes.net:5000/tpt"
+  hostUrl: "http://10.0.1.32:8080",
+  userManagementUrl: "http://10.0.1.32:8080/user-management",
+  ormUrl: "http://10.0.1.32:8080/orm",
+  bcmUrl: "http://10.0.1.32:8080/bcm",
+  dmsUrl: "http://10.0.1.32:8080/dms",
+  tppUrl: "http://10.0.1.32:8080/tpt"
 };

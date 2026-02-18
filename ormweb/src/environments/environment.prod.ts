@@ -3,7 +3,7 @@ export const environment = {
   production: true,
   umapiUrl: 'umapi',
   ormapiUrl: 'ormapi',
-  hostUrl: "https://serisktracgrcqa.secureyes.net",
+  hostUrl: "http://10.0.1.32:8080",
   bcmapiUrl: 'bcmapi',
   currency: 'INR',
   defaultLanguage: 'en'
