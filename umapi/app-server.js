@@ -260,6 +260,9 @@ SERVER.listen(appPortNo, async function() {
         logger.log('info', 'Database Connected......');
     } catch (error) {
         console.error('Main DB connection failed (app staying up for get-key):', error && (error.message || error));
+        if (error && error.message === 'Database password is null') {
+            console.error('Fix: In project root create .env with DB_PASSWORD=YourSqlPassword then run: docker compose up -d --force-recreate umapi');
+        }
         logger.log('error', 'Data Base not connected. Error: ' + (error && (error.message || error)));
         global.poolConnectionObject = null;
     }
@@ -271,6 +274,9 @@ SERVER.listen(appPortNo, async function() {
         new NOTIFICATION_UTIL();
     } catch (error) {
         console.error('Notification DB / message util failed (continuing):', error && (error.message || error));
+        if (error && error.message === 'Notification database password is null') {
+            console.error('Fix: Set DB_PASSWORD (or NOTIFICATION_DB_PASSWORD) in .env, then: docker compose up -d --force-recreate umapi');
+        }
         (global.notificationlogger || consoleLogger).log('error', 'Notification DB failed: ' + (error && (error.message || error)));
         global.poolConnectionObjectNotification = null;
     }

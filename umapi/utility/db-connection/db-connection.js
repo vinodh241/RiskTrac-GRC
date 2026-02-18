@@ -38,6 +38,10 @@ function connectPool() {
         if (clearTextPassword === null || clearTextPassword === undefined || clearTextPassword === '') {
             var log = (typeof global !== 'undefined' && global.logger && global.logger.log) ? global.logger : null;
             if (log) log.log('error', 'dbConnection.js : Password for database connection is null. Set DB_PASSWORD env or use encrypted password in config with certs.');
+            var hasEnv = env.DB_PASSWORD !== undefined && env.DB_PASSWORD !== null && String(env.DB_PASSWORD).trim() !== '';
+            if (!hasEnv) {
+                console.error('umapi: DB_PASSWORD env is not set. Create .env in project root with DB_PASSWORD=yourpassword and run: docker compose up -d');
+            }
             return Promise.reject(new Error('Database password is null'));
         }
         dbConfigObject.password = clearTextPassword;

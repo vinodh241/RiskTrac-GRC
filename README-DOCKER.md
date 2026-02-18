@@ -47,6 +47,13 @@ APIs use `DB_PASSWORD` from the environment when set; otherwise they decrypt the
 
 Optional for notification DB: `NOTIFICATION_DB_PASSWORD`, `NOTIFICATION_DB_SERVER`, `NOTIFICATION_DB_USER`, `NOTIFICATION_DB_PORT`, `NOTIFICATION_DB_NAME` (each falls back to the main `DB_*` value).
 
+**If you see "Database password is null" in umapi logs:** The container is not getting `DB_PASSWORD`. From the **project root** (where `docker-compose.yml` is), create `.env` with your SQL password, then recreate the container:
+```bash
+cd ~/RiskTrac/RiskTrac-GRC
+echo "DB_PASSWORD=YourActualSqlPassword" > .env
+docker compose up -d --force-recreate umapi
+```
+
 **Access:**
 - App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
 - User Management: http://10.0.1.32:8080/um/
