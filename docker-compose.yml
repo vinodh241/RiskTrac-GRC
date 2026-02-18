@@ -33,6 +33,12 @@ services:
     networks:
       - risktrac-net
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://127.0.0.1:6002/user-management/auth/get-key',r=>process.exit(r.statusCode===200?0:1)).on('error',()=>process.exit(1))"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 20s
 
   ormapi:
     image: vinod9072/ormapi:v1

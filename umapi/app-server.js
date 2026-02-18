@@ -217,78 +217,63 @@ var SERVER = HTTP.createServer(function (req, res) {
     }
     APP(req, res);
 });
+// Minimal console logger so startup can log without exiting when real logger/DB fail
+var consoleLogger = { log: function(level, msg) { try { console.log('[' + level + '] ' + (msg || '')); } catch (_) {} } };
 SERVER.listen(appPortNo, async function() {
+    console.log('App is listening on port : ' + appPortNo + ' (get-key is available immediately)');
+    global.logger = consoleLogger;
     /**
-     * Fetching looger object and setting in global variable :: Start
+     * Fetching logger object and setting in global variable :: Start
      */
     try {
         global.logger = await LOG_MANAGER_FILE_OBJECT.logger;
         logger.log('info', 'Logger initialized......');
-        // console.log("Logger initialized......");
     } catch (error) {
-        // console.log('appIndex.js : Logger is not set into global object. Error details : '+error.stack);
-        logger.log('error', 'appIndex.js : Logger is not set into global object. Error details : '+error);
-        process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
+        console.error('Logger init failed (continuing with console fallback):', error && (error.message || error));
+        global.logger = consoleLogger;
     }
 
-    
-    try {   
+    try {
         global.notificationlogger = await LOG_NOTIFICATION_FILE_OBJ.Notificationlogger;
-        notificationlogger.log('info', 'Notification Logger initialized......');
-        console.log("Notification Logger initialized......");
+        (global.logger || consoleLogger).log('info', 'Notification Logger initialized......');
     } catch (error) {
-        console.log('Notification Logger is not set into global object. Error : '+error.stack);
-        notificationlogger.log('error', 'Notification Logger is not set into global object. Error : ' + error);
-        notificationlogger.log('error', 'Error from appIndex.js : ' + error.stack);
-        process.exit(0);
+        console.error('Notification logger init failed (continuing):', error && (error.message || error));
+        global.notificationlogger = consoleLogger;
     }
 
-    console.log('App is listening on port : '+appPortNo);
-    logger.log('info', 'App is listening on port : '+appPortNo);
-    
-    /**
-     * Fetching looger object and setting in global variable :: End
-     */
-    // console.log('App is listening on port : '+appPortNo);
-    logger.log('info', 'App is listening on port : '+appPortNo);
+    logger.log('info', 'App is listening on port : ' + appPortNo);
     APP.set("moduleConfig", SYSTEM_CONFIG);
-    initializeModules();
+    try {
+        initializeModules();
+    } catch (error) {
+        console.error('Module init failed (get-key and auth endpoints still work):', error && (error.message || error));
+        logger.log('error', 'Modules not initialized: ' + (error && (error.message || error)));
+    }
 
     /**
      * Connecting to database by connection pooling logic :: Start
+     * Non-fatal: if DB fails, app stays up and get-key/login config still works; other routes may return 503.
      */
     try {
         var { poolConnectionObject } = require('./utility/db-connection/db-connection.js');
-        // Setting pool connection object in global variable
         global.poolConnectionObject = await poolConnectionObject;
+        logger.log('info', 'Database Connected......');
     } catch (error) {
-        // console.log('appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : '+error.stack);
-        logger.log('error', 'appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : '+error);
-        process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
+        console.error('Main DB connection failed (app staying up for get-key):', error && (error.message || error));
+        logger.log('error', 'Data Base not connected. Error: ' + (error && (error.message || error)));
+        global.poolConnectionObject = null;
     }
-    
-    /**
-     * Connecting to separate database for notification :: Start
-     */
-    try {        
-        var { poolConnectionObjectNotification } = require('./utility/db-connection/db-connection-notification.js');
-        // Setting pool connection object in global variable
-        global.poolConnectionObjectNotification = await poolConnectionObjectNotification;
 
-        /**
-         * Connecting to separate database for notification :: End
-         */
-        // Message queue initialization
-        notificationlogger.log('info','Calling message util');
+    try {
+        var { poolConnectionObjectNotification } = require('./utility/db-connection/db-connection-notification.js');
+        global.poolConnectionObjectNotification = await poolConnectionObjectNotification;
+        (global.notificationlogger || consoleLogger).log('info', 'Calling message util');
         new NOTIFICATION_UTIL();
-        /* Message queue initialization */
-       
     } catch (error) {
-        console.log(' Notification : Error details : '+error.stack);
-        notificationlogger.log('error', 'Notification : Error details : '+error.stack);
-        process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
+        console.error('Notification DB / message util failed (continuing):', error && (error.message || error));
+        (global.notificationlogger || consoleLogger).log('error', 'Notification DB failed: ' + (error && (error.message || error)));
+        global.poolConnectionObjectNotification = null;
     }
-    
 });
 
 /**

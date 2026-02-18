@@ -15,6 +15,8 @@ Summary of changes made so all modules are error-free and the application works 
 - **get-key 500 fix:** Early route in `app-server.js` for `POST/GET /user-management/auth/get-key` that always returns **200** (calls authapi; on failure returns fallback with local public key + config so the login page still loads).
 - **CORS:** Already allowed 10.0.1.32 and 127.0.0.1; global error handler already in place.
 - **PORT:** Already supported (Docker: 6002). `AUTH_SERVICE_URL=http://authapi:6001` in docker-compose.
+- **Resilient startup (502 / Host unreachable):** Logger, notification logger, main DB, and notification DB init are **non-fatal**. If any fail, the process **stays up** and `/user-management/auth/get-key` remains available (so nginx gets 200 instead of 502). DB connection modules no longer `process.exit(0)`; they reject the promise so `app-server.js` can catch and set `global.poolConnectionObject = null`. Login may still fail with 500 when DB is down, but the container stays reachable.
+- **Healthcheck:** `docker-compose` healthcheck for umapi (GET get-key) so the container is marked healthy once the endpoint responds.
 
 ---
 
