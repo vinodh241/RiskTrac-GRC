@@ -30,12 +30,19 @@ DB_PORT=1433
 To create `.env` in one go:  
 `printf 'DB_SERVER=10.0.1.22\nDB_NAME=SE_GRC\nDB_USER=sqldev\nDB_PASSWORD=RegXTrac1234\nDB_PORT=1433\n' > .env`
 
-**2. Build and run:**
+**2. Build and run (error-free images for login):**  
+All API containers (authapi, umapi, ormapi, bcmapi) are set up so DB connection failure does not restart the container; authapi has login certs baked in at build time; umapi get-key calls authapi for the full response. Build and start:
 ```bash
-docker-compose up -d --build
+# From project root (where .env and docker-compose.yml are)
+docker compose build authapi --no-cache
+docker compose build umapi ormapi bcmapi
+docker compose up -d
 ```
+Or build everything: `docker compose build --no-cache && docker compose up -d`
 
-**3. View logs:**
+**3. After first deploy (or after recreating authapi/umapi):** Refresh the login page once (Ctrl+F5) so the app fetches the public key from get-key.
+
+**4. View logs:**
 ```bash
 docker-compose logs -f
 ```
@@ -59,7 +66,7 @@ echo "DB_PASSWORD=YourActualSqlPassword" > .env
 docker compose up -d --force-recreate umapi
 ```
 
-**Auth API – certificates for login:** Login uses authapi’s key pair; authapi **auto-generates** `private.pem` and `public.pem` in the container at startup (no host volume). After deploying or recreating authapi, **refresh the login page once** (Ctrl+F5) so the app fetches the current public key from get-key; then login should work.
+**Auth API – certificates for login (permanent):** Login requires authapi’s key pair. The **authapi Dockerfile** runs `ensureAuthCerts()` at **build time** so every image has `private.pem` and `public.pem` in the container (no host volume). **umapi** must not intercept get-key before calling authapi: the Express route `getKeyHandler` calls authapi and returns the full response including authapi’s `publicKey`; only if authapi is down does it return a fallback. After deploying or recreating authapi/umapi, **refresh the login page once** (Ctrl+F5) so the app loads the current public key; then login works.
 
 **Troubleshooting – Unable to login**
 

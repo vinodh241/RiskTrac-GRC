@@ -109,15 +109,13 @@ appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPor
     /**
      * Fetching notification looger object and setting in global variable :: Start
      */
-    try {   
+    try {
         global.notificationlogger = await LOG_NOTIFICATION_FILE_OBJ.Notificationlogger;
         notificationlogger.log('info', 'Notification Logger initialized......');
         console.log("Notification Logger initialized......");
     } catch (error) {
-        console.log('Notification Logger is not set into global object. Error : '+error.stack);
-        notificationlogger.log('error', 'Notification Logger is not set into global object. Error : ' + error);
-        notificationlogger.log('error', 'Error from appIndex.js : ' + error.stack);
-        process.exit(0);
+        console.error('Notification Logger init failed (continuing with console):', error && (error.message || error));
+        global.notificationlogger = { log: function(lvl, msg) { try { console.log('[' + lvl + '] ' + (msg || '')); } catch (_) {} } };
     }
     // notificationlogger.log('info', 'App is listening on port :'+ appPortNo);
     /**
@@ -130,38 +128,32 @@ appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPor
 
     /**
      * Connecting to database by connection pooling logic :: Start
+     * Non-fatal: if DB fails, app stays up so container does not restart loop.
      */
     try {
         var { poolConnectionObject } = require('./utility/db-connection/db-connection.js');
-        // Setting pool connection object in global variable
         global.poolConnectionObject = await poolConnectionObject;
+        logger.log('info', 'Database Connected......');
     } catch (error) {
-        console.log('appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : '+error.stack);
-        logger.log('error', 'appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : '+error);
-        process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
+        console.error('BCM API: Main DB connection failed (app staying up):', error && (error.message || error));
+        logger.log('error', 'appIndex.js : Data Base is not connected : Error details : ' + (error && (error.message || error)));
+        global.poolConnectionObject = null;
     }
     /**
      * Connecting to separate database for notification :: Start
+     * Non-fatal: if notification DB fails, app stays up; message queue may be skipped.
      */
-    try {        
+    try {
         var { poolConnectionObjectNotification } = require('./utility/db-connection/db-connection-notification.js');
-        // Setting pool connection object in global variable
         global.poolConnectionObjectNotification = await poolConnectionObjectNotification;
-
-        /**
-         * Connecting to separate database for notification :: End
-         */
-        // Message queue initialization
-        notificationlogger.log('info','Calling message util');
+        (global.notificationlogger || { log: function() {} }).log('info', 'Calling message util');
         new NOTIFICATION_UTIL();
-        /* Message queue initialization */
-       
     } catch (error) {
-        console.log(' Notification : Error details : '+error.stack);
-        notificationlogger.log('error', 'Notification : Error details : '+error.stack);
-        process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
+        console.error('BCM API: Notification DB connection failed (app staying up):', error && (error.message || error));
+        (global.notificationlogger || { log: function() {} }).log('error', 'Notification : Error details : ' + (error && (error.message || error)));
+        global.poolConnectionObjectNotification = null;
     }
- 
+
 });
 
 /**
