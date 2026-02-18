@@ -1,6 +1,6 @@
 # RiskTrac GRC – Fixes Applied (All Modules)
 
-Summary of changes made so all modules are error-free and the application works behind nginx at `http://10.0.1.32:8080`.
+Summary of changes made so all modules are error-free. Nginx is not in the compose file; use your own reverse proxy if needed.
 
 ---
 
@@ -68,7 +68,7 @@ These changes are required for login to work reliably. Reverting any of them can
 ---
 
 ## 6. **nginx**
-- **Config:** Single `nginx.conf` with resolver `127.0.0.11`, correct `proxy_pass` and `rewrite` for `/authapi/`, `/umapi/`, `/ormapi/`, `/bcmapi/`, `/um/`, `/orm/`, `/bcm/`, and `/` (hostweb). Host port **8080** maps to container port 80.
+- **Not in compose.** The `nginx/` folder contains a sample `nginx.conf` for use with your own nginx (or other reverse proxy). The compose file does not include an nginx service.
 
 ---
 
@@ -81,7 +81,7 @@ docker compose build --no-cache
 docker compose up -d
 ```
 
-Then open: **http://10.0.1.32:8080**
+Then access your app via your own reverse proxy (compose does not expose a single entry port).
 
 - Login and get-key go through umapi → authapi; get-key always returns 200 (success or fallback).
 - All APIs respond with 200 and `success: 0` on unexpected errors instead of 500.
@@ -99,9 +99,9 @@ These removals are optional; the app runs correctly with gulp-util still listed.
 
 ## Troubleshooting: 502 Bad Gateway on `/umapi/user-management/auth/get-key` or `/login`
 
-**What it means:** The browser reaches nginx at `http://10.0.1.32:8080`, but nginx cannot get a valid response from the **umapi** backend (User Management API). So the failure is between nginx and the umapi container, not in the frontend.
+**What it means:** Your reverse proxy (e.g. nginx) cannot get a valid response from the **umapi** backend (User Management API). So the failure is between the proxy and the umapi container, not in the frontend.
 
-**If nginx logs show:** `connect() failed (113: Host is unreachable) while connecting to upstream`  
+**If proxy/nginx logs show:** `connect() failed (113: Host is unreachable) while connecting to upstream`  
 That means nginx resolved the **umapi** hostname to an IP (e.g. `172.25.0.2`) but could not reach it. Usually the **umapi** container is **not running** (crashed or never started), or it restarted and nginx was using a stale IP. Fix: get **umapi** running (see below) and reload nginx if you changed config. Nginx is now configured to re-resolve upstream hostnames (via variables) so restarted backends get fresh IPs.
 
 **Checks:**

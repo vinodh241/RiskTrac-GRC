@@ -7,11 +7,12 @@
 
 | Port | Service  |
 |------|----------|
-| 8080 | Nginx (main entry - all UIs and API routes) |
 | 6001 | Auth API (direct) |
 | 6002 | UM API (direct) |
 | 6003 | ORM API (direct) |
 | 6004 | BCM API (direct) |
+
+(Nginx is not in this compose; run your own reverse proxy if needed.)
 
 ## Quick Start
 
@@ -87,12 +88,8 @@ docker compose up -d --force-recreate umapi
 4. **Database and credentials**  
    Ensure `.env` has the correct `DB_PASSWORD` (and `DB_SERVER`, `DB_USER`, `DB_NAME` if different). The SQL user (e.g. `sqldev`) must exist and have access to the `SE_GRC` database. Use valid application user credentials (as stored in your DB).
 
-**Access:**
-- App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
-- User Management: http://10.0.1.32:8080/um/
-- ORM: http://10.0.1.32:8080/orm/
-- BCM: http://10.0.1.32:8080/bcm/
-- APIs via nginx: http://10.0.1.32:8080/authapi/, /umapi/, /ormapi/, /bcmapi/
+**Access:**  
+Use your own reverse proxy (e.g. nginx) in front of the APIs and webs. APIs: 6001 (auth), 6002 (um), 6003 (orm), 6004 (bcm). Webs: hostweb, umweb, ormweb, bcmweb (no port exposed by default; put them behind your proxy).
 
 ## Build and push images to Docker Hub
 
@@ -100,14 +97,14 @@ docker compose up -d --force-recreate umapi
 # Login (once)
 docker login
 
-# Build all (nginx service is named risktrac-nginx so only one image tag is created)
+# Build all
 docker-compose build
 
 # Tag and push (use your username vinod9072)
 docker-compose push
 ```
 
-Or build and tag individually (use **risktrac-nginx** for nginx, not `nginx`):
+Or build and tag individually:
 
 ```bash
 docker build -t vinod9072/authapi:v1 ./authapi
@@ -118,24 +115,11 @@ docker build -t vinod9072/hostweb:v1 ./hostweb
 docker build -t vinod9072/umweb:v1 ./umweb
 docker build -t vinod9072/ormweb:v1 ./ormweb
 docker build -t vinod9072/bcmweb:v1 ./bcmweb
-docker build -t vinod9072/risktrac-nginx:v1 ./nginx
 
 docker push vinod9072/authapi:v1
 docker push vinod9072/umapi:v1
 # ... etc
 ```
-
-**Nginx: one image only.** Use only `vinod9072/risktrac-nginx:v1`. Never build or tag as `vinod9072/nginx:v1`.
-
-- **If you already have both tags** (same image ID), remove the extra tag:
-  ```bash
-  docker rmi vinod9072/nginx:v1
-  ```
-- **To build nginx** (creates only the one image):
-  ```bash
-  docker compose build risktrac-nginx
-  ```
-  Or from repo root: `./scripts/build-nginx.sh` or `docker build -t vinod9072/risktrac-nginx:v1 ./nginx`.
 
 ## Stop
 
