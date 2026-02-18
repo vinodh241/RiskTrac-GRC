@@ -63,11 +63,17 @@ docker push vinod9072/umapi:v1
 # ... etc
 ```
 
-**Nginx: one image only.** The nginx image must be tagged only as `vinod9072/risktrac-nginx:v1`. Do **not** use `vinod9072/nginx:v1` when building. If you see both tags (same image ID), remove the extra one:
-```bash
-docker rmi vinod9072/nginx:v1
-```
-Build nginx with: `docker compose build nginx` or `docker build -t vinod9072/risktrac-nginx:v1 ./nginx`.
+**Nginx: one image only.** Use only `vinod9072/risktrac-nginx:v1`. Never build or tag as `vinod9072/nginx:v1`.
+
+- **If you already have both tags** (same image ID), remove the extra tag:
+  ```bash
+  docker rmi vinod9072/nginx:v1
+  ```
+- **To build nginx** (creates only the one image):
+  ```bash
+  docker compose build nginx
+  ```
+  Or from repo root: `./scripts/build-nginx.sh` or `docker build -t vinod9072/risktrac-nginx:v1 ./nginx`.
 
 ## Stop
 
