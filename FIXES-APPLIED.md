@@ -74,13 +74,19 @@ These removals are optional; the app runs correctly with gulp-util still listed.
 
 **What it means:** The browser reaches nginx at `http://10.0.1.32:8080`, but nginx cannot get a valid response from the **umapi** backend (User Management API). So the failure is between nginx and the umapi container, not in the frontend.
 
+**If nginx logs show:** `connect() failed (113: Host is unreachable) while connecting to upstream`  
+That means nginx resolved the **umapi** hostname to an IP (e.g. `172.25.0.2`) but could not reach it. Usually the **umapi** container is **not running** (crashed or never started), or it restarted and nginx was using a stale IP. Fix: get **umapi** running (see below) and reload nginx if you changed config. Nginx is now configured to re-resolve upstream hostnames (via variables) so restarted backends get fresh IPs.
+
 **Checks:**
 
 1. **Ensure all containers are running**
    ```bash
    docker compose ps
    ```
-   Confirm `risktrac-umapi` (and `risktrac-authapi`) are **Up**.
+   Confirm `risktrac-umapi` (and `risktrac-authapi`) are **Up**. If **umapi** is **Exited** or missing, start it:
+   ```bash
+   docker compose up -d umapi
+   ```
 
 2. **Inspect umapi logs**
    ```bash
@@ -93,7 +99,7 @@ These removals are optional; the app runs correctly with gulp-util still listed.
    docker compose restart umapi
    ```
 
-4. **Full stack restart**
+4. **Full stack restart** (ensures all services and network are correct)
    ```bash
    docker compose down && docker compose up -d
    ```
