@@ -1,3 +1,6 @@
+const PATH = require("path");
+const FS = require("fs");
+const CRYPTO = require("crypto");
 const { apiDocumentation } = require("./api-docs/api-doc.js");
 const EXPRESS = require("express");
 const APP = EXPRESS();
@@ -13,6 +16,30 @@ const CONSTANT_FILE_OBJECT = require("./utility/constants/constant.js");
 const swaggerJsdoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 const ALLOWED_ORIGINS = APP_CONFIG_FILE_OBJECT.APP_SERVER.ALLOWED_ORIGINS;
+
+/**
+ * Ensure authapi config/certs has public.pem and private.pem for login decryption.
+ * If private.pem is missing, generate a new key pair so the container works without host certs.
+ * When using a volume mount for ./authapi/config/certs, generated certs persist on the host.
+ */
+function ensureAuthCerts() {
+  const certsDir = PATH.join(__dirname, "config", "certs");
+  const privatePath = PATH.join(certsDir, "private.pem");
+  if (FS.existsSync(privatePath)) return;
+  try {
+    if (!FS.existsSync(certsDir)) FS.mkdirSync(certsDir, { recursive: true });
+    const { publicKey, privateKey } = CRYPTO.generateKeyPairSync("rsa", {
+      modulusLength: 4096,
+      publicKeyEncoding: { type: "spki", format: "pem" },
+      privateKeyEncoding: { type: "pkcs8", format: "pem" },
+    });
+    FS.writeFileSync(PATH.join(certsDir, "public.pem"), publicKey, "utf8");
+    FS.writeFileSync(privatePath, privateKey, "utf8");
+    if (typeof console !== "undefined") console.log("Auth API: generated new certs in config/certs (private.pem, public.pem)");
+  } catch (e) {
+    if (typeof console !== "undefined") console.error("Auth API: failed to generate certs:", e && (e.message || e));
+  }
+}
 
 /*
  * Swagger UI configuration
@@ -110,6 +137,7 @@ APP.listen(appPortNo, async function () {
   /**
    * Fetching looger object and setting in global variable :: End
    */
+  ensureAuthCerts();
   // console.log('App is listening on port : '+appPortNo);
   logger.log("info", "App is listening on port : " + appPortNo);
 

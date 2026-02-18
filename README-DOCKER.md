@@ -59,7 +59,7 @@ echo "DB_PASSWORD=YourActualSqlPassword" > .env
 docker compose up -d --force-recreate umapi
 ```
 
-**Auth API – certificates for login:** Login decrypts the client payload with the auth API’s private key. The compose file mounts `./authapi/config/certs` into the authapi container. Ensure on the **host** (e.g. under `~/RiskTrac/RiskTrac-GRC/authapi/config/certs/`) you have at least `private.pem` (and `public.pem`, `secret.pem` if used). If these are missing, generate them (e.g. run the key-generator script once) and keep the same keys across builds so the frontend’s public key matches.
+**Auth API – certificates for login:** Login decrypts the client payload with the auth API’s private key. The compose file mounts `./authapi/config/certs` into the authapi container. If `private.pem` is missing, **authapi auto-generates** a new key pair at startup (and writes it to the mounted dir so it persists). If certs were auto-generated, **refresh the login page** after the first successful authapi start so the frontend fetches the new public key from get-key. To use your own keys, place `private.pem` and `public.pem` in `authapi/config/certs/` on the host before starting.
 
 **Access:**
 - App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
