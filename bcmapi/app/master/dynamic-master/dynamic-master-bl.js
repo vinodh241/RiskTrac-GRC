@@ -92,7 +92,7 @@ class DynamicMasterManagement {
             response.status(200).json({ message: 'web page configured successfully', data: responseData, error: null, success: 1, token: refreshedToken });
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : addWebPageConfiguration : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -151,7 +151,7 @@ class DynamicMasterManagement {
             response.status(200).json({ message: 'web page fetched successfully', success: 1, error: null, data: responseData, pageList, records, headerList, token: refreshedToken });
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : getWebPageConfiguration : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -204,7 +204,7 @@ class DynamicMasterManagement {
 
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : getWebPageConfiguration : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -242,7 +242,7 @@ class DynamicMasterManagement {
 
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : execProcedure : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -296,7 +296,7 @@ class DynamicMasterManagement {
 
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : addData : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -378,14 +378,14 @@ class DynamicMasterManagement {
 
             } catch (err) {
                 logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : addWebPageControlConfiguration : Execution end. : Got unhandled error. : Error Detail : ' + err.stack);
-                response.status(500).json({ message: "Internal Server Error", error: err.stack, success: 0, token: refreshedToken });
+                response.status(200).json({ message: "Internal Server Error", error: err.stack, success: 0, token: refreshedToken });
 
             }
 
             response.status(200).json({ message: 'web page control added successfully', success: 1, error: null, data: responseData, query, tableCreationResult, childtableresult, token: refreshedToken });
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : addWebPageControlConfiguration : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -478,7 +478,7 @@ class DynamicMasterManagement {
                     response.status(200).json({ message: 'Web page controls fetched successfully', success: 1, error: null, data: mergedData, token: refreshedToken });
                 } catch (error) {
                     logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : getWebPageControlConfiguration : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-                    response.status(500).json({ message: 'Internal Server Error', success: 0, token: refreshedToken });
+                    response.status(200).json({ message: 'Internal Server Error', success: 0, token: refreshedToken });
                 }
             } else {
                 response.status(200).json({
@@ -488,7 +488,7 @@ class DynamicMasterManagement {
             }
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : getWebPageControlConfiguration : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -758,7 +758,7 @@ class DynamicMasterManagement {
             response.status(200).json({ message: 'Data fetched successfully', success: 1, data: displayData, error: null, mergedArr, headerList, procResponseData, refFiledResponse, PrimaryTableData, childTableData, linkedData, token: refreshedToken });
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : getPageDetails : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -806,7 +806,7 @@ class DynamicMasterManagement {
 
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : editData : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -869,7 +869,7 @@ class DynamicMasterManagement {
                 });
             } else {
                 console.error('No matching data found.');
-                response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+                response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
             }
             // console.log('procResponseData : +'+JSON.stringify(procResponseData))
 
@@ -929,7 +929,7 @@ class DynamicMasterManagement {
                     });
                 } catch (error) {
                     logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : getEditControlInfo : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-                    response.status(500).json({ message: 'Internal Server Error', success: 0, token: refreshedToken });
+                    response.status(200).json({ message: 'Internal Server Error', success: 0, token: refreshedToken });
                 }
             } else {
                 response.status(200).json({
@@ -944,7 +944,7 @@ class DynamicMasterManagement {
 
             // response.status(200).json({ message: 'Data fetched successfully', data:  procResponseData });
         } catch (error) {
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -988,7 +988,7 @@ class DynamicMasterManagement {
 
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : editRecordStatus : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
@@ -1011,7 +1011,7 @@ class DynamicMasterManagement {
             response.status(200).json({ message: 'data fetched successfully', success: 1, error: null, data: resp, token: refreshedToken });
         } catch (error) {
             logger.log('error', 'User Id : ' + userIdFromToken + ' : DynamicMasterManagement : getUpdatedToken : Execution end. : Got unhandled error. : Error Detail : ' + error.stack);
-            response.status(500).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
+            response.status(200).json({ message: "Internal Server Error", error: error.stack, success: 0, token: refreshedToken });
         }
     }
 
