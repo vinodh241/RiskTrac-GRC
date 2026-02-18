@@ -50,6 +50,8 @@ class AuthBl {
         let sessionTimeOut              = CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
 
         try {
+            var ensureAuthCerts          = require('../../utility/ensure-auth-certs.js').ensureAuthCerts;
+            ensureAuthCerts();
             domainName                  = AD_CONFIG.AD_CONFIG.domainName;
             absolutePathForPublicKey    = PATH.join(process.cwd(), PUBLIC_KEY_FILE_PATH);
             publicKey                   = FILE_SYSTEM.readFileSync(absolutePathForPublicKey, "utf8");

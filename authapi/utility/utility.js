@@ -203,16 +203,27 @@ module.exports = class UtilityApp {
      * @param {*} data 
      */
     decryptDataByPrivateKey(encryptedData) {
-        try {
-            var privateKey                  = FILE_SYSTEM.readFileSync(PRIVATE_KEY_FILE_PATH, "utf8");           // Fetching private key value
-            var deCryptionObj               = new JS_ENCRYPT_LIB_OBJ();                                            // Creating js encryption object.
-            deCryptionObj.setPrivateKey(privateKey);                                                            // Setting private key into js encryption object
-            var decryptedData               = deCryptionObj.decrypt(encryptedData);                             // decrypted data
-            return decryptedData;
-        } catch (error) {
-            logger.log('error', 'UtilityApp : decryptDataByPrivateKey : Error details :'+error);
-            return CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
+        var tryGenerate = true;
+        for (var attempt = 0; attempt < 2; attempt++) {
+            try {
+                var privateKey                  = FILE_SYSTEM.readFileSync(PRIVATE_KEY_FILE_PATH, "utf8");           // Fetching private key value
+                var deCryptionObj               = new JS_ENCRYPT_LIB_OBJ();                                            // Creating js encryption object.
+                deCryptionObj.setPrivateKey(privateKey);                                                            // Setting private key into js encryption object
+                var decryptedData               = deCryptionObj.decrypt(encryptedData);                             // decrypted data
+                return decryptedData;
+            } catch (error) {
+                var isMissingKey = error && (error.code === 'ENOENT' || (error.message && error.message.indexOf('no such file') !== -1));
+                if (isMissingKey && tryGenerate) {
+                    try {
+                        var ensureAuthCerts = require('./ensure-auth-certs.js').ensureAuthCerts;
+                        if (ensureAuthCerts()) { tryGenerate = false; continue; }
+                    } catch (_) {}
+                }
+                logger.log('error', 'UtilityApp : decryptDataByPrivateKey : Error details :'+error);
+                return CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
+            }
         }
+        return CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
     }
 
     /**
