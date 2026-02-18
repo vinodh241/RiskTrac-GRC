@@ -19,7 +19,7 @@ All API modules are configured to use this SQL Server:
 - `ormapi/config/db-config.js` and `ormapi/config/db-config-notification.js`
 - `bcmapi/config/db-config.js` and `bcmapi/config/db-config-notification.js`
 
-Passwords in these files are **encrypted** with the public key in each API’s `config/certs/public.pem` and decrypted at runtime with the matching private key. The value currently in the configs was generated with **authapi**’s cert; if umapi/ormapi/bcmapi use different certs and decryption fails, re-encrypt per API (see below).
+Passwords in these files are **encrypted** with each API’s own public key (`config/certs/public.pem`) and decrypted at runtime with that API’s private key. Each API (authapi, umapi, ormapi, bcmapi) has its own cert pair, so each has its own encrypted password in its config.
 
 ---
 

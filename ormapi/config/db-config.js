@@ -4,7 +4,7 @@ let DB_CONFIG = {
    */
   /** Below configuration parameters for development environment. */
     user                : 'sqldev',                       // User name to use for authentication
-    password            : "ayyjRWrZyEpcBKcfesgL5p/GeFGxdl7azGKpazS4vpySgJAeu2+FhlInAo7Ah9DbcKf3njYUjex88XN6WMgYY4Bzm02IBW6vpjRIwftBit9p92m1ga4jwBkHISyr92dZo6xZbLRTKUE4K3ryGKAcSAppZ0R/z4aWvZw3n4mPqHT/txV1gJ8aJrO/gkFBjec2jhuPHPxpSE/YWssIku2Nhq2yUJgSjuEjZCakhcmaJsSt02xUHRurhF+urvtRC2tXpHnF9i9Pw8U26izMyMZ3wAOy6T1IaZBuFOgCcB8C99vKASDJMJyjQphj7/8P0VyVe3yeSg4baBQ8L8AsBNcFO4oINhfCMZw+ZyGJi+Bf5UkePDHhfpXkLO8W9rMk9JHgkXy0nuayYbKanuk9EqcFl059C4FP9gzEXl0s97boXRq0c65lNekx/oszd+KOxtka8x/IwNRrVD+izhxI/Up8XWG7UdplG9JzA5Scewu/p0rRBQbm7BDk8PyC/+CHi7Hbm/cOEqASLrJ3r2Fhb92whe8ChQiuZ3YBc6kO4/HRR1t/qX53Ym6n6V8GxdYc+Q8rjnvHPBWc/D4ft0C3/klcFKwYoMR4OFJiaIGEyDj0DgqC1bgdrF1QNTzTUDDj+n8dvHSgPtQkoU4qVZBkuFBiKrK+gdnL8LygxVBMvrFPAoU=",
+    password            : "dPtjvaspYfxnWGuZOLm24IuvquuFvbbxviMzf+aRy3dX1HBMsso7QJX1HM5ycJ5K0gytx4kNgB23ukIyR3XvtsaImwuqwU8O1hyrnYBBeGHjWhgPZTQYCzugk5uBecZj1196qL9f/DZVZSJhKX6xGaHQkGzjjhcrU+nXwbsbvOWj9L1mrqYY5EMl3AoxRUCU7jQnFL8dJwSQhjCt1Jh4nR4FNx76XdATC5vjjDKryMRVe2BrSmP2AZDO6NiVTp5rnMdrzxkfArXRDflFQyGRT7uHk6/oxEZm4K91DUTRl5lNhh9oftnLyf0F+xs21a8nboJBYHPxCLqaDOiyBPRIExwy+/WDFMleL61BgcA8o1+FdH/xduTh6xw2sb8nsAd+SzY0yOz/T6Jt5BcjpEBmTDqoBq4EK/njOVUoCI1NXLSIGShNrFc0UTrXksoASHtzjBZOz0VWPGPpnv7owc0ECu1sms4PmaydIoj1CIjxKiOut0UKQwybXw0a5SQMc5W7cD0scT2x2tltu7OdCdet/qkwCNxsThdASaL+sC8y3K2OCH7/xv0ER8yc1nrqCu3abg44M5/GniHT1ByKJb6iIQLLBfKk93g1vjL5+ddW1tuxSyp1FM/Vo8XzICzuSEEbbp3wVkjUJ0PA5lJkyQVkxZU8Wtr8oa2RdIS0fNTISCY=",
     server              : '10.0.1.22',                     // Private IP of Dev DB
     port                : 1433,
 
