@@ -59,7 +59,7 @@ echo "DB_PASSWORD=YourActualSqlPassword" > .env
 docker compose up -d --force-recreate umapi
 ```
 
-**Auth API – certificates for login:** Login decrypts the client payload with the auth API’s private key. The compose file mounts `./authapi/config/certs` into the authapi container. If `private.pem` is missing, **authapi auto-generates** a new key pair at startup (and writes it to the mounted dir so it persists). If certs were auto-generated, **refresh the login page** after the first successful authapi start so the frontend fetches the new public key from get-key. To use your own keys, place `private.pem` and `public.pem` in `authapi/config/certs/` on the host before starting.
+**Auth API – certificates for login:** Login uses authapi’s key pair; authapi **auto-generates** `private.pem` and `public.pem` in the container at startup (no host volume). After deploying or recreating authapi, **refresh the login page once** (Ctrl+F5) so the app fetches the current public key from get-key; then login should work.
 
 **Access:**
 - App (host + all modules): **http://10.0.1.32:8080** or **http://localhost:8080**
