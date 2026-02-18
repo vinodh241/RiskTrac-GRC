@@ -607,10 +607,7 @@ class AuthBl {
                                             const differenceInMilliseconds = today - userDate;
                                             const millisecondsInDay = 1000 * 60 * 60 * 24;
                                             const differenceInDays = Math.floor(differenceInMilliseconds / millisecondsInDay);
-                                            logger.log('error', 'User Name : ' + userName + ' : AuthManagement : updateUserLogin : today : ' + today);
-                                            logger.log('error', 'User Name : ' + userName + ' : AuthManagement : updateUserLogin : userDate : ' + userDate);
-                                            logger.log('error', 'User Name : ' + userName + ' : AuthManagement : updateUserLogin : differenceInDays : ' + differenceInDays);
-                                           
+                                            logger.log('info', 'User Name : ' + userName + ' : AuthManagement : updateUserLogin : password age check : daysSinceChange=' + differenceInDays + ', limit=' + APP_CONFIG.FORCE_PASSWORD_CHANGE_AFTER_INTO_DAYS.DAYS);
                                             if (differenceInDays >= APP_CONFIG.FORCE_PASSWORD_CHANGE_AFTER_INTO_DAYS.DAYS) {
                                                 ForceDefaultPasswordReset = CONSTANT_FILE_OBJ.APP_CONSTANT.TRUE;
                                                 logger.log('error', 'User Name : ' + userName + ' : AuthManagement : updateUserLogin : Execution end. : Password expired. ForceDefaultPasswordReset : ' + ForceDefaultPasswordReset);
