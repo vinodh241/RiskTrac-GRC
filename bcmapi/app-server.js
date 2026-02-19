@@ -44,10 +44,14 @@ APP.use(BODY_PARSER.json({limit: '512mb', extended: true}));
 
 APP.use(CORS({
     origin          : function(origin, callback) {
-                        if (!origin) return callback(null, true);
-                        if (ALLOWED_ORIGINS.indexOf(origin) !== -1) return callback(null, true);
-                        if (origin.startsWith('http://10.0.1.') || origin.startsWith('http://127.0.0.1:')) return callback(null, true);
-                        return callback(null, true);
+                        // allow requests with no origin
+                        // (like mobile apps or curl requests)
+                        if (!origin) return callback(CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL, CONSTANT_FILE_OBJECT.APP_CONSTANT.TRUE);
+                        if (ALLOWED_ORIGINS.indexOf(origin) === CONSTANT_FILE_OBJECT.APP_CONSTANT.MINUS_ONE) {
+                            let message = 'The CORS policy for RiskTrac site does not allow access from the specified Origin. : Origin : '+origin;
+                            return callback(new Error(message), CONSTANT_FILE_OBJECT.APP_CONSTANT.FALSE);
+                        }
+                        return callback(CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL, CONSTANT_FILE_OBJECT.APP_CONSTANT.TRUE);
                     },
     credentials     : CONSTANT_FILE_OBJECT.APP_CONSTANT.TRUE,
     exposedHeaders : ['token','status', 'OriginalFileName', 'FileType','ErrorMessage'],
@@ -58,15 +62,6 @@ APP.use(CORS({
  * App will use cookie parser
  */
 APP.use(COOKIE_PARSER());
-
-/**
- * Global error handler: never send 500 to client; return 200 with success:0
- */
-APP.use(function(err, req, res, next) {
-    try { if (global.logger && global.logger.log) global.logger.log('error', 'Unhandled error: ' + (err && (err.message || err.toString()) || err)); } catch (_) {}
-    if (res.headersSent) return next(err);
-    res.status(200).json({ success: 0, message: null, result: null, error: { errorCode: null, errorMessage: 'Service temporarily unavailable' } });
-});
 
 /**
  * App will use file upload with below mentioned options value
@@ -80,9 +75,8 @@ APP.use(FILE_UPLOAD({
 /**
  * Node server is running on port no. "appPortNo"
  */
-/** PORT can be overridden via process.env.PORT (e.g. in Docker) */
-var appPortNo   = process.env.PORT || APP_CONFIG_FILE_OBJECT.APP_SERVER.APP_START_PORT;
-appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.UNDEFINED ) ? CONSTANT_FILE_OBJECT.APP_CONSTANT.DEFAULT_PORT : parseInt(appPortNo, 10);
+var appPortNo   = APP_CONFIG_FILE_OBJECT.APP_SERVER.APP_START_PORT;
+appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.UNDEFINED ) ? CONSTANT_FILE_OBJECT.APP_CONSTANT.DEFAULT_PORT : appPortNo;
 
 /**
  *  
@@ -109,13 +103,15 @@ appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPor
     /**
      * Fetching notification looger object and setting in global variable :: Start
      */
-    try {
+    try {   
         global.notificationlogger = await LOG_NOTIFICATION_FILE_OBJ.Notificationlogger;
         notificationlogger.log('info', 'Notification Logger initialized......');
         console.log("Notification Logger initialized......");
     } catch (error) {
-        console.error('Notification Logger init failed (continuing with console):', error && (error.message || error));
-        global.notificationlogger = { log: function(lvl, msg) { try { console.log('[' + lvl + '] ' + (msg || '')); } catch (_) {} } };
+        console.log('Notification Logger is not set into global object. Error : '+error.stack);
+        notificationlogger.log('error', 'Notification Logger is not set into global object. Error : ' + error);
+        notificationlogger.log('error', 'Error from appIndex.js : ' + error.stack);
+        process.exit(0);
     }
     // notificationlogger.log('info', 'App is listening on port :'+ appPortNo);
     /**
@@ -128,32 +124,38 @@ appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPor
 
     /**
      * Connecting to database by connection pooling logic :: Start
-     * Non-fatal: if DB fails, app stays up so container does not restart loop.
      */
     try {
         var { poolConnectionObject } = require('./utility/db-connection/db-connection.js');
+        // Setting pool connection object in global variable
         global.poolConnectionObject = await poolConnectionObject;
-        logger.log('info', 'Database Connected......');
     } catch (error) {
-        console.error('BCM API: Main DB connection failed (app staying up):', error && (error.message || error));
-        logger.log('error', 'appIndex.js : Data Base is not connected : Error details : ' + (error && (error.message || error)));
-        global.poolConnectionObject = null;
+        console.log('appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : '+error.stack);
+        logger.log('error', 'appIndex.js : Error from appIndex.js : Data Base is not connected : Error details : '+error);
+        process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
     }
     /**
      * Connecting to separate database for notification :: Start
-     * Non-fatal: if notification DB fails, app stays up; message queue may be skipped.
      */
-    try {
+    try {        
         var { poolConnectionObjectNotification } = require('./utility/db-connection/db-connection-notification.js');
+        // Setting pool connection object in global variable
         global.poolConnectionObjectNotification = await poolConnectionObjectNotification;
-        (global.notificationlogger || { log: function() {} }).log('info', 'Calling message util');
-        new NOTIFICATION_UTIL();
-    } catch (error) {
-        console.error('BCM API: Notification DB connection failed (app staying up):', error && (error.message || error));
-        (global.notificationlogger || { log: function() {} }).log('error', 'Notification : Error details : ' + (error && (error.message || error)));
-        global.poolConnectionObjectNotification = null;
-    }
 
+        /**
+         * Connecting to separate database for notification :: End
+         */
+        // Message queue initialization
+        notificationlogger.log('info','Calling message util');
+        new NOTIFICATION_UTIL();
+        /* Message queue initialization */
+       
+    } catch (error) {
+        console.log(' Notification : Error details : '+error.stack);
+        notificationlogger.log('error', 'Notification : Error details : '+error.stack);
+        process.exit(CONSTANT_FILE_OBJECT.APP_CONSTANT.ZERO);
+    }
+ 
 });
 
 /**

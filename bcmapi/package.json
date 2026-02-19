@@ -29,7 +29,6 @@
     "file-type": "16.5.4",
     "gulp": "4.0.2",
     "gulp4-run-sequence": "1.0.2",
-    "gulp-util": "3.0.8",
     "helmet": "7.1.0",
     "json2csv": "6.0.0-alpha.2",
     "jsonwebtoken": "9.0.2",

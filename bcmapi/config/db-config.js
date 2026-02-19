@@ -4,9 +4,9 @@ let DB_CONFIG = {
    */
   /** Below configuration parameters for development environment. */
     user                : 'sqldev',                       // User name to use for authentication
-  password            : "hPqzghb+ST4z64hSBrx6apLeqoPwbM0cKP+boE6c5VxIC3E1AXD0eoW9nZSntuT04zyd+D07m5f6Pqxdv78ekOK2r36h71dkE4CH8hGFkL3ZGDDPOMYlwEgR69RmJM8eBVlgbnwi8tK77ShvOAYlinGITbjYqriDbejrmFXT8qpEGUTDkYGTLD1lKBQ7gLCzSWZGxbJMSgLFBnTaostdy1GdZsbhImCdgixg8ZIprMtE9UZjOldNqomwlC43YLItVe7G4VF4Cj6b8zwWQ40sGuxcL0of6vq4MIEl4HYtHzVqfmfqxvs9HF8JrTxL3lVI+aXKfVb1uKzztGyHOhR8HuLIMhg/HDkCFrQwSRtH8sDMbHiC0hu0x1JM2XlQ7ZCpIAuvR+Tp+Q4cQRO0THOUr4bthkHbCJ8z8I91NBTLAiezectipTB5+Is7EDWu6xQpA5lOLR7P5RbEP4M54vIXVmN4DaA/rqe4IgvfVS4CSGjnlSq+kPU/eAHcdkg1qrFOlQFKwJ2i5nkFU8d+Vp2f/Mu0GWq1HsawD7dm7GZC4+3yY8r/Edfmr2H4Dd5GVhYeH0YyGBGkQ8G2WmIk2brOEmzF1QPSfdIKicZmgSKe8rPKbuwHMl8V4Ac2P5j1JpwYxlOi9ugnlhdzO7Y5cYmH8qvcZ1M0j+DwkVVXkmw5mVU=",
-  server              : '10.0.1.22',                     // Private IP of Dev DB
-  port                : 1433,                           // Port to connect to Dev DB
+    password            : "PD//P0tFmVNFP4vkRvZQGchqG3G02tymLsf6fSnWpGmCL4Jqn1zIVumO0VLucexSDaoW584sYdyvzR45RdfWgzN6cswxbLZYfJ3u82ZOFNrK3kTIZTNemq7BWZx6stDaWUJTmL0R1LFWD7DYRLdIqHylQ2HCCP3sRqapynq8kqQIFt57adnUOpbR1T0lw3mitXLuK6i7xqJ8JsCH0Bx4JaP6Ou6mpKnCSlzsVQwMFhFhSMpev4uQ7QKvDqaVp//FkpAn+ENFLmHc3zWWREG9egD7DhWxEyW0DzQhrsrOuj35X+NK8QsEKdgU5pXc8SfLqvQm1UziHnKux+TDbgD4giiZrUD+flHsUeJrJojC9WgPgBc6o4p/fU/8+/dCUzgBvoTXhANHJyyiTT+nRiW8qDiT8GBI8X+VypsEcauMjYSy7/mff2U8QxlILXj2ztIHKfdZI1picHs2VYeVKs6nTmgJyfsgkbQ21dHVzwJZLd6YIEc36rWKYFHeLMvfYw1ZXPEAc3K7mM5vlQ22benrWzVBEwX2rqcb2LT5SdCTUTo7NcqR3T5zAbkTNekIFM4xzuODXD8kjqrN1fhQHtudacxjJPXrCkHWGHDx6nBI6XB9HXm8Insas/cAdH1uSnwxE0NCsDVwQqc8g/C71/ctI9E7P0afP0PmUzHpK9ShsJ0=",
+    server              : '10.0.1.22',                     // Private IP of Dev DB
+    port                : 1433,                           // Port to connect to Dev DB
 
   /** Below configuration parameters for QA environment. */
     // user                : 'sqlqa',                       // User name to use for authentication

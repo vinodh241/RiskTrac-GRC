@@ -11,10 +11,9 @@ const FILE_TYPE             = require('file-type');
 const EXCELJS_OBJ           = require('exceljs');
 const Client                = require('ssh2-sftp-client');
 const pdf                   = require('pdf-parse');
-const CERTS_DIR             = PATH.join(__dirname, '..', 'config', 'certs');
-const SECRET_KEY_FILE_PATH  = PATH.join(CERTS_DIR, 'secret.pem');
-const PRIVATE_KEY_FILE_PATH = PATH.join(CERTS_DIR, 'private.pem');
-const PUBLIC_KEY_FILE_PATH  = PATH.join(CERTS_DIR, 'public.pem');
+const SECRET_KEY_FILE_PATH  = "/config/certs/secret.pem";
+const PRIVATE_KEY_FILE_PATH = "/config/certs/private.pem"; 
+const PUBLIC_KEY_FILE_PATH  = "/config/certs/public.pem";
 const COMMON_DB             = require('./data-base-utility/common-db.js');
 
 var commonDbObject = CONSTANT_FILE_OBJ.APP_CONSTANT.NULL;
@@ -167,15 +166,12 @@ module.exports = class UtilityApp {
     }
 
     /**
-     * This function will return JWT secret: env JWT_SECRET if set, else "secret.pem" file.
-     * Use same JWT_SECRET as umapi so tokens issued at login verify here (avoids "Session expired").
+     * This function will read "secret.pem"  file and return secretkey
      */
     getAppSecretKey(){
-        var fromEnv = process.env.JWT_SECRET;
-        if (fromEnv && typeof fromEnv === 'string' && fromEnv.trim().length > 0)
-            return fromEnv.trim();
         try {
-            var key = FILE_SYSTEM.readFileSync(SECRET_KEY_FILE_PATH, "utf8");
+            var absolutePathForSecretKey    = PATH.join(process.cwd(),SECRET_KEY_FILE_PATH);
+            var key                         = FILE_SYSTEM.readFileSync(absolutePathForSecretKey, "utf8");
             return key;
         } catch (error) {
             logger.log('error', 'UtilityApp : getAppSecretKey : Error details : '+error);
@@ -358,7 +354,8 @@ module.exports = class UtilityApp {
      */
     decryptDataByPrivateKey(encryptedData) {
         try {
-            var privateKey                  = FILE_SYSTEM.readFileSync(PRIVATE_KEY_FILE_PATH, "utf8");           // Fetching private key value
+            var absolutePathForPrivateKey   = PATH.join(process.cwd(),PRIVATE_KEY_FILE_PATH);                      // Fetching absolute path for private key
+            var privateKey                  = FILE_SYSTEM.readFileSync(absolutePathForPrivateKey, "utf8");       // Fetching private key value
             var deCryptionObj               = new JS_ENCRYPT_LIB_OBJ();                                            // Creating js encryption object.
             deCryptionObj.setPrivateKey(privateKey);                                                            // Setting private key into js encryption object
             var decryptedData               = deCryptionObj.decrypt(encryptedData);                             // decrypted data
@@ -377,7 +374,8 @@ module.exports = class UtilityApp {
      */
     encryptDataByPublicKey(clearTextData) {
         try {
-            var publicKey                  = FILE_SYSTEM.readFileSync(PUBLIC_KEY_FILE_PATH, "utf8");             // Fetching public key value
+            var absolutePathForPublicKey   = PATH.join(process.cwd(),PUBLIC_KEY_FILE_PATH);                        // Fetching absolute path for public key
+            var publicKey                  = FILE_SYSTEM.readFileSync(absolutePathForPublicKey, "utf8");         // Fetching public key value
             var enCryptionObj               = new JS_ENCRYPT_LIB_OBJ();                                            // Creating js encryption object.
             enCryptionObj.setPrivateKey(publicKey);                                                             // Setting public key into js encryption object
             var encryptedData               = enCryptionObj.encrypt(clearTextData);                             // encrypted data

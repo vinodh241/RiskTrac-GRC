@@ -5,6 +5,7 @@ const BUSINESS_CONTINUITY_PLAN_DB   = require("../../data-access/business-contin
 const ENUMS_OBJ                     = require("../../utility/enums/enums.js");
 const COMPUTATION_OBJ               = require("../../utility/computations.js");
 const { logger }                    = require("../../utility/log-manager/log-manager.js");
+const { get }                       = require("browser-sync");
 const { Container }                 = require("winston");
 const UTILITY_APP                   = require("../../utility/utility.js");
 const BCP_TEMPLATE                  = require("./../../config/email-template/generic-bcp-template.js");
