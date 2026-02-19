@@ -62,6 +62,9 @@ services:
     container_name: risktrac-ormapi
     ports:
       - "6003:6003"
+    # Use same JWT secret as umapi so tokens issued at login verify here (avoids "Session expired")
+    volumes:
+      - ./umapi/config/certs:/app/config/certs:ro
     environment:
       - PORT=6003
       - DB_PASSWORD=${DB_PASSWORD}
@@ -85,6 +88,9 @@ services:
     container_name: risktrac-bcmapi
     ports:
       - "6004:6004"
+    # Use same JWT secret as umapi so tokens issued at login verify here (avoids "Session expired")
+    volumes:
+      - ./umapi/config/certs:/app/config/certs:ro
     environment:
       - PORT=6004
       - DB_PASSWORD=${DB_PASSWORD}
