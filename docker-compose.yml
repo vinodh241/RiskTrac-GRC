@@ -81,6 +81,7 @@ services:
       - risktrac-net
     restart: unless-stopped
 
+  # --- BCM API (port 6004, proxied as /bcmapi/ by nginx) ---
   bcmapi:
     image: vinod9072/bcmapi:v1
     build:
@@ -136,6 +137,7 @@ services:
       - risktrac-net
     restart: unless-stopped
 
+  # --- BCM Web (served at /bcm/ by nginx) ---
   bcmweb:
     image: vinod9072/bcmweb:v1
     build:
