@@ -61,7 +61,8 @@ export abstract class RestService {
             .pipe(map((result: any) => {
                 if (wait)
                     this.closeWait()
-                localStorage.setItem('token', result['token']);
+                if (result && result['token'] != null)
+                    localStorage.setItem('token', result['token']);
                 if (result instanceof Array) {
                     return result.pop();
                 }
@@ -95,7 +96,8 @@ export abstract class RestService {
             .pipe(map((result: any) => {
                 if (wait)
                     this.closeWait()
-                localStorage.setItem('token', result['token']);
+                if (result && result['token'] != null)
+                    localStorage.setItem('token', result['token']);
                 if (result instanceof Array) {
                     return result.pop();
                 }

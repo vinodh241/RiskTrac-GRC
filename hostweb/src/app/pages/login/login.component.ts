@@ -193,6 +193,7 @@ export class LoginComponent implements OnInit {
     this.closeWait()
     localStorage.setItem('token', response.token);
     localStorage.setItem('tokenlOGIN', response.token);
+    localStorage.setItem('isOnLine', 'true'); // required by ORM/BCM/UM module auth guards
     if (response.success) {
       let login = response.result.loginData[0];
       let roles = response.result.roleData || [];
@@ -618,6 +619,7 @@ export class LoginComponent implements OnInit {
             this.OTPsuccess = true;
           }
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
           this.StartTimer();
           this.submitIsEnabled = true;
         } else {
@@ -628,6 +630,7 @@ export class LoginComponent implements OnInit {
             this.OTPsuccess = false;
           }
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
           this.submitIsEnabled = false;
         }
         this.enteredOTP = '';
@@ -647,6 +650,7 @@ export class LoginComponent implements OnInit {
           }
           this.StartTimer();
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
           this.submitIsEnabled = true;
         } else {
           this.disableButton = false
@@ -656,6 +660,7 @@ export class LoginComponent implements OnInit {
             this.OTPsuccess = false;
           }
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
           this.submitIsEnabled = false;
         }
         this.enteredOTP = '';
@@ -781,6 +786,7 @@ export class LoginComponent implements OnInit {
           if (res['error'].errorCode == 'INV_WP') {
           }
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
         }
       });
     } else if (this.forgotOTP) {
@@ -807,6 +813,7 @@ export class LoginComponent implements OnInit {
             location.reload();
           }, 3000);
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
         } else {
           this.disableButtonOtp = false;
           // if(res.error){
@@ -853,6 +860,7 @@ export class LoginComponent implements OnInit {
           this.disableButton = true;
           // this.getDataOnSuccessfulLogin(res);
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
         } else {
           this.disableButtonOtp = false;
           // if(res.error){
@@ -929,6 +937,7 @@ export class LoginComponent implements OnInit {
           this.ChangePasswordForm.disable();
           // location.reload();
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
           this.disableButton = true;
           setTimeout(() => {
             this.router.navigate(['/login']);
@@ -946,6 +955,7 @@ export class LoginComponent implements OnInit {
             this.ChangePasswordForm.controls['oldCPassword'].enable();
           }
           localStorage.setItem('token', res.token);
+          localStorage.setItem('isOnLine', 'true');
         }
       });
     }
