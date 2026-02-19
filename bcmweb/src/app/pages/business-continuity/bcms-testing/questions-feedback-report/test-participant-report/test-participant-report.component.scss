@@ -1,0 +1,74 @@
+.statusStyle {
+  left: 20%;
+  font-size: 1.8rem;
+  min-width: 7.5vw;
+}
+
+.expansion-panel-header {
+  background: linear-gradient(90deg, #DBE8F0 5.21%, rgba(219, 232, 240, 0.00) 100%) !important;
+  border-radius: 0.3vh 0.3vh 0 0 !important;
+}
+
+::ng-deep .test-participant .mat-expansion-panel-body {
+  padding: 0 !important;
+}
+
+::ng-deep .participant-report .mat-expansion-panel-body {
+  padding: 0 !important;
+  overflow-y: auto;
+}
+
+.mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+  align-items: flex-start;
+}
+
+.forbarStatus {
+  right: 6%;
+}
+
+.forbarStatus span:first-child {
+  font-size: 70%;
+  color: #747474;
+  text-align: right;
+}
+
+.forbarStatus span:nth-child(2) {
+  font-size: 80%;
+  color: #000;
+  text-align: center;
+  padding: 0.6vh 0.8vw;
+  border-radius: 50vh;
+  color: #fff;
+  border: 1px solid #DEDEDE;
+}
+
+
+.forbarStatus span:nth-child(2).new {
+  background: linear-gradient(100deg, #fff 9.29%, #d88922 100%);
+  color: #8d5103;
+}
+
+.forbarStatus span:nth-child(2).rinp {
+  background: linear-gradient(100deg, #fff 9.29%, #318DFA 100%);
+  color: #084288;
+}
+
+.forbarStatus span:nth-child(2).responded {
+  background: linear-gradient(100deg, #fff 9.29%, #85ad50 100%);
+  color: #3d6606;
+}
+
+.forbarStatus span:nth-child(2).rbo {
+  background: linear-gradient(100deg, #FFF 9.29%, #ffb619 100%);
+  color: #a3540b;
+}
+
+.forbarStatus span:nth-child(2).rwc {
+  background: linear-gradient(91deg, #FFF 0%, #FFCACA 100%);
+  color: #D31313;
+}
+
+.forbarStatus span:nth-child(2).topapproved {
+  background: linear-gradient(91deg, #FFF 0%, #CAFFE6 100%);
+  color: #00A944;
+}

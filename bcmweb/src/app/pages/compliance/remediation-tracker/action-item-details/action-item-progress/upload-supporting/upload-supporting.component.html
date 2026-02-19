@@ -1,0 +1,55 @@
+<div class="modal-content modalContent">
+  <div class="modal-header bgSeaGreenGradient text-white allModalHeader position-relative">
+    <h5 class="modal-title modalh5" id="staticBackdropLabel">Upload Evidence (Allowed file type - {{this.fileTypeList}})</h5>
+    <button type="button" class="close customClose" mat-icon-button mat-dialog-close data-bs-dismiss="modal"
+      aria-label="Close" (click)="cancel()" id="cancelAttach">
+      <span>&times;</span>
+    </button>
+  </div>
+
+  <mat-dialog-content class="modal-body greyModalBody vscroll" style="height: 40vh;">
+    <div class="row mx-3 p-2">
+      <div class="col-12 ModaltableContent ModaltableContentBlue" style="height: 32vh;">
+        <div class="row mx-0">
+          <div class="col-12 px-4">
+            <label> <b>File Title</b> <sup class="red">*</sup></label>
+            <mat-form-field appearance="fill" class="w-100 p-0 col-form-label slctLbl text-start mt-4">
+              <input matInput type="text" placeholder="Upload file" [value]="selectedFile ? selectedFile.name : ''"
+                readonly id="uploadFile">
+            </mat-form-field>
+            <mat-error *ngIf="fileErr">Please select a file to upload</mat-error>
+            <mat-error *ngIf="allowedFile">Please upload a valid file</mat-error>
+            <mat-error *ngIf="validFileNameErr">Special Characters are not allowed in File name</mat-error>
+            <mat-error *ngIf="failedToUpload">{{ this.saveerror}}</mat-error>
+          </div>
+
+          <div class="col-6 px-4 mt-4" (drop)="onFileDrop($event)" (dragover)="allowDrop($event)"> 
+            Drag file here to upload<br/>
+            <div class="dragNdrop cursor-default" style="margin-top: 10px;">
+            </div>
+          </div>
+
+          <div class="col-6 px-4 mt-4">
+            <span>or</span><br><br>
+            <div class="position-relative">
+              <span class="btn-file btnUploadVisible">
+                <label for="file-input" style="cursor: pointer;">
+                  <img src="./assets/images/icon-attachment.svg" style="filter: invert();" class="mx-2" alt=""> Select file manually
+                </label>
+                <input type="file" class="file-upload" id="file-input" name="file-input"
+                  (change)="onFileSelected($event)" style="display: none;">
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <div class="modal-footer modalFooter">
+    <button type="button" class="btn btn-secondary modalCancelBtn me-2" id="cancelSupp" mat-dialog-close (click)="cancel()">Cancel</button>
+    <button type="button" class="btn btn-primary modalColorBtn" style="min-width: 10vw !important;" id="uploadDoc" (click)="upload()">
+      <img src="./assets/images/icon-upload.svg" style="width: 15% !important; margin-bottom: 4%;" alt="upload"/> Upload
+    </button>
+  </div>
+</div>

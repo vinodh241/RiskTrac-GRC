@@ -1,0 +1,83 @@
+<!-- MAODAL FOUR -->
+
+<div class="modal-content modalContent">
+  <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+    <h5 class="modal-title modalh5" id="staticBackdropLabel">Request Extension of Completion Date</h5>
+    <button type="button" class="close customClose" mat-icon-button mat-dialog-close data-bs-dismiss="modal"
+      aria-label="Close" (click)="close()" id="closeReq">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <form [formGroup]="requestForm">
+    <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+      <div class="row mx-3">
+        <h2 class="col-12 px-0">{{actionPlan.IdentifiedActionItem}}</h2>
+
+        <div class="col-6 pl-0 pr-5">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Explanation for Extension of Target
+              Date</b><sup class="red">*</sup></label><br>
+          <mat-form-field appearance="fill" class="w-100">
+            <textarea matInput class="form-control-plaintext fldcolor fldcolor18" placeholder="" id="explanation"
+              formControlName="explanation" rows="3"></textarea>
+          </mat-form-field>
+          <mat-error *ngIf="(submitted || f['explanation'].touched) && f['explanation'].errors">Enter explanation for
+            extension</mat-error>
+        </div>
+
+        <div class="col-6 pl-5 pr-0 mt-4">
+          <div class="row mx-0 pt-2">
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Source</b></label>
+              <div>{{source}}</div>
+            </div>
+
+            <div class="col-6 pl-2 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Module</b></label>
+              <div>{{actionPlan.ActionItemModule}}</div>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Start Date</b></label>
+              <div class="w-100">{{startDate |date:'MMM d, y'}}</div>
+            </div>
+
+            <div class="col-6 pl-2 pr-0 ">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Target Date</b></label>
+              <div class="w-100">{{endDate |date:'MMM d, y'}}</div>
+            </div>
+
+            <div class="col-8 pl-2 pr-0 ">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>New Target Date</b><sup
+                  class="red">*</sup></label>
+              <mat-form-field appearance="fill" (click)="picker.open()" class="w-100">
+                <input matInput formControlName="targetDate" id="targetDate" [min]="disDate" [matDatepicker]="picker"
+                  (keydown.enter)="$event.preventDefault()" (dateChange)="updateSelecedTargetDate($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['targetDate'].touched) && f['targetDate'].errors">Enter new target date</mat-error>
+              <mat-error *ngIf="targetDateError">New target date should be Greater than Existing Target Date</mat-error>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="modal-footer modalFooter" style="display: flex;justify-content: space-between;">
+    <div>
+      <label><strong> Current Status :</strong></label> {{this.parent.currentStep}}
+    </div>
+    <div>
+      <button type="button" class="btn btn-secondary modalCancelBtn" data-bs-dismiss="modal" (click)="close()"
+        id="closeReqPop">Cancel</button>&nbsp;
+      <button [disabled]="!BtnEnableActionItem()" type="button" class="btn btn-primary modalColorBtn"
+        (click)="request()" id="request">{{buttonName}}&nbsp;<img src="./assets/images/icon-next.svg"
+          style="width: 8% !important;" alt=""></button>
+    </div>
+  </div>
+</div>
+
+<!-- END MAODAL FOUR -->

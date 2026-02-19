@@ -1,0 +1,324 @@
+<div class="col-10 ps-0 pe-4 h-100" style="width: 82.8vw;">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+    [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+    style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: -1vh; font-size: 2.3vh;"
+      [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+      (workFlowStatusID == 2) ? 'statusInprogress' :
+      (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+      (workFlowStatusID == 8) ? 'statusCompleted' :
+      (workFlowStatusID == 7) ? 'statusDelayed' :
+      'statusPublished'">
+       {{ workFlowStatus }}
+    </span>
+  </span>
+  <div class="tab-pane pb-2 h-100" id="section-1-content" role="tabpanel" aria-labelledby="section-1">
+      <div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+          <div class="cardBody singleRow w-100 h-100">
+              <div class="w-100 h-100 px-2 py-3 position-relative">
+                  <div class="w-100 h-6 pb-5">
+                      <h2 class="h-100"><img src="./assets/images/icon-tl.svg"
+                              class="headingIcon longBox icoAs" alt="BCP Coverage"> {{ 'bcp.section5.title' | translate }}</h2>
+                  </div>
+
+                  <div *ngIf="!listingBCP">
+                  <div class="w-100 h-78 vscroll pe-3  bc-process-details-container" style="height: 56vh;">
+
+                    <form [formGroup]="riskForm">
+                      <div class="impact-assessment-container ">
+                          <div class="row pb-3">
+                              <div class="col-12">
+
+                                      <div class="w-100 tableContent11">
+                                          <div class="w-100 h-100 p-0 vscroll tableContent2">
+                                            <table class="w-100 modalTble  smallTable addThreat fixedTbleHead mat-table-padding" mat-table
+                                            [dataSource]="businessContinuityService.TableRMBIA" id="addCritical">
+                                            <ng-container matColumnDef="Index">
+                                              <th mat-header-cell *matHeaderCellDef >#</th>
+                                              <td mat-cell *matCellDef="let row" class="w-5 text-center"> {{row.Index}} </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Potential">
+                                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Risk / Potential
+                                                Failure <sup class="red">*</sup></th>
+                                              <td mat-cell *matCellDef="let row" class="text-left">
+                                                <div *ngIf="!row.isEdit">{{row.PotentialData}}</div>
+                                                <div *ngIf="row.isEdit">
+                                                  <mat-form-field appearance="fill" style="width: 15vh;">
+                                                  <textarea matInput [value]="row.PotentialData" id="currentCDes"
+                                                    formControlName="Potential"
+                                                    class="text-area" placeholder="Max(500 chars)">{{row.PotentialData}}</textarea>
+                                                    </mat-form-field>
+                                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                                      *ngIf="riskForm.get('Potential')?.hasError('maxlength')">
+                                                      Exceeding 500 characters
+                                                    </mat-error>
+                                                </div>
+                                              </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="AffectedProcess">
+                                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Affected Process<sup class="red">*</sup></th>
+                                              <td mat-cell *matCellDef="let row" class="text-left">
+                                                <div *ngIf="!row.isEdit">{{row.AffectedProcess}}</div>
+                                                <div *ngIf="row.isEdit">
+                                                  <mat-form-field appearance="fill" style="width: 20vh;">
+                                                    <mat-select matSelectSearch formControlName="Process" id="applicationTypeID" placeholder="select">
+                                                      <mat-option *ngFor="let process of affectedProcess"
+                                                        [value]="process.BusinessActivity"
+                                                        [id]="process.BusinessActivityID">
+                                                        {{process.BusinessActivity}}
+                                                      </mat-option>
+                                                    </mat-select>
+                                                  </mat-form-field>
+                                                </div>
+                                              </td>
+                                            </ng-container>
+
+                                             <ng-container matColumnDef="ImpactData">
+                                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Impact<sup class="red">*</sup></th>
+                                              <td mat-cell *matCellDef="let row" class="text-left">
+                                                <div *ngIf="!row.isEdit">{{row.Impact}}</div>
+                                                <div *ngIf="row.isEdit">
+                                                  <mat-form-field appearance="fill" style="width: 20vh;" >
+                                                    <mat-select matSelectSearch formControlName="Impact" id="ImpactId" placeholder="select">
+                                                      <!-- Dont remove click functionality it will break the risk functionality -->
+                                                      <mat-option *ngFor="let row of impactListData" (click)="onSelectImpact(row.ImpactID)"
+                                                        [value]="row.Impact"
+                                                        [id]="row.ImpactID">
+                                                        {{row.Impact}}
+                                                      </mat-option>
+                                                    </mat-select>
+                                                  </mat-form-field>
+                                                </div>
+                                              </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="Likelihood">
+                                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Likelihood<sup class="red">*</sup></th>
+                                              <td mat-cell *matCellDef="let row" class="text-left">
+                                                <div *ngIf="!row.isEdit">{{row.Likelihood}}</div>
+                                                <div *ngIf="row.isEdit">
+                                                  <mat-form-field appearance="fill" style="width: 20vh;">
+                                                    <mat-select matSelectSearch formControlName="Likelihood" id="applicationTypeID" placeholder="select">
+                                                      <mat-option *ngFor="let impact of likelihood" (click)="onSelectLikelihood(impact.LikelihoodID)"
+                                                        [value]="impact.Likelihood"
+                                                        [id]="impact.LikelihoodID">
+                                                        {{impact.Likelihood}}
+                                                      </mat-option>
+                                                    </mat-select>
+                                                  </mat-form-field>
+                                                </div>
+                                              </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Risk">
+                                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff; width: 11vh;">Risk<sup class="red">*</sup></th>
+                                              <td mat-cell *matCellDef="let row" class="text-left">
+                                                <div *ngIf="!row.isEdit">{{row.Risk}}</div>
+                                                <div *ngIf="row.isEdit">{{riskRating}}</div>
+                                              </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Contingency">
+                                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Contingency
+                                                Measures in place<sup class="red">*</sup></th>
+                                              <td mat-cell *matCellDef="let row" class="text-left">
+                                                <div *ngIf="!row.isEdit">{{row.Contingency}}</div>
+                                                <div *ngIf="row.isEdit">
+                                                  <mat-form-field appearance="fill" style="width: 23vh;">
+                                                  <textarea matInput [value]="row.Contingency" rows="2" cols="75" id="currentCDes"
+                                                    formControlName="Measures"
+                                                    class="text-area" placeholder="Max(500 chars)">{{row.Contingency}}</textarea>
+                                                    </mat-form-field>
+                                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                                      *ngIf="riskForm.get('Measures')?.hasError('maxlength')">
+                                                      Exceeding 500 characters
+                                                    </mat-error>
+                                                </div>
+                                              </td>
+                                            </ng-container>
+
+
+                                            <ng-container matColumnDef="Treatment">
+                                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Treatment
+                                                plan<sup class="red">*</sup></th>
+                                              <td mat-cell *matCellDef="let row" class="text-left">
+                                                <div *ngIf="!row.isEdit">{{row.Treatment}}</div>
+                                                <div *ngIf="row.isEdit">
+                                                  <mat-form-field appearance="fill" style="width: 15vh;">
+                                                  <textarea matInput [value]="row.Treatment" rows="2" cols="50" id="currentCDes"
+                                                    formControlName="Treatment"
+                                                    class="text-area" placeholder="Max(500 chars)">{{row.Treatment}}</textarea>
+                                                    </mat-form-field>
+                                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                                      *ngIf="riskForm.get('Treatment')?.hasError('maxlength')">
+                                                      Exceeding 500 characters
+                                                    </mat-error>
+                                                </div>
+                                              </td>
+                                            </ng-container>
+
+                                            <ng-container matColumnDef="Action">
+                                              <th mat-header-cell *matHeaderCellDef class="w-15" style="border-left: 1px solid #fff"> </th>
+                                              <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                                                <ng-container *ngIf="!row.isEdit">
+                                                  <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                                  matTooltip="Edit" color="primary"  (click)="editRisk(row)" id="controlEdit" [disabled]="blockEdit">
+                                                  <mat-icon>edit</mat-icon>
+                                                </button>
+                                                </ng-container>
+                                                <ng-container *ngIf="row.isEdit">
+                                                  <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                                    matTooltip="Save" color="primary"
+                                                    id="saveCritical" [disabled]="!isSaveDisable()" (click)="save(row)"><mat-icon>save</mat-icon>
+                                                  </button>
+                                                  <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                                    matTooltip="cancel" color="primary" (click)="cancel(row)"
+                                                    id="closeCritical"><mat-icon>close</mat-icon>
+                                                  </button>
+                                                </ng-container>
+                                              </td>
+                                            </ng-container>
+                                            <tr mat-header-row *matHeaderRowDef="displayedColumnsRM"></tr>
+                                            <tr mat-row *matRowDef="let row; columns: displayedColumnsRM;"></tr>
+                                            <tr *matNoDataRow>
+                                              <td [attr.colspan]="displayedColumnsRM.length">{{ 'bcp.section5.noRisks' | translate }}</td>
+                                            </tr>
+                                          </table>
+                                        </div>
+                                        <mat-error *ngIf="saveerror">{{saveerror}}</mat-error>
+
+                                        <div class="row py-3">
+                                          <div class="col-12 text-end">
+                                            <div><button type="button" [disabled]="blockEdit"
+                                                class="btn btn-primary normalColorBtn modalColorBtnGreen" id="initiateRisk" (click)="addRisk()"><span
+                                                  class="fw-bold">+</span> Add New</button></div>
+                                          </div>
+                                        </div>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+
+                </form>
+              </div>
+              </div>
+                <div *ngIf="listingBCP">
+                  <div class="w-100 h-78 vscroll pe-3 bc-process-details-container" style="height: 56vh;">
+                  <div class="impact-assessment-container">
+                    <div class="row pb-3">
+                        <div class="col-12">
+
+                                <div class="w-100 tableContent11">
+                                    <div class="w-100 h-100 p-0 vscroll tableContent2">
+                                      <table class="w-100 modalTble smallTable addThreat fixedTbleHead" mat-table
+                                      [dataSource]="allViewDetails" id="addCritical">
+                                      <ng-container matColumnDef="Index">
+                                        <th mat-header-cell *matHeaderCellDef>#</th>
+                                        <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                                      </ng-container>
+
+                                      <ng-container matColumnDef="Potential">
+                                        <th mat-header-cell *matHeaderCellDef>Risk / Potential
+                                          Failure</th>
+                                        <td mat-cell *matCellDef="let row" class="text-left">
+                                          <div>{{row.PotentialData}}</div>
+                                        </td>
+                                      </ng-container>
+
+                                      <ng-container matColumnDef="AffectedProcess">
+                                        <th mat-header-cell *matHeaderCellDef>Affected Process</th>
+                                        <td mat-cell *matCellDef="let row" class="text-left">
+                                          <div>{{row.AffectedProcess}}</div>
+                                        </td>
+                                      </ng-container>
+
+                                       <ng-container matColumnDef="ImpactData">
+                                        <th mat-header-cell *matHeaderCellDef>Impact</th>
+                                        <td mat-cell *matCellDef="let row" class="text-left">
+                                          <div>{{row.Impact}}</div>
+                                        </td>
+                                      </ng-container>
+
+
+                                      <ng-container matColumnDef="Likelihood">
+                                        <th mat-header-cell *matHeaderCellDef>Likelihood</th>
+                                        <td mat-cell *matCellDef="let row" class="text-left">
+                                          <div>{{row.Likelihood}}</div>
+                                        </td>
+                                      </ng-container>
+
+                                        <ng-container matColumnDef="Risk">
+                                        <th mat-header-cell *matHeaderCellDef>Risk</th>
+                                        <td mat-cell *matCellDef="let row" class="text-left">
+                                          <div>{{row.Risk}}</div>
+                                        </td>
+                                      </ng-container>
+
+
+                                      <ng-container matColumnDef="Contingency">
+                                        <th mat-header-cell *matHeaderCellDef>Contingency
+                                          Measures in place</th>
+                                        <td mat-cell *matCellDef="let row" class="text-left">
+                                          <div >{{row.Contingency}}</div>
+                                        </td>
+                                      </ng-container>
+
+
+                                      <ng-container matColumnDef="Treatment">
+                                        <th mat-header-cell *matHeaderCellDef>Treatment
+                                          plan</th>
+                                        <td mat-cell *matCellDef="let row" class="text-left">
+                                          <div>{{row.Treatment}}</div>
+                                        </td>
+                                      </ng-container>
+                                      <tr mat-header-row *matHeaderRowDef="displayedColumnsRMV"></tr>
+                                      <tr mat-row *matRowDef="let row; columns: displayedColumnsRMV;"></tr>
+                                      <tr *matNoDataRow>
+                                        <td [attr.colspan]="displayedColumnsRMV.length">No Risk Mitigation added
+                                          yet.</td>
+                                      </tr>
+                                    </table>
+                                  </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+                </div>
+
+                  </div>
+
+                  <!-- <div class="w-100 h-16 position-relative">
+                    <div class="move-buttons"  *ngIf="!listingBCP">
+                        <button class="buttons save" style="margin-right: -20vh;margin-top: 3vh;"><img src="./assets/images/icon-application.svg" alt="Save"> Save</button>
+                    </div>
+                  </div>
+
+                  <div class="child-button " style="margin-top: 6vh;" *ngIf="!listingBCP">
+                  <mat-error *ngIf = "isAnyTableInvalid()"> The save button will be enabled once all the mandatory data is filled.</mat-error>
+                    <div class="move-buttons" style="margin-left: 67vh;margin-top: -2.5vh;" >
+                      <button class="buttons save" id="saveSub" (click)="onSubmit()"
+                      [ngClass]="(isAnyTableInvalid()) ? 'disable'  : ''">
+                      <img src="./assets/images/icon-application.svg" alt="Save">
+                        Save</button>
+                    </div>
+                  </div> -->
+
+                  <div class="child-button " style="margin-top: 6vh;">
+                    <div class="move-buttons" style="margin-left: 92vh; margin-top: -1vh;" *ngIf="!listingBCP">
+                      <button class="buttons save" id="saveSub" (click)="onSubmit()" style="height: 6vh; width: 24vh;"
+                        [ngClass]="isAnyTableInvalid() ? 'disable'  : ''"><img src="./assets/images/icon-application.svg" alt="Save">Save</button>
+                    </div>
+                  </div>
+                  <span *ngIf="!listingBCP"><mat-error style="margin-top: -7vh;" *ngIf = "isAnyTableInvalid()"> The save button will be enabled once all the mandatory data is filled.</mat-error></span>
+              </div>
+
+          </div>
+      </div>
+  </div>
+
+</div>

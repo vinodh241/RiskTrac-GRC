@@ -1,0 +1,491 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5">{{parent?.modelTitle}}</h5>
+  <button type="button" class="close customClose p-0" mat-dialog-close aria-label="Close" mat-icon-button
+    (click)="resetForm()" id="incidentclosed">
+    <span>&times;</span>
+  </button>
+</div>
+<form [formGroup]="defineIncidentForm">
+  <div class="modal-body greyModalBody vscroll" id="scrollToTop" style="height: 56vh;">
+    <div class="row mx-3">
+      <div class="col-6 ps-0 pe-5">
+        <div class="row mx-0">
+          <div class="col-7 ps-0 pe-4">
+            <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="incidentCode">Incident Code<sup
+                  class="red">*</sup> </label>
+            </div>
+            <mat-form-field appearance="fill" class="w-100">
+              <input matInput formControlName="incidentCode" id="incidentCode"
+                (keydown.enter)="$event.preventDefault()" placeholder="Code will be auto generated after incident creation"/>
+            </mat-form-field>
+          </div>
+
+          <div class="col-5 ps-4 pe-0">
+            <label for="incidentStatus" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Incident Status<sup
+                class="red">*</sup></label>
+            <mat-form-field appearance="fill" class="w-100"
+              *ngIf="service.incidentInfoData?.IncidentStatusList.length > 0">
+              <input matInput formControlName="incidentStatus" placeholder="Status" id="incidentStatus"
+                (keydown.enter)="$event.preventDefault()" />
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['incidentStatus'].touched) && f['incidentStatus'].errors">Select Incident
+              Status</mat-error>
+          </div>
+          <div class="col-6 ps-0 pe-4">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Incident Start Date & Time <sup
+                class="red">*</sup></label>
+            <div class="row mx-0">
+              <div class="col-6 ps-0 pe-2">
+                <mat-form-field appearance="fill" (click)="pickerIncStart.open()" class="w-100">
+                  <input matInput formControlName="incidentStartDate" placeholder="DD/MM/YYYY" [matDatepicker]="pickerIncStart" id="startDate"
+                    (keydown.enter)="$event.preventDefault()" (dateChange)="setStartIncDate()">
+                  <mat-datepicker-toggle id="startIncDateToggle" matSuffix
+                    [for]="pickerIncStart"></mat-datepicker-toggle>
+                  <mat-datepicker id="startIncDate" #pickerIncStart></mat-datepicker>
+                </mat-form-field>
+                <mat-error *ngIf="(submitted || f['incidentStartDate'].touched) && f['incidentStartDate'].errors">Select
+                  Start Date</mat-error>
+                <!-- <mat-error *ngIf="minStartDateError && !endIncDateError">Start date needs to be a future date including today</mat-error> -->
+                <mat-error *ngIf="endIncDateError">Start date cannot be after End date.</mat-error>
+              </div>
+              <div class="col-6 ps-2 pe-0">
+                <mat-form-field class="w-100">
+                  <input matInput class="time-picker-style" type="time" formControlName="incidentStateTime"
+                    id="timePickerStart" (change)="checkStartIncTimeValidation()">
+                </mat-form-field>
+                <mat-error *ngIf="(submitted || f['incidentStateTime'].touched) && f['incidentStateTime'].errors">Select
+                  Start Time</mat-error>
+                <mat-error *ngIf="endIncTimeError">Start time cannot be after or same End time.</mat-error>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 ps-4 pe-0">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Incident End Date & Time <sup
+              class="red">*</sup></label>
+            <div class="row mx-0">
+              <div class="col-6 ps-0 pe-2">
+                <mat-form-field appearance="fill" (click)="pickerIncEnd.open()" class="w-100">
+                  <input matInput formControlName="incidentEndDate" placeholder="DD/MM/YYYY" [matDatepicker]="pickerIncEnd" id="endDate"
+                    (keydown.enter)="$event.preventDefault()" (dateChange)="setEndIncDate()">
+                  <mat-datepicker-toggle id="incidentEndDate" matSuffix [for]="pickerIncEnd"></mat-datepicker-toggle>
+                  <mat-datepicker id="incidentEndDate" #pickerIncEnd></mat-datepicker>
+                </mat-form-field>
+                <mat-error *ngIf="(submitted || f['incidentEndDate'].touched) && f['incidentEndDate'].errors">Select End
+                  Date</mat-error>
+                <mat-error *ngIf="minEndDateError && !endIncDateError">End Date should starts from todays
+                  date</mat-error>
+                <mat-error *ngIf="endIncDateError" class="error ml-3"> End date cannot be before Start date.</mat-error>
+              </div>
+              <div class="col-6 ps-2 pe-0">
+                <mat-form-field class="w-100">
+                  <input matInput class="time-picker-style" type="time" formControlName="incidentEndTime"
+                    id="timePickerEnd" (change)="checkEndIncTimeValidation()">
+                </mat-form-field>
+                <mat-error *ngIf="(submitted || f['incidentEndTime'].touched) && f['incidentEndTime'].errors">Select End
+                  Time</mat-error>
+                <mat-error *ngIf="endIncTimeError">End time cannot be before or same Start time.</mat-error>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12 px-0">
+            <label for="incidentTitle" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Incident Title<sup
+                class="red">*</sup></label>
+            <mat-form-field appearance="fill" class="w-100" *ngIf="!defineIncidentForm.disabled">
+              <input matInput formControlName="incidentTitle" placeholder="Title" id="incidentTitle"
+                (keydown.enter)="$event.preventDefault()" (keyup)="checkIncidentExist($event)" />
+            </mat-form-field>
+            <mat-form-field class="w-100" class="w-100" *ngIf="defineIncidentForm.disabled">
+              <textarea matInput class="form-control-plaintext" id="description" formControlName="incidentTitle"
+                rows="2"></textarea>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['incidentTitle'].touched) && f['incidentTitle'].errors && !isIncidentTitleExists">Enter Incident
+              Title</mat-error>
+            <mat-error *ngIf="(submitted || f['incidentTitle'].touched) && isIncidentTitleExists">Incident Title already
+              exists</mat-error>
+          </div>
+
+          <div class="col-6 ps-0 pe-4" [matTooltip]="getList('1')">
+            <label for="incidentNatureId" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Incident Nature<sup
+                class="red">*</sup></label>
+            <mat-form-field class="w-100">
+              <mat-select matSelectSearch formControlName="incidentNatureId" id="incidentNatureId" placeholder="Select Incident Nature"
+                multiple>
+                <mat-option *ngFor="let item of filteredNatureList" [value]="item.IncidentNatureID"
+                  [id]="item.IncidentNature">
+                  {{ item.IncidentNature }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['incidentNatureId'].touched) && f['incidentNatureId'].errors">Select
+              Incident Nature</mat-error>
+            <mat-error *ngIf="submitted && isIncidentNatureExists">Please select derived Incident Nature</mat-error>
+          </div>
+
+
+          <div class="col-6 ps-4 pe-0">
+            <label for="Classification" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Classification<sup
+                class="red">*</sup></label>
+            <div class="d-flex justify-content-start py-3"
+              *ngIf="service.incidentInfoData && service.incidentInfoData.Classifications?.length > 0">
+              <div class="me-4 radioTxt" *ngFor="let item of service.incidentInfoData.Classifications">
+                <label><input type="radio" formControlName="classification" name="classification"
+                    [value]="item.ClassificationID" [id]="item.ClassificationID" aria-label="select">
+                  {{item.Classification}}</label>
+              </div>
+            </div>
+            <mat-error *ngIf="submitted && f['classification'].errors">Please select Classification</mat-error>
+          </div>
+
+          <div class="col-12 px-0" [matTooltip]="getList('2')">
+            <label for="incidentLocationId" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Incident
+              Location<sup class="red">*</sup></label>
+            <mat-form-field class="w-100" (click)="onIncidentClick()">
+              <mat-select matSelectSearch formControlName="incidentLocationId" id="incidentLocationId"
+                placeholder="Select Incident Locations" multiple  (selectionChange)="setActionItemOnwers()">
+                <mat-option *ngFor="let item of filteredLocationList" [value]="item.IncidentLocationID"
+                  [id]="item.IncidentLocation">{{item.IncidentLocation}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error *ngIf="isLocationData">
+              No Site is mapped for the business function the logged in user belong to.</mat-error>
+            <mat-error *ngIf="(submitted || f['incidentLocationId'].touched) && f['incidentLocationId'].errors && !(filteredLocationList.length == 0)">Select
+              Incident Location</mat-error>
+          </div>
+
+          <div class="col-12 px-0">
+            <label for="description" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Description<sup
+                class="red">*</sup></label>
+            <mat-form-field class="w-100">
+              <textarea matInput class="form-control-plaintext" id="description" formControlName="description"
+                rows="3"></textarea>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['description'].touched) && f['description'].errors">Enter
+              Description</mat-error>
+          </div>
+
+          <div class="col-12 px-0 pb-2" *ngIf="intializeCKEditor">
+            <label for="postIncident" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Post-incident Evaluation &
+              Conclusion <sup class="red">*</sup></label>
+            <ckeditor formControlName="postIncidentEvaCon" id="postIncident" [readOnly]="(this.service.isBCManager || (service.incidentReportData?.ReporterGUID != loginUserGUID) && [1].includes(service.incidentReportData?.ActualStatusID)) || [2, 3].includes(service.incidentReportData?.ActualStatusID)"
+              [config]="!(this.service.isBCManager || (service.incidentReportData?.ReporterGUID != loginUserGUID) && [1].includes(service.incidentReportData?.ActualStatusID)) || [2, 3].includes(service.incidentReportData?.ActualStatusID)? ckeConfig : disabledCkeConfig" [editorUrl]="ckeConfig.ckeditorUrl" debounce="300">
+            </ckeditor>
+            <mat-error *ngIf="(submitted || f['postIncidentEvaCon'].touched) && f['postIncidentEvaCon'].errors">Enter
+              Post-incident</mat-error>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 ps-5 pe-0">
+        <div class="w-100 p-0 mb-2 position-relative">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Actions Taken so far / Updates<sup
+              class="red">*</sup></label>
+          <div class="w-100 ModaltableContent ModaltableContentBlue">
+            <div class="w-100 heightVH-22 vscroll" id="actionTakenID">
+              <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                [dataSource]="service.TableAT" id="tableCC">
+                <ng-container matColumnDef="Index">
+                  <td mat-cell *matCellDef="let row" class="w-5 text-center"> {{row.Index}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Action">
+                  <td mat-cell *matCellDef="let row" class="w-70 text-left" [attr.rowspan]="row.IsEdit? 2 : 1">
+                    <div *ngIf="!row.IsEdit" class="word-wrap-text">{{row.Action}}</div>
+                    <div *ngIf="row.IsEdit">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <textarea matInput [value]="row.Action" rows="3" cols="70" formControlName="actionTaken"
+                          class="text-area" id="ActionData" (keyup)="onActionChange($event)"></textarea>
+                      </mat-form-field>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="DateTime">
+                  <td mat-cell *matCellDef="let row" class="w-25 text-center"> {{row.ActionDateTime}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Actions">
+                  <td mat-cell *matCellDef="let row" class="w-10 text-center">
+                    <ng-container *ngIf="!row.IsEdit">
+                      <button mat-icon-button class="example-icon" style="padding-left: 0.5rem;"
+                        matTooltip="Delete" color="primary" (click)="deleteActionTaken(row)"
+                        [disabled]="blockActionTaken" id="deleteActionTaken">
+                        <img src="./assets/images/icon-delete-black.svg">
+                      </button>
+                    </ng-container>
+                    <ng-container *ngIf="row.IsEdit">
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                        matTooltip="Save" color="primary" style="padding-left: 0.5rem; padding-bottom: 0.5rem;"
+                        [disabled]="!defineIncidentForm.get('actionTaken')?.value?.trim()"
+                        (click)="saveActionTaken(row)" id="saveActionTaken"><img src="./assets/images/icon-save.svg" style="filter: invert();">
+                      </button>
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="cancel" color="primary" (click)="cancelActionTaken(row)"
+                        id="closeActionTaken"><mat-icon>close</mat-icon>
+                      </button>
+                    </ng-container>
+                  </td>
+                </ng-container>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsAT;"></tr>
+                <tr *matNoDataRow>
+                  <td [attr.colspan]="displayedColumnsAT.length">No Actions Taken Yet</td>
+                </tr>
+              </table>
+            </div>
+            <div class="w-100 px-0 text-end py-4" *ngIf="(!isIncidentSaved || (parent?.selectedIncident?.ReporterGUID === loginUserGUID || service.incidentReportData?.ReporterGUID == loginUserGUID)) && ![2,3].includes(service.incidentReportData?.ActualStatusID)">
+              <div><button mat-button class="btn btn-primary modalColorBtn modalColorBtnGreen"
+                  [disabled]="blockActionTaken" (click)="addActionTaken()" id="addControl"><span
+                    class="font-weight-bold">+</span> Add New</button></div>
+            </div>
+          </div>
+          <mat-error *ngIf="actionTakenExists">Action Already Exists.</mat-error>
+          <mat-error *ngIf="(submittedAT && service.TableAT.data?.length == 0)">Atleast one Action Taken is
+            required.</mat-error>
+          <mat-error *ngIf="(submittedAT && checkActionTakenSave(service.TableAT.data) && !actionTakenExists)">Please
+            save the control.</mat-error>
+        </div>
+        <div class="w-100 p-0 mb-2 position-relative">
+          <div class="d-flex align-items-end">
+            <label for="" class="p-0 col-form-label slctLbl text-start mt-4 me-2">Action Plan</label>
+            <span *ngIf="siteAdminExistsAT"><img src="./assets/images/icon-i-red.svg" alt="export" style="cursor: pointer;" (click)="openAdminExistsList()">
+            </span>
+            <mat-error *ngIf="siteAdminExistsAT"> Conflicts occurred for the listed Action items(click 'i' icon for more info)</mat-error>
+          </div>
+          <div class="w-100 ModaltableContent ModaltableContentBlue">
+            <div class="w-100 h-100">
+              <div style="max-height: 30vh; min-height: 30vh;" class="vscroll p-0" id="ActionPlanID">
+                <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                  [dataSource]="service.TableAP" id="actionPlanTable">
+                  <ng-container matColumnDef="Index">
+                    <th mat-header-cell *matHeaderCellDef class="w-4 text-center"> # </th>
+                    <td mat-cell *matCellDef="let row" class="w-4 text-center">
+                      {{row.Index}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="ActionItem">
+                    <th mat-header-cell *matHeaderCellDef class="w-31">
+                      Action Item </th>
+                    <td mat-cell *matCellDef="let row" class="w-31"> {{row.ActionItem}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="StartDate">
+                    <th mat-header-cell *matHeaderCellDef class="w-17">
+                      Start Date </th>
+                    <td mat-cell *matCellDef="let row" class="w-17"> {{getDateFormat(row.StartDate)}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="TargetDate">
+                    <th mat-header-cell *matHeaderCellDef class="w-17">
+                      Target Date </th>
+                    <td mat-cell *matCellDef="let row" class="w-17"> {{getDateFormat(row.TargetDate)}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Owner">
+                    <th mat-header-cell *matHeaderCellDef class="w-10">
+                      Owner </th>
+                    <td mat-cell *matCellDef="let row" class="w-10"> {{row.ActionItemOwner}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Actions">
+                    <th mat-header-cell *matHeaderCellDef class="w-21"> </th>
+                    <td mat-cell *matCellDef="let row" class="w-21 text-center">
+                      <ng-container>
+                        <button mat-icon-button class="material-icons app-toolbar-menu save-button" style="padding-left: 0.5rem; padding-bottom: 0.5rem;"
+                          matTooltip="Edit" color="primary" (click)="editAction(row)" [disabled]="blockAPEdit"
+                          [id]="'edit' + row.Index">
+                          <img src="assets/images/icon-edit.svg" alt="edit">
+                        </button>
+                        <button mat-icon-button class="material-icons app-toolbar-menu save-button" style="padding-left: 0.5rem; padding-bottom: 0.5rem;"
+                          matTooltip="Delete" color="primary" (click)="deleteAction(row)" [disabled]="blockAPEdit"
+                          [id]="'delete' + row.Index">
+                          <img src="./assets/images/icon-delete-black.svg">
+                        </button>
+                      </ng-container>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsAP; sticky: true" class="table-bg-header-color">
+                  </tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsAP;"></tr>
+                  <tr *matNoDataRow>
+                    <td [attr.colspan]="displayedColumnsAP.length">No Action Plan Added Yet</td>
+                  </tr>
+                </table>
+              </div>
+
+              <div class="row mx-0" formGroupName="actionPlan"  *ngIf="(!isIncidentSaved || (parent?.selectedIncident?.ReporterGUID === loginUserGUID || service.incidentReportData?.ReporterGUID == loginUserGUID)) && ![2,3].includes(service.incidentReportData?.ActualStatusID)">
+                <div class="col-6 ps-0 pe-2">
+                  <label for="actionItem" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Item <sup
+                      class="red">*</sup></label>
+                  <mat-form-field class="w-100">
+                    <textarea matInput class="form-control-plaintext" formControlName="actionItemText" id="actionItem"
+                      rows="5" (keyup)="checkActionExsist($event)"></textarea>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submittedAP || f1['actionItemText'].touched) && f1['actionItemText'].errors && !isActionExsist">Enter
+                    Action Item</mat-error>
+                  <mat-error *ngIf="isActionExsist">Action Item already exsist</mat-error>
+                </div>
+                <div class="col-6 ps-2 pe-0">
+                  <div class="row mx-0">
+                    <div class="col-6 ps-0 pe-2">
+                      <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Start Date
+                        <sup class="red">*</sup></label>
+                      <mat-form-field appearance="fill" (click)="picker.open()" class="w-100">
+                        <input matInput formControlName="startDate" [matDatepicker]="picker" placeholder="DD/MM/YYYY" id="APStartDate"
+                          (keydown.enter)="$event.preventDefault()" (dateChange)="setStartDate()">
+                        <mat-datepicker-toggle id="startDateToggle" matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker id="startDate" #picker></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="(submittedAP || f1['startDate'].touched) && f1['startDate'].errors">Select Start
+                        Date</mat-error>
+                      <mat-error *ngIf="minStartDateAPError && !endDateError">Start Date should be Greater than or
+                        Equals to Current date</mat-error>
+                      <mat-error *ngIf="endDateError">Start date cannot be after End date.</mat-error>
+                    </div>
+                    <div class="col-6 ps-2 pe-0">
+                      <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Target Date
+                        <sup class="red">*</sup></label>
+                      <mat-form-field appearance="fill" (click)="picker1.open()" class="w-100">
+                        <input matInput formControlName="targetDate" [matDatepicker]="picker1" placeholder="DD/MM/YYYY" [max]="maxAPDate" id="APEndDate"
+                          (keydown.enter)="$event.preventDefault()" (dateChange)="setEndDate()">
+                        <mat-datepicker-toggle id="targetDateToggle" matSuffix [for]="picker1"></mat-datepicker-toggle>
+                        <mat-datepicker id="targetDate" #picker1></mat-datepicker>
+                      </mat-form-field>
+                      <mat-error *ngIf="(submittedAP || f1['targetDate'].touched) && f1['targetDate'].errors">Select
+                        Target Date</mat-error>
+                      <mat-error *ngIf="minEndDateAPError && !endDateError">End Date should starts from todays
+                        date</mat-error>
+                      <mat-error *ngIf="endDateError" class="error ml-3"> End date cannot be before Start
+                        date.</mat-error>
+                    </div>
+                    <label for="actionItemO" class="col-12 p-0 col-form-label slctLbl text-start mt-4">Action Item Owner
+                      <sup class="red">*</sup></label>
+                    <div class="col-12 p-0 mb-2 position-relative">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <input type="text" matInput formControlName="actionItemOwnerName" [matAutocomplete]="owner" id="APActionItemO"
+                          #autoCompleteActionInput (input)="filterActionOwnerList($event)"
+                          (keydown.enter)="$event.preventDefault()" id="actionItemO" />
+                        <img src="./assets/images/icon-site-bcposition.svg"
+                          class="vmiddleRight position-absolute formIconMddl2" alt="user-card" />
+                        <mat-autocomplete #owner="matAutocomplete">
+                          <mat-option *ngFor="let owner of filteredActionOwner" [value]="owner.ActionItemOwnerName"
+                            (onSelectionChange)="setActionOwnerID(owner, $event)" [id]="owner.ActionItemOwnerName">
+                            {{ owner.ActionItemOwnerName }}
+                          </mat-option>
+                        </mat-autocomplete>
+                      </mat-form-field>
+                      <mat-error
+                        *ngIf="(submittedAP || f1['actionItemOwnerName'].touched) && f1['actionItemOwnerName'].errors && filteredActionOwner?.length != 0">Select
+                        Action Owner</mat-error>
+                      <mat-error *ngIf="f1['actionItemOwnerName'].touched && filteredActionOwner?.length == 0">Please select atleast one Incident
+                        Location</mat-error>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="w-100 px-0 text-end py-4" *ngIf="(!isIncidentSaved || (parent?.selectedIncident?.ReporterGUID === loginUserGUID || service.incidentReportData?.ReporterGUID == loginUserGUID)) && ![2,3].includes(service.incidentReportData?.ActualStatusID)">
+                <div class="d-flex justify-content-end align-items-center">
+                  <mat-error class="me-5" *ngIf="(submittedAP && isActionExsist && !actionItemPrompt)">Action Item
+                    already exsist</mat-error>
+                  <mat-error *ngIf="(submittedAP && submitted && (blockAPEdit || actionItemPrompt) && !(defineIncidentForm?.get('actionPlan')?.invalid || minStartDateAPError || endDateError || isActionExsist))">Please save the Action
+                    Item.</mat-error>
+                  <button type="button" mat-button class="btn btn-secondary modalCancelBtn me-3"
+                    (click)="updateNReset()" id="cancelActionPlan">Cancel</button>
+                  <button type="button" mat-button class="btn btn-primary modalColorBtn modalColorBtnGreen"
+                    (click)="addActionItem()" id="addActionItem"><span class="fw-bold"></span> + {{actionItemMode}}
+                    Action Item</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Attachments</label>
+          <div class="w-100 ModaltableContent ModaltableContentBlue">
+            <div class="w-100 h-14 vscroll" >
+              <table class="w-100 modalTble seablueTble smallTable">
+                <tbody>
+                  <tr *ngIf="service?.incidentUploadedAttachments?.length == 0" style="height: 5vw;">
+                    <td class="w-100 text-center"> No Attachments </td>
+                  </tr>
+                  <tr *ngFor="let file of service.incidentUploadedAttachments;index as i">
+                    <td class="w-4">{{i+1}}</td>
+                    <td class="w-65" (click)="service.downloadFile(file.FileContentID)" [id]="'download'+ file.AttachmentID" class="cursor-pointer"><img src="./assets/images/icon-attachment.svg" >
+                      <a class="tblLnk">{{file.AttachmentName}}</a>
+                    </td>
+                    <td class="w-26">{{formatedDate(file.CreatedDate)}}</td>
+                    <td class="w-5" *ngIf="(!isIncidentSaved || (parent?.selectedIncident?.ReporterGUID === loginUserGUID || service.incidentReportData?.ReporterGUID == loginUserGUID)) && ![2,3].includes(service.incidentReportData?.ActualStatusID)">
+                      <button mat-icon-button class="custom-button" style="padding-left: 0.5rem;" (click)="service.deleteUploadIncidentAttachment(file.FileContentID)"
+                        [id]="'delete'+ file.FileContentID" alt="delete"><img src="./assets/images/icon-delete-black.svg"></button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="w-100 px-0 text-end py-4" *ngIf="(!isIncidentSaved || (parent?.selectedIncident?.ReporterGUID === loginUserGUID || service.incidentReportData?.ReporterGUID == loginUserGUID)) && ![2,3].includes(service.incidentReportData?.ActualStatusID)">
+              <div>
+                <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGreen" (click)="openFileUploadPopup()"
+                  id="addEvidence"><span class="fw-bold"> <img src="./assets/images/icon-attachment.svg"
+                    style="filter: invert(); width: 8%;" alt="">
+                  </span> Attach Supporting Document
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mx-0" *ngIf="mode != 'Add'">
+            <div class="col-12 p-0 mt-4 mb-2 position-relative">
+              <mat-expansion-panel class="review" id="commentHistory" [expanded]="true">
+                <mat-expansion-panel-header
+                  style="padding: 1.5vw; height: 3vw; background-color: #C6E9D8; border: 1px solid #BBBBBB;">
+                  <mat-panel-title style="font-size: 140%;color: #000;">
+                    <img src="./assets/images/icon-review.svg" alt="" class="me-2">
+                    Review Comments History
+                  </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="card-body bodyAccordion" style="padding: 0 1.5vw; overflow-y: auto; max-height: 20vw;">
+                  <div class="w-100 position-relative reviewComments mt-5 p-0"
+                    *ngFor="let each of reviewCommentsHistory">
+                    <span class="position-absolute reviewDate"><i>{{getDateFormat(each.CreatedDate)}}</i></span>
+                    <div class="d-flex align-items-start mb-3">
+                      <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                      <p>
+                        <strong>{{each.CommentUserName}}</strong><br>
+                        {{each.CommentBody}}
+                      </p>
+                    </div>
+                  </div>
+                  <div class="w-100 position-relative reviewComments mt-5 p-0"
+                    *ngIf="reviewCommentsHistory?.length == 0"
+                    style="padding: 3vw; font-size: 2rem; text-align: center;">No Comments</div>
+                </div>
+              </mat-expansion-panel>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-error *ngIf="saveerror" class="ms-5">{{saveerror}}</mat-error>
+  <div class="modal-footer modalFooter">
+    <button mat-dialog-close class="btn btn-secondary modalCancelBtn me-2" (click)="resetForm()"
+      id="siteCancel">Cancel
+    </button>
+    <button class="btn btn-primary modalColorBtn modalColorBtnGreen"
+      (click)="!isIncidentSaved? createNewIncident() : saveForLater()" id="reportIncident"
+      *ngIf="!isIncidentSaved || (mode == 'Edit' && (parent?.selectedIncident?.ReporterGUID == loginUserGUID || service.incidentReportData?.ReporterGUID == loginUserGUID))"
+      [disabled]="[2,3].includes(service.incidentReportData?.ActualStatusID) && (mode == 'Edit')"><img
+      [src]="!isIncidentSaved? './assets/images/icon-create-new-dashboard.svg':'./assets/images/icon-save.svg'"
+      style="width: 2rem; margin-right: 0.5vw;" alt="">{{!isIncidentSaved? "Save for later" : "Save for later"}}
+    </button>
+    <button type="button" class="btn btn-primary modalColorBtn ms-2" id="submitIncident"
+      (click)="submit()" *ngIf="!isIncidentSaved || (mode == 'Edit' && parent?.selectedIncident?.ReporterGUID == loginUserGUID || service.incidentReportData?.ReporterGUID == loginUserGUID)"
+      [disabled]="[2,3].includes(service.incidentReportData?.ActualStatusID) && (mode == 'Edit')"><img src="./assets/images/icon-send.svg" alt="Submit for Review"> Submit for Review
+    </button>
+    <button type="button" class="btn btn-primary modalColorBtn ms-2" style="min-width: 15vw;" id="submitforreview"
+      *ngIf="service.isBCManager && service.incidentReportData?.ActualStatusID == 2" (click)="service.openSubmitForReview('Provide Review Decision', this.incidentData)">
+      <img src="./assets/images/icon-prd.svg" alt="Provide Review Decision"> Provide Review Decision
+    </button>
+  </div>
+</form>

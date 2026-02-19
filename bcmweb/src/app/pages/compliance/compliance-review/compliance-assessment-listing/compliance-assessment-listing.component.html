@@ -1,0 +1,1640 @@
+<!-- <div class="w-100 h-100"> -->
+  <!-- TABS -->
+
+    <div class="tab-content topTabContentBg h-6" id="nav-tabContent">
+
+      <div class="tab-pane fade show active p-1 text-start position-relative h-100" id="nav-site" role="tabpanel" style="z-index: 1;"
+        aria-labelledby="nav-site-tab">
+        <span class="position-absolute vmiddleLeft navtabHeading">BCP Assessment for Amlak HO</span>
+        <div class="d-flex justify-content-right align-items-center vmiddleRight filterRight">
+
+          <div class="applyFilter addDesktop position-relative text-start me-4">
+            <button type="button" class="btn btn-dark dropdown-toggle btnGradient" type="button"
+              data-bs-toggle="dropdown" aria-expanded="false">Configuration</button>
+            <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+                src="./assets/images/icon-equalizer.svg"></span>
+            <div class="dropdown-menu dropdownFilter">
+              <a class="dropdown-item" href="#">One</a>
+              <a class="dropdown-item" href="#">Two</a>
+              <a class="dropdown-item" href="#">Three</a>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="position-absolute tabsLevel2">
+
+          <ul class="nav nav-pills" id="pills-tab" role="tablist">
+            <li class="nav-item mutitabBg textonly" role="presentation">
+              <div>Overall Completion Status: <span>13%</span></div>
+            </li>
+            <li class="nav-item mutitabBg" role="presentation">
+              <button class="nav-link active" id="detail-timeline-tab" data-bs-toggle="pill"
+                data-bs-target="#detail-timeline" type="button" role="tab" aria-controls="detail-timeline"
+                aria-selected="true">Dashboard</button>
+            </li>
+            <li class="nav-item mutitabBg" role="presentation">
+              <button class="nav-link" id="pills-framework-tab" data-bs-toggle="pill" data-bs-target="#pills-framework"
+                type="button" role="tab" aria-controls="pills-framework" aria-selected="false">Responses</button>
+            </li>
+            <li class="nav-item mutitabBg" role="presentation">
+              <button class="nav-link" id="pills-observation-tab" data-bs-toggle="pill"
+                data-bs-target="#pills-observation" type="button" role="tab" aria-controls="pills-observation"
+                aria-selected="false">Observations</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="tab-pane fade p-1 text-center position-relative h-100" id="nav-busitness-fnc" role="tabpanel"
+        aria-labelledby="nav-busitness-fnc">
+        <div class="d-flex justify-content-center align-items-center vhmiddle w-xl-60">
+          <div class="applyFilter addDesktop position-relative text-start me-4">
+            <button type="button" class="btn btn-dark btnGradient" data-bs-toggle="modal"
+              data-bs-target="#addNewWorkSide">Create New Message</button>
+            <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+                src="./assets/images/icon-add-desktop.svg"></span>
+          </div>
+
+          <div class="d-inline-block position-relative searchInput me-2">
+            <input placeholder="Search" class="form-control tblfilter" id="">
+            <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+                aria-hidden="true"></i></span>
+
+          </div>
+
+        </div>
+      </div>
+
+
+    </div>
+
+  <!-- END TABS -->
+
+  <div class="h-76 px-3 w-100 py-4 vscroll">
+    <div class="h-100 pb-3 w-100">
+      <div class="tab-content h-100" id="pills-tabContent">
+        <div class="tab-pane fade show active h-100" id="detail-timeline" role="tabpanel"
+          aria-labelledby="detail-timeline-tab">
+          <div class="row mx-0 h-100">
+            <div class="col-7 ps-0 pe-4 h-100">
+              <div class="cardGen colorGeyGradient w-100 h-100">
+                <div class="cardBody singleRow w-100 h-100">
+                  <div class="w-100 h-100 px-2 py-3 position-relative">
+                    <div class="w-100 h-6">
+                      <h2 class="h-100"><img src="./assets/images/icon-as.svg" class="headingIcon longBox icoAs"
+                          alt="BCP Coverage"> Assessment Status</h2>
+                    </div>
+                    <div class="w-100 h-94 vscroll tableContent2">
+                      <table matSort class="tblContent w-100 fixedTbleHead" id="dashboardTable">
+                        <thead>
+                          <tr>
+                            <th class="w-4 text-center">#</th>
+                            <th class="w-40">Business Functions</th>
+                            <th class="w-26">Respondents</th>
+                            <th class="w-20 text-center">Response Status</th>
+                            <th class="w-10 text-center">Completed</th>
+                          </tr>
+                        </thead>
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef
+                            style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                          <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="BusinessFunctions">
+                          <th mat-header-cell *matHeaderCellDef
+                            style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Business Functions</th>
+                          <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.ReviewerName}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" style="background-color:  rgb(207, 205, 205);"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                        <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">No data found.</td></tr>
+                      </table>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-5 ps-4 pe-0 h-100">
+              <div class="cardGen colorGeyGradient w-100 h-100">
+                <div class="cardBody singleRowNoimg w-100 h-100 p-0">
+                  <div class="w-100 h-100 px-0 py-0 position-relative">
+                    <div class="w-100 h-8 h2bg position-relative">
+                      <h2 class="h-100">Assessment Overview</h2>
+                      <span class="statusID statusInprogress position-absolute vmiddleRight px-1 rightblStatus">In
+                        Progress</span>
+                    </div>
+                    <div class="w-100 h-92 px-2 py-3 vscroll tableContent">
+                      <div class="col-12 px-3">
+                        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4 fw-bold">Description <sup
+                            class="red">*</sup></label>
+                        <div class="form-control-plaintext">lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        </div>
+                      </div>
+                      <div class="col-12 px-3">
+                        <table class="listTbl w-100">
+                          <tr>
+                            <td class="text-end w-20">Start Date</td>
+                            <td class="text-start w-80"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2"
+                                alt=""> May 28, 2023</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Deadline</td>
+                            <td class="text-start w-80"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2"
+                                alt=""> Jun 15, 2023</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Reviewer</td>
+                            <td class="text-start w-80">
+                              <div><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt=""> BCM Manager</div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Observers</td>
+                            <td class="text-start w-80">
+                              <div><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt="">Yousef Broughton
+                                (Internal Audit)</div>
+                              <div class="mt-1"><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt="">Ebony
+                                Decker (Site Head, Amlak HO)</div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Status</td>
+                            <td class="text-start w-80">In Progress (<a href="#" class="tblLnk">History</a>)</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Next Action</td>
+                            <td class="text-start w-80">Submit responses for review</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Next Action by</td>
+                            <td class="text-start w-80">Respondents</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade h-100" id="pills-framework" role="tabpanel" aria-labelledby="detail-framework-tab">
+          <div class="row mx-0 h-100">
+            <div class="col-7 ps-0 pe-4 h-100">
+              <div class="cardGen colorGeyGradient w-100 h-100">
+                <div class="cardBody singleRow w-100 h-100">
+                  <div class="w-100 h-100 px-2 py-3 position-relative">
+                    <div class="w-100 h-6">
+                      <h2 class="h-100"><img src="./assets/images/icon-as.svg" class="headingIcon longBox icoAs"
+                          alt="BCP Coverage"> Assessment Status</h2>
+                    </div>
+                    <div class="w-100 h-82 vscroll tableContent2">
+                      <table class="tblContent w-100 fixedTbleHead">
+                        <thead>
+                          <tr>
+                            <th class="w-4 text-center">#</th>
+                            <th class="w-20">Control Code</th>
+                            <th class="w-36">Control Description</th>
+                            <th class="w-15">
+                              <div class="position-relative">Framework <span class="position-absolute tbleFilter"><i
+                                    class="fa fa-fw fa-sort"></i></span></div>
+                            </th>
+                            <th class="w-15">
+                              <div class="position-relative">Control<br>Domain <span
+                                  class="position-absolute tbleFilter"><i class="fa fa-fw fa-sort"></i></span></div>
+                            </th>
+                            <th class="w-10"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot grey position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img src="./assets/images/icon-edit.svg"
+                                data-bs-toggle="modal" data-bs-target="#prfcr"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg" style="visibility: hidden;"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot grey position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth17"> A training program should be provided once on
+                                an annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="w-100 h-12 vscroll">
+                      <div class="d-flex justify-content-center align-items-center colorlegend w-100 h-100 px-4">
+                        <div class="position-relative "><span class="statusdot grey"></span> <i>No response provided</i>
+                        </div>
+                        <div class="position-relative"><span class="statusdot green"></span> <i>Compliant to control
+                            requirements</i></div>
+                        <div class="position-relative"><span class="statusdot red"></span> <i>Non-Compliant to control
+                            requirements</i></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-5 ps-4 pe-0 h-100">
+              <div class="cardGen colorGeyGradient w-100 h-100">
+                <div class="cardBody singleRowNoimg w-100 h-100 p-0">
+                  <div class="w-100 h-100 px-0 py-0 position-relative">
+                    <div class="w-100 h-8 h2bg position-relative">
+                      <h2 class="h-100">Assessment Overview</h2>
+                      <span class="statusID statusInprogress position-absolute vmiddleRight px-1 rightblStatus">In
+                        Progress</span>
+                    </div>
+                    <div class="w-100 h-92 px-2 py-3 vscroll tableContent">
+                      <div class="col-12 px-3">
+                        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4 fw-bold">Description <sup
+                            class="red">*</sup></label>
+                        <div class="form-control-plaintext">lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        </div>
+                      </div>
+                      <div class="col-12 px-3">
+                        <table class="listTbl w-100">
+                          <tr>
+                            <td class="text-end w-20">Start Date</td>
+                            <td class="text-start w-80"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2"
+                                alt=""> May 28, 2023</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Deadline</td>
+                            <td class="text-start w-80"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2"
+                                alt=""> Jun 15, 2023</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Reviewer</td>
+                            <td class="text-start w-80">
+                              <div><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt=""> BCM Manager</div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Observers</td>
+                            <td class="text-start w-80">
+                              <div><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt="">Yousef Broughton
+                                (Internal Audit)</div>
+                              <div class="mt-1"><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt="">Ebony
+                                Decker (Site Head, Amlak HO)</div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Status</td>
+                            <td class="text-start w-80">In Progress (<a href="#" class="tblLnk">History</a>)</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Next Action</td>
+                            <td class="text-start w-80">
+                              <div class="d-flex justify-content-around"><span class="btnLightGreen inactive"><img
+                                    src="./assets/images/icon-save.svg" class="mx-3" alt=""> Submit for Review</span>
+                                <span class="font-italic text-end colorlegend">The submit button is
+                                  enabled when all
+                                  questions have been
+                                  responded to.</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Next Action by</td>
+                            <td class="text-start w-80">Respondents</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-pane fade h-100" id="pills-observation" role="tabpanel"
+          aria-labelledby="detail-observation-tab">
+          <div class="row mx-0 h-100">
+            <div class="col-7 ps-0 pe-4 h-100">
+              <div class="cardGen colorGeyGradient w-100 h-100">
+                <div class="cardBody singleRow w-100 h-100">
+                  <div class="w-100 h-100 px-2 py-3 position-relative">
+                    <div class="w-100 h-6">
+                      <h2 class="h-100"><img src="./assets/images/icon-as.svg" class="headingIcon longBox icoAs"
+                          alt="BCP Coverage"> Assessment Status</h2>
+                    </div>
+                    <div class="w-100 h-82 vscroll tableContent2">
+                      <table class="tblContent w-100 fixedTbleHead">
+                        <thead>
+                          <tr>
+                            <th class="w-4 text-center">#</th>
+                            <th class="w-20">Control Code</th>
+                            <th class="w-36">Control Description</th>
+                            <th class="w-15">
+                              <div class="position-relative">Framework <span class="position-absolute tbleFilter"><i
+                                    class="fa fa-fw fa-sort"></i></span></div>
+                            </th>
+                            <th class="w-15">
+                              <div class="position-relative">Control<br>Domain <span
+                                  class="position-absolute tbleFilter"><i class="fa fa-fw fa-sort"></i></span></div>
+                            </th>
+                            <th class="w-10"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot grey position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg" style="visibility: hidden;"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot grey position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot green position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center position-relative">1 <span
+                                class="vmiddleLeft statusdot red position-absolute"></span></td>
+                            <td><a href="" class="tblLnk">BCM-AWT-012</a></td>
+                            <td>
+                              <div class="text-truncate w-95 maxWidth"> A training program should be provided once on an
+                                annual basis</div>
+                            </td>
+                            <td>SAMA BCM</td>
+                            <td>2.4.2. Training</td>
+                            <td><img src="./assets/images/icon-attachment.svg"> <img
+                                src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="w-100 h-12 vscroll">
+                      <div class="d-flex justify-content-center align-items-center colorlegend w-100 h-100 px-4">
+                        <div class="position-relative "><span class="statusdot grey"></span> <i>No response provided</i>
+                        </div>
+                        <div class="position-relative"><span class="statusdot green"></span> <i>Compliant to control
+                            requirements</i></div>
+                        <div class="position-relative"><span class="statusdot red"></span> <i>Non-Compliant to control
+                            requirements</i></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="col-5 ps-4 pe-0 h-100">
+              <div class="cardGen colorGeyGradient w-100 h-100">
+                <div class="cardBody singleRowNoimg w-100 h-100 p-0">
+                  <div class="w-100 h-100 px-0 py-0 position-relative">
+                    <div class="w-100 h-8 h2bg position-relative">
+                      <h2 class="h-100">Assessment Overview</h2>
+                      <span class="statusID statusInprogress position-absolute vmiddleRight px-1 rightblStatus">In
+                        Progress</span>
+                    </div>
+                    <div class="w-100 h-92 px-2 py-3 vscroll tableContent">
+                      <div class="col-12 px-3">
+                        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4 fw-bold">Description <sup
+                            class="red">*</sup></label>
+                        <div class="form-control-plaintext">lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                          sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                          quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute
+                          irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                        </div>
+                      </div>
+                      <div class="col-12 px-3">
+                        <table class="listTbl w-100">
+                          <tr>
+                            <td class="text-end w-20">Start Date</td>
+                            <td class="text-start w-80"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2"
+                                alt=""> May 28, 2023</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Deadline</td>
+                            <td class="text-start w-80"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2"
+                                alt=""> Jun 15, 2023</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Reviewer</td>
+                            <td class="text-start w-80">
+                              <div><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt=""> BCM Manager</div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Observers</td>
+                            <td class="text-start w-80">
+                              <div><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt="">Yousef Broughton
+                                (Internal Audit)</div>
+                              <div class="mt-1"><img src="./assets/images/thumb-user.svg" class="ms-3 w-6" alt="">Ebony
+                                Decker (Site Head, Amlak HO)</div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Status</td>
+                            <td class="text-start w-80">In Progress (<a href="#" class="tblLnk">History</a>)</td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Next Action</td>
+                            <td class="text-start w-80">
+                              <div class="d-flex justify-content-around"><span class="btnLightGreen inactive"><img
+                                    src="./assets/images/icon-save.svg" class="mx-3" alt=""> Submit for Review</span>
+                                <span class="font-italic text-end colorlegend">The submit button is
+                                  enabled when all
+                                  questions have been
+                                  responded to.</span></div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class="text-end w-20">Next Action by</td>
+                            <td class="text-start w-80">Respondents</td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- <div class="w-100 h-4 lpFooter px-3 position-relative">
+    <div class="px-3 position-absolute vmiddleLeft">© 2023 Copyright SecurEyes Techno Services Pvt. Ltd. All rights
+      reserved.</div>
+  </div> -->
+
+<!-- </div> -->
+
+<!-- MAODAL ONE -->
+<div class="modal fade" id="consolidateReport" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="consolidateReportLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="width: 94%; min-width: 94%;">
+    <div class="modal-content modalContent">
+      <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+        <h5 class="modal-title modalh5" id="staticBackdropLabel">Consolidated Report</h5>
+        <button type="button" class="close customClose" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+        <div class="row mx-3 h-100">
+
+          <div class="col-12 px-0 h-100">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4 h-6">Choose one or more reviews from
+              the <strong><span class="txtGreen">completed</span> Standards Compliance</strong> reviews listed below.
+              The selected ones will be consolidated and
+              summarised in the report.</label>
+            <div class="w-100 h-94">
+              <table class="tblContent w-100 fixedTbleHead">
+                <thead>
+                  <tr>
+                    <th class="w-4 text-center"></th>
+                    <th class="w-10">Code</th>
+                    <th class="32">Title</th>
+                    <th class="w-18">Framework</th>
+                    <th class="w-10">Scope</th>
+                    <th class="w-12">Start Date</th>
+                    <th class="w-11">End Date</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                  <tr>
+                    <td class="text-center"><input type="checkbox"></td>
+                    <td>CR2300220</td>
+                    <td>BCP Self-Review for Finance</td>
+                    <td>SAMA BCM</td>
+                    <td>BF:Finance</td>
+                    <td>Mar 13, 2023</td>
+                    <td>Mar 13, 2023</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer modalFooter">
+        <button type="button" class="btn btn-secondary modalCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary modalColorBtn btnBig"><img src="./assets/images/icon-export.svg"
+            alt=""> Export Consolidated Report</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MODAL ONE -->
+
+<!-- MODAL TWO -->
+<div class="modal fade" id="prfcr" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="prfcrLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="width: 94%; min-width: 94%;">
+    <div class="modal-content modalContent">
+      <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+        <h5 class="modal-title modalh5" id="staticBackdropLabel">Provide Response for Framework Control Requirement</h5>
+        <button type="button" class="close customClose" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+        <div class="row mx-3">
+
+          <div class="col-6 ps-0 pe-5">
+            <div class="row mx-0">
+              <div class="col-4 ps-0 pe-2">
+                <label for="" class="w-100 p-0 col-form-label slctLblro text-start mt-4">Check Code</label>
+                <div class="readonlyTxt">BCM-AWT-012</div>
+              </div>
+              <div class="col-4 ps-2 pe-2">
+                <label for="" class="w-100 p-0 col-form-label slctLblro text-start mt-4">Framework</label>
+                <div class="readonlyTxt">SAMA BCM Framework</div>
+              </div>
+              <div class="col-4 ps-2 pe-0">
+                <label for="" class="w-100 p-0 col-form-label slctLblro text-start mt-4">Control Domain</label>
+                <div class="readonlyTxt">2.4.2. Training</div>
+              </div>
+
+              <div class="col-12 px-0">
+                <label for="" class="w-100 p-0 col-form-label slctLblro text-start mt-4">Control Desription</label>
+                <div class="readonlyTxt">A training program should be provided once on an annual basis to employees
+                  involved in BCM to achieve the required level of experience, skills and
+                  competences.</div>
+              </div>
+
+              <div class="divider w-100 mt-4"></div>
+
+              <div class="col-12 ps-0 pe-0">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Compliance <sup
+                    class="red">*</sup></label>
+                <div class="d-flex justify-content-start">
+                  <div class="me-4 radioTxt"><label><input type="radio" name="rd1" id="rd1" aria-label="select"> Fully
+                      Compliant</label></div>
+                  <div class="me-4 radioTxt"><label><input type="radio" name="rd1" id="rd2" aria-label="select">
+                      Partially Compliant</label></div>
+                  <div class="radioTxt"><label><input type="radio" checked="" name="rd1" id="rd3" aria-label="select">
+                      Not Compliant</label></div>
+                </div>
+              </div>
+
+              <div class="col-12 px-0">
+                <label for="" class="w-100 p-0 col-form-label slctLblro text-start mt-4">Reason for Selected Compliance
+                  <sup class="red">*</sup></label>
+                <textarea class="form-control-plaintext fldcolor" id=""
+                  rows="3">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </textarea>
+              </div>
+
+              <div class="col-12 px-0 h-100">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Evidences</label>
+                <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-28">
+                  <div class="w-100 h-100 vscroll">
+
+                    <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+                      <thead>
+                        <tr>
+                          <th class="w-4">#</th>
+                          <th class="w-34">Action Item</th>
+                          <th class="w-40">Description</th>
+                          <th class="w-22"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Cyber Security Org Structure</td>
+                          <td>
+                            <div class="text-truncate w-95 maxWidth17">Org Structure of Global CS Department</div>
+                          </td>
+                          <td class="text-center"><img src="./assets/images/icon-edit.svg"> <img
+                              src="./assets/images/icon-download.svg"></td>
+                        </tr>
+                        <tr>
+                          <td>1</td>
+                          <td>Cyber Security Org Structure</td>
+                          <td>
+                            <div class="text-truncate w-95 maxWidth17">Org Structure of Global CS Department</div>
+                          </td>
+                          <td class="text-center"><img src="./assets/images/icon-edit.svg"> <img
+                              src="./assets/images/icon-download.svg"></td>
+                        </tr>
+                        <tr class="bdrBtm">
+                          <td>1</td>
+                          <td>Cyber Security Org Structure</td>
+                          <td>
+                            <div class="text-truncate w-95 maxWidth17">Org Structure of Global CS Department</div>
+                          </td>
+                          <td class="text-center"><img src="./assets/images/icon-edit.svg"> <img
+                              src="./assets/images/icon-download.svg"></td>
+                        </tr>
+                        <tr>
+                          <td class="align-top"></td>
+                          <td class="align-top">
+                            <input class="form-control fldcolor mt-1" placeholder="Select File" id="">
+                          </td>
+                          <td>
+                            <textarea class="form-control-plaintext fldcolor mt-1" id="" rows="2">Description</textarea>
+                          </td>
+                          <td class="text-center align-top">
+                            <div class="position-relative">
+                              <span class="btn-file btnUploadVisible">
+                                <img src="./assets/images/icon-upload.svg" class="mx-2" alt=""> Upload Evidence<input
+                                  type="file">
+                              </span>
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 ps-5 pe-0">
+            <div class="row mx-0">
+              <div class="col-12 p-0 mt-4 mb-2 position-relative">
+                <div id="accordion4">
+                  <div class="card">
+                    <div class="card-header bgAccodion" id="headingSix">
+                      <h5 class="mb-0 position-relative">
+                        <button class="btn btn-link btnAccordion w-100 text-start" data-bs-toggle="collapse"
+                          data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                          <span class="position-absolute vmiddleRight"><i class="fa" aria-hidden="true"></i></span>
+                          <img src="./assets/images/icon-review.svg" alt="">
+                          Review Comments History
+                        </button>
+                      </h5>
+                    </div>
+
+                    <div id="collapseSix" class="collapse show" aria-labelledby="headingSix"
+                      data-bs-parent="#accordion4">
+                      <div class="card-body bodyAccordion">
+                        <div class="w-100 px-0">
+                          <textarea class="form-control-plaintext fldcolor" id=""
+                            rows="3">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </textarea>
+                        </div>
+                        <div class="w-100 text-end mt-4"><span class="btnAddcomment"><img
+                              src="./assets/images/icon-comment.svg" class="mx-3" alt=""> Add Comment</span></div>
+                        <div class="w-100 position-relative reviewComments mt-5">
+                          <span class="position-absolute reviewDate"><i>May 09, 2023</i></span>
+                          <div class="d-flex align-items-start">
+                            <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                            <p>
+                              <strong>Yousef Broughton</strong><br>
+                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
+                              squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa
+                              nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
+                              single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
+                              beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                              vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
+                              you probably haven't heard of them accusamus labore sustainable VHS.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="w-100 position-relative reviewComments">
+                          <span class="position-absolute reviewDate"><i>May 09, 2023</i></span>
+                          <div class="d-flex align-items-start">
+                            <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                            <p>
+                              <strong>Yousef Broughton</strong><br>
+                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
+                              squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa
+                              nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
+                              single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
+                              beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                              vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
+                              you probably haven't heard of them accusamus labore sustainable VHS.
+                            </p>
+                          </div>
+                        </div>
+
+                        <div class="w-100 position-relative reviewComments">
+                          <span class="position-absolute reviewDate"><i>May 09, 2023</i></span>
+                          <div class="d-flex align-items-start">
+                            <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                            <p>
+                              <strong>Yousef Broughton</strong><br>
+                              Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad
+                              squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa
+                              nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid
+                              single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft
+                              beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher
+                              vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt
+                              you probably haven't heard of them accusamus labore sustainable VHS.
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer modalFooter position-relative">
+        <div class="position-absolute vmiddleLeft issusPagination">Issue <span>11</span>/50</div>
+        <button type="button" class="btn btn-secondary modalCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGreen btnsave"><img
+            src="./assets/images/icon-save.svg" alt=""> Save</button>
+        <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGrey btnPrevious"><img
+            src="./assets/images/icon-previous.svg" alt=""> Previous</button>
+        <button type="button" class="btn btn-primary modalColorBtn modalColorBtnDarkGrey btnNext">Next <img
+            src="./assets/images/icon-next.svg" alt=""></button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- END MODAL TWO -->
+
+<!-- MAODAL THREE -->
+<div class="modal fade" id="stakeHolder" data-backdrop="static" data-keyboard="false" tabindex="-1"
+  aria-labelledby="stakeHolderLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" style="width: 94%; min-width: 94%;">
+    <div class="modal-content modalContent">
+      <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+        <h5 class="modal-title modalh5" id="staticBackdropLabel">Report New Incident</h5>
+        <button type="button" class="close customClose" data-bs-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+        <ul class="nav nav-pills" id="pills-tab" role="tablist">
+          <li class="nav-item modalTabBg" role="presentation">
+            <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+              type="button" role="tab" aria-controls="pills-home" aria-selected="true">Details & Timeline</button>
+          </li>
+          <li class="nav-item modalTabBg" role="presentation">
+            <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+              type="button" role="tab" aria-controls="pills-profile" aria-selected="false">Frameworks</button>
+          </li>
+          <li class="nav-item modalTabBg" role="presentation">
+            <button class="nav-link active" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+              type="button" role="tab" aria-controls="pills-contact" aria-selected="false">Stakeholders</button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="pills-tabContent">
+          <div class="tab-pane fade modaltabContentBg" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+            <div class="row mx-3">
+              <div class="col-6 ps-0 pe-5">
+                <div class="row mx-0">
+
+                  <div class="col-6 ps-0 pe-4">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Code</label>
+                    <input class="form-control fldcolor" placeholder="CR230023" id="">
+                  </div>
+
+                  <div class="col-6 ps-4 pe-0">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Type <sup
+                        class="red">*</sup></label>
+                    <select class="form-control-plaintext fldcolor" id="staticEmail">
+                      <option>Standards Compliance</option>
+                    </select>
+                  </div>
+                  <div class="col-12 px-0">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Name <sup
+                        class="red">*</sup></label>
+                    <input type="text" class="form-control fldcolor" placeholder="BCP Assessment for Amlak HO" id="">
+                  </div>
+
+                  <div class="col-6 ps-0 pe-4">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Start Date</label>
+                    <input type="date" class="form-control fldcolor" placeholder="May 12, 2023" id="">
+                  </div>
+
+                  <div class="col-6 ps-4 pe-0">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Estimated End Date <sup
+                        class="red">*</sup></label>
+                    <input type="date" class="form-control fldcolor" placeholder="May 12, 2023" id="">
+                  </div>
+
+                  <div class="col-12 px-0">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Description <sup
+                        class="red">*</sup></label>
+                    <textarea class="form-control-plaintext fldcolor" id=""
+                      rows="3">lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. </textarea>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 ps-5 pe-0">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Review Scope <sup
+                    class="red">*</sup></label>
+                <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-28">
+                  <div class="row mx-0">
+
+                    <div class="col-12 px-0">
+                      <input type="radio" name="rd1" id="rd1" aria-label="select"> Custom list of Business Functions
+                      <div class="radioFiterBg">
+                        <div class="row mx-0">
+                          <div class="col-6 px-0 position-relative mb-3">
+                            <input type="text" class="form-control fldcolor"
+                              placeholder="Search Business Groups / Functions" id="">
+                            <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+                                aria-hidden="true"></i></span>
+                          </div>
+                          <div class="col-6 mb-3"></div>
+                          <div class="blueCrossFilter position-relative d-inline-block me-2">Amlak HO <span
+                              class="vmiddleRight position-absolute">X</span></div>
+                          <div class="blueCrossFilter position-relative d-inline-block">Human Resources <span
+                              class="vmiddleRight position-absolute">X</span></div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <div class="col-12 px-0 mt-3">
+                      <input type="radio" name="rd1" id="rd1" aria-label="select"> Custom list of Sites
+                      <div class="radioFiterBg">
+                        <div class="row mx-0">
+                          <div class="col-6 px-0 position-relative mb-3">
+                            <input type="text" class="form-control fldcolor" placeholder="Search Sites" id="">
+                            <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+                                aria-hidden="true"></i></span>
+                          </div>
+                          <div class="col-6 mb-3"></div>
+                          <div class="blueCrossFilter position-relative d-inline-block me-2">Amlak HO <span
+                              class="vmiddleRight position-absolute">X</span></div>
+                          <div class="blueCrossFilter position-relative d-inline-block">Riyadh Branch <span
+                              class="vmiddleRight position-absolute">X</span></div>
+                        </div>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade modaltabContentBg" id="pills-profile" role="tabpanel"
+            aria-labelledby="pills-profile-tab">
+            <div class="row mx-3">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Review Scope <sup
+                  class="red">*</sup></label>
+              <div class="col-6 ps-0 pe-5">
+                <div class="w-100 p-0 mb-2 position-relative">
+                  <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-20">
+                    <div class="w-100 h-100 vscroll">
+                      <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+                        <thead>
+                          <!-- <tr>
+                                                <th class="w-4"></th>
+                                                <th class="w-50">Business Function</th>
+                                                <th class="w-40">FBCC</th>
+                                                <th class="w-6">FBCC</th>
+                                            </tr> -->
+                          <tr>
+                            <th class="w-6"></th>
+                            <th class="w-4 text-center">#</th>
+                            <th class="w-90">Framework</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <!-- <tr>
+                                                <td class="text-center">1</td>
+                                                <td class="w-50">Credit Administration & Control</td>
+                                                <td class="w-46">Amlak Head Office</td>
+                                                <td class="text-center"><img src="./assets/images/icon-edit.svg"></td>
+                                            </tr> -->
+                          <tr>
+                            <td class="w-6"><span class="ps-2"><input type="checkbox" name="rd1" id="rd2"
+                                  aria-label="select"> </span></td>
+                            <td class="w-4 text-center">1</td>
+                            <td class="w-96">Jeddah Branch Office</td>
+                          </tr>
+                          <tr>
+                            <td class="w-6"><span class="ps-2"><input type="checkbox" name="rd1" id="rd2"
+                                  aria-label="select"> </span></td>
+                            <td class="w-4 text-center">1</td>
+                            <td class="w-96">Jeddah Branch Office</td>
+                          </tr>
+                          <tr>
+                            <td class="w-6"><span class="ps-2"><input type="checkbox" name="rd1" id="rd2"
+                                  aria-label="select"> </span></td>
+                            <td class="w-4 text-center">1</td>
+                            <td class="w-96">Jeddah Branch Office</td>
+                          </tr>
+                          <tr>
+                            <td class="w-6"><span class="ps-2"><input type="checkbox" name="rd1" id="rd2"
+                                  aria-label="select"> </span></td>
+                            <td class="w-4 text-center">1</td>
+                            <td class="w-96">Jeddah Branch Office</td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 ps-5 pe-0">
+                <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-20">
+                  <div class="w-100 h-100 vscroll">
+                    <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+                      <thead>
+                        <tr>
+                          <th class="w-6"><span class="ps-2"><input type="checkbox" name="all" id=""
+                                aria-label="select"> </span></th>
+                          <th class="w-4 text-center">#</th>
+                          <th class="w-60">Domains / Sub-domains</th>
+                          <th class="w-20"></th>
+                          <th class="w-6"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Cyber Resilience</td>
+                          <td>[<a href="#" class="tblLnk">View Controls</a>]</td>
+                          <td class="text-center"><img src="./assets/images/icon-copy.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Cyber Resilience</td>
+                          <td>[<a href="#" class="tblLnk">View Controls</a>]</td>
+                          <td class="text-center"><img src="./assets/images/icon-copy.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Cyber Resilience</td>
+                          <td>[<a href="#" class="tblLnk">View Controls</a>]</td>
+                          <td class="text-center"><img src="./assets/images/icon-copy.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Cyber Resilience</td>
+                          <td>[<a href="#" class="tblLnk">View Controls</a>]</td>
+                          <td class="text-center"><img src="./assets/images/icon-copy.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" name="rd1" id="rd1" aria-label="select"> </span>
+                          </td>
+                          <td class="text-center">1</td>
+                          <td>Cyber Resilience</td>
+                          <td>[<a href="#" class="tblLnk">View Controls</a>]</td>
+                          <td class="text-center"><img src="./assets/images/icon-copy.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" name="rd1" id="rd1" aria-label="select"> </span>
+                          </td>
+                          <td class="text-center">1</td>
+                          <td>Cyber Resilience</td>
+                          <td>[<a href="#" class="tblLnk">View Controls</a>]</td>
+                          <td class="text-center"><img src="./assets/images/icon-copy.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" name="rd1" id="rd1" aria-label="select"> </span>
+                          </td>
+                          <td class="text-center">1</td>
+                          <td>Cyber Resilience</td>
+                          <td>[<a href="#" class="tblLnk">View Controls</a>]</td>
+                          <td class="text-center"><img src="./assets/images/icon-copy.svg"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade show active modaltabContentBg" id="pills-contact" role="tabpanel"
+            aria-labelledby="pills-contact-tab">
+            <div class="row mx-3">
+              <div class="col-6 ps-0 pe-5">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Reviewer <sup
+                    class="red">*</sup></label>
+                <div class="w-100 mb-2 position-relative">
+                  <input class="form-control fldcolor" placeholder="BCM Manager" id="">
+                  <img src="./assets/images/icon-site-bcposition.svg"
+                    class="vmiddleRight position-absolute formIconMddl2" alt="">
+                </div>
+              </div>
+              <div class="col-6 ps-5 pe-0">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Manage Observers <sup
+                    class="red">*</sup></label>
+                <div class="w-100 mb-2 position-relative">
+                  <input class="form-control fldcolor" placeholder="Search and add observers" id="">
+                  <span class="vmiddleRight position-absolute formIconMddl2"><i class="fa fa-search"
+                      aria-hidden="true"></i></span>
+                </div>
+              </div>
+            </div>
+            <div class="row mx-3">
+
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Manage Assessment Respondents <sup
+                  class="red">*</sup></label>
+              <div class="col-6 ps-0 pe-5">
+                <div class="w-100 p-0 mb-2 position-relative">
+                  <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-20">
+                    <div class="w-100 h-100 vscroll">
+                      <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+                        <thead>
+                          <tr>
+                            <th class="w-4"></th>
+                            <th class="w-50">Business Function</th>
+                            <th class="w-40">Respondent</th>
+                            <th class="w-6"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td class="text-center">1</td>
+                            <td class="w-50">ISO 22301</td>
+                            <td class="w-46">Tamer Badhduh</td>
+                            <td class="text-center"><img src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+                          <tr>
+                            <td class="text-center">2</td>
+                            <td class="w-50">SAMA BCM</td>
+                            <td class="w-46">Tamer Badhduh</td>
+                            <td class="text-center"><img src="./assets/images/icon-edit.svg"></td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-6 ps-5 pe-0">
+                <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-20">
+                  <div class="w-100 h-100 vscroll">
+                    <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+                      <thead>
+                        <tr>
+                          <th class="w-6"><span class="ps-2"><input type="checkbox" name="all" id=""
+                                aria-label="select"> </span></th>
+                          <th class="w-4 text-center">#</th>
+                          <th class="w-60">Observers</th>
+                          <th class="w-20">Department</th>
+                          <th class="w-6"></th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                        <tr>
+                          <td><span class="ps-2"><input type="checkbox" checked="" name="rd1" id="rd1"
+                                aria-label="select"> </span></td>
+                          <td class="text-center">1</td>
+                          <td>Yousef Broughton</td>
+                          <td>Internal Audit</td>
+                          <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer modalFooter">
+        <button type="button" class="btn btn-secondary modalCancelBtn" data-bs-dismiss="modal">Cancel</button>
+        <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGreen btnsave"><img
+            src="./assets/images/icon-save.svg" alt=""> Save</button>
+        <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGrey btnPrevious"><img
+            src="./assets/images/icon-previous.svg" alt=""> Previous</button>
+        <button type="button" class="btn btn-primary modalColorBtn modalColorBtnDarkGrey btnNext"><img
+            src="./assets/images/icon-next.svg" alt=""> Next</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+<!-- END MAODAL THREE -->
+
+
+<script src="assets/js/popper.min.js"></script>
+<script src="assets/js/bootstrap.min.js"></script>

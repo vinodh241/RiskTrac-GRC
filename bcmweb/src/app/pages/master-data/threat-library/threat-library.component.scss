@@ -1,0 +1,30 @@
+::ng-deep .threat mat-dialog-container{
+  padding: 0px !important;
+  border-radius: 1vw 1vw 0 0;
+}
+
+.table-bg-header-color {
+  background-color: #E7E7E7;
+}
+
+.example-container {
+  height: 464px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-row:hover {
+  background: #a1c2f0;
+}
+
+.custom-button {
+  outline: none;
+  border: none;
+}
+
+.custom-button:active {
+  background-color: transparent;
+}

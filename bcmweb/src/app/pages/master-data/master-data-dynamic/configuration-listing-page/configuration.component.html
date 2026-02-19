@@ -1,0 +1,149 @@
+<div class="row d-flex justify-content-center align-items-center w-xl-60 py-3">
+  <div class="col-lg-3 applyFilter addDesktop position-relative text-left mr-4">
+    <button type="button" class="btn btn-dark btnGradient" style="font-size: 2rem;" id="nMasterID" data-toggle="modal"
+      (click)="newMasterPage()">Configure New Master Page</button>
+
+  </div>
+  <div class="col-lg-3 applyFilter addDesktop position-relative text-left mr-4">
+
+    <button type="button" class="btn btn-dark btnGradient" style="font-size: 2rem;" id="nPageID" data-toggle="modal"
+      (click)="newInputPage()">Configure New Master Page Input</button>
+
+
+  </div>
+  <div class="col-lg-3 applyFilter addDesktop position-relative text-left mr-4">
+    <input placeholder="Search" class="form-control tblfilter" id="configuration"  [(ngModel)]="searchQuery"  (keyup)="applyFilter()">
+    <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+        aria-hidden="true"></i></span>
+  </div>
+
+</div>
+
+<div>
+  <div class="cardGen colorGeyGradient h-100 text-left">
+    <div class="cardBody singleRow w-100 h-100">
+      <div class="w-100 h-100 px-2 py-3 position-relative">
+        <div class="w-100 h-6">
+
+
+        </div>
+        <div class="w-100 h-94">
+          <div class="w-100 h-100 mat-elevation-z8 ">
+
+            <mat-tab-group style="width: 100%;">
+              <mat-tab>
+                <ng-template mat-tab-label>
+                  <h2 class="h-100 text-left"><img src="./assets/images/icon-bcpc.svg" class="headingIcon longBox"
+                    alt="BCP Coverage">
+                  All pages</h2>
+                </ng-template>
+
+                <section class="example-container mat-elevation-z8" tabindex="0" style="height: 51.0rem;">
+                  <table mat-table [dataSource]="dataSource" class="table-striped" id="configurationID">
+
+                    <ng-container matColumnDef="PageID">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="width: 1%;border-right: 1px solid #fff;text-align: center;"> # PageID</th>
+                      <td mat-cell *matCellDef="let element" style="width: 1%; padding-left: 12px;text-align: center;">
+                        {{element.PageID}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="PageTitle">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="width: 1%;border-right: 1px solid #fff;text-align: center;"> # PageTitle</th>
+                      <td mat-cell *matCellDef="let element" style="width: 1%; padding-left: 8px;text-align: center;">
+                        {{element.PageTitle}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="DisplayName">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="width: 1%;border-right: 1px solid #fff;text-align: center;"> # PageDisplayName</th>
+                      <td mat-cell *matCellDef="let element" style="width: 1%; padding-left: 8px;text-align: center;">
+                        {{element.DisplayName}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="HeaderButtonTitle">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="width: 1%;border-right: 1px solid #fff;text-align: center;"> # AddButtonTitle</th>
+                      <td mat-cell *matCellDef="let element" style="width: 1%; padding-left: 8px;text-align: center;">
+                        {{element.HeaderButtonTitle}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="PopUpTitle">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="width: 1%;border-right: 1px solid #fff;text-align: center;"> # PopupTitle</th>
+                      <td mat-cell *matCellDef="let element" style="width: 1%; padding-left: 8px;text-align: center;">
+                        {{element.PopUpTitle}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="SaveButtonTitle">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="width: 1%;border-right: 1px solid #fff;text-align: center;"> # SaveButtonTitle</th>
+                      <td mat-cell *matCellDef="let element" style="width: 1%; padding-left: 8px;text-align: center;">
+                        {{element.SaveButtonTitle}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="CancelButtonTitle">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="width: 1%;border-right: 1px solid #fff;text-align: center;"> # CancelButtonTitle</th>
+                      <td mat-cell *matCellDef="let element" style="width: 1%; padding-left: 8px;text-align: center;">
+                        {{element.CancelButtonTitle}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef>Action</th>
+                      <td mat-cell *matCellDef="let row">
+                        <button mat-icon-button (click)="edit_site_Form(row)">
+                          <mat-icon aria-hidden="false" aria-label="Edit" fontIcon="edit"></mat-icon>
+                        </button>
+                        <button mat-icon-button>
+                          <mat-icon aria-hidden="false" aria-label="Delete" fontIcon="delete"></mat-icon>
+                        </button>
+                      </td>
+                    </ng-container>
+
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-bg-header-color"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                </section>
+              </mat-tab>
+              <mat-tab>
+                <ng-template mat-tab-label> All Table Controls</ng-template>
+                <section class="example-container mat-elevation-z8" tabindex="0" style="height: 51.0rem;">
+                <table mat-table [dataSource]="resultData" class="table-striped">
+                  <ng-container *ngFor="let column of headerList" [matColumnDef]="column">
+                    <th mat-header-cell *matHeaderCellDef >{{ column }}</th>
+                    <td mat-cell *matCellDef="let element">
+                      <span [ngClass]="element.IsActive? '':'disable-color'">
+                        {{element[column]}}
+                      </span>
+                    </td>
+                  </ng-container>
+
+                  <!-- <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>Action</th>
+                    <td mat-cell *matCellDef="let row">
+                      <button mat-icon-button [id]="'editID'" (click)="editTableControl(row)" [disabled]="!row.IsActive">
+                        <img src="./assets/images/icon-edit.svg">
+                      </button>
+                    </td>
+                  </ng-container>   -->
+
+                  <!-- <tr mat-header-row *matHeaderRowDef="headerList?.concat(['action']);sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: headerList?.concat(['action'])"></tr>
+                  <tr *matNoDataRow><td [attr.colspan]="headerList?.concat(['action'])?.length">No data found.</td></tr> -->
+
+                  <tr mat-header-row *matHeaderRowDef="headerList;sticky: true"></tr>
+                  <tr mat-row *matRowDef="let row; columns: headerList"></tr>
+                  <tr *matNoDataRow><td [attr.colspan]="headerList?.length">No data found.</td></tr>
+
+
+                </table>
+              </section>
+              </mat-tab>
+            </mat-tab-group>
+
+
+
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

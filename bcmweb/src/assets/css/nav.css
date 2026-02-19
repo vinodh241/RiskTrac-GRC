@@ -48,16 +48,12 @@
 
 
 .iconRefresh {color: #fff;}
-.iconPositionLeft {     left: 87vw !important;   position: absolute;}
+.iconPositionLeft {left: .4vw !important;}
 
-.btnGen {background-color: #1d7c98; border-radius: 50vh; min-height: 2.9vh; height: 2.5vh; padding: 0.2vh 0.8vw; vertical-align: middle; color: #fff; line-height: 1.5; cursor: pointer; text-wrap: nowrap;}
+.btnGen {background-color: #ffffff30; border-radius: 50vh; min-height: 3.5vh; height: 3.5vh; padding: 0.2vh 0.8vw; vertical-align: middle; color: #fff; line-height: 1.5; cursor: pointer; text-wrap: nowrap;}
 /* .btnGen.ev {padding: 0.5vh 0.8vw;} */
 .btnGen.cr {padding: 0.5vh 0.8vw;}
-.btnGen img {vertical-align: text-bottom; width: 1.2em;margin-right: 1vh;margin-left: 1vh;}
-.btnGenDown {background-color: #245A8C; border-radius: 50vh; min-height: 3.5vh; height: 3.5vh; padding: 0.2vh 0.8vw; vertical-align: middle; color: #fff; line-height: 1.5; cursor: pointer; text-wrap: nowrap;}
-.btnGenUp {background-color: #3CBC60; border-radius: 50vh; min-height: 3.5vh; height: 3.5vh; padding: 0.2vh 0.8vw; vertical-align: middle; color: #fff; line-height: 1.5; cursor: pointer; text-wrap: nowrap;}
-.btnGen {padding: 0.5vh 0.8vw;}
-.btnGen.ev {padding: 0.5vh 0.8vw;}
+.btnGen img {vertical-align: text-bottom; width: 1.2em;}
 
 /* .btn-dark.ad:not(:disabled):not(.disabled).active, .btn-dark.ad:not(:disabled):not(.disabled):active, .show>.btn-dark.ad.dropdown-toggle {padding-inline: 1vw;}
 
@@ -125,7 +121,7 @@ Delayed - #FF2C2D - First color code from gradient(page 35) */
 .menuListHead {color: #000; font-size: 2em;}
 .menuList ul {padding-left: 0;}
 .menuList ul li {list-style: none; font-size: 1.4em;}
-/* .menuList ul li a::before {content:"\f178";  display: inline-block; font-family:'FontAwesome'; margin-right: 0.5em;} */
+.menuList ul li a::before {content:"\f178";  display: inline-block; font-family:'FontAwesome'; margin-right: 0.5em;}
 .dropdown-menu.dropdown-menu-dark.gradientDropdown.userLogin .menuList.listOne {min-width: 10vw;}
 .menuList .dropdown-item {padding-block: 0.5em; border-radius: 0.3vh;}
 .menuList .dropdown-item:focus, .dropdown-item:hover {background-color: #ffffff1c; }

@@ -1,187 +1,335 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { EvidenceFileComponent } from './evidence-files/evidence-file.component';
-import { MatTableDataSource } from '@angular/material/table';
-import { IncidentService } from 'src/app/services/incident/incident.service';
-import { KriService } from 'src/app/services/kri/kri.service';
-import { RiskAssessmentService } from 'src/app/services/risk-assessment/risk-assessment.service';
+import { Component, Inject, Input } from '@angular/core';
+import { FileUploader, FileItem, ParsedResponseHeaders } from 'ng2-file-upload';
+import { MimeTypes } from 'src/app/includes/utilities/constant';
+import { fileNamePattern, filterMimeTypes } from 'src/app/includes/utilities/commonFunctions'
+import { CrisisCommunicationService } from 'src/app/services/crisis-communication/crisis-communication.service';
+import { environment } from 'src/environments/environment';
+import { WaitComponent } from 'src/app/includes/utilities/popups/wait/wait.component';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { UtilsService } from 'src/app/services/utils/utils.service';
-import { saveAs } from 'file-saver';
+import { DOCUMENT } from '@angular/common';
+import { InfoComponent } from 'src/app/includes/utilities/popups/info/info.component';
+import { FileUploadService } from 'src/app/services/common-module/file-upload/file-upload.service';
+import { AssessmentRiskListing } from 'src/app/services/site-risk-assessments/assessment-risk-listing.service';
+import { IncidentReportService } from 'src/app/services/incident-report/incident-report.service';
+import { BcmsTestingService } from 'src/app/services/bcms-testing/bcms-testing.service';
 
-// export const ValidExtension = ["pdf", "xls", "xlsx"];
-
-export interface Evidence {
-    EvidenceID: number;
-    FileName: string;
-    Remark: string;
-    CreatedDate: string;
-}
+const baseURL = environment.bcmapiUrl;
+declare var $: any;
 
 @Component({
-    selector: 'app-file-upload',
-    templateUrl: './file-upload.component.html',
-    styleUrls: ['./file-upload.component.scss']
+  selector: 'app-file-upload',
+  templateUrl: './file-upload.component.html',
+  styleUrls: ['./file-upload.component.scss']
 })
+export class FileUploadComponent {
+  public hasBaseDropZoneOver: boolean = false;
+  public hasAnotherDropZoneOver: boolean = false;
+  public uploader: FileUploader = new FileUploader({
+    isHTML5: true,
+    url: '',
+  });
+  uploadButtonText: string = '';
+  maxUploadFileSize: number = 0;
+  attachmentsConfig: any[] = [];
+  communicationId: number = 0;
+  allowedFileExtensions: any;
+  token: any = null;
+  apiUrl: any = '';
+  triggered: number = 0;
+  // validFileNameErr: boolean = false;
 
-export class FileUploadComponent implements OnInit {
-    @Input() recid: number = -1;
-    @Input() disabled: boolean = true;
-    @Output() filesdataOP: EventEmitter<any> = new EventEmitter();
-    @Output() isFileUploadChanged: EventEmitter<boolean> = new EventEmitter();
-    @Input() inputData: any;
-    displayedColumns: String[] = ['Index', 'UploadFile'];
-    recEvidences: MatTableDataSource<Evidence> = new MatTableDataSource();
-    @Input() evdname: string = "";
-    @Input() showFileIcon: boolean = false;
-    // @Input() filesdata: Evidence[] = [];
+  selectedFileName    : string = '';
+  uploadEvidence      : FormData = new FormData();
+  uploadEvidenceError : string = ''; // Please select the file to proceed
+  uploadProgress      : any;
+  submitted           : boolean = false;
 
+  // @ts-ignore
+  wait;
 
-    constructor(
-        public incidentservice: IncidentService,
-        public kriService: KriService,
-        private riskAssessmentservice: RiskAssessmentService,
-        public dialog: MatDialog,
-        public utils: UtilsService
-    ) {
+  public fileOverBase(e: any): void {
+    this.hasBaseDropZoneOver = e;
+  }
 
+  public fileOverAnother(e: any): void {
+    this.hasAnotherDropZoneOver = e;
+  }
+
+  constructor(
+    public dialog: MatDialog,
+    private utils: UtilsService,
+    public service: FileUploadService,
+    @Inject(DOCUMENT) private _document: any,
+    @Inject(MAT_DIALOG_DATA) public parent: any,
+    public bcmsService: BcmsTestingService,
+    public sraService: AssessmentRiskListing,
+    public incidentService: IncidentReportService,
+    public crisisService: CrisisCommunicationService,
+    public dialogRef: MatDialogRef<FileUploadComponent>,
+  ) {
+  }
+
+  ngOnInit() {
+    this.resetUploader();
+  }
+
+  onFileDrop(event: DragEvent) {
+    event.preventDefault();
+    const files = event.dataTransfer?.files;
+
+    if (files && files.length === 1) {
+      this.handleFile(files[0]);
+    } else {
+      this.uploadEvidenceError = 'Please drop a single file.';
+      this.resetUploader();
+    }
+  }
+
+  handleFile(file: File) {
+    if (!file) return;
+    this.selectedFileName = file.name;
+    this.getFileDetails(file);
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const files = input?.files;
+
+    if (files && files.length === 1) {
+      this.handleFile(files[0]);
+    } else {
+      this.uploadEvidenceError = 'Please select a single file.';
+      this.resetUploader();
+    }
+  }
+
+  allowDrop(event: DragEvent) {
+    event.preventDefault();
+  }
+
+  getFileDetails(file: File) {
+    const extension = '.' + file.name.split('.').pop() || '';
+    if (!this.parent.config.FileExtensions.includes(extension.toLowerCase())) {
+      this.uploadEvidenceError = `Please upload valid file like ${(this.parent.config.FileExtensions).join(', ')} only`;
+      this.resetUploader();
+      return;
     }
 
-    ngOnInit(): void {
-        this.recEvidences = new MatTableDataSource(this.inputData.evidences)
-        // console.log("🚀 ~ file: file-upload.component.ts:51 ~ FileUploadComponent ~ ngOnInit ~ this.inputData.evidences:", this.inputData.evidences)
-        // console.log("🚀 ~ file: file-upload.component.ts:51 ~ FileUploadComponent ~ ngOnInit ~ this.recEvidences:", this.recEvidences)
-        this.displayedColumns.push("AddIcon")
+    const sizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+    if (+sizeInMB > this.parent.config.FileSize) {
+      this.uploadEvidenceError = 'File size has exceeded the limit of ' + this.parent.config.FileSize + ' MB.';
+      this.resetUploader();
+      return;
     }
 
-    uploadEvidence(event: any) {
-        event.preventDefault();
-        const dialogRef = this.dialog.open(EvidenceFileComponent, {
-            disableClose: true,
-            height: '50vh',
-            width: '50vw',
-            data: {
-                evdname: this.evdname,
-                recData: this.recEvidences,
-                recID: this.recid,
-                inputData: this.inputData
-            }
-        });
-        dialogRef.afterClosed().subscribe(result => {
-            this.recEvidences = new MatTableDataSource(this.recEvidences.data);
-            this.isFileUploadChanged.emit(true);
-            this.filesdataOP.emit({ 'Evidences': this.recEvidences.data, 'inputData': this.inputData })
-            // if(result){
-            //     this.recEvidences = new MatTableDataSource(this.recEvidences.data);
-            //     this.isFileUploadChanged.emit(true);
-            //     this.filesdataOP.emit({ 'Evidences': this.recEvidences.data, 'inputData': this.inputData })
-            // }
-        })
+    if (fileNamePattern(file.name)) {
+      this.uploadEvidenceError = 'Special Characters are not allowed in File name';
+      this.resetUploader();
+      return;
     }
 
-    get FileData(): MatTableDataSource<Evidence> {
-        return this.recEvidences || [];
-    }
+    this.uploadEvidenceError = "";
+    this.uploadEvidence = new FormData();
+    this.uploadEvidence.append('file', file);
+    this.uploadProgress = 0;
+  }
 
-    getFile(row: any, eviName: any) {
-        switch (eviName) {
-            case 'Incident': {
-                // this.downloadFile(res);
-                break
-            }
-            case 'RCA': {
-                // this.downloadFile(res);
-                break
-            }
-            case 'Recommendation': {
-                // this.downloadFile(res);
-                break
-            }
-            case 'Risk Unit Maker': {
-                this.getRiskUnitMaker(row);
-                break
-            }
-            case 'Kri Scoring': {
-                this.getKriScoring(row);
-                break
-            }
+  saveEvidenceFile() {
+    this.submitted = true;
+    if (this.uploadEvidenceError || !this.selectedFileName)
+      return;
+
+    this.service.uploadEvidenceFile(this.uploadEvidence, this.parent.config.apiURL).subscribe((res: any) => {
+      next:
+      if (res.success == 1) {
+        this.dialogRef.close(true);
+        this.saveSuccess('File Uploaded Successfully');
+        if (this.parent.moduleName == 'Crisis') {
+          this.crisisService.processUploadCrisisAttachment(res);
+        } else if (this.parent.moduleName == 'SRA') {
+          this.sraService.processUploadSRAAttachment(res);
+        } else if (this.parent.moduleName == 'Incident') {
+          this.incidentService.processUploadIncidentAttachment(res);
+        } else if (this.parent.moduleName == 'observerReport') {
+          this.bcmsService.processUploadObserverAttachment(res);
+        } else if (this.parent.moduleName == 'participantReport') {
+          this.bcmsService.processUploadParticipantAttachment(res);
         }
+        this.resetUploader();
+      } else {
+        if (res.error.errorCode && res.error.errorCode == "TOKEN_EXPIRED")
+          this.utils.relogin(this._document);
+        else
+          this.popupInfo("Unsuccessful", res.error.errorMessage)
+      }
+    });
+  }
+
+  // triggerFileUpload() {
+  //   const fileInput = document.getElementById('UploadFile') as HTMLInputElement;
+  //   fileInput.click();
+  //   this.uploadFile();
+  // }
+
+  // uploadFile() {
+  //   this.token = localStorage.getItem("token") || '';
+  //   if (this.parent.moduleName == 'Crisis') {
+  //     // this.apiUrl = baseURL + this.crisisService.fileUploadData?.apiURL;
+  //     this.uploader = new FileUploader({
+  //       url: this.apiUrl, removeAfterUpload: false, autoUpload: true, authToken: this.token,
+  //       allowedMimeType: filterMimeTypes(this.allowedFileExtensions, MimeTypes),
+  //       maxFileSize: this.maxUploadFileSize * 1024 * 1024
+  //     });
+  //   }
+
+  //   this.uploader.onBeforeUploadItem = (fileItem: FileItem) => {
+  //     this.uploader.authToken = localStorage.getItem("token") || '';
+  //     this.uploader.options.additionalParameter = {
+  //       communicationId: this.communicationId
+  //     };
+  //   };
+
+  //   this.uploader.onAfterAddingFile = (fileItem: FileItem) => this.onAfterAddingFile(fileItem);
+  //   this.uploader.onProgressItem = (fileItem: FileItem, progress: any) => {
+  //     this.triggered += 1;
+  //     if (this.triggered == 1) {
+  //       this.openWait('Uploading....');
+  //     }
+  //     if (fileNamePattern(fileItem.file.name || '')) {
+  //       this.validFileNameErr = true;
+  //       return;
+  //     } else {
+  //       this.validFileNameErr = false;
+  //     }
+
+  //     this.selectedFileName = fileItem.file.name || '';
+  //   };
+
+  //   this.uploader.onSuccessItem = (fileItem: FileItem, response: any, status: number, headers: ParsedResponseHeaders) => {
+  //     let data = JSON.parse(response);
+  //     if (this.validFileNameErr) {
+  //       this.closeWait();
+  //       localStorage.setItem('token', data['token']);
+  //       return;
+  //     }
+  //     this.closeWait();
+  //     localStorage.setItem('token', data['token']);
+  //     if (data.success == 1) {
+  //       this.saveSuccess('File Uploaded Successfully');
+  //       if (this.parent.moduleName == 'Crisis') {
+  //         this.crisisService.processUploadCrisisAttachment(data);
+  //       }
+  //       this.resetUploader();
+  //     } else {
+  //       if (data?.error?.errorCode && data?.error?.errorCode == "TOKEN_EXPIRED")
+  //         this.utils.relogin(this._document);
+  //       else
+  //         this.popupInfo("Unsuccessful", data.error?.errorMessage)
+  //     }
+  //   };
+
+  //   this.uploader.onWhenAddingFileFailed = (item, filter, options) => this.onWhenAddingFileFailed(item, filter, options);
+
+  //   this.uploader.onErrorItem = (fileItem: FileItem, response: any, status: number, headers: ParsedResponseHeaders) => {
+  //     this.closeWait();
+  //     if (response)
+  //       this.popupInfo("Unsuccessful", response.error?.errorMessage);
+  //     else
+  //       this.popupInfo("Unsuccessful", 'Failed to Upload');
+  //   };
+  // }
+
+  // onBeforeUploadItem(fileItem: any) {
+  //   this.uploader.authToken = this.token;
+  //   if (this.parent.moduleName == 'Crisis')
+  //     fileItem.append("communicationId", this.communicationId);
+  // }
+
+  // onAfterAddingFile(fileItem: FileItem) {
+  //   let latestFile = this.uploader.queue[this.uploader.queue.length - 1];
+  //   this.uploader.queue = [];
+  //   this.uploader.queue.push(latestFile);
+  // }
+
+  // onWhenAddingFileFailed(item: any, filter: any, options: any) {
+  //   let errorMessage: string = '';
+  //   switch (filter.name) {
+  //     case 'mimeType':
+  //       errorMessage = `Please upload valid file like ${(this.allowedFileExtensions).join(', ')} only`;
+  //       this.popupInfo("Unsuccessful", errorMessage)
+  //       break;
+  //     case 'fileSize':
+  //       errorMessage = 'File size has exceeded the limit of ' + this.maxUploadFileSize + 'mb.';
+  //       this.popupInfo("Unsuccessful", errorMessage)
+  //       this.uploader.clearQueue();
+  //       $("#UploadFile").val('');
+  //       break;
+  //   }
+  // }
+
+  resetUploader() {
+    if (this.uploader) {
+      this.uploader.clearQueue();
+      $("#UploadFile").val('');
     }
+  }
 
+  // Common Methods below(loader,error,success popup) - start
+  openWait(masg: any): void {
+    this.wait = this.dialog.open(WaitComponent, {
+      disableClose: true,
+      panelClass: "dark",
+      data: {
+        text: masg
+      }
+    })
+  }
 
-    getKriScoring(row: any) {
-        let data = { "EvidenceID": row.EvidenceID };
-        this.kriService.downloadKriScoringEvidence(data).subscribe(res => {
-            if (res.success == 1) {
-                this.downloadFile(res);
-            } else {
+  closeWait(): void {
+    if (this.wait)
+      this.wait.close();
+    this.triggered = 0;
+  }
 
-            }
-        });
-    }
+  popupInfo(title: string, message: string) {
+    const timeout = 3000; // 3 seconds
+    const confirm = this.dialog.open(InfoComponent, {
+      disableClose: true,
+      minWidth: "300px",
+      panelClass: "dark",
+      data: {
+        title: title,
+        content: message
+      }
+    });
 
+    confirm.afterOpened().subscribe(result => {
+      setTimeout(() => {
+        confirm.close();
+      }, timeout)
+    });
+  }
 
-    getRiskUnitMaker(row: any) {
-        let data = {
-            "CollectionID": row.CollectionID,
-            "EvidenceID": row.EvidenceID,
-            "FileContentID": row.FileContentID
-        };
+  saveSuccess(content: string): void {
+    const timeout = 3000; // 3 Seconds
+    const confirm = this.dialog.open(InfoComponent, {
+      id: "InfoComponent",
+      disableClose: true,
+      minWidth: "5vh",
+      panelClass: "success",
+      data: {
+        title: "Success",
+        content: content
+      }
+    });
 
-        this.riskAssessmentservice.downloadRiskUnitMakerEvidence(data).subscribe(res => {
-            if (res.success == 1) {
-                this.downloadFile(res);
-            } else {
-
-            }
-        });
-    }
-
-    downloadFile(res: any) {
-        const FileType = res["result"].fileData[0].FileContent.type;
-        const TYPED_ARRAY = new Uint8Array(res.result.fileData[0].FileContent.data);
-        const base64String = window.btoa(new Uint8Array(TYPED_ARRAY).reduce(function (data, byte) {
-            return data + String.fromCharCode(byte);
-        }, ''));
-        const fileMetaType = res.FileType;
-        const blobData = this.convertBase64ToBlobData(base64String, fileMetaType);
-        const blob = new Blob([blobData], { type: fileMetaType });
-        // [".xlsx", ".pdf",".docx",".jpeg"],
-        // saveAs(blob, row.FileName.split('.')[0] + fileMetaType);
-        saveAs(blob, res.result.fileData[0].FileName)
-    }
-
-    convertBase64ToBlobData(base64Data: any, contentType: string) {
-        contentType = contentType || '';
-        let sliceSize = 1024;
-        let byteCharacters = window.atob(decodeURIComponent(base64Data));
-        let bytesLength = byteCharacters.length;
-        let slicesCount = Math.ceil(bytesLength / sliceSize);
-        let byteArrays = new Array(slicesCount);
-        for (let sliceIndex = 0; sliceIndex < slicesCount; ++sliceIndex) {
-            let begin = sliceIndex * sliceSize;
-            let end = Math.min(begin + sliceSize, bytesLength);
-
-            let bytes = new Array(end - begin);
-            for (var offset = begin, i = 0; offset < end; ++i, ++offset) {
-                bytes[i] = byteCharacters[offset].charCodeAt(0);
-            }
-            byteArrays[sliceIndex] = new Uint8Array(bytes);
-        }
-        return new Blob(byteArrays, { type: contentType });
-    }
-
-    remove(row: any, eviName: any): void {
-        let index = -1;
-        index = this.recEvidences.data.indexOf(row)
-        if (index !== -1) {
-            this.recEvidences.data.splice(index, 1)
-            this.recEvidences.data = [...this.recEvidences.data]
-        }
-        this.isFileUploadChanged.emit(true);
-        this.filesdataOP.emit({ 'Evidences': this.recEvidences.data, 'inputData': this.inputData });
-
-    }
-
+    confirm.afterOpened().subscribe((result: any) => {
+      setTimeout(() => {
+        confirm.close();
+      }, timeout)
+    });
+  }
 
 }
 

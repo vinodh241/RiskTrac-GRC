@@ -1,0 +1,427 @@
+<div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+      [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+      style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: 2vh; font-size: 2.3vh;"
+      [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+      (workFlowStatusID == 2) ? 'statusInprogress' :
+      (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+      (workFlowStatusID == 8) ? 'statusCompleted' :
+      (workFlowStatusID == 7) ? 'statusDelayed' :
+      'statusPublished'">
+       {{ workFlowStatus }}
+    </span>
+
+  </span>
+
+  <div class="cardBody singleRow w-100 h-100">
+    <div class="w-100 h-100 px-2 py-3 position-relative">
+      <div class="w-100 h-6 pb-5">
+        <h2 class="h-100"><img src="./assets/images/icon-tl.svg" class="headingIcon longBox icoAs" alt="BCP Coverage">
+          {{ 'bcp.section1.title' | translate }}</h2>
+      </div>
+      <!-- <div class="applyFilter addDesktop position-relative text-start me-4"> -->
+
+      <!-- </div> -->
+
+      <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;">
+        <div class="bc-fuction-details ms-5">
+          <div class="content-box">
+            <div class="contents">
+              <img src="./assets/images/cr-admin-icon.svg" alt="">
+              <div class="content-area">
+                <p class="mb-1 content-name">Business Function Name</p>
+                <p class="mb-0"
+                  [matTooltip]="allViewDetails?.BusinessFunctionName?.length > 20? allViewDetails?.BusinessFunctionName:''">
+                  <b>{{businessContinuityService.getTitleValue(allViewDetails?.BusinessFunctionName)}}</b></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-box">
+            <div class="contents">
+              <img src="./assets/images/cac-icon.svg" alt="">
+              <div class="content-area">
+                <p class="mb-1 content-name">Short Code
+                <p class="mb-0"><strong>{{this.allViewDetails?.ShortCode}}</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-box">
+            <div class="contents">
+              <img src="./assets/images/person-icon.svg" alt="">
+              <div class="content-area">
+                <p class="mb-1 content-name">Business Owner</p>
+                <p class="mb-0"
+                  [matTooltip]="allViewDetails?.BusinessOwnerName?.length > 20? allViewDetails?.BusinessOwnerName:''">
+                  <strong>{{businessContinuityService.getTitleValue(allViewDetails?.BusinessOwnerName)}}</strong></p>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-box">
+            <div class="contents">
+              <img src="./assets/images/person-icon.svg" alt="">
+              <div class="content-area">
+                <p class="mb-1 content-name">{{ 'bcp.section1.bcCoordinator' | translate }}</p>
+                <p class="mb-0" [matTooltip]="allViewDetails?.BCCNames?.length > 20? allViewDetails?.BCCNames:''">
+                  <strong>{{businessContinuityService.getTitleValue(allViewDetails?.BCCNames)}}</strong></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!listingBCP">
+          <form [formGroup]="businessFunctionProfile">
+            <div class="row pb-3 pt-3">
+
+              <div class="col-6 left-col" *ngIf="intializeCKEditor">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-lef" style="font-weight: bold;">{{ 'bcp.section1.descriptionOfBusiness' | translate }}<sup
+                    class="red">*</sup></label>
+                <ckeditor id="business" formControlName="description" [config]="ckeConfig"
+                  [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+                <mat-error *ngIf="(submitted || f['description'].touched) && f['description'].errors
+                && f['description'].value?.length === 0">Description of Business is required</mat-error>
+              </div>
+
+              <div class="col-6 right-col" *ngIf="intializeCKEditor">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-lef" style="font-weight: bold;">Business
+                  Products/Services<sup class="red">*</sup></label>
+                <ckeditor id="businessProducts" formControlName="business" [config]="ckeConfig"
+                  [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+                <mat-error *ngIf="(submitted || f['business'].touched) && f['business'].errors && f['business'].value?.length === 0">Business
+                  Products/Services is required</mat-error>
+              </div>
+            </div>
+
+            <div class="row pb-3">
+              <div class="col-6 left-col">
+                <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">Critical Business Processes /
+                  Activities<sup class="red">*</sup></label>
+                <p for="" class="w-100 p-0 pb-2 slctLbl text-left min-description">Critical Business Processes /
+                  Activities [Critical processes/activities that support the business area(s) / function(s)]</p>
+                <div class="table-bg" style="margin-top: 1.9vh;">
+
+                  <div class="table-bg vscroll" style="height: 23vh;">
+                    <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                      [dataSource]="businessContinuityService.TableCB" id="addCritical">
+                      <ng-container matColumnDef="Index">
+                        <th mat-header-cell *matHeaderCellDef class="w-5"> </th>
+                        <td mat-cell *matCellDef="let row" class="w-5 text-center"> {{row.Index}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="Description">
+                        <th mat-header-cell *matHeaderCellDef class="w-70"> </th>
+                        <td mat-cell *matCellDef="let row" class="w-70 text-left">
+                          <div *ngIf="!row.isEdit">{{row.Description}}</div>
+                          <div *ngIf="row.isEdit">
+                            <mat-form-field appearance="fill" style="width:41vh">
+                              <input type="text" [placeholder]="'bcp.section1.businessProcessesPlaceholder' | translate" matInput
+                                formControlName="caDescription" id="caDescription" [matAutocomplete]="caDescription"
+                                #autoCompleteProcessesInput (input)="filterBusinessProcesses($event)">
+                              <mat-autocomplete #caDescription="matAutocomplete">
+                                <mat-option *ngFor="let process of filteredBusinessProcess"
+                                  [value]="process.ActivityName" (click)="setBusinessProcess(process)"
+                                  [id]="process.ActivityName">
+                                  {{process.ActivityName}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="Action">
+                        <th mat-header-cell *matHeaderCellDef class="w-15"> </th>
+                        <td mat-cell *matCellDef="let row" class="w-25 text-center">
+                          <ng-container *ngIf="!row.isEdit">
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.delete' | translate" color="primary" (click)="deleteProcess(row)" id="deleteSave"
+                              [disabled]="blockEdit">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </ng-container>
+
+                          <ng-container *ngIf="row.isEdit">
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.save' | translate" color="primary" id="saveCritical" [disabled]="!isSaveDisable() "
+                              (click)="saveProcess(row)"><mat-icon>save</mat-icon>
+                            </button>
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancel(row)"
+                              id="closeCritical"><mat-icon>close</mat-icon>
+                            </button>
+                          </ng-container>
+                        </td>
+                      </ng-container>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsCC;"></tr>
+                      <tr *matNoDataRow>
+                        <td [attr.colspan]="displayedColumnsCC.length">{{ 'bcp.section1.noCriticalBusinessProcessesAdded' | translate }}</td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+                <mat-error *ngIf="processExists">Enter valid Business Process.</mat-error>
+                <mat-error *ngIf="(submitted && businessContinuityService.TableCB.data?.length == 0)">{{ 'bcp.section1.atLeastOneCriticalBusinessProcessRequired' | translate }}</mat-error>
+                <mat-error *ngIf="(submitted && checkControlSave(businessContinuityService.TableCB.data))">{{ 'bcp.section1.pleaseSaveNewCriticalBusinessProcesses' | translate }}</mat-error>
+                <div class="row py-3">
+                  <div class="col-12 text-end">
+                    <div><button type="button" [disabled]="blockEdit"
+                        class="btn btn-primary normalColorBtn modalColorBtnGreen" id="criticalAdd"
+                        (click)="addCritical()" [disabled]="processExists"><span class="fw-bold">+</span> {{ 'common.addNew' | translate }}</button></div>
+                  </div>
+                </div>
+
+              </div>
+
+              <div class="col-6 right-col">
+                <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section1.customers' | translate }}<sup class="red">*</sup></label>
+                <p for="" class="w-100 p-0 pb-2 slctLbl text-left min-description">{{ 'bcp.section1.customersDescription' | translate }}</p>
+                <div class="table-bg">
+                  <div class="table-bg vscroll" style="height:23vh">
+                    <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                      [dataSource]="businessContinuityService.TableCBP" id="addCritical">
+
+                      <ng-container matColumnDef="Index">
+                        <th mat-header-cell *matHeaderCellDef class="w-5"> </th>
+                        <td mat-cell *matCellDef="let row" class="w-5 text-center"> {{row.Index}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="Description">
+                        <th mat-header-cell *matHeaderCellDef class="w-60"> </th>
+                        <td mat-cell *matCellDef="let row" class="w-30 text-left">
+                          <div *ngIf="!row.isEdit">{{row.Description}}</div>
+                          <div *ngIf="row.isEdit">
+                            <mat-form-field appearance="fill" style="width:30vh">
+                              <input type="text" [placeholder]="'bcp.section1.customersPlaceholder' | translate" matInput formControlName="cDescription"
+                                id="cDescription" [matAutocomplete]="cDescription" #autoCompleteCustomersInput
+                                (input)="filterCustomerDescription($event)">
+                              <mat-autocomplete #cDescription="matAutocomplete">
+                                <mat-option *ngFor="let process of filteredCustomerDescription"
+                                  [value]="process.CustomerName" (click)="setCustomerDescription(process)"
+                                  [id]="process.CustomerName">
+                                  {{process.CustomerName}}
+                                </mat-option>
+                              </mat-autocomplete>
+                            </mat-form-field>
+                          </div>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="affiliation">
+                        <th mat-header-cell *matHeaderCellDef class="w-40"> </th>
+                        <td mat-cell *matCellDef="let row" class="w-40 text-left">
+                          <div *ngIf="!row?.isEdit">
+                            {{ row?.affiliationDataStatus ? row?.affiliationDataStatus : row.Affiliate }}
+                          </div>
+
+                          <div *ngIf="row.isEdit" style="display: flex;justify-content: space-evenly;">
+                            <div *ngFor="let affiliationData of affiliationStatusData">
+                              <input type="radio" formControlName="affiliationDataStatus"
+                                [value]="affiliationData.AffiliationID" id="afflit"
+                                (click)="radiobuttonClick(affiliationData.AffiliationID)" />{{
+                              affiliationData.AffiliationName}}
+                            </div>
+                          </div>
+                        </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="Action">
+                        <th mat-header-cell *matHeaderCellDef class="w-10"> </th>
+                        <td mat-cell *matCellDef="let row" class="w-25 text-center">
+                          <ng-container *ngIf="!row.isEdit">
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.delete' | translate" color="primary" (click)="deleteCriticalBusiness(row)" id="deleteSave"
+                              [disabled]="blockEditBusiness">
+                              <mat-icon>delete</mat-icon>
+                            </button>
+                          </ng-container>
+
+                          <ng-container *ngIf="row.isEdit">
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.save' | translate" color="primary" id="saveCriticaltest" [disabled]="!isSaveCustDisable()"
+                              (click)="saveCriticalBusiness(row)"><mat-icon>save</mat-icon>
+                            </button>
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancelCriticalBusiness(row)"
+                              id="closeCriticaltest"><mat-icon>close</mat-icon>
+                            </button>
+                          </ng-container>
+                        </td>
+                      </ng-container>
+                      <tr mat-row *matRowDef="let row; columns: displayedColumnsCBP;"></tr>
+                      <tr *matNoDataRow>
+                        <td [attr.colspan]="displayedColumnsCBP.length">{{ 'bcp.section1.noCustomersAdded' | translate }}</td>
+                      </tr>
+                    </table>
+
+                  </div>
+                </div>
+                <mat-error *ngIf="customerExists">Enter Valid Customer.</mat-error>
+                <mat-error *ngIf="(submitted && businessContinuityService.TableCBP.data?.length == 0)">{{ 'bcp.section1.atLeastOneCustomerRequired' | translate }}</mat-error>
+                <mat-error *ngIf="(submitted && checkControlSave(businessContinuityService.TableCBP.data))">{{ 'bcp.section1.pleaseSaveNewCustomers' | translate }}</mat-error>
+
+                <div class="row py-3">
+                  <div class="col-12 text-end">
+                    <div><button type="button" [disabled]="blockEditBusiness"
+                        class="btn btn-primary normalColorBtn modalColorBtnGreen" id="criticalbusiness"
+                        (click)="addCriticalBusiness()" [disabled]="customerExists"><span class="fw-bold">+</span> {{ 'common.addNew' | translate }}</button></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <form [formGroup]="profilingForm">
+              <div class="w-100 h-6 pt-5">
+                <h2 class="h-100 ps-5" style="font-weight: bold;">{{ 'bcp.section1.profilingQuestions' | translate }}</h2>
+                <div class="row mt-4" *ngFor="let question of profilingQuestions; let i = index ">
+                  <div class="col-6 left-col">
+                    <div class="question d-flex justify-content-start">
+                      <span><b>{{i + 1 +'.'}}</b></span>
+                      <span>{{ question.ProfilingQuestion}}</span>
+                    </div>
+                  </div>
+
+                  <div class="col-6">
+                    <div class="answer" id="q{{ question.ProfilingQuestionID }}">
+                      <div class="d-flex justify-content-start">
+                        <div class="w-100">
+                          <div class="w-100 p-0 mb-2">
+                            <textarea class="form-control-plaintext fldcolor" id="profileQuestions" style="width: 69vh;"
+                              rows="2" [formControlName]="'ProfilingAnswer_' + question.ProfilingQuestionID"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+
+          </form>
+        </div>
+
+        <div *ngIf="listingBCP">
+          <div class="row pb-3 pt-3">
+            <div class="col-6 left-col">
+              <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section1.descriptionOfBusiness' | translate }}</label>
+              <ckeditor id="business" [(ngModel)]="allViewDetails.BusinessDescription" [config]="disabledCkeConfig"
+                [editorUrl]="ckeConfig.ckeditorUrl" debounce="300" [readOnly]="true"></ckeditor>
+            </div>
+
+            <div class="col-6 right-col">
+              <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section1.businessProductsServices' | translate }}</label>
+              <ckeditor id="businessPro" [(ngModel)]="allViewDetails.BusinessServices" [config]="disabledCkeConfig"
+                [editorUrl]="ckeConfig.ckeditorUrl" debounce="300" [readOnly]="true"></ckeditor>
+            </div>
+          </div>
+
+          <div class="row pb-3">
+            <div class="col-6 left-col">
+              <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section1.criticalBusinessProcessesActivities' | translate }}</label>
+              <p for="" class="w-100 p-0 pb-2 slctLbl text-left min-description" style="margin-bottom: 2vh;">{{ 'bcp.section1.criticalBusinessProcessesActivitiesDescription' | translate }}</p>
+              <div class="w-100 h-82 vscroll tableContent11">
+                <table class="tblContent w-100 fixedTbleHead" mat-table
+                  [dataSource]="this.allViewDetails?.CriticalBusinessActivities" id="addCritical">
+
+                  <ng-container matColumnDef="Index">
+                    <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                    <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Description">
+                    <th mat-header-cell *matHeaderCellDef class="w-80"> </th>
+                    <td mat-cell *matCellDef="let row" class="w-80 text-left">
+                      <div>{{row.Description}}</div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsCCV;"></tr>
+                  <tr *matNoDataRow>
+                    <td [attr.colspan]="displayedColumnsCCV.length">{{ 'bcp.section1.noCriticalBusinessProcessesAdded' | translate }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="col-6 right-col">
+              <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section1.customers' | translate }}
+              </label>
+              <p for="" class="w-100 p-0 pb-2 slctLbl text-left min-description">{{ 'bcp.section1.customersDescription' | translate }}</p>
+
+              <div class="w-100 h-82 vscroll tableContent11">
+                <table class="tblContent w-100 fixedTbleHead" mat-table [dataSource]="this.allViewDetails?.Customers" id="addCritical">
+
+                  <ng-container matColumnDef="Index">
+                    <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                    <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Description">
+                    <th mat-header-cell *matHeaderCellDef class="w-80"> </th>
+                    <td mat-cell *matCellDef="let row" class="w-80 text-left">
+                      <div>{{row.Description}}</div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="affiliation">
+                    <th mat-header-cell *matHeaderCellDef class="w-80"> </th>
+                    <td mat-cell *matCellDef="let row" class="w-80 text-left">
+                      <div>{{row.Affiliate}}</div>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsCBPV;"></tr>
+                  <tr *matNoDataRow>
+                    <td [attr.colspan]="displayedColumnsCBPV.length">{{ 'bcp.section1.noCustomersAdded' | translate }}
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="w-100 h-6" style="padding-top: 7rem !important;">
+            <h2 class="ps-5" style="font-weight: bold;">Profiling Questions</h2>
+            <div *ngFor="let questions of profilingQuestionsView;let i = index ">
+              <div class="row">
+                <div class="col-6 left-col">
+                  <div class="question d-flex justify-content-start">
+                    <span><b>{{i + 1}}</b></span>
+                    <div>{{questions.ProfilingQuestion}}</div>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div class="answer" id="q1">
+                    <div class="d-flex justify-content-start">
+                      <div class="w-100">
+                        <div class="w-100 p-0 mb-2">
+                          <textarea class="form-control-plaintext fldcolor fldcolor10" id="" style="width: 69vh;"
+                            rows="2" readonly="true">{{questions.ProfilingAnswer}}</textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+<!--
+      <div class="child-button " style="margin-top: 6vh;">
+        <div class="move-buttons" style="margin-left: 91vh; margin-top: -1vh;" *ngIf="!listingBCP">
+          <button class="buttons save" id="saveSub" (click)="onSubmit()" style="height: 6vh; width: 24vh;"
+            [ngClass]="isSaveEnable() ? 'disable'  : ''"><img src="./assets/images/icon-application.svg"
+              alt="Save">Save</button>
+        </div>
+      </div>
+
+      <span *ngIf="!listingBCP"><mat-error style="margin-top: -4vh;" *ngIf="isSaveEnable()"> The save button will be
+          enabled once all the mandatory data is filled.</mat-error></span> -->
+
+    </div>
+  </div>
+</div>

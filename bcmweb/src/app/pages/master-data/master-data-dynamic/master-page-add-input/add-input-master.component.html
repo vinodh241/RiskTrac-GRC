@@ -1,0 +1,73 @@
+<!-- <div class="modal fade" id="modal-{{this.pageId}}" #content style="width: 90vw;"
+  data-keyboard="false" tabindex="-1" aria-labelledby="saddWidgetLabel" aria-hidden="true"> -->
+<form [formGroup]="modalForm">
+  <div class="modal-content modalContent">
+    <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+      <h5 class="modal-title modalh5" id="staticBackdropLabel">Add {{PopUpTitle}}</h5>
+      <button type="button" class="close customClose" id="inputMaster" data-dismiss="modal" aria-label="Close" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body greyModalBody vscroll" style="height: 60vh;
+        width: 54vw;
+        margin-left: 2vh;">
+      <!-- <div class="row mx-3"> -->
+        <form [formGroup]="modalForm">
+          <div *ngFor="let it of resultData"  [class]="it.class">
+            <div class="{{it.class}}"> <label for="shortCode">{{ it.LabelName }}<sup
+                  *ngIf="it.IsRequired" class="red">*</sup></label></div>
+            <mat-form-field appearance="fill"  [class]="it.class" style="width:107vh">
+
+              <ng-container *ngIf="it.Type != 'select' && it.Type != 'textarea'&& it.Type != 'number' "  [class]="it.class">
+                <textarea  matInput type="{{ it.Type }}" formControlName="{{ it.Name }}" placeholder="{{ it.Placeholder }}" style="height: 4vh;"
+                  id="{{ it.PageID }}" [value]="it.Value" ></textarea>
+              </ng-container>
+
+              <ng-container *ngIf="it.Type == 'textarea' && it.Type != 'number' "  [class]="it.class">
+                <textarea matInput type="{{ it.Type }}" formControlName="{{ it.Name }}" placeholder="{{ it.Placeholder }}" style="height: 4vh;"
+                  id="{{ it.PageID }}" [value]="it.Value"></textarea>
+              </ng-container>
+
+              <ng-container *ngIf="it.Type == 'number' && it.Type != 'textarea'"  [class]="it.class">
+                <textarea matInput type="{{ it.Type }}" formControlName="{{ it.Name }}"  min="0" max="100" pattern="[0-9]*" placeholder="{{ it.Placeholder }}" style="height: 4vh;"
+                  id="{{ it.PageID }}" [value]="it.Value"></textarea>
+              </ng-container>
+
+              <div class="p-0 mb-2 position-relative" *ngIf="it.Type == 'select'"  [class]="it.class">
+                  <mat-select matSelectSearch formControlName="{{ it.Name }}" aria-label="Select {{ it.LabelName }}" id="{{it.PageID}}">
+                    <ng-container *ngFor="let opt of filteredDropDownData">
+                      <ng-container *ngIf="it.Name == opt.tableName">
+                        <mat-option [value]="opt.ID">{{ opt.NAME }}</mat-option>
+                      </ng-container>
+                    </ng-container>
+                  </mat-select>
+              </div>
+
+
+
+
+            </mat-form-field>
+            <div *ngIf="it.IsRequired">
+              <div
+                *ngIf="(submitted || (it.IsRequired && modalForm.get(it.Name)?.touched && modalForm.get(it.Name)?.errors)) && (modalForm.get(it.Name)?.value?.length === 0)"
+                class="text-danger">
+                {{ it.LabelName }} is required.
+              </div>
+            </div>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+    <div class="modal-footer modalFooter">
+      <p  style="color:red">{{this.messagedata}}</p>
+      <button type="button" class="btn btn-secondary modalCancelBtn"  id="cancelID" (click)="close()">{{CancelButtonTitle
+        }}</button>
+         <button mat-button class="btn btn-primary modalColorBtn" id="saveID" (click)="submit()"><img
+          src="./assets/images/icon-create-new-dashboard.svg" style="width: 2rem; margin-right: 0.5vw;" alt="">{{SaveButtonTitle }}</button>
+    </div>
+  <!-- </div> -->
+</form>
+<button id="closeInput" class="button-custom" data-dismiss="modal" hidden>OK </button>
+

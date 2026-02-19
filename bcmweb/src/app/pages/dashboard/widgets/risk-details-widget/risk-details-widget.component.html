@@ -1,0 +1,42 @@
+<div class="cardGen colorGeyGradient">
+  <div class="cardBody bgwhite w-100 h-100 d-flex justify-content-start">
+    <div class="w-40 h-100 px-2 py-3 position-relative">
+      <div class="">
+        <h2><img src="./assets/images/icon-sr.svg" class="headingIcon rd" alt="Site Risk"> Site Risk</h2>
+      </div>
+      <div class="h-85">
+        <div class="h-100 d-flex flex-column justify-content-around risk ps-2" style="font-size: small;">
+          <div class="clearfix">
+            <span class="normalTxt margin-right">Inherent</span>
+            <!-- <label class="bsswitch">
+              <input type="checkbox" id="toggleRisk" [formControl]="riskFilter"/>
+              <span class="bsslider round "></span>
+            </label> -->
+            <mat-slide-toggle class="margin"  id="toggleRisk" [formControl]="riskFilter"></mat-slide-toggle>
+            <span class="normalTxt margin-left">Residual</span>
+          </div>
+          <div >
+            <strong>Count of risks</strong>
+            <p class="d-flex justify-content-between mb-0 ps-3 position-relative" *ngFor="let risk of riskStatusData">
+              <span class="roundStatus siterisk srasessmentStaus" [ngClass]="risk.class" ></span>{{risk.name}}:
+              <strong>{{risk.y| leadingZeroFilter}}</strong>
+            </p>
+          </div>
+          <div >
+            <strong>Count of open risks</strong>
+            <p class="d-flex justify-content-between mb-0 ps-3 position-relative" *ngFor="let risk of risksCount">
+              <span class="roundStatus siterisk" [ngClass]="risk.class" ></span>{{risk.riskName}}:
+              <strong>{{risk.riskCount| leadingZeroFilter}}</strong>
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="w-60 h-100">
+      <div class="h-100 bcpcoverrageGrap bgBlueGrey" style="width: 100%;">
+        <app-risk-data-chart [chartID]="riskChartId" [riskStatusData]="riskStatusData"
+          [residualRiskStatusData]="residualRiskStatusData"></app-risk-data-chart>
+      </div>
+    </div>
+  </div>
+</div>

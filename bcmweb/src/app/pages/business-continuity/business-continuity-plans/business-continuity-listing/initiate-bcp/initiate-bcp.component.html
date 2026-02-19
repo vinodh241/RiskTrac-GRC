@@ -1,0 +1,88 @@
+<!-- MAODAL ONE -->
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{ 'bcp.initiate.title' | translate }}</h5>
+  <button type="button" class="close customClose" mat-icon-button mat-dialog-close aria-label="Close" (click)="close()"
+    id="popupClose">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body greyModalBody" style="height: 56vh;">
+  <div class="row mx-3 h-100">
+
+    <div class="col-12 px-0 h-100">
+      <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4 h-6">{{ 'bcp.initiate.selectBusinessFunction' | translate }}</label>
+      <div class="w-94 ModaltableContent tableBgWhite heightVH-48">
+        <div class="w-100 h-100 vscroll">
+          <table mat-table [dataSource]="bcpReviewList" matSort class="table-striped" id="bcpInitiateTable">
+
+            <ng-container matColumnDef="Position">
+              <th mat-header-cell *matHeaderCellDef
+                style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+              <td mat-cell *matCellDef="let element  let i = index">{{i+1}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="BusinessFunction">
+              <th mat-header-cell *matHeaderCellDef
+                style="background-color:#e4e4e4;width: 12vw;border: 1px solid #fff; padding-left: 10px">
+                <mat-form-field appearance="outline" class="mat-outline" style="height: 38px; max-height: 38px;">
+                  <mat-label class="status">{{ 'bcp.columns.businessFunction' | translate }}</mat-label>
+                  <input matInput [formControl]="businessFilter" id="businessSearch"
+                    (keydown.enter)="$event.preventDefault()" />
+                </mat-form-field>
+              </th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 12vw;">
+                {{element.BusinessFunctionName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="BusinessGroupName">
+              <th mat-header-cell *matHeaderCellDef
+                style="background-color:#e4e4e4;width: 12vw;border: 1px solid #fff; padding-left: 10px">{{ 'bcp.initiate.departmentName' | translate }}</th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 12vw;">
+                {{element.BusinessGroupName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="DocStatus">
+              <th mat-header-cell *matHeaderCellDef
+                style="background-color:#e4e4e4;width: 0.5vw;border: 1px solid #fff; padding-left: 10px">Doc Status</th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 0.5vw;"><span class="statusID"
+                  [ngClass]="(element.DocStatus == 'Scheduled') ? 'statusScheduled':
+                (element.DocStatus == 'In Progress') ? 'statusInprogress' :
+                (element.DocStatus == 'Published') ? 'statusTpComplated' :
+                (element.DocStatus == 'Not Published') ? 'statusNotStartedRed' : 'statusNotStarted'">{{element.DocStatus}}</span>
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="LastReviewed">
+              <th mat-header-cell *matHeaderCellDef
+                style="background-color:#e4e4e4;width: 1vw;border: 1px solid #fff; padding-left: 10px">Last Reviewed
+              </th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px;width:1vw;">
+                {{formatTimeZone(element.LastReviewed)|date:'MMM d, y'}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Status">
+              <th mat-header-cell *matHeaderCellDef
+                style="background-color:#e4e4e4;width: 0.3vw;border: 1px solid #fff; padding-left: 10px"></th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 0.3vw;"><button
+                  [ngClass]="(element.DocStatus == 'In Progress' || element.DocStatus == 'Scheduled' || element.DocStatus == 'Not Published')? 'disable' : '' "
+                  mat-button class="statusID statusTpComplated" (click)="select(element)">{{ 'common.select' | translate }}</button></td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:  rgb(207, 205, 205);"></tr>
+            <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+            <tr *matNoDataRow>
+              <td [attr.colspan]="displayedColumns.length">{{ 'common.noDataFound' | translate }}</td>
+            </tr>
+
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-footer modalFooter">
+  <button type="button" class="btn btn-secondary modalCancelBtn" (click)="close()" id="closeInitiate">{{ 'common.cancel' | translate }}</button>
+</div>
+<!-- END MAODAL ONE -->

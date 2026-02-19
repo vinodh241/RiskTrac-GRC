@@ -1,0 +1,76 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{ 'sra.consolidatedReport.consolidatedReport' | translate }}</h5>
+  <button type="button" class="close customClose example-icon" mat-icon-button mat-dialog-close aria-label="Close"
+    (click)="resetForm()" id="closeReport">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+  <div class="row mx-3 h-100">
+    <div class="col-12 px-0 h-100">
+      <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4 h-6">{{ 'sra.consolidatedReport.chooseAssessments' | translate }}</label>
+
+      <section class="w-94 ModaltableContent tableBgWhite vscroll h-85" tabindex="0" style="padding: 0 0.5%;">
+        <table mat-table [dataSource]="service.TableConsolidated" class="table-striped" id="reportTable">
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef style="width: 4%;border-right: 1px solid #fff; padding-left: 8px;">
+            </th>
+            <td mat-cell *matCellDef="let row" style="width: 4%; padding-left: 8px;text-align: center;">
+              <mat-checkbox (change)="storeSiteIds(row)" [id]="'assessment' + row.SiteRiskAssessmentID"></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Index">
+            <th mat-header-cell *matHeaderCellDef style="width: 4%;border-right: 1px solid #fff;"> # </th>
+            <td mat-cell *matCellDef="let row" style="width: 4%; padding-left: 8px;text-align: center;">
+              {{row.Index}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Site">
+            <th mat-header-cell *matHeaderCellDef style="width: 14%;border-right: 1px solid #fff; padding-left: 8px;">
+              {{ 'sra.consolidatedReport.site' | translate }} </th>
+            <td mat-cell *matCellDef="let row" style="width: 14%; padding-left: 8px;"> {{row.SiteName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Assessment">
+            <th mat-header-cell *matHeaderCellDef style="width: 18%;border-right: 1px solid #fff; padding-left: 8px;">
+              {{ 'sra.consolidatedReport.assessmentName' | translate }} </th>
+            <td mat-cell *matCellDef="let row" style="width: 18%; padding-left: 8px;"> {{row.AssessmentName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="BCSiteChampion">
+            <th mat-header-cell *matHeaderCellDef style="width: 32%;border-right: 1px solid #fff; padding-left: 8px;">
+              {{ 'sra.consolidatedReport.bcSiteChampion' | translate }} </th>
+            <td mat-cell *matCellDef="let row" style="width: 32%; padding-left: 8px;"> {{row.BCSiteChampionName}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="StartDate">
+            <th mat-header-cell *matHeaderCellDef style="width: 12%;border-right: 1px solid #fff; padding-left: 8px;">
+              {{ 'sra.consolidatedReport.startDate' | translate }} </th>
+            <td mat-cell *matCellDef="let row" style="width: 12%; padding-left: 8px;"> {{getDateFormat(row.StartDate)}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="EndDate">
+            <th mat-header-cell *matHeaderCellDef style="width: 11%;border-right: 1px solid #fff; padding-left: 8px;">
+              {{ 'sra.consolidatedReport.endDate' | translate }} </th>
+            <td mat-cell *matCellDef="let row" style="width: 11%; padding-left: 8px;"> {{getDateFormat(row.EndDate)}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-bg-header-color"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">{{ 'common.noDataFound' | translate }}</td></tr>
+        </table>
+      </section>
+    </div>
+  </div>
+</div>
+<mat-error class="position-absolute mt-4" style="margin-left: 2.8vw;"
+ *ngIf="(siteIds?.length == 0) && download">{{ 'sra.consolidatedReport.selectAtLeastOneAssessment' | translate }}</mat-error>
+<div class="modal-footer modalFooter"  [ngClass]="parent.exportFileLimit != null? 'position-relative':''">
+  <ul class="position-absolute sraTxt maxReport" *ngIf="parent.exportFileLimit != null">
+    <li><b>{{ 'common.note' | translate }}:</b> {{ 'sra.consolidatedReport.maxReportsNote' | translate: {count: this.parent.exportFileLimit} }}</li>
+  </ul>
+  <button  mat-dialog-close class="btn btn-secondary modalCancelBtn me-2" (click)="resetForm()" id="cancelReport">{{ 'common.cancel' | translate }}</button>
+  <button type="button"  class="btn btn-primary modalColorBtn btnBig"
+    (click)="exportConsolidatedReport()" id="exportReport"><img src="./assets/images/icon-export.svg" alt=""> {{ 'sra.consolidatedReport.exportConsolidatedReport' | translate }}</button>
+</div>

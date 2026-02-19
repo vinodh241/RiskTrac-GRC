@@ -1,0 +1,44 @@
+.navsiteHeading{
+  left:4%
+}
+
+.leftStatusRisk {left: 54%; font-size: 1.8rem; min-width: 7.5vw;}
+
+.dueDate {
+  position: absolute;
+  top: 50%;
+  left: 70%;
+  transform: translate(-50%, -50%);
+}
+
+.deepwhite.common {
+  color: orange;
+  font-size: 3vh;
+}
+
+.deepwhite.responded {
+  color: green;
+  font-size: 3vh;
+}
+
+.deepwhite.rejected {
+  color: red;
+  font-size: 3vh;
+}
+
+.deepwhite.default {
+  color: black;
+  font-size: 3vh;
+}
+
+.disabled-btn{
+  cursor: auto;
+  opacity: 0.5; /* Adjust the opacity as needed */
+}
+
+.color-class-full {
+  background:linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%) left / 10px 10px repeat-x, linear-gradient(to right, #BCFF50 0%, #2FFF3D 90%), lightgray;
+  box-shadow: inset 0px -2px 5px rgba(1, 1, 1, 0.5);
+  animation: zebra 1s linear infinite;
+  border-radius: 50vh;
+}

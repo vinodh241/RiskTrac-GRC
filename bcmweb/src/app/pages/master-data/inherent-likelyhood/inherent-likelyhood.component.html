@@ -1,0 +1,476 @@
+<mat-toolbar class="fontSize">
+  <span>Overall Risk Rating</span>
+  <span class="spacer"></span>
+</mat-toolbar>
+<div class="container">
+  <!-- <div fxLayout="row wrap" fxLayoutGap="20px grid"> -->
+  <div class="Grouptable" fxLayout="row wrap" fxLayoutAlign="space-around stretch">
+      <div fxFlex="33" fxFlex.md="50" fxFlex.lg="49" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+          <span><b>Likelihood Rating</b></span>
+          <mat-card class="mat-elevation-z4" xFlexAlign="stretch">
+              <mat-card-header>
+              </mat-card-header>
+              <mat-card-content>
+                  <form [formGroup]="GridFormsInherentLikelihoodRating" autocomplete="off">
+                      <ng-container formArrayName="GridRows">
+                          <mat-table [dataSource]="dataSourceInherentLikelihoodRate" matSort>
+                              <ng-container matColumnDef="Index">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                  <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                      {{GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].RowNumber}}
+                                  </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="RatingName">
+                                  <mat-header-cell *matHeaderCellDef  style="min-width: 32vh;"  mat-sort-header>Rating</mat-header-cell>
+                                  <mat-cell *matCellDef="let row;let i = index" [formGroup]="row" style="flex: 1 1 100%; box-sizing: border-box; max-width: 34%; padding-right: 8px;" class="tablecolumnspan">
+                                      <span style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;" [hidden]="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].isEditable">{{GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].Rating}}</span>
+                                      <ng-container *ngIf="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].isEditable">
+                                      <mat-form-field>
+                                          <input matInput type="text" formControlName="Rating" class="tableInput"
+                                              [hidden]="GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].isEditable"
+                                              [readonly]="GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].isEditable">
+                                      </mat-form-field>
+                                    </ng-container>
+                                  </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="RatingScore">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
+                                  <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                    <span style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;" [hidden]="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].isEditable">{{GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].Score}}</span>
+                                    <ng-container *ngIf="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].isEditable">
+                                      <mat-form-field>
+                                          <input matInput type="number" min="0" (keypress)="keyPressNumber($event)"
+                                              formControlName="Score"
+                                              [readonly]="GridFormsInherentLikelihoodRating.get('GridRows')?.value[i].isEditable">
+                                      </mat-form-field>
+                                      </ng-container>
+                                  </mat-cell>
+                              </ng-container>
+
+                              <ng-container matColumnDef="Action">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                                  <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                      <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                          matTooltip="Save Changes"
+                                          (click)="saveEditInherentLikelihoodRateData(GridFormsInherentLikelihoodRating,i)"
+                                          [disabled]="!row.valid"
+                                          *ngIf="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i]?.isEditable"
+                                          color="primary">
+                                          <mat-icon>check_circle</mat-icon>
+                                      </button>
+
+                                      <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                          matTooltip="Cancel Changes" color="warn"
+                                          (click)="CancelInherentLikelihoodRate(GridFormsInherentLikelihoodRating,i)"
+                                          *ngIf="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i]?.isEditable">
+                                          <mat-icon>cancel</mat-icon>
+                                      </button>
+
+                                      <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                          *ngIf="GridFormsInherentLikelihoodRating.get('GridRows')?.value[i]?.isEditable"
+                                          matTooltip="Edit" color="primary"
+                                          [disabled]="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i]?.IsActive"
+                                          (click)="editInherentLikelihoodRateData(GridFormsInherentLikelihoodRating,i)">
+                                          <mat-icon>edit</mat-icon>
+                                      </button>
+                                  </mat-cell>
+                              </ng-container>
+                              <ng-container matColumnDef="Status">
+                                  <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                  <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                      <mat-slide-toggle
+                                          [checked]="GridFormsInherentLikelihoodRating.get('GridRows')?.value[i]?.IsActive"
+                                          (change)="changedInherentLikelihoodRate(row,$event)">
+                                      </mat-slide-toggle>
+                                      <span
+                                          *ngIf="GridFormsInherentLikelihoodRating.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                      <span
+                                          *ngIf="!GridFormsInherentLikelihoodRating.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                  </mat-cell>
+                              </ng-container>
+
+                              <mat-header-row
+                                  *matHeaderRowDef="displayedInherentLikelihoodRateColumns"></mat-header-row>
+                              <mat-row
+                                  *matRowDef="let row; columns: displayedInherentLikelihoodRateColumns;"></mat-row>
+                          </mat-table>
+                      </ng-container>
+                  </form>
+              </mat-card-content>
+
+              <mat-error *ngIf="saveInherentLikelihoodRateerror">{{saveInherentLikelihoodRateerror}}</mat-error>
+              <mat-error *ngIf="exceedCharLenErr && record == 'Likelihood'">{{exceedCharLenErr}}</mat-error>
+
+              <mat-card-actions fxLayout="row" fxLayoutAlign="end end">
+
+                  <button mat-mini-fab color="warn" aria-label="add Inherent Likelihood Rate"
+                      (click)="initiatAddInherentLikelihoodRate()" *ngIf="!addInherentLikelihoodRatedg">
+                      <mat-icon>add</mat-icon>
+                  </button>
+                  <form [formGroup]="inherentLikelihoodRateForm" (ngSubmit)="saveInherentLikelihoodRate()"
+                      autocomplete="off" *ngIf="addInherentLikelihoodRatedg" fxLayout="row" fxLayoutAlign="end center"
+                      fxFlex.xs="98%" fxFlex.lg="98%">
+                      <input formControlName="txtInherentLikelihoodRateID" hidden="true">
+                      <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                          fxFlex.sm="35%">
+                          <mat-label>Rating</mat-label>
+                          <input matInput formControlName="txtInherentLikelihoodRate">
+                      </mat-form-field>
+                      <mat-form-field appearance="fill" fxFlexOffset="5px" fxFlex.xs="100%" fxFlex.lg="35%"
+                          fxFlex.sm="35%">
+                          <mat-label>Score</mat-label>
+                          <input matInput type="number" min="0" (keypress)="keyPressNumber($event)"
+                              formControlName="txtInherentLikelihoodScore">
+                      </mat-form-field>
+
+                      <button fxFlexOffset="10px" type="submit" mat-mini-fab
+                          aria-label="Save Inherent Likelihood Rate" *ngIf="addInherentLikelihoodRatedg"
+                          [disabled]="!inherentLikelihoodRateForm.valid">
+                          <mat-icon>check</mat-icon>
+                      </button>
+                      <button mat-mini-fab fxFlexOffset="10px" color="warn"
+                          aria-label="Cancel Inherent Likelihood Rate" (click)="cancelInherentLikelihoodRate()"
+                          *ngIf="addInherentLikelihoodRatedg">
+                          <mat-icon>close</mat-icon>
+                      </button>
+                  </form>
+              </mat-card-actions>
+          </mat-card>
+      </div>
+      <div fxFlex="33" fxFlex.md="50" fxFlex.lg="49" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+
+        <span><b>Impact Rating</b></span>
+        <mat-card class="mat-elevation-z4">
+            <mat-card-header>
+
+            </mat-card-header>
+            <mat-card-content>
+                <form [formGroup]="GridFormsInherentImpactRate" autocomplete="off">
+                    <ng-container formArrayName="GridRows">
+                        <mat-table [dataSource]="dataSourceInherentImpactRate" matSort>
+                            <ng-container matColumnDef="Index">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                    {{GridFormsInherentImpactRate.get('GridRows')?.value[i].RowNumber}} </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="RatingName">
+                                <mat-header-cell *matHeaderCellDef style="min-width: 23vh;"  mat-sort-header>Rating</mat-header-cell>
+                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row"
+                                style="flex: 1 1 100%;
+                                box-sizing: border-box;
+                                max-width: 34%;
+                                padding-right: 8px"
+                                    class="tablecolumnspan">
+                                    <span style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;" [hidden]="!GridFormsInherentImpactRate.get('GridRows')?.value[i].isEditable">{{GridFormsInherentImpactRate.get('GridRows')?.value[i].Rating}}</span>
+                                        <ng-container *ngIf="!GridFormsInherentImpactRate.get('GridRows')?.value[i].isEditable">
+                                        <mat-form-field>
+                                        <input matInput type="text" formControlName="Rating"
+                                            [hidden]="GridFormsInherentImpactRate.get('GridRows')?.value[i].isEditable"
+                                            [readonly]="GridFormsInherentImpactRate.get('GridRows')?.value[i].isEditable">
+                                    </mat-form-field>
+                                    </ng-container>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="RatingScore">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Score</mat-header-cell>
+                                <mat-cell *matCellDef="let row;let i = index" [formGroup]="row">
+                                  <span style="word-wrap: break-word; overflow-wrap: break-word; white-space: normal;" [hidden]="!GridFormsInherentImpactRate.get('GridRows')?.value[i].isEditable">{{GridFormsInherentImpactRate.get('GridRows')?.value[i].Score}}</span>
+                                  <ng-container *ngIf="!GridFormsInherentImpactRate.get('GridRows')?.value[i].isEditable">
+                                    <mat-form-field>
+                                        <input matInput type="number" min="0" (keypress)="keyPressNumber($event)"
+                                            formControlName="Score"
+                                            [readonly]="GridFormsInherentImpactRate.get('GridRows')?.value[i].isEditable">
+                                    </mat-form-field>
+                                    </ng-container>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Action">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                                <mat-cell *matCellDef="let row ;let i = index" [formGroup]="row">
+                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                        matTooltip="Save Changes"
+                                        (click)="saveEditInherentImpactRateData(GridFormsInherentImpactRate,i)"
+                                        [disabled]="!row.valid"
+                                        *ngIf="!GridFormsInherentImpactRate.get('GridRows')?.value[i]?.isEditable"
+                                        color="primary">
+                                        <mat-icon>check_circle</mat-icon>
+                                    </button>
+
+                                    <button mat-icon-button class="material-icons app-toolbar-menu cancel-button"
+                                        matTooltip="Cancel Changes" color="warn"
+                                        (click)="CancelInherentImpactRate(GridFormsInherentImpactRate,i)"
+                                        *ngIf="!GridFormsInherentImpactRate.get('GridRows')?.value[i]?.isEditable">
+                                        <mat-icon>cancel</mat-icon>
+                                    </button>
+
+                                    <button mat-icon-button class="material-icons app-toolbar-menu save-button"
+                                        *ngIf="GridFormsInherentImpactRate.get('GridRows')?.value[i]?.isEditable"
+                                        matTooltip="Edit" color="primary"
+                                        [disabled]="!GridFormsInherentImpactRate.get('GridRows')?.value[i]?.IsActive"
+                                        (click)="editInherentImpactRateData(GridFormsInherentImpactRate,i)">
+                                        <mat-icon>edit</mat-icon>
+                                    </button>
+                                </mat-cell>
+                            </ng-container>
+                            <ng-container matColumnDef="Status">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"><mat-slide-toggle
+                                        [checked]="GridFormsInherentImpactRate.get('GridRows')?.value[i]?.IsActive"
+                                        (change)="changedInherentImpactRate(row,$event)">
+                                    </mat-slide-toggle>
+                                    <span
+                                        *ngIf="GridFormsInherentImpactRate.get('GridRows')?.value[i]?.IsActive">Enabled</span>
+                                    <span
+                                        *ngIf="!GridFormsInherentImpactRate.get('GridRows')?.value[i]?.IsActive">Disabled</span>
+                                </mat-cell>
+                            </ng-container>
+
+                            <mat-header-row *matHeaderRowDef="displayedInherentImpactRateColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedInherentImpactRateColumns;"></mat-row>
+                        </mat-table>
+                    </ng-container>
+                </form>
+            </mat-card-content>
+
+            <mat-error *ngIf="saveInherentImpactRateerror">{{saveInherentImpactRateerror}}</mat-error>
+            <mat-error *ngIf="exceedCharLenErr && record == 'ImpactRating'">{{exceedCharLenErr}}</mat-error>
+            <mat-card-actions fxLayout="row" fxLayoutAlign="end end">
+                    <button mat-mini-fab color="warn" aria-label="add Inherent Impact Rate"
+                        (click)="initiatAddInherentImpactRate()" *ngIf="!addInherentImpactRatedg">
+                        <mat-icon>add</mat-icon>
+                    </button>
+                    <form [formGroup]="inherentImpactRateForm" autocomplete="off" *ngIf="addInherentImpactRatedg"
+                        (ngSubmit)="saveInherentImpactRate()" fxLayout="row" fxLayoutAlign="end center"
+                        fxFlex.xs="98%" fxFlex.lg="98%">
+                        <input formControlName="txtInherentImpactRateID" hidden="true">
+                        <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                            fxFlex.sm="35%">
+                            <mat-label>Rating</mat-label>
+                            <input matInput formControlName="txtInherentImpactRate">
+                        </mat-form-field>
+                        <mat-form-field appearance="fill" fxFlexOffset="10px" fxFlex.xs="100%" fxFlex.lg="35%"
+                            fxFlex.sm="35%">
+                            <mat-label>Score</mat-label>
+                            <input matInput type="number" min="0" (keypress)="keyPressNumber($event)"
+                                formControlName="txtInherentImpactScore">
+                        </mat-form-field>
+                        <button fxFlexOffset="10px" type="submit" mat-mini-fab
+                            aria-label="Save Inherent Impact Rate" *ngIf="addInherentImpactRatedg"
+                            [disabled]="!inherentImpactRateForm.valid">
+                            <mat-icon>check</mat-icon>
+                        </button>
+                        <button mat-mini-fab fxFlexOffset="10px" color="warn"
+                            aria-label="Cancel Inherent Impact Rate" (click)="cancelInherentImpactRate()"
+                            *ngIf="addInherentImpactRatedg">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                    </form>
+
+            </mat-card-actions>
+        </mat-card>
+
+    </div>
+
+  </div>
+  <div class="Grouptable" fxLayout="row" fxLayoutAlign="space-around stretch">
+    <div fxFlex="33" fxFlex.md="50" fxFlex.lg="49" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+      <span><b>Overall Risk Score</b></span>
+      <mat-card class="mat-elevation-z4 formulaCard">
+          <mat-card-header>
+          </mat-card-header>
+          <mat-card-content>
+              <div class="content formulacontent">
+                  <span><b>Computation Formula</b></span>
+                  <div class="tag-box">
+                      <ul fxLayout="row wrap">
+                          <li *ngFor="let item of inherentRiskScoreTags">
+                              {{item?.ConfigDisplay}} <mat-icon *ngIf="iseditinherentRiskScoredg"
+                                  (click)="RemoveInherentRiskScoreData(item)">close</mat-icon>
+                          </li>
+                      </ul>
+                  </div>
+              </div>
+          </mat-card-content>
+          <mat-error *ngIf="saveinherentRiskScoreerror">{{saveinherentRiskScoreerror}}</mat-error>
+          <mat-card-actions  fxLayout="row" fxLayoutAlign="end end">
+                  <div class="content" fxLayout="row wrap" fxLayoutAlign="start center">
+
+                      <div class="tag-box-items" *ngIf="iseditinherentRiskScoredg">
+                          <span *ngIf="iseditinherentRiskScoredg"><b>Scores</b></span>
+                          <ul fxLayout="row wrap">
+                              <li *ngFor="let a of sourcedatainherentRiskScore; let index = index"
+                                  (click)="addInherentRiskScoretagitem(a)">
+                                  {{ a.ConfigDisplay }}
+                              </li>
+                          </ul>
+                      </div>
+
+                      <div class="tag-box-items" *ngIf="iseditinherentRiskScoredg">
+                          <span *ngIf="iseditinherentRiskScoredg"><b>Operators</b></span>
+                          <ul fxLayout="row wrap">
+                              <li *ngFor="let a of sourcedatainherentRiskScoreoperator; let index = index"
+                                  (click)="addInherentRiskScoretagitem(a)">
+                                  {{ a.ConfigDisplay }}
+                              </li>
+                          </ul>
+                      </div>
+                      <button fxFlexOffset="10px" mat-mini-fab aria-label="Save" *ngIf="iseditinherentRiskScoredg"
+                          (click)="saveInherentRiskScoreData()">
+                          <mat-icon>check</mat-icon>
+                      </button>
+                      <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="Cancel"
+                          (click)="CancelInherentRiskScore()" *ngIf="iseditinherentRiskScoredg">
+                          <mat-icon>close</mat-icon>
+                      </button>
+                  </div>
+                  <button mat-icon-button *ngIf="!iseditinherentRiskScoredg" (click)="editInherentRiskScoreinitiate()">
+                      <mat-icon aria-hidden="false"
+                          aria-label="Edit">edit
+                      </mat-icon>
+                  </button>
+
+          </mat-card-actions>
+      </mat-card>
+  </div>
+
+      <div fxFlex="33" fxFlex.md="50" fxFlex.lg="49" fxFlex.sm="100" fxFlex.xs="100" fxFlexAlign="stretch">
+
+          <span><b>Overall Risk Rating</b></span>
+          <mat-card class="mat-elevation-z4">
+              <mat-card-header>
+              </mat-card-header>
+              <mat-card-content>
+                  <mat-table [dataSource]="dataSourceInherentRiskRating" matSort>
+                      <ng-container matColumnDef="RowNumber">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>#</mat-header-cell>
+                          <mat-cell *matCellDef="let row"> {{row.RowNumber}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="RatingdataName">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>Rating</mat-header-cell>
+                          <mat-cell *matCellDef="let row"> {{row.RiskRating}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="Computation">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>Computation</mat-header-cell>
+                          <mat-cell *matCellDef="let row"> {{row.Computation}} </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="Status">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>Status</mat-header-cell>
+                          <mat-cell *matCellDef="let row"><mat-slide-toggle [checked]="row.IsActive"
+                                  (change)="changedInherentRiskRating(row,$event)">
+                              </mat-slide-toggle>
+
+                              <span *ngIf="row.IsActive">Enabled</span>
+                              <span *ngIf="!row.IsActive">Disabled</span>
+
+                          </mat-cell>
+                      </ng-container>
+                      <ng-container matColumnDef="ActionScore">
+                          <mat-header-cell *matHeaderCellDef mat-sort-header>Action</mat-header-cell>
+                          <mat-cell *matCellDef="let row">
+                              <button mat-icon-button (click)="editInherentRiskRating(row)" [disabled]="!row.IsActive" >
+                                  <mat-icon  aria-hidden="false"
+                                      aria-label="Edit" fontIcon="edit">
+                                  </mat-icon>
+                              </button>
+                          </mat-cell>
+                      </ng-container>
+                      <mat-header-row *matHeaderRowDef="displayedInherentRiskRatingColumns"></mat-header-row>
+                      <mat-row *matRowDef="let row; columns: displayedInherentRiskRatingColumns;"></mat-row>
+                  </mat-table>
+              </mat-card-content>
+
+              <mat-error *ngIf="saveInherentRiskRatingerror">{{saveInherentRiskRatingerror}}</mat-error>
+              <mat-error *ngIf="exceedCharLenErr && record == 'riskRating'">{{exceedCharLenErr}}</mat-error>
+
+              <mat-card-actions>
+                <div fxLayout="column"
+                fxLayoutAlign="end start"
+                fxFlexFill>
+                  <div class="content" *ngIf="iseditInherentRiskRatingdg">
+                      <div class="tag-box">
+                          <form [formGroup]="masterInherentRiskRatingForm" autocomplete="off"
+                              *ngIf="iseditInherentRiskRatingdg" fxLayout="row" fxLayoutAlign="start center"
+                              fxFlex.xs="98%" fxFlex.lg="98%">
+                              <input formControlName="txtrateid" hidden="true">
+                              <mat-form-field appearance="fill" fxFlex.xs="100%" fxFlex.lg="120%" fxFlex.sm="25%"
+                              style="margin-left: 2.1vh;"
+                          >
+                                  <mat-label>Rating Name</mat-label>
+                                  <input matInput formControlName="txtratename" autocomplete="off">
+                              </mat-form-field>
+                          </form>
+                      </div>
+                  </div>
+                  <div class="content" *ngIf="iseditInherentRiskRatingdg && beforeEditedFormulatext!=''">
+                      <span><b>Current Computation Formula</b></span>
+                      <div class="tag-box beforeeditcomputedtext">
+                          <span>{{beforeEditedFormulatext}}</span>
+                      </div>
+                  </div>
+
+                  <div class="content" *ngIf="iseditInherentRiskRatingdg">
+                      <span><b>Computation Formula</b></span>
+                      <div class="tag-box">
+                          <ul fxLayout="row wrap">
+                              <li *ngFor="let item of inherentRiskRatingTags">
+                                  {{item?.ConfigDisplay}} <mat-icon *ngIf="iseditInherentRiskRatingdg"
+                                      (click)="RemoveInherentRiskRatingData(item)">close</mat-icon>
+                              </li>
+                              <input type="text" #customtxt *ngIf="isCustomTextEnabledInherentRiskRating"
+                              (blur)="addCustomTextInherentRiskRating(customtxt.value)"
+                              (keyup.escape)="CancelCustomtext()"/>
+                          </ul>
+                      </div>
+                  </div>
+                  <div fxLayout="row" *ngIf="iseditInherentRiskRatingdg">
+                      <div class="content" fxLayout="row wrap">
+                          <div class="tag-box-items">
+                              <span *ngIf="iseditInherentRiskRatingdg"><b>Scores</b></span>
+                              <ul fxLayout="row wrap">
+                                  <li *ngFor="let a of sourcedataInherentRiskRatingScore; let index = index"
+                                      (click)="addInherentRiskRatingtagitem(a)">
+                                      {{ a.ConfigDisplay }}
+                                  </li>
+                              </ul>
+                          </div>
+                      </div>
+                  </div>
+                  <div class="content" fxLayout="row wrap" fxLayoutAlign="start center"
+                      *ngIf="iseditInherentRiskRatingdg">
+                      <div class="tag-box-items" *ngIf="iseditInherentRiskRatingdg" fxFlex="80%" fxFlex.md="80%"
+                          fxFlex.sm="100%">
+                          <span *ngIf="iseditInherentRiskRatingdg"><b>Operators</b></span>
+                          <ul fxLayout="row wrap">
+                              <li *ngFor="let a of sourcedataInherentRiskRatingoperator; let index = index"
+                                  (click)="addInherentRiskRatingtagitem(a)">
+                                  {{ a.ConfigDisplay }}
+                              </li>
+                          </ul>
+                      </div>
+
+
+                      <button fxFlexOffset="10px" mat-mini-fab (click)="saveInherentRiskRatingData()"
+                          aria-label="Save" *ngIf="iseditInherentRiskRatingdg">
+                          <mat-icon>check</mat-icon>
+                      </button>
+                      <button mat-mini-fab fxFlexOffset="10px" color="warn" aria-label="Cancel"
+                          (click)="CancelInherentRiskRating()" *ngIf="iseditInherentRiskRatingdg">
+                          <mat-icon>close</mat-icon>
+                      </button>
+                  </div>
+                </div>
+                  <div class="content"
+                  fxLayoutAlign="end end"
+                  class="custom-mat-card-actions" style="position: absolute;left: 92vh;">
+
+                      <button mat-mini-fab color="warn" aria-label="add new" (click)="initiateInherentRiskRatingAdd()"
+                          *ngIf="!iseditInherentRiskRatingdg">
+                          <mat-icon>add</mat-icon>
+                      </button>
+                  </div>
+              </mat-card-actions>
+          </mat-card>
+      </div>
+  </div>
+</div>

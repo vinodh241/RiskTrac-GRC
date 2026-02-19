@@ -1,0 +1,212 @@
+<!-- MAODAL ONE page 119 starts-->
+<div class="modal-content modalContent">
+  <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+    <h5 class="modal-title modalh5" id="staticBackdropLabel" *ngIf="this.parent?.mode != 'edit'">Add Action Item</h5>
+    <h5 class="modal-title modalh5" id="staticBackdropLabel" *ngIf="this.parent?.mode == 'edit'">Edit Action Item</h5>
+    <button type="button" class="close customClose" id="close" aria-label="Close" mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body greyModalBody vscroll" style="height: 62vh;">
+    <form [formGroup]="addActionItemDetails">
+      <div class="row mx-3">
+        <div class="col-6 pl-0 pr-5">
+
+          <div class="col-6 pl-0 pr-5">
+            <div class="row mx-0">
+              <div class="col-12 px-0">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Item<sup
+                    class="red">*</sup></label>
+                <textarea class="form-control-plaintext fldcolor fldcolor27vh" formControlName="actionItems"
+                  id="actionItems" rows="5" style="height: 6vh;width: 89vh;"></textarea>
+                <mat-error *ngIf="(submitted || f['actionItems'].touched) && f['actionItems'].errors">Action Item is required</mat-error>
+              </div>
+            </div>
+          </div>
+
+          <div class="row mx-0">
+            <div class="col-12 px-0" *ngIf="intializeCKEditor">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Plan<sup
+                  class="red">*</sup></label>
+              <ckeditor id="actionPlan" formControlName="actionPlan" [config]="ckeConfig"
+                [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+              <mat-error
+                *ngIf="(submitted || f['actionPlan'].touched) && addActionItemDetails.get('actionPlan')?.value <= 0 && f['actionPlan'].errors">Action
+                Plan is required</mat-error>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 pl-5 pr-0">
+          <div class="row mx-0 pt-2">
+
+            <div class="col-6 pl-2 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Module<sup class="red">*</sup></label>
+              <div class="position-relative">
+                <mat-form-field appearance="fill" style="width:43vh">
+                  <input type="text" placeholder="Select Module" matInput formControlName="module" id="moduleID"
+                    #autoCompleteModuleInput [matAutocomplete]="auto" (input)="moduleListData($event)"
+                    (keydown.enter)="$event.preventDefault()">
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let action of actionItemModuleList" [value]="action.ActionItemModule"
+                      [id]="action.moduleId" (onSelectionChange)="moduleData(action.ActionItemModuleID,$event)">
+                      {{ action.ActionItemModule }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-error *ngIf="(submitted || f['module'].touched) && f['module'].errors">Select Module</mat-error>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Source<sup class="red">*</sup></label>
+              <div class="position-relative">
+                <mat-form-field appearance="fill" class="w-100">
+                  <input type="text" placeholder="Select Source" matInput formControlName="source" id="SourceID"
+                    [matAutocomplete]="sourceauto" (input)="sourceListData($event)" #autoCompleteSourceInput
+                    (keydown.enter)="$event.preventDefault()">
+                  <mat-autocomplete #sourceauto="matAutocomplete">
+                    <mat-option *ngFor="let action of filterSourceData" [value]="action.SourceCode"
+                      [id]="action.SourceActionPlanID" (onSelectionChange)="sourceData(action.SourceID,$event)">
+                      {{ action.SourceCode }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-error>{{getErrorMessage()}}</mat-error>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-2" *ngIf="riskDropDown || scheduleRiskID != null">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Risk<sup class="red">*</sup></label>
+              <div class="position-relative">
+                <mat-form-field appearance="fill" class="w-100">
+                  <input type="text" placeholder="Select Risk" matInput formControlName="risk" id="riskID"
+                    [matAutocomplete]="sourceauto" (input)="riskListData($event)" #autoCompleteRiskInput
+                    (keydown.enter)="$event.preventDefault()"
+                    [matTooltip]="addActionItemDetails.get('risk')?.disabled ? addActionItemDetails.get('risk')?.value : ''">
+                  <mat-autocomplete #sourceauto="matAutocomplete">
+                    <mat-option *ngFor="let risk of filterRiskData" [value]="risk.RiskTitle"
+                      [id]="risk.ScheduleRiskAssessmentID"
+                      (onSelectionChange)="riskData(risk.ScheduleRiskAssessmentID,$event)">
+                      {{ risk.RiskTitle }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-error *ngIf="this.parent?.mode != 'edit'">{{riskErrorValid()}}</mat-error>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Requires a Budget? <sup class="red">*</sup></label>
+              <div class="d-flex justify-content-start py-3">
+                <div class="me-4" *ngFor="let item of budgetRequiredList ">
+                  <label><input type="radio" name="budget" formControlName="budget" [id]="item.IsBudgetRequired"
+                      [value]="item.IsBudgetRequired" (click)="budgetReq(item.IsBudgetRequired)" aria-label="select"
+                      (keydown.enter)="$event.preventDefault()" />
+                    {{item.IsBudgetRequiredName}}
+                  </label>
+                </div>
+              </div>
+              <mat-error *ngIf="(submitted || f['budget'].touched) && f['budget'].errors">Select budget</mat-error>
+            </div>
+
+            <div class="col-6 pl-2 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Budgeted Cost<sup *ngIf="isRequired" class="red">*</sup></label>
+              <div class="w-100 d-flex justify-content-start">
+                <div class="form-control-plaintext fldcolor w-10 bgBsidefieldGrey"
+                  style="background: #e8dede54;color: #646464">{{currency}}</div>
+                <div class="w-90">
+                  <input type="number" class="form-control-plaintext fldcolor custom-select forlblLeft" id="cost"
+                    name="quantity" min="1" formControlName="budgetCost">
+                </div>
+              </div>
+              <mat-error *ngIf="((submitted && isRequired && addActionItemDetails.get('budgetCost')?.value <= 0) ||
+              (f['budgetCost'].touched && addActionItemDetails.get('budgetCost')?.value <= 0 && isRequired))">Budgeted Cost is Required</mat-error>
+              <mat-error *ngIf="f['budgetCost'].errors?.['min']">Please enter positive numbers</mat-error>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Criticality<sup class="red">*</sup></label>
+              <div class="d-flex justify-content-start py-3">
+                <div class="me-4" *ngFor="let item of criticalityList ">
+                  <label><input type="radio" name="criticality" formControlName="criticality" [id]="item.CriticalityID"
+                      [value]="item.CriticalityID" aria-label="select" (keydown.enter)="$event.preventDefault()" />
+                    {{item.CriticalityName}}
+                  </label>
+                </div>
+              </div>
+              <mat-error
+                *ngIf="((submitted &&  f['criticality'].value == 0 ) || f['criticality'].touched) && f['criticality'].errors">Select
+                criticality</mat-error>
+              <mat-error *ngIf="((submitted &&  f['criticality'].value == 0 && this.parent?.mode == 'edit'))">Select criticality</mat-error>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">Start Date <sup class="red">*</sup></label>
+              <mat-form-field appearance="fill" (click)="picker.open()" class="w-100">
+                <input matInput formControlName="startDate" id="startDateID" [min]="mindate" [max]="maxEndDate"
+                  [matDatepicker]="picker" (keydown.enter)="$event.preventDefault()"
+                  (dateChange)="updateSelecedStartDate($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['startDate'].touched) && f['startDate'].errors">Start Date is required</mat-error>
+              <mat-error *ngIf="dateError">Start Date needs to be future date including today</mat-error>
+              <mat-error *ngIf="endDateError">Start date cannot be after End date.</mat-error>
+              <mat-error *ngIf="endDateErrorValid" class="error ml-3"> Start date cannot be same as End date.</mat-error>
+            </div>
+
+            <div class="col-6 pl-2 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Item Owner<sup class="red">*</sup></label>
+              <div class="position-relative">
+                <mat-form-field appearance="fill" style="width:43vh">
+                  <input type="text" placeholder="Action Item Owner" matInput formControlName="actionOwner"
+                    id="actionOwnerID" [matAutocomplete]="actionOwner" (input)="ownerListData($event)"
+                    #autoCompleteActionInput (keydown.enter)="$event.preventDefault()">
+                  <mat-autocomplete #actionOwner="matAutocomplete">
+                    <mat-option *ngFor="let owner of filteredActionItemOwner" [value]="owner.ActionItemOwner"
+                      [id]="owner.actionOwnerId" (onSelectionChange)="ownerData(owner.ActionItemOwnerGUID,$event)">
+                      {{ owner.ActionItemOwner}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-error *ngIf="(submitted || f['actionOwner'].touched) && f['actionOwner'].errors
+                  && (filteredActionItemOwner.length != 0) && !isOwnerExists">Select action item owner</mat-error>
+                <mat-error *ngIf="( !isSourceSelected() && (f['actionOwner'].touched) && filteredActionItemOwner.length == 0)">Please
+                  select Source/Risk before selecting action item owner</mat-error>
+                <mat-error *ngIf="submitted && isOwnerExists">Please select a valid Action Item Owner</mat-error>
+              </div>
+            </div>
+
+            <div class="col-6 pl-2 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">Target Date<sup class="red">*</sup></label>
+              <mat-form-field appearance="fill" (click)="picker1.open()" class="w-100">
+                <input matInput formControlName="endDate" id="EndID" [max]="maxEndDate" [matDatepicker]="picker1"
+                  (keydown.enter)="$event.preventDefault()" (dateChange)="updateSelectedEndDate()">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['endDate'].touched) && f['endDate'].errors">Target Date is required</mat-error>
+              <mat-error *ngIf="endDateError || endDateError1" class="error ml-3">Target date cannot be before Start date.</mat-error>
+              <mat-error *ngIf="endDateErrorValid" class="error ml-3">Target date cannot be same as Start date.</mat-error>
+              <mat-error *ngIf="startDateError" class="error ml-3">Target Date needs to be future date including today.</mat-error>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer modalFooter">
+    <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" style="margin-right: 1vh" mat-dialog-close>Cancel</button>
+    <button type="button" class="btn btn-primary modalColorBtn" id="add" (click)="updateRisk()"
+      *ngIf="this.parent?.mode != 'edit'"><img src="./assets/images/icon-send.svg" alt="">Add Action Item</button>
+    <button type="button" class="btn btn-primary modalColorBtn" id="update" (click)="updateRisk()"
+      *ngIf="this.parent?.mode == 'edit'"><img src="./assets/images/icon-send.svg" alt="">Update & Notify</button>
+  </div>
+
+</div>
+
+<!-- END MAODAL ONE page 119 ends-->

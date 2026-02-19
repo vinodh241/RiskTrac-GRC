@@ -1,0 +1,143 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 test-end position-relative h-100" style="z-index: 1;">
+    <div class="d-flex justify-content-right align-items-center vmiddleRight filterRight">
+      <div class="applyFilter addDesktop position-relative text-start me-4">
+        <button type="button" class="btn btn-dark btnGradient" data-bs-toggle="modal" data-bs-target="#newIncident"
+          *ngIf="remediationService?.remediationListObj?.IsBCManager == 1" (click)="newAction()">New Action Item</button>
+        <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+            src="./assets/images/icon-add-desktop.svg"></span>
+      </div>
+
+      <div class="d-inline-block position-relative searchInput me-2">
+        <input placeholder="Search" class="form-control tblfilter" id="search" (keyup)="applyFilter($event)">
+        <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+            aria-hidden="true"></i></span>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-right align-items-center vmiddleLeft filterLeft">
+
+      <div class="position-relative colorStatus incidentReported me-4" data-bs-toggle="modal"
+        data-bs-target="#incidentReport" [ngClass]="{ 'active': totalFlag}" (click)="filterTotal($event)">
+        <span class="vmiddleLeft position-absolute">{{totalActionPlan}}</span>
+        Action Items<br>In Total
+      </div>
+
+      <div class="position-relative colorStatus inprogress me-4" data-bs-toggle="modal"
+        data-bs-target="#reportNewIncident" [ngClass]="{ 'active': assessmentStatusIds.includes(2)}"
+        (click)="filterStatus(2)">
+        <span class="vmiddleLeft position-absolute">{{assignedActionPlan}}</span>
+        Action Items<br>In Progress
+      </div>
+
+      <div class="position-relative colorStatus delayed " data-bs-toggle="modal" data-bs-target="#incidentReport2"
+        [ngClass]="{ 'active': assessmentStatusIds.includes(5)}" (click)="filterStatus(5)">
+        <span class="vmiddleLeft position-absolute">{{delayedActionPlan}}</span>
+        Action Items<br>Past Due Date
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4">
+  <div class="h-100 pb-3 w-100">
+    <div class="cardGen colorGeyGradient h-100">
+      <div class="cardBody singleRow w-100 h-100">
+        <div class="w-100 h-100 px-2 py-3 position-relative">
+          <div class="w-100 h-6">
+            <h2 class="h-100"><img src="./assets/images/icon-rt2.svg" class="headingIcon longBox" alt="BCP Coverage">
+              Remediation Tracker</h2>
+          </div>
+          <div class="w-100 h-94 vscroll tableContent">
+            <table mat-table [dataSource]="dataSource" class="table-striped" id="cTable">
+              <ng-container matColumnDef="Index">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="title">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 7vw;border: 2px solid white;padding-left: 10px;">
+                  Title</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;" [matTooltip]="getToolTip(element)"
+                  (click)="actionDetails(element)">
+                  <a href="javascript: void(0);" class="tblLnk">{{element.ActionItemName}}</a>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="source">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 12vw;border: 2px solid white;padding-left: 10px;">Source</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label
+                    class="link">{{element.SourceCode}}</label></td>
+              </ng-container>
+
+              <ng-container matColumnDef="module">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Module</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label class="link">
+                    {{element.ActionItemModule}}</label></td>
+              </ng-container>
+
+              <ng-container matColumnDef="owner">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">Action Item
+                  Owner
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.ActionItemOwner}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 6vw;border: 2px solid white;padding-left: 10px;">Start Date
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;">{{element.FormattedStartDate}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="endDate">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Target Date
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;">{{element.FormattedEndDate}}
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Status</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> <span class="statusID"
+                    [ngClass]="(element.StatusID == 1) ? 'statusNotStarted' : (element.StatusID == 2 ) ? 'StatusUnderReview' : (element.StatusID == 3) ? 'statusInprogress' :(element.StatusID == 4) ? 'statusPublished': (element.StatusID == 6) ? 'statusCompleted':'statusDelayed'">{{element.StatusName}}</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="progress">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Progress</th>
+                <td mat-cell *matCellDef="let element">
+                  <div class="d-flex justify-content-center px-2 w-90">
+                    <div class="progress tableProgress w-90" style="margin-right: 1vh;">
+                      <div [ngClass]="{ 'progress-bar': (element.Progress).replace('%','') < 99, 'color-class-Complete': (element.Progress).replace('%','') == 100 }"
+                        [ngStyle]="{ 'width': element.Progress, 'background-color': getColor(element.Progress) }">
+                      </div>
+                    </div>
+                    <div class="w-10 test-start fontSize13rem">{{element.Progress}}</div>
+                  </div>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                style="background-color:  rgb(207, 205, 205);">
+              </tr>
+              <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+              <tr *matNoDataRow>
+                <td [attr.colspan]="displayedColumns.length">No data found.</td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

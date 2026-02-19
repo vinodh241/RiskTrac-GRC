@@ -1,0 +1,184 @@
+<div class="tab-content topTabContentBg h-8 mx-3">
+    <div class="p-1 test-end position-relative h-100" style="z-index: 1;">
+      <div class="d-flex justify-content-right align-items-center vmiddleRight filterRight">
+        <div class="btnGen customize me-4" (click)="openConsolidatedReport()" id="Consolidated">
+          <img src="./assets/images/icon-cr.svg" width="20%" alt="Consolidated Report"> {{ 'common.consolidatedReport' | translate }}
+        </div>
+        <div class="applyFilter addDesktop position-relative text-start me-4">
+          <button type="button" class="btn btn-dark btnGradient" data-bs-toggle="modal" data-bs-target="#newIncident"
+            id="initiate" (click)="initiateBCP()" *ngIf="IsBCManager">{{ 'bia.initiateBiaExercise' | translate }}</button>
+          <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+              src="./assets/images/icon-add-desktop.svg"></span>
+        </div>
+  
+        <div class="d-inline-block position-relative searchInput me-2">
+          <input [placeholder]="'common.search' | translate" class="form-control tblfilter" id="search" (keyup)="applyFilter($event)">
+          <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+              aria-hidden="true"></i></span>
+        </div>
+      </div>
+  
+      <div class="d-flex justify-content-right align-items-center vmiddleLeft filterLeft">
+  
+        <div class="position-relative colorStatus scheduled me-4" id="TestSch"
+          [ngClass]="{ 'active': assessmentStatusIds.includes(1)}" (click)="filterStatus(1)">
+          <span class="vmiddleLeft position-absolute">{{scheduled}}</span>
+          {{ 'bia.statusCards.bcpsScheduled' | translate }}<br>{{ 'bia.statusCards.bcpsScheduledLabel' | translate }}
+        </div>
+  
+        <div class="position-relative colorStatus inprogress me-4" data-bs-toggle="modal"
+          data-bs-target="#reportNewIncident" [ngClass]="{ 'active': assessmentStatusIds.includes(2)}"
+          (click)="filterStatus(2)">
+          <span class="vmiddleLeft position-absolute">{{inProgressCount}}</span>
+          {{ 'bia.statusCards.reviewsInProgress' | translate }}<br>{{ 'bia.statusCards.reviewsInProgressLabel' | translate }}
+        </div>
+  
+        <div class="position-relative colorStatus published me-4" data-bs-toggle="modal"
+          [ngClass]="{ 'active': assessmentStatusIds.includes(3)}" data-bs-target="#incidentReport"
+          (click)="filterStatus(3)">
+          <span class="vmiddleLeft position-absolute">{{publishedCount}}</span>
+          {{ 'bia.statusCards.publishedBcps' | translate }}<br>{{ 'bia.statusCards.publishedBcpsLabel' | translate }}
+        </div>
+      </div>
+  
+    </div>
+  </div>
+  
+  <div class="table-model-bg h-80 px-3 w-100 py-4">
+    <div class="h-100 pb-3 w-100">
+      <div class="cardGen colorGeyGradient h-100">
+        <div class="cardBody singleRow w-100 h-100">
+          <div class="w-100 h-100 px-2 py-3 position-relative">
+            <div class="w-100 h-6">
+              <h2 class="h-100 text-start"><img src="./assets/images/icon-as.svg" class="headingIcon longBox icokKPI"
+                  alt="BCP Coverage"> {{ 'bia.pageTitle' | translate }}
+              </h2>
+            </div>
+  
+            <div class="w-100 h-94 vscroll tableContent">
+              <table mat-table [dataSource]="dataSource" (matSortChange)="sortData($event)" matSort class="table-striped">
+  
+                <ng-container matColumnDef="Index">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                  <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                </ng-container>
+  
+                <ng-container matColumnDef="businessFunction">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.businessFunction' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"
+                    [matTooltip]="((element.CurrentWorkflowStatusID == 2 || element.CurrentWorkflowStatusID == 1) && element.IsBCCValidUser == 0 || element.BCCNotFound == 1) ? 'It will be enabled once BCC submits the Business Function' : ''">
+                    <a href="javascript: void(0);" class="tblLnk"
+                      [ngClass]=" ((element.CurrentWorkflowStatusID == 2 || element.CurrentWorkflowStatusID == 1) && element.IsBCCValidUser == 0) ? 'disabled-btn' : ''"
+                      (click)="select(element)">{{element.BusinessFunctionName}}</a>
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="group">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="BusinessGroup"
+                    style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.department' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label
+                      class="link">{{element.BusinessGroup}}</label></td>
+                </ng-container>
+  
+                <ng-container matColumnDef="mtpd">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="MTPDValue"
+                    style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.mtpd' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label class="link">
+                      {{element.MTPDValue}}</label></td>
+                </ng-container>
+  
+                <ng-container matColumnDef="rto">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="RTOValue"
+                    style="background-color:#e4e4e4;width: 9vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.rto' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RTOValue}} </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="rpo">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="RPOValue"
+                    style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.rpo' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RPOValue}}</td>
+                </ng-container>
+  
+                <ng-container matColumnDef="bcc">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 6vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.bcc' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;" [matTooltip]="element?.BCCName">
+                    {{businessContinuityService.getTitleValue(element?.BCCName)}} </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="docStatus">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="DocStatus"
+                    style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.docStatus' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;">
+                    <span class="statusID"
+                      [ngClass]="(element.DocStatusID == 1) ? 'statusScheduled' : (element.DocStatusID == 2) ? 'draft' : (element.DocStatusID == 4) ? 'statusDelayed': 'statusPublished'">
+                      {{element.DocStatus}} </span>
+                </ng-container>
+  
+                <ng-container matColumnDef="nextReview">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.reviewCompletion' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.FinalDate == null ? '--' :
+                    (element.FinalDate) }} </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="ReviewStatus">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="CurrentWorkflowStatus"
+                    style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.workflowStatus' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;">
+                    <span class="statusID"
+                      [ngClass]="(element.CurrentWorkflowStatusID == 1) ? 'statusScheduled' : (element.CurrentWorkflowStatusID == 2) ? 'statusInprogress' : (element.CurrentWorkflowStatusID == 4 || element.CurrentWorkflowStatusID == 3 || element.CurrentWorkflowStatusID == 6) ? 'StatusUnderReview' : (element.CurrentWorkflowStatusID == 8) ? 'statusCompleted' : (element.CurrentWorkflowStatusID == 7) ? 'statusDelayed' : 'statusPublished'"
+                      [matTooltip]="(element.CurrentWorkflowStatus)?.length > 10? (element.CurrentWorkflowStatus):''">
+                      {{businessContinuityService.getTitleListValue(element.CurrentWorkflowStatus)}} </span>
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="biaRating">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.biaRating' | translate }}</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;">
+                    <span class="d-inline-flex align-items-center">
+                      {{element.BIARating}}
+                      <i class="fa fa-info-circle ms-2 bia-rating-help-icon" 
+                         *ngIf="element.BIARating && element.BIARatingDescription"
+                         [matTooltip]="element.BIARatingDescription"
+                         matTooltipClass="bia-rating-tooltip"
+                         matTooltipPosition="right"
+                         aria-label="BIA Rating description"></i>
+                    </span>
+                  </td>
+                </ng-container>
+  
+                <ng-container matColumnDef="action">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 9%;border: 2px solid white;border-right: 1px solid #fff; padding-left: 8px;">
+                  </th>
+                  <td mat-cell *matCellDef="let row">
+                    <button mat-icon-button [matTooltip]="'common.viewPreviousComments' | translate" class="eye-icon"
+                      (click)="reviewComments(row)"> <img src="./assets/images/icon-prev-comments.svg" class="pb-1"
+                        alt="Home" style="cursor: pointer;">
+                    </button>
+                    <button mat-icon-button class="example-icon custom-button" id="'submitforReview'"
+                      [disabled]="getViewAccess(row)" (click)="onReviewPublish(row)"> <img
+                        src="./assets/images/icon-right-arrow.svg" class="m-0">
+                    </button>
+                  </td>
+                </ng-container>
+  
+  
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"
+                  style="background-color:  rgb(207, 205, 205);">
+                </tr>
+                <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">{{ 'common.noDataFound' | translate }}</td></tr>
+  
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  

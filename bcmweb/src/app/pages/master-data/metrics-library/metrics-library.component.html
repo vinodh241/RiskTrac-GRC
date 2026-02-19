@@ -1,0 +1,108 @@
+<div class="d-flex justify-content-end align-items-center w-xl-60 p-3 h-9">
+  <div class="applyFilter addDesktop position-relative text-left me-4" style="margin-bottom: 0.4em;">
+    <button type="button" class="btn btn-dark btnGradient" id="krikpiID" (click)="addEdit('Add')">New KPI / KRI</button>
+    <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+        src="./assets/images/icon-add-desktop.svg"></span>
+  </div>
+  <div class="d-inline-block position-relative searchInput mr-2">
+    <input placeholder="Search" class="form-control tblfilter" id="searchID" (keyup)="applyFilter($event)">
+    <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+        aria-hidden="true"></i></span>
+  </div>
+</div>
+
+<div class="table-model-bg h-85 px-3 w-100 py-4">
+  <div class="h-100 pb-3 w-100">
+    <div class="cardGen colorGeyGradient h-100 text-left">
+      <div class="cardBody singleRow w-100 h-100">
+        <div class="w-100 h-100 px-2 py-3 position-relative">
+          <div class="w-100 h-6">
+            <h2 class="h-100 text-start"><img src="./assets/images/icon-kpi-kri-ml.svg"
+                class="headingIcon longBox icokKPI" alt="ML Image">
+              KPI / KRI Metric Library</h2>
+          </div>
+          <div class="w-100 h-94">
+            <div class="mat-table-padding data-container">
+              <table mat-table [dataSource]="dataSource"  (matSortChange)="sortData($event)" matSort  class="mat-elevation-z8" style="max-height: 71vh;overflow-y:scroll">
+                <ng-container matColumnDef="Position">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                  <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="Code">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header="Code"
+                    style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Code</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 8vw;"> {{element.MetricCode}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MetricTitle">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header="MetricTitle"
+                    style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Metric Title
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 8vw;"> <label class="link">
+                      {{element.MetricTitle}}</label> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MetricType">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header="MetricType"
+                    style="background-color:#e4e4e4;width: 9vw;border: 2px solid white;padding-left: 10px;">Metric Type
+                  </th>
+                  <td mat-cell *matCellDef="let element" [matTooltip]="element.MetricType"
+                    style="padding-left: 10px;width: 9vw;">
+                    {{element.MetricType}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ReviewFrequency">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header="ReviewFrequency"
+                    style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">Review
+                    Frequency
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 5vw;"> {{element.Frequency}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MetricTarget">
+                  <th mat-header-cell *matHeaderCellDef  mat-sort-header="MetricTarget"
+                    style="background-color:#e4e4e4;width: 6vw;border: 2px solid white;padding-left: 10px;">Metric
+                    Target
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 6vw;"> {{element.TargetValue}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="MetricOwner">
+                  <th mat-header-cell mat-sort-header *matHeaderCellDef  mat-sort-header="MetricOwner"
+                    style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Metric Owner
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;width: 3vw;"> {{element.MetricOwner}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 9%;border: 2px solid white;border-right: 1px solid #fff; padding-left: 8px;">
+                  </th>
+                  <td mat-cell *matCellDef="let row let i = index" style="width: 9%; padding-left: 8px;text-align: center;">
+                    <button mat-icon-button class="example-icon custom-button" [id]="'editID'+ i" (click)="addEdit('Edit',row)"><img
+                        src="assets/images/icon-edit.svg" alt="edit"></button>
+                    <button mat-icon-button class="example-icon custom-button" [id]="'delete'+ i" (click)="deleteMetrics(row)"><img
+                        src="./assets/images/icon-delete-black.svg"></button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true" style="background-color:  rgb(207, 205, 205);"></tr>
+                <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">No data found.</td></tr>
+            </table>
+            <!-- </section> -->
+
+          </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

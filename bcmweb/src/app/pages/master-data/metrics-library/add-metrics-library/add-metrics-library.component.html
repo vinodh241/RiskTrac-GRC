@@ -1,0 +1,295 @@
+<div class="modal-content modalContent" style="width: 196vh;">
+  <form [formGroup]="defineMetricLibraryForm">
+    <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+      <h5 class="modal-title modalh5" id="staticBackdropLabel">Metrics Library - {{mod}} Metric</h5>
+      <button type="button" class="example-icon" mat-icon-button data-dismiss="modal" aria-label="Close" id="closeID" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+      <div class="row mx-3">
+
+        <div class="col-7 pl-0 pr-5">
+          <div class="row mx-0">
+            <div class="col-6 pl-0 pr-4">
+              <div class="row mx-0">
+                <div class="col-6 pl-0 pr-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Metric Code <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" style="width: 20vh;">
+                    <input matInput formControlName="metricCode" readonly id="metricCode">
+                  </mat-form-field>
+                </div>
+
+                <div class="col-6 pl-2 pr-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Metric Type <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" style="width:25vh">
+                    <mat-select matSelectSearch formControlName="metricType" id="metricType" placeholder="Select Metric Type">
+                      <mat-option *ngFor="let metric of  MasterMetricService?.metricData?.MetricTypesList"
+                        [id]="metric.MetricTypeID" [value]="metric.MetricTypeID">
+                        {{metric.MetricType}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['metricType'].touched) && f['metricType'].errors">Metric Type is
+                    required</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-4 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Metric Owner <sup
+                  class="red">*</sup></label>
+              <div class="w-100 position-relative">
+                <mat-form-field appearance="fill" style="width:51vh">
+                  <input type="text" placeholder="Owner" matInput formControlName="metricOwner" [matAutocomplete]="auto"
+                    id="metricOwner" (input)="filterFBCC($event)">
+                  <img src="./assets/images/icon-site-bcposition.svg"
+                    class="vmiddleRight position-absolute formIconMddl2" alt="">
+                  <mat-autocomplete #auto="matAutocomplete">
+                    <mat-option *ngFor="let site of filteredFBCC" [value]="site.MetricOwnerName"
+                      [id]="site.MetricOwnerName" (onSelectionChange)="setMetricOwner(site)">
+                      {{site.MetricOwnerName}}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+                <mat-error *ngIf="(submitted || f['metricOwner'].touched) && f['metricOwner'].errors">Select
+                  Metric Owner</mat-error>
+                <mat-error *ngIf="submitted && isOwnerExists">Please select derived Metric Owner</mat-error>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-4">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Title <sup
+                  class="red">*</sup></label>
+              <mat-form-field appearance="fill" style="width: 51vh;" >
+                <textarea matInput formControlName="title" id="title" placeholder="Title" (keyup)="checkDescriptionExist($event)"></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['title'].touched) && f['title'].errors">Title is required</mat-error>
+              <mat-error *ngIf="(submitted || f['description'].touched) && isDescriptionExists">Title already exists</mat-error>
+
+            </div>
+
+            <div class="col-6 pl-4 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Description <sup
+                  class="red">*</sup></label>
+              <mat-form-field appearance="fill" style="width: 51vh;">
+                <textarea matInput formControlName="description" id="description" placeholder="Description" ></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['description'].touched) && f['description'].errors">Description is
+                required</mat-error>
+            </div>
+
+            <div class="col-6 pl-0 pr-4">
+              <div class="row mx-0">
+                <div class="col-6 pl-0 pr-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Target Type <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <mat-select matSelectSearch formControlName="targetType" id="targetType" placeholder="Select Target Type" >
+                      <mat-option *ngFor="let type of  MasterMetricService?.metricData?.TargetTypeslist"
+                        [id]="type.TargetTypeID" [value]="type.TargetTypeID" (click)="selectTarget(type)">
+                        {{type.TargetType}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['targetType'].touched) && f['targetType'].errors">Target Type is
+                    required</mat-error>
+                </div>
+
+                <div class="col-6 pl-2 pr-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Threshold <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <mat-select matSelectSearch formControlName="threshold" id="threshold" placeholder="Select Threshold" >
+                      <mat-option *ngFor="let threshold of  MasterMetricService?.metricData?.ThresholdsList"
+                        [id]="threshold.ThresholdID" [value]="threshold.ThresholdID">
+                        {{threshold.Threshold}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['threshold'].touched) && f['threshold'].errors">Threshold is
+                    required</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-4 pr-0">
+              <div class="row mx-0">
+                <div class="col-6 pl-0 pr-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Target Value<sup
+                      class="red">*</sup></label>
+
+                  <mat-form-field appearance="fill" style="width: 22vh;" *ngIf="!targetValue" >
+                    <mat-select matSelectSearch formControlName="targetValue" id="targetValue" placeholder="Select targetValue" >
+                      <mat-option *ngFor="let target of  targetValueList"
+                        [id]="target.id" [value]="target.targetValue">
+                        {{target.targetValue}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+
+                  <mat-form-field appearance="fill" style="width: 22vh;" *ngIf="targetValue">
+                    <input matInput type="number" formControlName="targetValue" placeholder="Target Value" id="targetValue">
+                  </mat-form-field>
+
+                  <mat-error *ngIf="submitted && f['targetValue'].value?.length === 0 && !targetLength">Select Target Type first</mat-error>
+                  <mat-error *ngIf="(!targetValue && submitted )&& f['targetValue'].errors">Target Value is
+                    required(eg Yes/No)</mat-error>
+                    <mat-error *ngIf="(targetValue && submitted ) && f['targetValue'].errors">Target Value is
+                      required(eg 10)</mat-error>
+                </div>
+
+                <div class="col-6 pl-2 pr-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Frequency <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" style="width: 25vh;">
+                    <mat-select matSelectSearch formControlName="frequency" placeholder="Select Frequency" id="frequency">
+                      <mat-option *ngFor="let frequency of  MasterMetricService?.metricData?.FrequenciesList"
+                        [id]="frequency.FrequencyID" [value]="frequency.FrequencyID">
+                        {{frequency.Frequency}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['frequency'].touched) && f['frequency'].errors">Frequency is
+                    required</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-4">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Datapoint 1 (Numerator) <sup
+                  class="red">*</sup></label>
+              <mat-form-field appearance="fill" style="width: 51vh;">
+                <textarea matInput formControlName="datapoint1Num" id="datapoint1Num"></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['datapoint1Num'].touched) && f['datapoint1Num'].errors">Datapoint 1 is
+                required</mat-error>
+            </div>
+
+            <div class="col-6 pl-4 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Datapoint 2 (Denominator) <sup
+                  class="red">*</sup></label>
+              <mat-form-field appearance="fill" style="width: 51vh;">
+                <textarea matInput formControlName="datapoint2Deno" id="datapoint2Deno"></textarea>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['datapoint2Deno'].touched) && f['datapoint2Deno'].errors">Datapoint 2 is
+                required</mat-error>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-5 pl-5 pr-0">
+          <div class="w-100 p-0 mb-2 position-relative">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Current Controls <sup
+                class="red">*</sup></label>
+            <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-30">
+              <div class="w-100 h-100 vscroll" formGroupName="addNewForm">
+                <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                  [dataSource]="dataSource">
+                  <ng-container matColumnDef="Index">
+                    <th mat-header-cell *matHeaderCellDef class="w-5"> </th>
+                    <td mat-cell *matCellDef="let row" class="w-5 text-center"> {{row.Index}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="framework">
+                    <th mat-header-cell *matHeaderCellDef> Framework </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div *ngIf="!element.isSaved">{{element.FrameworkName}}</div>
+                      <div *ngIf="element.isSaved">
+                        <mat-form-field style="width: 18vh;">
+                          <mat-select matSelectSearch formControlName="framework" id="framework" (selectionChange)="filterDomain($event.value)">
+                              <mat-option *ngFor="let option of MasterMetricService?.metricData?.Frameworks" [id]="option.FrameworkName" [value]="option">
+                                  {{option.FrameworkName}}
+                              </mat-option>
+                          </mat-select>
+                      </mat-form-field>
+
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="domain">
+                    <th mat-header-cell *matHeaderCellDef> Domain </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div *ngIf="!element.isSaved">{{element.DomainName}}</div>
+                      <div *ngIf="element.isSaved">
+                        <mat-form-field style="width: 18vh;">
+                          <mat-select matSelectSearch formControlName="domain" id="domain">
+                            <mat-option *ngFor="let option of this.filteredDomainOptions" [value]="option"
+                              [id]="option.DomainName" (onSelectionChange)="filterDomainData(option)">
+                              {{ concatenateDomainIDs(option) }}. {{option.DomainName}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="frameworkControl">
+                    <th mat-header-cell *matHeaderCellDef> Framework Control </th>
+                    <td mat-cell *matCellDef="let element">
+                      <div *ngIf="!element.isSaved">{{element.ControlName}}</div>
+                      <div *ngIf="element.isSaved">
+                        <mat-form-field style="width: 18vh;">
+                          <mat-select matSelectSearch formControlName="frameworkControl" id="frameworkControl">
+                            <mat-option *ngFor="let option of this.filteredFrameworkControlOptions"
+                              [value]="option" [id]="option.ControlName" (onSelectionChange)="checkControlData(option)">
+                              {{ concatenateControlIDs(option) }}.{{option.ControlName}}
+                            </mat-option>
+                          </mat-select>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef class="w-15"> </th>
+                    <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                      <ng-container *ngIf="!row.isSaved">
+                        <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                          matTooltip="Delete" color="primary" [id]="'delete'+ row.Index" (click)="deleteControl(row)" [disabled]="blockEdit">
+                          <mat-icon>delete</mat-icon>
+                        </button>
+                      </ng-container>
+                      <ng-container *ngIf="row.isSaved">
+                        <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                          matTooltip="Save" color="primary" [disabled]="!saveFlag" id="saveControl" (click)="saveControl(row)"><mat-icon>save</mat-icon>
+                        </button>
+                        <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="cancel" color="primary" (click)="cancel(row)" id="closeControl"><mat-icon>close</mat-icon>
+                      </button>
+                      </ng-container>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+
+              </div>
+            </div>
+            <mat-error *ngIf="(submitted && dataSource.data?.length == 0)">Atleast one current control is
+              required.</mat-error>
+            <mat-error *ngIf="(submitted && checkControlSave(dataSource.data))">Please save new added
+              control.</mat-error>
+            <div class="w-100 h-20 px-0 text-left py-1">
+              <div><button mat-button class="btn btn-primary modalColorBtn modalColorBtnGreen" [disabled]="blockEdit"
+                 id="addControls" (click)="addNewControl()"><span class="font-weight-bold">+</span> Add </button></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- </div> -->
+    <mat-error class="ms-5" *ngIf="saveerror">{{saveerror}}</mat-error>
+    <div class="modal-footer modalFooter">
+      <button mat-button mat-dialog-close class="btn btn-secondary modalCancelBtn me-3" id="cancelThreat"
+      >Cancel</button>
+      <button type="button" class="btn btn-primary modalColorBtn" id="metricID" (click)="onSubmit()"><img
+          src="./assets/images/icon-application.svg" alt="">{{mod}} New Metric</button>
+    </div>
+  </form>
+</div>

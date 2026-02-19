@@ -1,0 +1,18 @@
+.mat-mdc-dialog-content {
+  white-space: pre;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  color: white !important;
+}
+.mat-mdc-dialog-title{
+  margin: 0 0 20px;
+  display: block;
+  font-size: 20px;
+  color: white !important;
+}
+
+.confirm-modal {
+  background-color: #000000EE !important;
+}

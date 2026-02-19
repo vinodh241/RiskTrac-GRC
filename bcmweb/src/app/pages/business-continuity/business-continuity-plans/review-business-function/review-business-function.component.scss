@@ -1,0 +1,75 @@
+.disable{
+  cursor: none;
+  pointer-events: none;
+  opacity: 0.5; /* Adjust the opacity as needed */
+}
+.parent-container .child-button {
+  background-color: #008CBA; /* Override background color */
+  font-size: 18px; /* Override font size */
+}
+
+.middleDaywise {
+  background: linear-gradient(90deg, #C9FFC0 17.54%, #FFFCBA 84.35%);
+  border: 0.1vh solid #727272;
+  border-radius: 50vh;
+  color: #000;
+  font-size: 1.2rem;
+  padding: 0.5vh 0.5vw;
+}
+
+.middleDaywise span {
+  font-size: 1.6rem;
+  color: #000;
+}
+
+.disable{
+  cursor: none !important;
+  pointer-events: none;
+  opacity: 0.5 !important; /* Adjust the opacity as needed */
+}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.blinking-icon {
+  animation: blink 1s infinite;
+}
+
+.middleDaywise {
+  padding-inline: 0.8vw;
+  border-right: 1px solid #C3C3C3;
+}
+.applyFilter.addDesktop {
+  display: flex;
+  align-items: center;
+  gap: 0.5vh;
+  white-space: nowrap;
+  position: relative;
+}
+
+.applyFilter.addDesktop button {
+  flex-shrink: 0;
+}
+
+.applyFilter.addDesktop span {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin-left: 0.5vh;
+}
+
+.applyFilter.addDesktop img {
+  width: auto;
+  height: 2vh;
+  right: -1.3vh;
+  position: absolute;
+}

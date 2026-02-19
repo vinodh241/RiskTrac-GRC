@@ -1,0 +1,72 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 test-end position-relative h-100">
+    <div class="d-flex justify-content-center align-items-center vhmiddle w-xl-60">
+
+      <!-- multi-select
+       <label class="lblTxt mb-0" [ngClass]="(selectedYearsString.length > 7)? 'pe-2' : 'pe-4'"
+        [matTooltip]="(selectedYearsString.length > 7)? selectedYearsString : ''">Financial
+        <span>Year {{getSelectedYearsString()}}</span>
+      </label> -->
+      <label class="lblTxt mb-0 pe-2">Financial
+        <span>Year {{getSelectedYearsString()}}</span>
+      </label>
+
+      <mat-form-field class="w-20 ms-2 me-4 year-field" style="height: 5vh">
+        <!-- multi-select
+        <mat-select id="financialYearId" placeholder="Select Year" multiple [(ngModel)]="selectedYearsList">
+          <mat-option *ngFor="let item of yearsDropdownList" [value]="item.Year"
+            [id]="item.ID">{{item.Year}}</mat-option>
+        </mat-select> -->
+        <mat-select matSelectSearch id="financialYearId" placeholder="Select Year" [(ngModel)]="selectedYear" id="yearDropdown">
+          <mat-option *ngFor="let item of yearsDropdownList" [value]="item.Year" (click)="filterGlobalDashboardData()"
+            [id]="item.ID">{{item.Year}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <!-- multi-select
+      <div class="applyFilter position-relative me-4 text-start">
+        <button type="button" class="btn btn-dark btnGradient" style="min-width: 8vw;"
+          (click)="filterGlobalDashboardData()">Apply Filter</button>
+        <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><i class="fa fa-filter"
+            aria-hidden="true"></i></span>
+      </div> -->
+
+      <div class="iconRefresh me-4 cursor-pointer" (click)="resetFilter()" matTooltip="Reset Filter" id="resetFilter"><i class="fa fa-refresh"
+          aria-hidden="true"></i></div>
+
+      <div class="btnGen ev me-2" (click)="exportGDashboardView('global')" id="downloadGDView"><img src="./assets/images/icon-pdf.svg"
+          width="20%" alt="Setting"> Export View
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4 vscroll">
+  <div class="h-100 dashboardCard pb-3 w-100">
+    <ng-container>
+      <app-bcp-coverage-widget class="col-4 w-100 p-0" [bcpCoverageData]="bcpCoverageData"
+      id="global-BCP-coverage-widget-id"></app-bcp-coverage-widget>
+    </ng-container>
+    <ng-container>
+      <app-periodic-review-widget class="col-4 w-100 p-0" [periodicReviewData]="periodicReviewData"
+        id="global-periodic-review-widget-id"></app-periodic-review-widget>
+    </ng-container>
+    <ng-container>
+      <app-remediation-tracker-widget class="col-4 w-100 p-0" [remediationTrackerData]="remediationTrackerData"
+        id="global-remediation-tracker-widget-id"></app-remediation-tracker-widget>
+    </ng-container>
+    <ng-container>
+      <app-site-risk-widget class="col-4 w-100 p-0" [siteRiskAssessmentsData]="siteRiskAssessmentsData"
+        id="global-site-risk-assessment-widget-id"></app-site-risk-widget>
+    </ng-container>
+    <ng-container>
+      <app-risk-details-widget class="col-4 w-100 p-0" [siteRiskAssessmentsData]="siteRiskAssessmentsData"
+        id="global-risk-details-widget-id"></app-risk-details-widget>
+    </ng-container>
+    <ng-container>
+      <app-bcp-criticality-distribution class="col-4 w-100 p-0" [bcpCriticalityData]="bcpCriticalityData"
+        id="global-BCP-criticality-widget-id"></app-bcp-criticality-distribution>
+    </ng-container>
+  </div>
+</div>

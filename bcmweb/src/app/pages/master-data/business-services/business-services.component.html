@@ -1,0 +1,138 @@
+<div class="d-flex justify-content-end align-items-center w-xl-60 p-3 h-9">
+  <div style="display: contents;">
+    <div class="btnGenDown ev me-4" data-toggle="modal" style="position: absolute;left: 4vh;" (click)="download()" id="download"  matTooltip="Download" data-target="#addWidget"><img
+      src="./assets/images/icon-download-template.svg" alt="Download"> Download Template</div>
+      <div class="btnGen ev me-4" [ngClass]="(!importButtonFlag) ? 'disable'  : ''" data-toggle="modal" style="position: absolute;left: 28vh;" (click)="bulkUploadExcelFile()" [matTooltip]="!importButtonFlag ? ' Select a valid file before importing list' : 'Import list in bulk'" data-target="#addWidget"><img
+        src="./assets/images/icon-import.svg" alt="Import List in Bulk"> Import List in Bulk</div>
+    <div class="btnGenUp ev me-4" style="height: 4vh;position: absolute;left: 52vh;"> <img
+        src="./assets/images/icon-upload.svg" class="mx-2" alt="" matTooltip="Browse" id="file"  style="padding-bottom: 1vh;"><input type="file" class="file-upload" id="file-input"
+        name="file-input" style="display: none;" ng2FileSelect [uploader]="uploader"
+        (change)="seletedFileDetails($event)" />
+        <label id="file-input-label" for="file-input">Browse File</label></div><div style="left: 72vh;position: absolute;">{{fileName}}</div>
+    <div class="ev me-4" *ngIf="invalidData?.length>0" matTooltip="Invalid File Details. Click here to view more details" id="invalid" (click)="invalidExcelData()" style="position: absolute; left: 73vh"><img
+          src="./assets/images/icon-invalid-data.svg" alt="Invalid" class="blinking-icon"></div>
+
+  </div>
+
+  <div class="applyFilter addDesktop position-relative text-left me-4" style="margin-bottom: 0.4em;">
+    <button type="button" class="btn btn-dark btnGradient ad" id="businessID" (click)="add('add')">Add New
+      Application</button>
+    <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+        src="./assets/images/icon-add-desktop.svg"></span>
+  </div>
+
+  <div class="d-inline-block position-relative searchInput me-2">
+    <input placeholder="Search" class="form-control tblfilter" id="bussServiceFilter" (keyup)="applyFilter($event)">
+    <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+        aria-hidden="true"></i></span>
+  </div>
+
+</div>
+
+<div class="table-model-bg h-85 px-3 w-100 py-4">
+  <div class="h-100 pb-3 w-100">
+    <div class="cardGen colorGeyGradient h-100 text-left">
+      <div class="cardBody singleRow w-100 h-100">
+        <div class="w-100 h-100 px-2 py-3 position-relative">
+          <div class="w-100 h-6">
+            <h2 class="h-100 text-start"><img src="./assets/images/icon-sa.svg" class="headingIcon longBox icokKPI"
+                alt="BSA Image">
+              Services & Applications</h2>
+          </div>
+          <div class="w-100 h-94">
+
+            <section class="w-100 vscroll tableContent h-100" tabindex="0">
+              <table mat-table [dataSource]="dataSource" (matSortChange)="sortData($event)" matSort
+                class="table-striped" id="businessServicesID">
+                <ng-container matColumnDef="Position">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                  <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="ApplicationName">
+                  <th mat-header-cell mat-sort-header="ApplicationName" *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Application
+                    / Services name</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.ApplicationName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="BusinessGroup">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="BusinessGroup"
+                    style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Business
+                    Group/Function</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> <label class="link">
+                      {{element.BusinessFunction}}</label> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="DeploymentSite">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="DeploymentSite"
+                    style="background-color:#e4e4e4;width: 9vw;border: 2px solid white;padding-left: 10px;">Deployment
+                    Site
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.siteNameNew}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="BusinessOwner">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="BusinessOwner"
+                    style="background-color:#e4e4e4;width: 7vw;border: 2px solid white;padding-left: 10px;">Business
+                    Owner</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.BusinessOwnerName}}
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="ITOwner">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="ITOwner"
+                    style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">IT Owner
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.ITOwnerName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="SupportLead">
+                  <th mat-header-cell *matHeaderCellDef mat-sort-header="SupportLead"
+                    style="background-color:#e4e4e4;width: 6vw;border: 2px solid white;padding-left: 10px;">Support Lead
+                  </th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.LeadName}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="RTO">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">RTO</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RecoveryTime}}
+                    {{element.TimeUnit}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="RPO">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">RPO</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RecoveryPoint}}
+                    {{element.PointUnit}}</td>
+                </ng-container>
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef
+                    style="background-color: #e4e4e4; width: 3vw; border: 2px solid white; padding-left: 10px;"></th>
+                  <td mat-cell *matCellDef="let row let i=index"
+                    style="width: 3%; padding-left: 8px;text-align: center;">
+                    <button mat-icon-button class="example-icon custom-button" [id]="'edit'+ i"
+                      (click)="addEdit('edit',row)"><img src="assets/images/icon-edit.svg" alt="edit"></button>
+                  </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                  style="background-color:  rgb(207, 205, 205);"></tr>
+                <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                <tr *matNoDataRow>
+                  <td [attr.colspan]="displayedColumns.length">No data found.</td>
+                </tr>
+              </table>
+            </section>
+
+
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,540 @@
+<div class="col-10 ps-0 pe-4 h-100" style="width: 82.8vw;">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+      [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+      style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: 2vh; font-size: 2.3vh;"
+      [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+      (workFlowStatusID == 2) ? 'statusInprogress' :
+      (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+      (workFlowStatusID == 8) ? 'statusCompleted' :
+      (workFlowStatusID == 7) ? 'statusDelayed' :
+      'statusPublished'">
+       {{ workFlowStatus }}
+    </span>
+  </span>
+  <div class="tab-pane pb-2 h-100" id="section-1-content" role="tabpanel" aria-labelledby="section-1">
+    <div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+      <div class="cardBody singleRow w-100 h-100">
+        <div class="w-100 h-100 px-2 py-3 position-relative">
+          <div class="w-100 h-6 pb-5">
+            <h2 class="h-100"><img src="./assets/images/icon-tl.svg" class="headingIcon longBox icoAs"
+                alt="BCP Coverage"> {{ 'bcp.section7.title' | translate }}</h2>
+          </div>
+
+          <div class="w-100 h-78 vscroll pe-3  bc-process-details-container" style="height: 56vh;">
+            <div *ngIf="!listingBCP">
+            <form [formGroup]="staffDetailsForm">
+              <div class="risk-itigation-container">
+                <div class="row pb-3">
+                  <div class="col-12">
+                    <div class="w-100 h-52 vscroll tableContent11">
+                      <div class="w-100 h-100 p-0 vscroll tableContent2 mat-table-padding">
+                        <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                          [dataSource]="businessContinuityService.TableSCD" id="addCritical">
+                          <ng-container matColumnDef="Index">
+                            <th mat-header-cell *matHeaderCellDef style="background-color: #E7E7E7;font-size: 17px;">#</th>
+                            <td mat-cell *matCellDef="let row" class="w-2 text-center"> {{row.Index}} </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="CallID">
+                            <th mat-header-cell *matHeaderCellDef  style="border-left: 1px solid #fff;background-color: #E7E7E7;font-size: 17px;">Call ID<sup class="red">*</sup></th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.CallID}}</div>
+                              <div *ngIf="row.isEdit">
+                                <mat-form-field appearance="fill" style="width:13vh;">
+                                  <textarea matInput [value]="row.PotentialData" id="CallID" formControlName="CallID"
+                                    class="text-area" placeholder="Max(10 chars)" (input)="onCallIDInput($event)">{{row.CallID}}</textarea>
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('CallID')?.hasError('maxlength')">
+                                      Exceeding 10 characters
+                                      </mat-error>
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="CallOrder">
+                            <th mat-header-cell *matHeaderCellDef  style="border-left: 1px solid #fff;background-color: #E7E7E7;font-size: 17px;">Call Order<sup class="red">*</sup></th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit && row.Index == 1">{{ callOrder1}} --> {{row.CallID}}</div>
+                              <div *ngIf="!row.isEdit && row.Index > 1" >{{row.CallOrder}} --> {{row.CallOrder1}}</div>
+                              <div *ngIf="row.isEdit">
+                                <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="editOrder && row.Index == 1">
+                                  <input matInput id="CallOrder" [value]="row.CallOrder" formControlName="CallOrder"
+                                    class="text-area">
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="!editOrder || row.Index > 1" >
+                                      <mat-select matSelectSearch formControlName="CallOrder" id="CallOrder" placeholder="Select">
+                                        <mat-option *ngFor="let call of callDropdown" (click)="onSelect(call.name)"
+                                          [value]="call.name"
+                                          [id]="call.name">
+                                          {{call.name}}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                                -->
+                                <mat-form-field appearance="fill" style="width: 13vh;"
+                                *ngIf="editOrder && row.Index == 1">
+                                  <input matInput  id="CallOrder1" formControlName="CallOrder1"
+                                    class="text-area" readonly="true">{{getCallOrder1()}}
+                                </mat-form-field>
+                                <mat-form-field appearance="fill" style="width: 13vh;"
+                                *ngIf="!editOrder || row.Index > 1">
+                                    <mat-select matSelectSearch formControlName="CallIniOrder" id="CallOrder" placeholder="Select">
+                                      <mat-option *ngFor="let call1 of callOrderDropdown" (click)="onSelectOrder(call1.orderName)"
+                                        [value]="call1.orderName"
+                                        [id]="call1.orderName">
+                                        {{call1.orderName}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Role">
+                            <th mat-header-cell *matHeaderCellDef  style="border-left: 1px solid #fff;background-color: #E7E7E7;font-size: 17px;">Role</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.Role}}</div>
+                              <div *ngIf="row.isEdit">
+                                <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <input matInput [value]="row.Role" id="Role" formControlName="Role" placeholder="Max(20 chars)"
+                                    class="text-area">
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('Role')?.hasError('maxlength')">
+                                      Exceeding 20 characters
+                                    </mat-error>
+                                </mat-form-field>
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <mat-select matSelectSearch formControlName="Role" id="Role">
+                                    <mat-option *ngFor="let role of roleList" [value]="role.Role" [id]="role.RoleID">
+                                      {{role.Role}}
+                                    </mat-option>
+                                  </mat-select>
+                                </mat-form-field> -->
+                              </div>
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="CallInitiator">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #D1ECEE !important;font-size: 17px;">Call Initiator<sup class="red">*</sup></th>
+                            <td mat-cell *matCellDef="let row" class="border-left">
+                              <div *ngIf="!row.isEdit">{{row.CallInitiator}}</div>
+                              <div *ngIf="row.isEdit">
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <input matInput formControlName="CallInitiator" [matAutocomplete]="CallInitiatorAuto"
+                                    id="CallInitiator" (input)="filterInitiator($event)">
+                                  <mat-autocomplete #CallInitiatorAuto="matAutocomplete"> -->
+                                    <!-- <mat-option *ngFor="let staff of staffListData" [value]="staff.UserName"
+                                      [id]="staff.UserGUID" (click)="getStaffData(staff.UserGUID)">
+                                      {{staff.UserName}}
+                                    </mat-option> -->
+                                  <!-- </mat-autocomplete> -->
+                                <!-- </mat-form-field>  -->
+                                <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <!-- <input matInput formControlName="CallInitiator" [matAutocomplete]="CallInitiatorAuto"
+                                    id="CallInitiator" (input)="filterInitiator($event)">
+                                  <mat-autocomplete #CallInitiatorAuto="matAutocomplete"> -->
+                                    <mat-select matSelectSearch formControlName="CallInitiator" id="CallInitiator" placeholder="Select">
+                                    <mat-option *ngFor="let staff of staffListData" [value]="staff.UserName"
+                                      [id]="staff.UserGUID" (onSelectionChange)="getStaffData(staff.UserGUID)" style="font-size: 12px;font-weight: 600;">
+                                      {{staff.UserName}}
+                                    </mat-option>
+                                    </mat-select>
+                                  <!-- </mat-autocomplete> -->
+                                </mat-form-field>
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;" *ngIf="businessContinuityService.TableSCD.data.length == 1">
+                                                <input matInput [value]="row.CallOrder" id="CallOrder"
+                                                  formControlName="CallOrder"
+                                                  class="text-area">
+                                                 </mat-form-field> -->
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="businessContinuityService.TableSCD.data.length > 1">
+                                  <input matInput [value]="row.CallInitiator" id="CallInitiator"
+                                    formControlName="CallInitiator" class="text-area" readonly="true">{{callReceiver}}
+                                </mat-form-field> -->
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="DesignationC">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #D1ECEE !important;font-size: 17px;">Designation<sup class="red">*</sup></th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.DesignationC}}</div>
+                              <div *ngIf="row.isEdit">
+                                <mat-form-field appearance="fill" style="width: 13vh;" >
+                                  <input matInput [value]="row.DesignationC" id="DesignationC" formControlName="DesignationC" placeholder="Max(20 chars)"
+                                    class="text-area">
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('DesignationC')?.hasError('maxlength')">
+                                      Exceeding 20 characters
+                                    </mat-error>
+                                </mat-form-field>
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="businessContinuityService.TableSCD.data.length == 1">
+                                  <input matInput [value]="row.DesignationC" id="DesignationC"
+                                    formControlName="DesignationC" class="text-area"
+                                    readonly="true">{{getDesig(staffDetailsForm.get("CallInitiator")?.value,1)}}
+                                </mat-form-field> -->
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="businessContinuityService.TableSCD.data.length > 1">
+                                  <input matInput [value]="row.CallInitiator" id="CallInitiator"
+                                    formControlName="CallInitiator" class="text-area" readonly="true">{{designationR}} -->
+                                <!-- </mat-form-field> -->
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Mobile">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #D1ECEE !important;font-size: 17px;">Mobile<sup class="red">*</sup></th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.Mobile}}</div>
+                              <div *ngIf="row.isEdit">
+                                <mat-form-field appearance="fill" style="width: 13vh;" >
+                                  <input matInput [value]="row.DesignationC" id="Mobile" formControlName="Mobile" placeholder="Max(15 digits)"
+                                    class="text-area">
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('Mobile')?.hasError('pattern') && (!staffDetailsForm.get('Mobile')?.hasError('maxlength') || !staffDetailsForm.get('Mobile')?.hasError('minlength'))">
+                                      Digits Only
+                                    </mat-error>
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('Mobile')?.hasError('maxlength') || staffDetailsForm.get('Mobile')?.hasError('minlength')">
+                                      Range(10-15 digits)
+                                    </mat-error>
+                                </mat-form-field>
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="businessContinuityService.TableSCD.data.length == 1">
+                                  <input matInput [value]="row.Mobile" id="Mobile" formControlName="Mobile"
+                                    class="text-area"
+                                    readonly="true">{{getDesig(staffDetailsForm.get("CallInitiator")?.value,2)}}
+                                </mat-form-field> -->
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="businessContinuityService.TableSCD.data.length > 1">
+                                  <input matInput [value]="row.CallInitiator" id="CallInitiator"
+                                    formControlName="CallInitiator" class="text-area" readonly="true">{{mobileR}}
+                                </mat-form-field> -->
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Residence">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #D1ECEE !important;font-size: 17px;">Residence<sup class="red">*</sup></th>
+                            <td mat-cell *matCellDef="let row" class="border-right">
+                              <div *ngIf="!row.isEdit">{{row.Residence}}</div>
+                              <div *ngIf="row.isEdit">
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="businessContinuityService.TableSCD.data.length == 1">
+                                  <input matInput [value]="row.Residence" id="currentCDes" formControlName="Residence"
+                                    class="text-area"
+                                    readonly="true">{{getDesig(staffDetailsForm.get("CallInitiator")?.value,3)}}
+                                </mat-form-field> -->
+                                <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <input matInput [value]="row.Residence" id="currentCDes" formControlName="Residence" placeholder="Max(15 chars)"
+                                    class="text-area">
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('Residence')?.hasError('maxlength')">
+                                      Exceeding 15 characters
+                                    </mat-error>
+                                </mat-form-field>
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;"
+                                  *ngIf="businessContinuityService.TableSCD.data.length > 1">
+                                  <input matInput [value]="row.CallInitiator" id="CallInitiator"
+                                    formControlName="CallInitiator" class="text-area" readonly="true">{{residenceR}}
+                                </mat-form-field> -->
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="CallReceiver">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #DFD8F1 !important;font-size: 17px;">Call Receiver<sup class="red">*</sup></th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.CallReceiver}}</div>
+                              <div *ngIf="row.isEdit">
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;">
+                                <textarea matInput [value]="row.CallReceiver"  id="CallReceiver"
+                                                    formControlName="CallReceiver"
+                                                    class="text-area">{{row.CallReceiver}}</textarea>
+                                </mat-form-field> -->
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <input matInput formControlName="CallReceiver" [matAutocomplete]="CallReceiverAuto"
+                                    id="CallReceiver" (input)="filterReceiver($event)">
+                                  <mat-autocomplete #CallReceiverAuto="matAutocomplete"> -->
+                                    <!-- <mat-option *ngFor="let staff of staffReceiver" [value]="staff.UserName"
+                                      [id]="staff.UserGUID" (onSelectionChange)="getRecData(staff.UserGUID)">
+                                      {{staff.UserName}}
+                                    </mat-option> -->
+                                  <!-- </mat-autocomplete> -->
+                                <!-- </mat-form-field>  -->
+                                <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <!-- <input matInput formControlName="CallReceiver" [matAutocomplete]="CallReceiverAuto"
+                                    id="CallReceiver" (input)="filterReceiver($event)">
+                                  <mat-autocomplete #CallReceiverAuto="matAutocomplete"> -->
+                                    <mat-select matSelectSearch formControlName="CallReceiver" id="CallReceiver" placeholder="Select">
+                                    <mat-option *ngFor="let staff of staffReceiver" [value]="staff.UserName"
+                                      [id]="staff.UserGUID" (onSelectionChange)="getRecData(staff.UserGUID)" style="font-size: 12px;font-weight: 600;">
+                                      {{staff.UserName}}
+                                    </mat-option>
+                                  </mat-select>
+                                  <!-- </mat-autocomplete> -->
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="DesignationR">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #DFD8F1 !important;font-size: 17px;">Designation<sup class="red">*</sup>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.DesignationR}}</div>
+                              <div *ngIf="row.isEdit">
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <input matInput [value]="row.DesignationR" id="DesignationR"
+                                    formControlName="DesignationR" class="text-area"
+                                    readonly="true">{{getReceiver(staffDetailsForm.get("CallReceiver")?.value,1)}}
+                                </mat-form-field> -->
+                                <mat-form-field appearance="fill" style="width:10vh;">
+                                  <input matInput [value]="row.DesignationR" id="DesignationR" formControlName="DesignationR" placeholder="Max(20 chars)"
+                                    class="text-area">
+                                    <mat-error style="font-size: 10px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('DesignationR')?.hasError('maxlength')">
+                                      Exceeds 20 characters
+                                    </mat-error>
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="MobileR">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #DFD8F1 !important;font-size: 17px;">Mobile <sup class="red">*</sup>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.MobileR}}</div>
+                              <div *ngIf="row.isEdit">
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <input matInput [value]="row.MobileR" id="currentCDes" formControlName="MobileR"
+                                    class="text-area"
+                                    readonly="true">{{getReceiver(staffDetailsForm.get("CallReceiver")?.value,2)}}
+                                </mat-form-field> -->
+                                <mat-form-field appearance="fill" style="width:10vh;">
+                                  <input matInput [value]="row.MobileR" id="MobileR" formControlName="MobileR" placeholder="Max(15 digits)"
+                                    class="text-area">
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;" *ngIf="staffDetailsForm.get('MobileR')?.hasError('pattern') && (!staffDetailsForm.get('MobileR')?.hasError('maxlength') || !staffDetailsForm.get('MobileR')?.hasError('minlength'))">
+                                      Digits Only
+                                    </mat-error>
+                                    <mat-error style="font-size: 11px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('MobileR')?.hasError('maxlength') || staffDetailsForm.get('MobileR')?.hasError('minlength')">
+                                      Range(10-15 digits)
+                                    </mat-error>
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="ResidenceR">
+                            <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;background-color: #DFD8F1 !important;font-size: 17px;">Residence<sup class="red">*</sup>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                              <div *ngIf="!row.isEdit">{{row.ResidenceR}}</div>
+                              <div *ngIf="row.isEdit">
+                                <!-- <mat-form-field appearance="fill" style="width: 13vh;">
+                                  <input matInput [value]="row.ResidenceR" id="currentCDes" formControlName="ResidenceR"
+                                    class="text-area"
+                                    readonly="true">{{getReceiver(staffDetailsForm.get("CallReceiver")?.value,3)}}
+                                </mat-form-field> -->
+                                <mat-form-field appearance="fill" style="width:10vh;">
+                                  <input matInput [value]="row.ResidenceR" id="ResidenceR" formControlName="ResidenceR" placeholder="Max(15 chars)"
+                                    class="text-area">
+                                    <mat-error style="font-size: 10px; padding-top: 7px; display: flex;"
+                                      *ngIf="staffDetailsForm.get('ResidenceR')?.hasError('maxlength')">
+                                      Exceeds 15 characters
+                                    </mat-error>
+                                </mat-form-field>
+                              </div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Action">
+                            <th mat-header-cell *matHeaderCellDef class="w-15" style="border-left: 1px solid #fff;background-color: #DFD8F1 !important;font-size: 17px;">Action </th>
+                            <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                              <ng-container *ngIf="!row.isEdit">
+                                <button mat-icon-button
+                                  class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.edit' | translate"
+                                  color="primary" (click)="editRisk(row)" id="controlEdit" [disabled]="blockEdit">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.delete' | translate" color="primary" (click)="deleteRisk(row)" id="deleteSave" [disabled]="blockEdit">
+                                <mat-icon>delete</mat-icon>
+                                </button>
+                              </ng-container>
+                              <ng-container *ngIf="row.isEdit">
+                                <button mat-icon-button
+                                  class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.save' | translate"
+                                  color="primary" id="saveCritical" [disabled]="!isSaveDisable(row)" (click)="save(row)"><mat-icon>save</mat-icon>
+                                </button>
+                                <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                                    [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancel(row)"
+                                                    id="closeCritical"><mat-icon>close</mat-icon>
+                                                  </button>
+                              </ng-container>
+                            </td>
+                          </ng-container>
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsSCD"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsSCD;"></tr>
+                          <tr *matNoDataRow>
+                            <td [attr.colspan]="displayedColumnsSCD.length">{{ 'bcp.section7.noStaffContactsAdded' | translate }}
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                    <div class="w-100 text-end mt-4">
+                      <div><button type="button" [disabled]="blockEdit"
+                          class="btn btn-primary normalColorBtn modalColorBtnGreen" id="initiateRisk" (click)="addRisk()"><span
+                            class="fw-bold">+</span> {{ 'common.addNew' | translate }}</button></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </form>
+            </div>
+            <div *ngIf="listingBCP">
+              <div class="risk-itigation-container">
+                <div class="row pb-3">
+                  <div class="col-12">
+                    <div class="w-100 h-52 vscroll tableContent11">
+                      <div class="w-100 h-100 p-0 vscroll tableContent2">
+                        <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                          [dataSource]="StaffContactView" id="addCritical">
+                          <ng-container matColumnDef="Index">
+                            <th mat-header-cell *matHeaderCellDef>#</th>
+                            <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="CallID">
+                            <th mat-header-cell *matHeaderCellDef>Call ID</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div >{{row.CallID}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="CallOrder">
+                            <th mat-header-cell *matHeaderCellDef>Call Order</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.CallOrder}} --> {{row.CallOrder1}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Role">
+                            <th mat-header-cell *matHeaderCellDef>Role</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.Role}}</div>
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container matColumnDef="CallInitiator">
+                            <th mat-header-cell *matHeaderCellDef>Call Initiator</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.CallInitiator}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="DesignationC">
+                            <th mat-header-cell *matHeaderCellDef>Designation</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.DesignationC}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Mobile">
+                            <th mat-header-cell *matHeaderCellDef>Mobile</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.Mobile}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="Residence">
+                            <th mat-header-cell *matHeaderCellDef>Residence</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.Residence}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="CallReceiver">
+                            <th mat-header-cell *matHeaderCellDef>Call Receiver</th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.CallReceiverName}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="DesignationR">
+                            <th mat-header-cell *matHeaderCellDef>Designation
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.DesignationR}}</div>
+                            </td>
+                          </ng-container>
+
+                          <ng-container matColumnDef="MobileR">
+                            <th mat-header-cell *matHeaderCellDef>Mobile
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.MobileR}}</div>
+                            </td>
+                          </ng-container>
+                          <ng-container matColumnDef="ResidenceR">
+                            <th mat-header-cell *matHeaderCellDef>Residence
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                              <div>{{row.ResidenceR}}</div>
+                            </td>
+                          </ng-container>
+
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsSCDV"></tr>
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsSCDV;"></tr>
+                          <tr *matNoDataRow>
+                            <td [attr.colspan]="displayedColumnsSCDV.length">{{ 'bcp.section7.noStaffContactsAdded' | translate }}
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="w-100 h-16 position-relative">
+            <div class="move-buttons" *ngIf="!listingBCP">
+              <button class="buttons save" style="margin-right: -20vh;margin-top: 3vh;"><img src="./assets/images/icon-application.svg" alt="Save"> Save</button>
+            </div>
+          </div> -->
+
+          <!-- <div class="child-button " style="margin-top: 6vh;" *ngIf="!listingBCP">
+            <mat-error *ngIf = "isAnyTableInvalid()"> The save button will be enabled once all the mandatory data is filled.</mat-error>
+              <div class="move-buttons" style="margin-left: 67vh;margin-top: -2.5vh;" >
+                <button class="buttons save" id="saveSub" (click)="onSubmit()"
+                [ngClass]="(isAnyTableInvalid()) ? 'disable'  : ''">
+                <img src="./assets/images/icon-application.svg" alt="Save">
+                  Save</button>
+              </div>
+            </div> -->
+
+            <!-- <div class="child-button " style="margin-top: 6vh;">
+              <div class="move-buttons" style="margin-left: 92vh; margin-top: -1vh;" *ngIf="!listingBCP">
+                <button class="buttons save" id="saveSub" (click)="onSubmit()" style="height: 6vh; width: 24vh;"
+                  [ngClass]="isAnyTableInvalid() ? 'disable'  : ''"><img src="./assets/images/icon-application.svg" alt="Save">Save</button>
+              </div>
+            </div>
+            <span *ngIf="!listingBCP"><mat-error style="margin-top: -4vh;" *ngIf = "isAnyTableInvalid()"> The save button will be enabled once all the mandatory data is filled.</mat-error></span> -->
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>

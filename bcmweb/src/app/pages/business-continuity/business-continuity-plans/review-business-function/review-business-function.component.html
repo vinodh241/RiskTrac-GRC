@@ -1,0 +1,233 @@
+
+<div class="tab-content topTabContentBg h-6" id="nav-tabContent">
+  <div class="tab-pane fade show active p-1 text-left position-relative h-100" id="nav-site" role="tabpanel"
+    aria-labelledby="nav-site-tab">
+    <button mat-raised-button color="primary" id="backButton" class="me-3"
+      style="display:inline-block; padding:0vh 1vh;border-radius:100vw;margin: 7px 6px;" [matTooltip]="'common.navigateBack' | translate"
+      (click)="navigateToListing()">
+      <span style="font-size:16px; margin-right:10px;">&#11164;</span>{{ 'common.back' | translate }}
+    </button>
+
+    <div class="position-absolute vmiddleLeft navtabHeading" style="margin-left: 14vh;margin-top: 1vh;font-size: 3vh;"
+      [matTooltip]="businessFunName?.length > 10? businessFunName:''">
+      {{businessContinuityService.getTitleValue(businessFunName)}}</div>
+
+    <div class="dueText vhmiddle" *ngIf="listingBCP" style="left: 56%;">
+      <div class="d-flex justify-content-center middleDaywise"  style="margin-top: 2vh;" >
+        <div style="padding-inline: 0.2vw;
+    border-right: 1px solid #C3C3C3;">MTPD: <span>{{MTPDValue}}</span></div>
+        <div style="margin-left: 1vh;padding-inline: 0.2vw;
+    border-right: 1px solid #C3C3C3;">RTO: <span>{{RTOValue}}</span></div>
+        <div style="margin-left: 1vh;padding-inline: 0.2vw;
+    border-right: 1px solid #C3C3C3;">RPO: <span>{{RPOValue}}</span></div>
+        <div style="margin-left: 1vh;padding-inline: 0.2vw;
+    border-right: 1px solid #C3C3C3;">MAC: <span>{{MACValue}}</span></div>
+        <div style="margin-left: 1vh;">MNPR: <span>{{MNPRValue}}</span></div>
+      </div>
+    </div>
+    <!-- <button type="button" id="exportDraft2" class="btn btn-dark btnGradient btnGradientNoshadow"  (click)="exportDraft()"
+    style="margin-left: 138vh; margin-top: 1vh; height: 4vh; font-size: small;"
+     *ngIf="allSectionSave8|| dataRecoverySaved">Download BCP Doc</button> -->
+
+     <span class="applyFilter addDesktop" *ngIf="allSectionSave8|| dataRecoverySaved" style="    width: 20vh;
+     margin-top: -5vh;
+     margin-left: 149vh;">
+      <button type="button" class="btn btn-dark btnGradient" data-bs-toggle="modal" data-bs-target="#newBCPeXPORT" (click)="exportDraft()">{{ 'common.downloadBcpDoc' | translate }}</button>
+      <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+          src="./assets/images/icon-add-desktop.svg"></span>
+      </span>
+
+
+    <div *ngIf="selectedBCC == 1 && workFlowStatusID != 9" style="margin-left: 146vh;margin-top: -5vh;color: white;">&nbsp;
+      <span matTooltip="No BC Coordinator found. Please
+        assign a BC Coordinator to continue filling the BIA" style="margin-left: 5vh;"> <img src="./assets/images/icon-invalid-data.svg" alt="Invalid" class="blinking-icon">
+      </span>
+    </div>
+    <div *ngIf="selectedBCC == 1 && workFlowStatusID == 9" style="margin-left: 146vh;margin-top: -5vh;color: white;">&nbsp;
+      <span matTooltip="No BC Coordinator is currently assigned to this Business Function ({{this.businessFunName}})." style="margin-left: 5vh;"> <img
+          src="./assets/images/icon-invalid-data.svg" alt="Invalid" class="blinking-icon">
+      </span>
+    </div>
+    <div *ngIf="selectedBCC == 1 && LastReviewed != 'null'" style="margin-left: 173vh;margin-top: -3vh;color: white;">
+      <span>{{ 'common.lastReviewed' | translate }} : {{LastReviewed == null ? '--' : (getTimeFormat(LastReviewed)) }}</span>
+    </div>
+    <div *ngIf="selectedBCC == 0 && LastReviewed != 'null'" style="margin-left: 173vh;margin-top: -3vh;color: white;">
+      <span>{{ 'common.lastReviewed' | translate }} : {{LastReviewed == null ? '--' : (getTimeFormat(LastReviewed)) }}</span>
+    </div>
+  </div>
+</div>
+
+
+<div class="tab-pane h-82 px-3 w-100 py-4" id="detail-timeline" role="tabpanel" aria-labelledby="section-1" style="margin-top: 2vh;
+background: #f2f2f2 !important;">
+  <div class="row mx-0 h-100">
+    <div class="col-2 pe-0">
+      <div class="left-nav nav-pills" id="pills-tab" role="tablist" style="position: absolute; width: 16%; z-index: 1;">
+        <div class="nav-item-area mutitabBg nav-item-area-tabs" role="presentation">
+          <button class="nav-sec-link position-relative" id="section-1" data-bs-toggle="pill"
+            data-bs-target="#section-1-content" type="button" role="tab" aria-controls="section-1-content"
+            aria-selected="true" (click)="selectSections('1')" [ngClass]="selectedSetions == '1'? 'active': ''">
+            <div class="w-100 h-100"><img *ngIf="(dataSaved || allSectionSave1)"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section1' | translate }}</span><span class="float-end">{{ 'bcp.sections.businessFunctionProfile' | translate }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="nav-item-area mutitabBg nav-item-area-tabs " role="presentation">
+          <button class="nav-sec-link position-relative" id="section-2" data-bs-toggle="pill"
+            data-bs-target="#section-2-content" type="button" role="tab" aria-controls="section-2-content"
+            aria-selected="true"
+            [ngClass]="(!dataSaved && !listingBCP && !allSectionSave2) ? 'disable' : (selectedSetions == '2' ? 'active' : '')"
+            (click)="selectSections('2')">
+            <div class="w-100 h-100"><img *ngIf="(dataProcessSaved || allSectionSave2)"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section2' | translate }}</span><span class="float-end">{{ 'bcp.sections.processActivitiesDetails' | translate }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="nav-item-area mutitabBg nav-item-area-tabs " role="presentation">
+          <button class="nav-sec-link position-relative" id="section-3" data-bs-toggle="pill"
+            data-bs-target="#section-3-content" type="button" role="tab" aria-controls="section-3-content"
+            aria-selected="true" (click)="selectSections('3')"
+            [ngClass]="(!dataProcessSaved && !listingBCP && !allSectionSave3)? 'disable' : (selectedSetions == '3'? 'active': '')">
+            <div class="w-100 h-100"><img *ngIf="(dataDepSaved || allSectionSave3)"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section3' | translate }}</span><span class="float-end">{{ 'bcp.sections.dependencies' | translate }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="nav-item-area mutitabBg nav-item-area-tabs" role="presentation">
+          <button class="nav-sec-link position-relative" id="section-4" data-bs-toggle="pill"
+            data-bs-target="#section-4-content" type="button" role="tab" aria-controls="section-2-content"
+            aria-selected="true" (click)="selectSections('4')"
+            [ngClass]="(!dataDepSaved && !listingBCP && !allSectionSave4) ? 'disable' : (selectedSetions == '4'? 'active': '')">
+            <div class="w-100 h-100"><img *ngIf="dataImpactSaved || allSectionSave4"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section4' | translate }}</span><span class="float-end">{{ 'bcp.sections.impactAssessment' | translate }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="nav-item-area mutitabBg nav-item-area-tabs parent-container" role="presentation">
+          <button class="nav-sec-link position-relative" id="section-5" data-bs-toggle="pill"
+            data-bs-target="#section-5-content" type="button" role="tab" aria-controls="section-5-content"
+            aria-selected="true" (click)="selectSections('5')"
+            [ngClass]="(!dataImpactSaved && !listingBCP && !allSectionSave5) ? 'disable' : (selectedSetions == '5'? 'active': '')">
+            <div class="w-100 h-100"><img *ngIf="dataRiskSaved || allSectionSave5"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section5' | translate }}</span><span class="float-end">{{ 'bcp.sections.riskMitigation' | translate }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="nav-item-area mutitabBg nav-item-area-tabs" role="presentation">
+          <button class="nav-sec-link position-relative" id="section-6" data-bs-toggle="pill"
+            data-bs-target="#section-6-content" type="button" role="tab" aria-controls="section-6-content"
+            aria-selected="true" (click)="selectSections('6')"
+            [ngClass]="(!dataRiskSaved && !listingBCP && !allSectionSave6) ? 'disable' : (selectedSetions == '6'? 'active': '')">
+            <div class="w-100 h-100"><img *ngIf="dataResourceSaved || allSectionSave6"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section6' | translate }}</span><span class="float-end">{{ 'bcp.sections.resourceRequirements' | translate }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="nav-item-area mutitabBg nav-item-area-tabs parent-container" role="presentation">
+          <button class="nav-sec-link position-relative" id="section-7" data-bs-toggle="pill"
+            data-bs-target="#section-7-content" type="button" role="tab" aria-controls="section-7-content"
+            aria-selected="true" (click)="selectSections('7')"
+            [ngClass]="(!dataResourceSaved && !listingBCP && !allSectionSave7) ? 'disable' : (selectedSetions == '7'? 'active': '')">
+            <div class="w-100 h-100"><img *ngIf="dataStaffSaved || allSectionSave7"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section7' | translate }}</span><span class="float-end">{{ 'bcp.sections.staffContactDetails' | translate }}</span>
+            </div>
+          </button>
+        </div>
+
+        <div class="nav-item-area mutitabBg nav-item-area-tabs" role="presentation">
+          <button class="nav-sec-link position-relative" id="section-8" data-bs-toggle="pill"
+            data-bs-target="#section-8-content" type="button" role="tab" aria-controls="section-8-content"
+            aria-selected="true" (click)="selectSections('8')"
+            [ngClass]="(!dataStaffSaved && !listingBCP && !allSectionSave8) ? 'disable' : (selectedSetions == '8'? 'active': '')">
+            <div class="w-100 h-100"><img *ngIf="dataRecoverySaved || allSectionSave8"
+                src="./assets/images/check-mark-icon.svg" class="vhmiddle leftcheckImg" alt="">
+              <span class="sections">{{ 'bcp.sections.section8' | translate }}</span><span class="float-end">{{ 'bcp.sections.recoveryProcess' | translate }}</span>
+            </div>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!--End of nav bar-->
+
+    <!--Sub Components-->
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100 parent-container" id="section-1-content" role="tabpanel"
+      aria-labelledby="section-1" *ngIf="selectedSetions == '1'" [ngClass]="selectedSetions == '1'? 'active show': ''">
+      <app-business-function-profile [businessFunctionFlag]="businessFunctionFlag"
+        (tabsEnableData)="tabsEnableData($event)" (allBusinessProfileData)="getBusinessData($event)"
+        (dataSaved)="profileData($event)">
+      </app-business-function-profile>
+    </div>
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100" id="section-2-content" role="tabpanel" aria-labelledby="section-1"
+      *ngIf="selectedSetions == '2'" [ngClass]="selectedSetions == '2'? 'active show': ''">
+      <app-process-activities-details [processActivityFlag]="processActivityFlag"
+        (tabsEnableData)="tabsEnableData($event)"
+        (dataProcessSaved)="processData($event)"></app-process-activities-details>
+    </div>
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100 parent-container" id="section-3-content" role="tabpanel"
+      aria-labelledby="section-1" *ngIf="selectedSetions == '3'" [ngClass]="selectedSetions == '3'? 'active show': ''">
+      <app-dependencies [dependencyFlag]="dependencyFlag" (dataDepSaved)="dependencyData($event)"></app-dependencies>
+    </div>
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100" id="section-4-content" role="tabpanel" aria-labelledby="section-1"
+      *ngIf="selectedSetions == '4'" [ngClass]="selectedSetions == '4'? 'active show': ''">
+      <app-impact-assessment [impactAsseFlag]="impactAsseFlag"
+        (dataImpactSaved)="impactData($event)"></app-impact-assessment>
+    </div>
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100 parent-container" id="section-5-content" role="tabpanel"
+      aria-labelledby="section-1" *ngIf="selectedSetions == '5'" [ngClass]="selectedSetions == '5'? 'active show': ''">
+      <app-risk-mitigation [riskMitigationFlag]="riskMitigationFlag"
+        (dataRiskSaved)="riskData($event)"></app-risk-mitigation>
+    </div>
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100" id="section-6-content" role="tabpanel" aria-labelledby="section-1"
+      *ngIf="selectedSetions == '6'" [ngClass]="selectedSetions == '6'? 'active show': ''">
+      <app-resource-requirements [resourceFlag]="resourceFlag"
+        (dataResourceSaved)="resourceData($event)"></app-resource-requirements>
+    </div>
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100 parent-container" id="section-7-content" role="tabpanel"
+      aria-labelledby="section-1" *ngIf="selectedSetions == '7'" [ngClass]="selectedSetions == '7'? 'active show': ''">
+      <app-staff-contact-details [staffConFlag]="staffConFlag"
+        (dataStaffSaved)="staffData($event)"></app-staff-contact-details>
+    </div>
+
+    <div class="col-10 ps-0 tab-pane pb-2 h-100" id="section-8-content" role="tabpanel" aria-labelledby="section-1"
+      *ngIf="selectedSetions == '8'" [ngClass]="selectedSetions == '8'? 'active show': ''">
+      <app-recovery-process [recoveryFlag]="recoveryFlag" (dataRecoverySaved)="recoveryData($event)"
+        (allDataOP)="workflowDetails($event)"></app-recovery-process>
+    </div>
+
+    <div class="w-100 h-16 position-relative" style="margin-top: -12vh;padding-left: 36vh;">
+      <div class="move-buttons" style="margin-left: 40vh;">
+        <button class="buttons" [ngClass]="selectedSetions >= '2'? 'active': ''" id="prevSection"
+          (click)="previousSection(selectedSetions)"><img src="./assets/images/icon-previous.svg"> {{ 'common.previousSection' | translate }}</button>
+        <button *ngIf="selectedSetions != 8" class="buttons" id="nextSection"
+          [ngClass]=" (isNextEnable() ? 'active' : 'disable')" style="margin-right: -49vh;"
+          (click)="nextSection(selectedSetions)">{{ 'common.nextSection' | translate }} <img src="./assets/images/icon-next.svg"
+            alt="next"></button>
+        <button *ngIf="selectedSetions == 8 && enableButton() && dataRecoverySaved == true" class="buttons save"
+          id="submit" (click)="openSubmit()" style="margin-right: -49vh; min-width: 12vw">{{displayButton()}}</button>
+        <span *ngIf="selectedSetions == 8 && dataRecoverySaved == undefined"
+          style="margin-right: -49vh; min-width: 12vw"></span>
+      </div>
+    </div>
+  </div>
+</div>

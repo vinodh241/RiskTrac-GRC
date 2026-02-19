@@ -1,7 +1,11 @@
 #wrapper {
-    main {
-        // min-height: calc(100vh - 149px);
-        // max-height: calc(100vh - 149px);
-        padding: 0;
-    }
+  main {
+    // min-height: calc(100vh - 149px);
+    // max-height: calc(100vh - 149px);
+    padding: 0;
+  }
+}
+
+.h-99 {
+  height: 99.9%;
 }

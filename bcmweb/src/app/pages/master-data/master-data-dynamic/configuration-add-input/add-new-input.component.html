@@ -1,0 +1,184 @@
+<div style="width: 55vw;">
+  <form [formGroup]="addPageForm1">
+    <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+      <h5 class="modal-title modalh5" id="staticBackdropLabel">Configure New Page input</h5>
+      <button type="button" class="close customClose" id="newinputID" data-dismiss="modal" (click)="close()" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body greyModalBody vscroll" style="height: 70vh;">
+      <ng-container *ngIf="validatemsginput1; else elseTemplate2">
+        <div class="text-center mt-5">
+          <h1 class="text-center">{{validatemsginput}}</h1>
+        </div>
+      </ng-container>
+      <ng-template #elseTemplate2>
+        <div class="row mx-3 ">
+
+          <mat-tab-group style="width: 100%;">
+            <mat-tab>
+              <ng-template mat-tab-label>
+                Form Controls
+              </ng-template>
+              <div class="row mx-3 ">
+                <div class="col-6 p-0 m-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Select Page<sup
+                      class="red">*</sup></label>
+                  <select class="form-control fldcolor" formControlName="SelectPage" style="height: 41px;"
+                    (change)="onSelect()" id="sPageID">
+                    <option selected value="">Select Page</option>
+                    <option *ngFor="let item of totalPage" [value]="item.PageTitle">{{item.PageTitle}}</option>
+                  </select>
+                  <span class="text-danger" *ngIf="(f['SelectPage'].touched || submitted) && f['SelectPage'].errors">
+                    Select Page is required
+                  </span>
+                </div>
+
+
+                <div style="margin-top: 1vh;width: 24vh;margin-left: 0vh;">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Select
+                    Header
+                    <sup class="red">*</sup></label>
+                  <select class="form-control fldcolor" formControlName="SelectHeader" style="height: 41px;" id="sHeaderID"
+                    (change)="onSelectHeader()">
+                    <option selected value="">Select Header</option>
+                    <!-- <option *ngFor="let item of totalPage" id="{{item.id}}">{{item.PageTitle}}</option> -->
+                    <option *ngFor="let item of headerData" [value]="item.header">{{item.header}}</option>
+                  </select>
+                  <span class="text-danger"
+                    *ngIf="(f['SelectHeader'].touched || submitted) && f['SelectHeader'].errors">
+                    Select Header is required
+                  </span>
+                </div>
+                <div class="col-3 justify-content-center" style="margin-top: 1vh;max-width: 13vh;">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Is Required
+                    <sup class="red">*</sup></label>
+                  <input type="checkbox" id="" formControlName="IsRequired">
+
+                </div>
+                <div class="col-3 justify-content-center" style="margin-top: -1vh;
+                max-width: 15vh;">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-5">Is Foreign Key
+                    <sup class="red">*</sup>
+                  </label>
+                  <input type="checkbox" id="isForeignKeyCheckbox" formControlName="IsForeignKey"
+                    (click)="handleCheckboxClick($event)">
+                </div>
+
+
+                <div class="col-3 p-0 m-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Name<sup
+                      class="red">*</sup></label>
+                  <input class="form-control fldcolor" formControlName="name" id="nameID"  (keypress)="removeSpecialCharacter($event)" [value]="this.selectPageControl?.value">
+                  <span class="text-danger" *ngIf="(f['name'].touched || submitted) && f['name'].errors">
+                    Name is required
+                  </span>
+                </div>
+                <div class="col-3 p-0 m-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Label
+                    <sup class="red">*</sup></label>
+                  <input class="form-control fldcolor" formControlName="label" id="labelID">
+                  <span class="text-danger" *ngIf="(f['label'].touched || submitted) && f['label'].errors">
+                    Label is required
+                  </span>
+                </div>
+                <div class="col-3 p-0 m-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Value</label>
+                  <input class="form-control fldcolor" formControlName="value" id="valueID">
+                  <span class="text-danger" *ngIf="(f['value'].touched || submitted) && f['value'].errors">
+                    Value is required
+                  </span>
+                </div>
+                <div class="col-3 p-0 m-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Placeholder
+                    <sup class="red">*</sup></label>
+                  <input class="form-control fldcolor" formControlName="Placeholder" id="pID">
+                  <span class="text-danger" *ngIf="(f['Placeholder'].touched || submitted) && f['Placeholder'].errors">
+                    Placeholder is required
+                  </span>
+                </div>
+                <div class="col-3 p-0 m-2">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Class<sup
+                      class="red">*</sup></label>
+                  <input class="form-control fldcolor" formControlName="Class" id="classID">
+                  <span class="text-danger" *ngIf="(f['Class'].touched || submitted) && f['Class'].errors">
+                    Class is required
+                  </span>
+                </div>
+                <div class="col-3 p-0 m-2" style="margin-right: 2vh !important;">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Type
+                    <sup class="red">*</sup></label>
+                  <select class="form-control fldcolor" formControlName="Type" style="height: 41px;" id="typeID">
+                    <option id="1" selected>text</option>
+                    <option id="2">number</option>
+                    <option id="3">select</option>
+                    <option id="4">textarea</option>
+                  </select>
+                  <span class="text-danger" *ngIf="(f['Type'].touched || submitted) && f['Type'].errors">
+                    Type is required
+                  </span>
+                </div>
+                <div class="col-3 p-0 m-2" *ngIf="this.newParameter">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">New Parameter
+                    <sup class="red">*</sup></label>
+                  <input class="form-control fldcolor" formControlName="newParameter" id="parameterID" [value]="this.selectPageControl?.value">
+                  <span class="text-danger"
+                    *ngIf="(f['newParameter'].touched || submitted) && f['newParameter'].errors">
+                    New Parameter is required
+                  </span>
+                </div>
+
+                <div style="margin-top: 1vh;" *ngIf="checked">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Table
+                    Names
+                    <sup class="red">*</sup></label>
+                  <select class="form-control fldcolor" formControlName="selectedTableNames" id="tableNameID" style="height: 41px;width: 24vh;"
+                    (change)="onSelectHeaderForeign()">
+                    <!-- <option *ngFor="let item of totalPage" id="{{item.id}}">{{item.PageTitle}}</option> -->
+                    <option *ngFor="let item of tableData" [value]="item.PageTitle">{{item.PageTitle}}</option>
+                  </select>
+                  <span class="text-danger"
+                    *ngIf="(f['selectedTableNames'].touched || submitted) && f['selectedTableNames'].errors">
+                    Select Table is required
+                  </span>
+                </div>
+
+                <div style="    margin-top:-10vh;
+                margin-left: 28vh;
+                width: 21vh;" *ngIf="checked && headerChecked">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Header
+                    Names
+                    <sup class="red">*</sup></label>
+                  <select class="form-control fldcolor" formControlName="selectedTableHeader" id="headerID" style="height: 41px;width: 24vh;">
+                    <!-- <option *ngFor="let item of totalPage" id="{{item.id}}">{{item.PageTitle}}</option> -->
+                    <option *ngFor="let item of headerDataForeign" [value]="item.COLUMN_NAME">{{item.COLUMN_NAME}}
+                    </option>
+                  </select>
+                  <span class="text-danger"
+                    *ngIf="(f['selectedTableHeader'].touched || submitted) && f['selectedTableHeader'].errors">
+                    Select Header is required
+                  </span>
+                </div>
+
+
+              </div>
+            </mat-tab>
+            <mat-tab>
+              <ng-template mat-tab-label>
+                Table Controls
+              </ng-template>
+
+            </mat-tab>
+          </mat-tab-group>
+        </div>
+      </ng-template>
+    </div>
+    <div class="modal-footer modalFooter">
+
+      <button type="button" class="btn btn-secondary modalCancelBtn" data-dismiss="modal" id="cancelID"
+        (click)="close()">Cancel</button>
+      <button type="submit" *ngIf="show_save_btn2" class="btn btn-primary modalColorBtn" id="nInputID" (click)="addPage1()"><img
+          src="./assets/images/icon-create-new-dashboard.svg" width="28px !important" alt=""> Add New input</button>
+    </div>
+  </form>
+</div>

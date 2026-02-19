@@ -30,6 +30,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
+import { MatChipsModule } from '@angular/material/chips';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 const Material = [
   MatToolbarModule,
@@ -63,8 +65,9 @@ const Material = [
   MatSortModule,
   MatProgressSpinnerModule,
   MatListModule,
-  MatGridListModule
-
+  MatGridListModule,
+  MatChipsModule,
+  FlexLayoutModule
 ]
 
 @NgModule({

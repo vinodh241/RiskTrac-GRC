@@ -1,3 +1,4 @@
+/* You can add global styles to this file, and also import other style files */
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
@@ -10,42 +11,37 @@
 @import './assets/fonts/open-sans/open-sans-fonts.scss';
 @import './assets/fonts/roboto/roboto-fonts.scss';
 @import './assets/fonts/material-icons/material-icons-fonts.scss';
-// @import './modal.css';
-@import './assets/css/modal.css';
-// @import './assets/';
-@import "./assets/css/layout.css";
-@import "./assets/css/nav.css";
 
 $web-palette: (
-    50 : #e5eef4,
-    100 : #bdd4e3,
-    200 : #92b8d1,
-    300 : #669bbf,
-    400 : #4585b1,
-    500 : #2470a3,
-    600 : #20689b,
-    700 : #1b5d91,
-    800 : #165388,
-    900 : #0d4177,
-    A100 : #a9cfff,
-    A200 : #76b3ff,
-    A400 : #4397ff,
-    A700 : #2a88ff,
-    contrast: (50 : #000000,
-        100 : #000000,
-        200 : #000000,
-        300 : #000000,
-        400 : #ffffff,
-        500 : #ffffff,
-        600 : #ffffff,
-        700 : #ffffff,
-        800 : #ffffff,
-        900 : #ffffff,
-        A100 : #000000,
-        A200 : #000000,
-        A400 : #000000,
-        A700 : #ffffff,
-    )
+  50 : #e5eef4,
+  100 : #bdd4e3,
+  200 : #92b8d1,
+  300 : #669bbf,
+  400 : #4585b1,
+  500 : #2470a3,
+  600 : #20689b,
+  700 : #1b5d91,
+  800 : #165388,
+  900 : #0d4177,
+  A100 : #a9cfff,
+  A200 : #76b3ff,
+  A400 : #4397ff,
+  A700 : #2a88ff,
+  contrast: (50 : #000000,
+    100 : #000000,
+    200 : #000000,
+    300 : #000000,
+    400 : #ffffff,
+    500 : #ffffff,
+    600 : #ffffff,
+    700 : #ffffff,
+    800 : #ffffff,
+    900 : #ffffff,
+    A100 : #000000,
+    A200 : #000000,
+    A400 : #000000,
+    A700 : #ffffff,
+  )
 );
 
 $web-primary: mat.define-palette($web-palette);
@@ -69,15 +65,32 @@ $web-theme: mat.define-light-theme((color: (primary: $web-primary, accent: $web-
 //mat-body-strong mat-body-2    --      body-2
 //mat-small mat-caption         --      caption
 
+
+
 //level parameters: font-size , line-height , font-weight , font-family and letter-spacing
-$web-typography: mat.define-typography-config($font-family: 'Roboto Condensed',
-        $title: mat.define-typography-level(3.5vh, 1, 300),
-        $subheading-2: mat.define-typography-level(2.5vh, 1, 700),
-        $subheading-1: mat.define-typography-level(2.5vh, 1, 300),
-        $display-4: mat.define-typography-level(2.1vh, 1, 700),
-        $display-3: mat.define-typography-level(2.1vh, 1, 400),
-        $display-2: mat.define-typography-level(1.7vh, 1, 700),
-        $button: mat.define-typography-level(2.3vh, 1, 400));
+// $web-typography: mat.define-typography-config($font-family: 'Roboto Condensed',
+//     $headline-6: mat.define-typography-level(3.5vh, 1, 300),
+//     $subTitle-1: mat.define-typography-level(2.5vh, 1, 700),
+//     $subTitle-2: mat.define-typography-level(2.5vh, 1, 300),
+//     $headline-1: mat.define-typography-level(2.1vh, 1, 700),
+//     $headline-2: mat.define-typography-level(2.1vh, 1, 400),
+//     $headline-3: mat.define-typography-level(1.7vh, 1, 700),
+//     $button: mat.define-typography-level(2.3vh, 1, 400));
+
+$my-custom-level: mat.define-typography-level($font-family: Roboto,
+    $font-weight: 400,
+    $font-size: 0.1rem,
+    $line-height: 1,
+    $letter-spacing: normal,
+  );
+
+$my-custom-typography-config: mat.define-typography-config($headline-6: mat.define-typography-level(3.5vh, 1, 300),
+    $subtitle-1: mat.define-typography-level(2.5vh, 1, 700),
+    $subtitle-2: mat.define-typography-level(2.5vh, 1, 300),
+    $headline-1: mat.define-typography-level(2.1vh, 1, 700),
+    $headline-2: mat.define-typography-level(2.1vh, 1, 400),
+    $headline-3: mat.define-typography-level(1.7vh, 1, 700),
+    $button: mat.define-typography-level(2.3vh, 1, 400));
 
 // $display-4:     mat.define-typography-level(112px, 1, 1000),
 // $display-3:     mat.define-typography-level(56px, 1, 1000),
@@ -93,197 +106,218 @@ $web-typography: mat.define-typography-config($font-family: 'Roboto Condensed',
 // $button:        mat.define-typography-level(1rem, 1, 10),
 // $input:         mat.define-typography-level(1rem, 1, 10)
 
-@include mat.core($web-typography);
+// @include mat.core($web-typography);
 
 html,
 body {
-    height: 100%;
+  height: 100%;
 }
 
 body {
-    margin: 0;
-    background-color: #F2F2F2;
-    color: black;
-    font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
+  margin: 0;
+  background-color: #F2F2F2;
+  color: black;
+  font-family: "Roboto Condensed", "Helvetica Neue", sans-serif;
 }
 
 .container {
-    display: flex;
-    flex-direction: column;
-        // background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);
+  display: flex;
+  flex-direction: column;
 
 }
 
 .mat-action-row {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .label {
-    font-size: 5.5vh;
+  font-size: 5.5vh;
 }
 
 .spacer {
-    flex: 1 1 auto;
+  flex: 1 1 auto;
 }
 
 .dark {
-    color: black;
+  color: black;
 }
 
 .space {
-    width: 3vw;
+  width: 3vw;
 }
+
 .rscaComponent tbody tr:nth-child(even) {
-    background-color: #f8f8f8;
+  background-color: #f8f8f8;
 }
+
 .mat-h3,
 .mat-h4 {
-    margin: 0px 0px 0px 0px;
+  margin: 0px 0px 0px 0px;
 }
 
 .mat-toolbar {
-    // background-color: #2980B9;
-    background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);
-    color: white;
-    height: 6.4vh;
+  background-color: transparent;
+  color: white;
+  height: 8.4vh;
 }
 
 .mat-table {
-    width: 100%;
-    border: 0px;
+  width: 100%;
+  border: 0px;
 }
 
 .mat-header-row {
-    min-height: 3vh;
+  min-height: 3vh;
 }
 
-.mat-header-cell {
-    color: black;
-    font-size: 1.8vh;
-    font-weight: 700;
+.mat-mdc-header-cell {
+  color: black;
+  font-size: 1.8vh;
+  font-weight: 700;
 }
 
-.matViewTable thead th{
-    position: sticky;
-    top:0px;
+.matViewTable thead th {
+  position: sticky;
+  top: 0px;
 }
-.mat-cell {
-    color: black;
-    font-size: 1.8vh;
-    font-weight: 400;
+
+.mat-mdc-cell {
+  color: black;
+  font-size: 1.8vh;
+  font-weight: 400;
 }
-#InfoComponent, #WaitComponent, #RiskMetricsComponent, #ConfirmDialogComponent, #MetricsComponent, .dark > mat-dialog-container  {
-    padding: 24px !important;
+
+#InfoComponent,
+#WaitComponent,
+#RiskMetricsComponent,
+#ConfirmDialogComponent,
+#MetricsComponent,
+.dark>mat-mdc-dialog-container {
+  padding: 24px !important;
 }
+
 .mat-tooltip {
-    font-size: 1.8vh;
+  font-size: 1.8vh;
 }
 
-.dark>mat-dialog-container {
-    background-color: #000000EE;
-    color: white;
+.dark>mat-mdc-dialog-container {
+  background-color: #000000EE !important;
+  color: white !important;
 }
-.dashFilter .mat-form-field-flex,.dashFilter .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex{
-    background-color: #ffffff;
-    width: 100% !important;
-    border-radius: 0px;
+
+.dashFilter .mat-form-field-flex,
+.dashFilter .mat-form-field-type-mat-select:not(.mat-form-field-disabled) .mat-form-field-flex {
+  background-color: #ffffff;
+  width: 100% !important;
+  border-radius: 0px;
 }
-.dashFilter .mat-form-field-infix{
-    top: -5px;
-    width: 100% !important;
+
+.dashFilter .mat-form-field-infix {
+  top: -5px;
+  width: 100% !important;
 }
-.dashFilter .mat-select-arrow-wrapper{
-    top: 7px;
-    position: relative;
+
+.dashFilter .mat-select-arrow-wrapper {
+  top: 7px;
+  position: relative;
 }
 
 .success>mat-dialog-container {
-    background-color: #000000EE;
-    color: white;
+  // background-color: #000000EE;
+  color: white;
 }
 
 .error>mat-dialog-container {
-    background-color: #000000EE;
-    color: white;
+  // background-color: #000000EE;
+  color: white;
 }
 
 .warning>mat-dialog-container {
-    background-color: #000000EE;
-    color: white;
+  // background-color: #000000EE;
+  color: white;
 }
 
 .history>mat-dialog-container {
-    padding: 0;
+  padding: 0;
 }
 
 .custom-radio .mat-radio-container {
-    background-color: white;
-    border-radius: 20px;
+  background-color: white;
+  border-radius: 20px;
 }
 
 .custom-radio .mat-radio-button {
-    border: opx;
+  border: opx;
 }
 
 .custom-radio .mat-radio-outer-circle {
-    border: 0px !important;
+  border: 0px !important;
 }
 
 .mat-menu-panel {
-    // background: linear-gradient(180deg, #2470A3 20.02%, #72AED5 100%);
-    color: #fff;
-    background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%); box-shadow: 0px 1vh 2vh 0px rgba(0, 0, 0, 0.25); border-radius: 0.3vh 0.3vh 4vh 0.3vh;padding: 2vh 1vw; right: 0;margin-top: 1vh;
-
+  background: linear-gradient(180deg, #2470A3 20.02%, #72AED5 100%);
+  color: #fff;
 }
-
-.mat-menu-item:hover:not([disabled]), .mat-menu-item.cdk-program-focused:not([disabled]), .mat-menu-item.cdk-keyboard-focused:not([disabled]), .mat-menu-item-highlighted:not([disabled]) {
-    background-color: #ffffff1c;
+.mat-mdc-menu-panel {
+  color: #fff;
+    background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%); box-shadow: 0px 1vh 2vh 0px rgba(0, 0, 0, 0.25); border-radius: 0.3vh 0.3vh 4vh 0.3vh;padding: 2vh 1vw; right: 0;margin-top: 1vh;
 }
 .mat-menu-item {
-    color: #FFF;
+  color: #FFF;
 }
 
 .mat-dialog-container {
-    border-radius: 10px !important;
+  border-radius: 10px !important;
 }
 
 .tooltip-fulltext {
-    word-break: break-all !important;
-    white-space: normal !important;
+  word-break: break-all !important;
+  white-space: normal !important;
 }
 
 .file-upload-disp .mat-elevation-z8 {
-    box-shadow: 0px 0px !important;
-    border: 1px solid #d4d4d4;
+  box-shadow: 0px 0px !important;
+  border: 1px solid #d4d4d4;
 }
+
 .InherentTable .mat-form-field-appearance-fill .mat-select-arrow-wrapper {
-    height: 3px;
+  height: 3px;
+
 }
+
 .seachInCident .mat-form-field-infix {
-    padding: 0.25em 0 0em 0 !important;
-    border: 0px !important;
+  padding: 0.25em 0 0em 0 !important;
+  border: 0px !important;
 }
-.seachInCident .mat-button-base{
-    margin-top: -5px !important;
+
+.seachInCident .mat-button-base {
+  margin-top: -5px !important;
 }
-.app-risk-unit .mat-expansion-indicator{
-    top: -3px;
-    position: relative;
+
+.app-risk-unit .mat-expansion-indicator {
+  top: -3px;
+  position: relative;
 }
-.app-risk-unit.mat-expanded .mat-expansion-indicator{
-    top: 3px;
+
+.app-risk-unit.mat-expanded .mat-expansion-indicator {
+  top: 3px;
 }
-.tooltip .tooltiptext{
-    z-index: 5;
+
+.tooltip .tooltiptext {
+  z-index: 5;
 }
-.headTotalFS{
-    font-size: 4vh;
+
+.headTotalFS {
+  font-size: 4vh;
 }
-.highcharts-credits{
-    display: none;
+
+.highcharts-credits {
+  display: none;
 }
-.mriMeasure .mat-column-header-row-indicator, .mriMeasure .mat-column-indicator {
+
+.mriMeasure .mat-column-header-row-indicator,
+.mriMeasure .mat-column-indicator {
   word-wrap: break-word !important;
   white-space: unset !important;
   flex: 0 0 150px !important;
@@ -298,57 +332,199 @@ body {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
-#OverallFinancialLoss, #OverallFinancialLoss svg, #OverallFinancialLoss > *{
-    overflow: visible !important;
+
+#OverallFinancialLoss,
+#OverallFinancialLoss svg,
+#OverallFinancialLoss>* {
+  overflow: visible !important;
 }
-#OverallFinancialLoss .highcharts-data-label{
+
+#OverallFinancialLoss .highcharts-data-label {
+  opacity: 1;
+}
+
+#OverallFinancialLoss .highcharts-data-labels {
+  transform: translate(115px, 13px) !important;
+}
+
+#OverallFinancialLoss .highcharts-data-label text {
+  font-size: 11px !important;
+}
+
+.toggleInRAOnly .mat-slide-toggle-thumb {
+  height: 14px !important;
+  width: 14px !important;
+  margin-top: 4px;
+  margin-left: 2px;
+  background: dodgerblue;
+}
+
+.toggleInRAOnly .mat-slide-toggle-thumb-container {
+  width: 25px !important;
+  height: 25px !important;
+}
+
+.toggleInRAOnly .mat-slide-toggle-bar {
+  width: 35px !important;
+  height: 17px !important;
+  border-radius: 10px !important;
+  background: #e9e6e6 !important;
+  border: 1px solid darkgray !important;
+}
+
+.toggleInRAOnly .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
+  background-color: #448aff;
+  /* margin-right: 5vh; */
+  margin-left: 4px;
+  /* margin-bottom: 21vh; */
+}
+
+
+
+//angular-material@15.2.9
+
+.mat-mdc-icon-button svg,
+.mat-mdc-icon-button img {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+.mat-mdc-icon-button.mat-mdc-button-base {
+  width: 40px !important;
+  height: 40px !important;
+  padding: 0px;
+}
+
+.example-icon.mat-mdc-icon-button {
+  padding: 0;
+}
+
+.mat-mdc-header-row {
+  background-color:  #E7E7E7 !important;
+}
+
+.table-striped>tbody>tr:nth-of-type(even)>*  {
+  background-color: rgba(0, 0, 0, .05) !important;
+}
+
+.mat-mdc-text-field-wrapper:not(.mdc-text-field--outlined) .mat-mdc-form-field-infix {
+  padding-top: 12px !important;
+  padding-bottom: 8px !important;
+}
+
+.mat-mdc-form-field-infix {
+  min-height: 42px !important;
+}
+
+.text-right {
+  text-align: right;
+}
+
+.mat-mdc-row:hover {
+  background: #bce8ffa7 !important;
+}
+
+.disabled {
+  pointer-events: none;
+}
+
+.modal.fade.show {
+  backdrop-filter: brightness(0.4);
+  top: 0% !important;
+}
+
+.mat-sort-header-content {
+  font-weight: 600;
+}
+
+.mdc-text-field--disabled .mdc-text-field__input {
+  color: rgb(0 0 0 / 50%);
+}
+
+.mat-mdc-no-data-row {
+  text-align: center;
+}
+
+.mat-mdc-no-data-row>td {
+  padding: 3vw;
+  font-size: 2rem;
+}
+
+.mat-mdc-table .mat-mdc-header-cell {
+  z-index: auto !important;
+}
+
+.mat-mdc-header-row{
+  position: relative !important;
+  z-index: 89 !important;
+}
+
+.mat-mdc-form-field:hover .mat-mdc-form-field-focus-overlay {
+  opacity: 0 !important;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  background-color: #FAFAFA !important; // snow
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
+  padding: 0 5px;
+}
+
+.mat-mdc-form-field-subscript-wrapper {
+  height: 0.2vw !important;
+  // box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
+}
+
+.word-wrap-text {
+  word-wrap: break-word;
+}
+
+// time picker styles -- start
+.time-picker-style {
+  font-size: 1.6rem !important;
+  &::-webkit-calendar-picker-indicator {
+    font-size: 1.4rem;
+  }
+}
+
+.mat-mdc-input-element::-webkit-calendar-picker-indicator {
+  display: block !important;
+}
+// time picker styles -- end
+
+
+.previousComments {
+  top: -2.8vh;
+  right: 0;
+  position: absolute !important;
+}
+
+// BIA Rating Tooltip Styles
+.bia-rating-tooltip {
+  font-size: 0.95rem !important;
+  max-width: 420px !important;
+  white-space: normal !important;
+  line-height: 1.6 !important;
+  padding: 12px 16px !important;
+  background-color: #333333 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25) !important;
+  letter-spacing: 0.3px !important;
+}
+
+// BIA Rating Help Icon Styles
+.bia-rating-help-icon {
+  color: #0d6efd;
+  cursor: help;
+  font-size: 1.1rem;
+  margin-left: 6px;
+  vertical-align: middle;
+  opacity: 0.85;
+  transition: all 0.2s ease;
+  
+  &:hover {
     opacity: 1;
-}
-#OverallFinancialLoss .highcharts-data-labels{
-    transform: translate(115px, 13px) !important;
-}
-#OverallFinancialLoss .highcharts-data-label text{
-    font-size: 11px !important;
-}
- .toggleInRAOnly .mat-slide-toggle-thumb {
-      height: 14px !important;
-      width: 14px !important;
-      margin-top: 4px;
-      margin-left: 2px;
-      background: dodgerblue;
-    }
-    .toggleInRAOnly  .mat-slide-toggle-thumb-container {
-      width: 25px !important;
-      height: 25px !important;
-    }
-
-    .toggleInRAOnly  .mat-slide-toggle-bar {
-      width: 35px !important;
-      height: 17px !important;
-      border-radius: 10px !important;
-      background: #e9e6e6!important;
-      border: 1px solid darkgray !important;
-   }
-   .toggleInRAOnly  .mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-    background-color: #448aff;
-    /* margin-right: 5vh; */
-    margin-left: 4px;
-    /* margin-bottom: 21vh; */
-}
-.modal-footer.modalFooter {background-color: transparent; margin-inline: 2%; border-top: 1px solid #ccc; position: relative; padding-top: 2%; padding-bottom: 2%;}
-.modal-footer.modalFooter::before {content:""; border-top:1px solid #fff; width: 100%; top: 1px; position: absolute; left: 50%; transform: translate(-50%);}
-
-.bgSeaGreenGradient {background: linear-gradient(90deg, #2470A3 0.57%, #0A9C79 100%);}
-
-.btnGradient {background: linear-gradient(92deg, #245A8C 44.75%, #1DA34A 108.73%); transition: .4s;}
-
-.cardGen.colorGeyGradient {background: linear-gradient(85deg, #A5A5A5 10.97%, rgba(255, 255, 255, 0.00) 95.19%);}
-
-.colorGredient {background: linear-gradient(112deg, #E0BFFF 16.18%, #CCE8FF 91.48%);}
-
-.bgwhite {background-color: #fff;}
-.bgBlueGrey {background-color: #ebeef0;}
-.fontSize {
-    font-size: 3vh;
-    font-weight: 400;
+    color: #0a58ca;
+    transform: scale(1.1);
+  }
 }

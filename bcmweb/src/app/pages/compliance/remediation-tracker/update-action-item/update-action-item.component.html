@@ -1,0 +1,129 @@
+<!-- MAODAL ONE page 119 starts-->
+<div class="modal-content modalContent">
+  <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+    <h5 class="modal-title modalh5" id="staticBackdropLabel">Action Item - {{this.rowData.ActionItemName}}</h5>
+    <button type="button" class="close customClose" id="close" aria-label="Close" mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+    <form [formGroup]="addActionItemDetails">
+      <div class="row mx-3">
+        <div class="col-6 pl-0 pr-5">
+          <h2 class="col-12 px-0">{{this.rowData.ActionItemName}}</h2>
+          <div class="row mx-0">
+            <div class="col-12 px-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Plan</label>
+              <textarea class="form-control-plaintext fldcolor fldcolor27vh" id="" formControlName="actionItems"
+                rows="3"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 pl-5 pr-0">
+          <div class="row mx-0 pt-2">
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Source</label>
+              <div><a href="#" class="tblLnk" data-bs-toggle="modal" data-bs-target="#createNewMsg">{{sourceName}}</a>
+              </div>
+            </div>
+
+            <div class="col-6 pl-2 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Module</label>
+              <div><a href="#" class="tblLnk" data-bs-toggle="modal" data-bs-target="#createNewMsg">{{moduleName}}</a>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Requires a Budget?<sup class="red">*</sup></label>
+              <div class="d-flex justify-content-start py-3">
+                <div class="me-4" *ngFor="let item of budgetRequiredList ">
+                  <label><input type="radio" name="budget" formControlName="budget" [id]="item.IsBudgetRequired"
+                      [value]="item.IsBudgetRequired" aria-label="select" (keydown.enter)="$event.preventDefault()" />
+                    {{item.IsBudgetRequiredName}}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-2 pr-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Budgeted Cost<sup class="red">*</sup></label>
+              <div class="w-100 d-flex justify-content-start">
+                <div class="form-control-plaintext fldcolor w-10 bgBsidefieldGrey">{{currency}}</div>
+                <div class="w-90">
+                  <input type="number" class="form-control-plaintext fldcolor custom-select forlblLeft" id="cost"
+                    name="quantity" formControlName="budgetCost" min="1" max="100">
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Criticality<sup class="red">*</sup></label>
+              <div class="d-flex justify-content-start py-3">
+                <div class="me-4" *ngFor="let item of criticalityList ">
+                  <label><input type="radio" name="criticality" formControlName="criticality" [id]="item.CriticalityID"
+                      [value]="item.CriticalityID" aria-label="select" (keydown.enter)="$event.preventDefault()" />
+                    {{item.CriticalityName}}
+                  </label>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 pl-0 pr-2">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Start Date</label>
+              <mat-form-field appearance="fill" (click)="picker.open()" class="w-100">
+                <input matInput formControlName="startDate" id="startDateID" [min]="mindate" [max]="maxEndDate"
+                  [matDatepicker]="picker" (keydown.enter)="$event.preventDefault()"
+                  (dateChange)="updateSelecedStartDate($event)">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="dateError">Start Date should be Greater than or Equals to Current date</mat-error>
+              <mat-error *ngIf="endDateError">Start date cannot be after End date.</mat-error>
+              <mat-error *ngIf="endDateErrorValid" class="error ml-3"> Start date cannot be same as End date.</mat-error>
+            </div>
+
+            <div class="col-6 pl-2 pr-0 ">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">End Date</label>
+              <mat-form-field appearance="fill" (click)="picker1.open()" class="w-100">
+                <input matInput formControlName="endDate" id="EndID" [min]="minStartDate" [max]="maxEndDate"
+                  [matDatepicker]="picker1" (keydown.enter)="$event.preventDefault()"
+                  (dateChange)="updateSelectedEndDate()">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+              </mat-form-field>
+              <mat-error *ngIf="endDateError || endDateError1" class="error ml-3"> End date cannot be before Start date.</mat-error>
+              <mat-error *ngIf="endDateErrorValid" class="error ml-3"> End date cannot be same as Start date.</mat-error>
+            </div>
+
+            <div class="col-6 pl-2 pr-0 mt-4">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Item Owner</label>
+              <div class="position-relative">
+                <mat-form-field appearance="fill" style="width:46vh">
+                  <input type="text" placeholder="Action Item Owner" matInput formControlName="actionOwner"
+                    id="actionOwnerID" [matAutocomplete]="actionOwner" (input)="ownerListData($event)"
+                    #matAutocompleteAIOwner>
+                  <mat-autocomplete #actionOwner="matAutocomplete">
+                    <mat-option *ngFor="let owner of actionItemOwnerFiltered" [value]="owner.ActionItemOwner"
+                      [id]="owner.ActionItemOwnerGUID" (click)="ownerData(owner.ActionItemOwner )">
+                      {{ owner.ActionItemOwner }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer modalFooter">
+    <button type="button" class="btn btn-secondary modalCancelBtn" id="cancel" mat-dialog-close>Cancel</button>
+    <button type="button" class="btn btn-primary modalColorBtn" id="update" (click)="updateRisk()"><img
+        src="./assets/images/icon-send.svg" alt=""> Update & Notify</button>
+  </div>
+</div>
+<!-- END MAODAL ONE page 119 ends-->

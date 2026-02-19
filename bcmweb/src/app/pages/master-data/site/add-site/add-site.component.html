@@ -1,0 +1,165 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5">{{mode}} Work Site</h5>
+  <button type="button" class="close customClose p-0" mat-dialog-close aria-label="Close" mat-icon-button (click)="resetForm()" id="siteClose">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<form [formGroup]="defineSiteForm">
+  <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+    <div class="row mx-3">
+      <div class="col-7 p-0 mb-2">
+        <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="siteName">Site Name<sup class="red">*</sup>
+          </label></div>
+        <mat-form-field appearance="fill" class="w-100">
+          <input matInput formControlName="siteName" placeholder="Enter Work Site Name" id="siteName" (keydown.enter)="$event.preventDefault()"
+          (keyup)="checkSiteNameExist($event)"/>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['siteName'].touched) && f['siteName'].errors">Enter Site Name</mat-error>
+        <mat-error *ngIf="(submitted || f['siteName'].touched) && isSiteNameExists">Site Name already exists</mat-error>
+        <mat-error *ngIf="(submitted || f['siteName'].touched)">{{getSitePatternErr()}}</mat-error>
+      </div>
+
+      <div class="col-5 ps-3 pe-0 mb-2">
+        <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="shortCode">Short Code<sup class="red">*</sup>
+          </label></div>
+        <mat-form-field appearance="fill" class="w-100">
+          <input matInput formControlName="shortCode" min="2" max="6" placeholder="Enter Code (3 to 6 characters) - ABCD12" (keydown.enter)="$event.preventDefault()"
+          id="shortCode" (keyup)="checkCodeExist($event)"/>
+        </mat-form-field>
+        <!-- <p >Allowed - [A-Z][A-Z0-9]</p> -->
+        <mat-error *ngIf="(submitted || f['shortCode'].touched) && f['shortCode'].hasError('required')">Enter Short Code</mat-error>
+        <mat-error *ngIf="(submitted || f['shortCode'].touched) && f['shortCode'].hasError('minlength')">Minimum 3 characters required</mat-error>
+        <mat-error *ngIf="(submitted || f['shortCode'].touched) && f['shortCode'].hasError('maxlength')">Maximum 6 characters required</mat-error>
+        <div *ngIf="f['shortCode'].hasError('pattern')">
+          <mat-error *ngIf="(submitted || f['shortCode'].touched)">{{getPatternError()}}</mat-error>
+        </div>
+        <mat-error *ngIf="(submitted || f['shortCode'].touched) && isShortCodeExists">Short Code already exists</mat-error>
+      </div>
+
+      <div class="col-12 p-0 mb-2">
+        <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="address">Address<sup class="red">*</sup></label>
+        </div>
+        <mat-form-field appearance="fill" class="w-100">
+          <textarea matInput formControlName="siteAdress" placeholder="Enter Work Site Address" rows="4" id="address"></textarea>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['siteAdress'].touched) && f['siteAdress'].errors">Enter Address</mat-error>
+      </div>
+
+      <div class="col-4 p-0 mb-2">
+        <label for="country" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Country<sup class="red">*</sup></label>
+        <!-- <mat-form-field *ngIf="service.siteInfoData?.CountryList.length > 0" appearance="fill" class="w-100">
+          <mat-select  formControlName="country"
+            (selectionChange)="filterState($event.value)" placeholder="Select Country" id="country">
+            <mat-option *ngFor="let item of service.siteInfoData.CountryList" [value]="item.CountryID" [id]="item.CountryID"> {{item.Country}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill" class="w-100">
+          <input type="text" matInput formControlName="country" [matAutocomplete]="country" #autoCompleteCountryInput
+            (input)="filterCountryList($event)" id="country" placeholder="Search and Select Country" />
+          <mat-autocomplete #country="matAutocomplete">
+            <mat-option *ngFor="let item of filteredCountryList" [value]="item.Country"
+            (onSelectionChange)="filterState(item.CountryID,$event)" [id]="item.Country">
+              {{ item.Country }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['country'].touched) && f['country'].errors">Select Country</mat-error>
+        <mat-error *ngIf="submitted && isCountryExists">Please select a valid Country</mat-error>
+      </div>
+
+      <div class="col-4 ps-3 pe-0 mb-2">
+        <label for="state" class="w-100 p-0 col-form-label slctLbl text-left mt-4">State/Region<sup class="red">*</sup></label>
+        <!-- <mat-form-field appearance="fill" class="w-100">
+          <mat-select formControlName="state"
+            (selectionChange)="filterCity($event.value)" placeholder="Select State/Region" id="state">
+            <mat-option *ngFor="let item of filteredStateList" [value]="item.StateID" [id]="item.StateID"> {{item.State}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill" class="w-100">
+          <input type="text" matInput formControlName="state" [matAutocomplete]="state" #autoCompleteStateInput
+            (input)="filterStateList($event)" id="state" placeholder="Search and Select State/Region" />
+          <mat-autocomplete #state="matAutocomplete">
+            <mat-option *ngFor="let item of filteredStateList" [value]="item.State"
+            (onSelectionChange)="filterCity(item.StateID,$event)" [id]="item.State">
+              {{ item.State }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['state'].touched) && f['state'].errors && !(filteredStateList?.length == 0)">Select State/Region</mat-error>
+        <mat-error *ngIf="(submitted || f['state'].touched) && filteredStateList?.length == 0">No Records Available</mat-error>
+        <mat-error *ngIf="submitted && isStateExists">Please select a valid State/Region</mat-error>
+      </div>
+
+      <div class="col-4 ps-3 pe-0 mb-2">
+        <label for="city" class="w-100 p-0 col-form-label slctLbl text-left mt-4">City<sup class="red">*</sup></label>
+        <!-- <mat-form-field appearance="fill" class="w-100">
+          <mat-select formControlName="city" id="city" placeholder="Select City">
+            <mat-option *ngFor="let item of filteredCityList" [value]="item.CityID" [id]="item.CityID"> {{item.City}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field> -->
+        <mat-form-field appearance="fill" class="w-100">
+          <input type="text" matInput formControlName="city" [matAutocomplete]="city" #autoCompleteCityInput
+            (input)="filterCityList($event)" id="city" placeholder="Search and Select City" />
+          <mat-autocomplete #city="matAutocomplete">
+            <mat-option *ngFor="let item of filteredCityList" [value]="item.City"
+            (onSelectionChange)="setCityID(item.CityID,$event)" [id]="item.City">
+              {{ item.City }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['city'].touched) && f['city'].errors && !(filteredCityList?.length == 0)">Select City</mat-error>
+        <mat-error *ngIf="(submitted || f['city'].touched) && filteredCityList?.length == 0">No Records Available</mat-error>
+        <mat-error *ngIf="submitted && isCityExists">Please select a valid City</mat-error>
+      </div>
+
+      <label for="siteBCChamp" class="col-12 p-0 col-form-label slctLbl text-left mt-4">Site BC Champion <sup
+          class="red">*</sup></label>
+      <div class="col-12 p-0 mb-2 position-relative">
+        <mat-form-field appearance="fill" class="w-100">
+          <input type="text" matInput formControlName="siteBCChamp" [matAutocomplete]="champ"  #autoCompleteSiteBCCInput
+            (input)="filterBCChampList($event)" (keydown.enter)="$event.preventDefault()" id="siteBCChamp" placeholder="Select Site BC Champion"/>
+          <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+            alt="">
+          <mat-autocomplete #champ="matAutocomplete">
+            <mat-option *ngFor="let champ of filteredChampList" [value]="champ.BCChampionName"
+              (onSelectionChange)="setBCChampID(champ,$event)" [id]="champ.BCChampionName">
+              {{ champ.BCChampionName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['siteBCChamp'].touched) && f['siteBCChamp'].errors">Select Site BC Champion</mat-error>
+        <mat-error *ngIf="submitted && isBCChampExists">Please select a valid BC Champion</mat-error>
+      </div>
+
+      <label for="siteAdminHead" class="col-12 p-0 col-form-label slctLbl text-left mt-4">Site Admin Head <sup
+          class="red">*</sup></label>
+      <div class="col-12 p-0 mb-2 position-relative">
+        <mat-form-field appearance="fill" class="w-100">
+          <input type="text" matInput formControlName="siteAdminHead" [matAutocomplete]="admin" #autoCompleteSiteAHInput
+            (input)="filterAdminHeadList($event)" (keydown.enter)="$event.preventDefault()" id="siteAdminHead" placeholder="Select Site Admin Head"/>
+          <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+            alt=""/>
+          <mat-autocomplete #admin="matAutocomplete">
+            <mat-option *ngFor="let admin of filteredAdminHead" [value]="admin.AdminName" [id]="admin.AdminName"
+              (onSelectionChange)="setAdminHeadID(admin,$event)">
+              {{ admin.AdminName }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['siteAdminHead'].touched) && f['siteAdminHead'].errors">Select Site Admin Head</mat-error>
+        <mat-error *ngIf="submitted && isAdminExists">Please select a valid Admin Head</mat-error>
+      </div>
+
+    </div>
+  </div>
+  <mat-error *ngIf="saveerror">{{saveerror}}</mat-error>
+  <div class="modal-footer modalFooter">
+    <button  mat-dialog-close class="btn btn-secondary modalCancelBtn me-2"
+      (click)="resetForm()" id="siteCancel">Cancel</button>
+    <button  class="btn btn-primary modalColorBtn" (click)="onSubmit()" id="saveSite"><img
+        src="./assets/images/icon-create-new-dashboard.svg" class="me-1" alt="">{{mode == 'Add New'? 'Create New Work Site' : 'Update Work Site'}}</button>
+  </div>
+</form>

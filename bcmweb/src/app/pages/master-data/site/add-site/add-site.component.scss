@@ -1,0 +1,32 @@
+mat-form-field {
+  display: block;
+}
+
+.custom-button {
+  outline: none;
+  border: none;
+}
+
+.custom-button:active {
+  background-color: transparent;
+}
+
+.modalColorBtn {
+  background-color: #245A8C;
+  box-shadow: 1px 3px 3px 0px rgba(0, 0, 0, 0.45);
+  font-size: 1.6rem;
+  border: none;
+  padding-top: 0.5vh;
+  padding-bottom: 0.5vh;
+  color: white !important;
+}
+
+.modalColorBtn.modalColorBtnGreen {
+  background-color: #1C9F50;
+}
+
+.modalColorBtn.modalColorBtnGreen:hover,
+.modalColorBtn.modalColorBtnGreen:active,
+.btn-primary.modalColorBtn.modalColorBtnGreen:not(:disabled):not(.disabled):active {
+  background-color: #27c064;
+}

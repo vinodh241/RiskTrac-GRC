@@ -1,0 +1,6 @@
+.color-class-Complete {
+  background:linear-gradient(-45deg, rgba(255, 255, 255, 0.15) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.15) 50%, rgba(255, 255, 255, 0.15) 75%, transparent 75%) left / 10px 10px repeat-x, linear-gradient(to right, #BCFF50 0%, #2FFF3D 90%), lightgray;
+  box-shadow: inset 0px -2px 5px rgba(1, 1, 1, 0.5);
+  animation: zebra 1s linear infinite;
+  border-radius: 50vh;
+}

@@ -1,0 +1,73 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{parent.modalTitle}}</h5>
+  <button type="button" id="closeButton" class="close customClose example-icon" aria-label="Close" mat-icon-button
+    mat-dialog-close>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+  <div class="row mx-3">
+    <label for="" class="col-12 p-0 col-form-label slctLbl text-start mt-4">{{parent.modalBodyTitle}}</label>
+    <div class="col-6 ps-0 pe-5">
+      <div class="row mx-0">
+        <div class="col-12 px-0" *ngIf="parent.isDecision.required">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">{{parent.dropdownLable}} <sup
+              class="red">*</sup></label>
+          <div *ngIf="parent.isDecision.required">
+            <div class="radioTxt" *ngFor="let item of parent.isDecision.optionData" [ngClass]="item.class"
+              style="border-radius: 1.3vh;"><label class="mb-0" style="cursor: pointer;"><input type="radio" [(ngModel)]="status"
+                  [value]="item.id" name="rd1" [id]="item.id" aria-label="select"> {{item.value}}</label></div>
+          </div>
+        </div>
+        <mat-error *ngIf="checkValueExists(status) && submitted && parent.isDecision.required"
+          class="p-0 mt-3 text-start">Decision Selection is required</mat-error>
+        <div class="col-12 px-0">
+          <label for="riskOnwerComments"
+            class="w-100 p-0 col-form-label slctLbl text-start mt-4">{{parent.commentLabel}} <sup
+              class="red">*</sup></label>
+          <mat-form-field appearance="fill" class="w-100">
+            <textarea matInput class="text-area" id="riskOnwerComments" rows="5"
+              [(ngModel)]="reviewComments"></textarea>
+          </mat-form-field>
+        </div>
+        <mat-error *ngIf="!reviewComments && submitted" class="p-0 mt-3 text-start">Comments required</mat-error>
+      </div>
+    </div>
+    <div class="col-6 ps-5 pe-0">
+      <div class="row mx-0">
+        <div class="col-12 p-0 mt-4 mb-2 position-relative">
+          <mat-expansion-panel class="submit-review" id="commentHistory" [expanded]="true">
+            <mat-expansion-panel-header
+              style="padding: 1.5vw; height: 3vw; background-color: #C6E9D8; border: 1px solid #BBBBBB;">
+              <mat-panel-title style="font-size: 140%;color: #000;">
+                <img src="./assets/images/icon-review.svg" alt="" class="me-2">
+                Review Comments History
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <div class="card-body bodyAccordion" style="padding: 0 1.5vw; overflow-y: auto; max-height: 20vw;">
+              <div class="w-100 position-relative reviewComments mt-5 p-0" *ngFor="let each of reviewCommentsHistory">
+                <span class="position-absolute reviewDate"><i>{{getDateFormat(each.CreatedDate)}}</i></span>
+                <div class="d-flex align-items-start mb-3">
+                  <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                  <p>
+                    <strong>{{each.CommentUserName}}</strong><br>
+                    {{each.CommentBody}}
+                  </p>
+                </div>
+              </div>
+              <div class="w-100 position-relative reviewComments mt-5 p-0" *ngIf="reviewCommentsHistory?.length == 0"
+                style="padding: 3vw; font-size: 2rem; text-align: center;">No Comments</div>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-error class="ms-5">{{saveerror}}</mat-error>
+<div class="modal-footer modalFooter">
+  <button type="button" class="btn btn-secondary modalCancelBtn me-2" mat-dialog-close id="cancelButton">Cancel</button>
+  <button type="button" class="btn btn-primary modalColorBtn" (click)="submitReviewComments()" id="submitButton"><img
+      src="./assets/images/icon-send.svg" alt="">
+    {{parent.buttonLabel}}</button>
+</div>

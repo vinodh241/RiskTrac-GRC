@@ -1,0 +1,519 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">Site Risk Assessment - {{service.selectedRiskData?.SiteName}}
+  </h5>
+  <button type="button" class="close customClose example-icon" mat-icon-button mat-dialog-close aria-label="Close"
+    (click)="resetForm()" id="closeUpdate">
+    <span>&times;</span>
+  </button>
+</div>
+<div class="modal-body greyModalBody vscroll" style="height: 62vh; padding: 1rem !important;" id="updateScrollTop">
+  <div class="row mx-3">
+    <div class="col-9 ps-0 pe-5">
+      <div class="modalinfoGrey">{{riskIndex}}. {{service.selectedRiskData?.RiskTitle}}</div>
+    </div>
+    <div class="col-3 ps-4 pe-0">
+      <div class="colorNextPrevious d-flex justify-content-start">
+        <button type="button" class="btn btn-primary modalColorBtn riskBtn btnPrevious topnp me-2"
+          [disabled]="parent.ScheduleRiskIDList[0] == service.currentScheduleRiskID" (click)="previousRisk()" id="previousRisk"><img
+            src="./assets/images/icon-previous.svg" alt=""> Previous Risk</button>
+        <button type="button" class="btn btn-primary modalColorBtn btnGradient btnNext topnp"
+          [disabled]="parent.ScheduleRiskIDList[parent.ScheduleRiskIDList?.length - 1] == service.currentScheduleRiskID"
+          (click)="nextRisk()" id="nextRisk">Next Risk <img src="./assets/images/icon-next.svg" alt=""></button>
+      </div>
+    </div>
+    <div class="divider w-100 mt-4"></div>
+    <div class="col-6 ps-0 pe-5">
+      <div class="row mx-0">
+        <div class="col-12 px-0">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Description
+            <sup class="red">*</sup></label>
+          <mat-form-field appearance="fill" class="w-100">
+            <textarea matInput class="text-area" id="staticDescription" [disabled]="true"
+              rows="5">{{service.selectedRiskData?.RiskDescription}}</textarea>
+          </mat-form-field>
+        </div>
+        <div class="w-100 p-0 mb-2 position-relative">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Current Controls</label>
+          <div class="w-100 ModaltableContent ModaltableContentBlue">
+            <div class="w-100 heightVH-22 vscroll" id="currentCCID">
+              <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                [dataSource]="service.TableCC" id="tableCC">
+                <ng-container matColumnDef="Index">
+                  <th mat-header-cell *matHeaderCellDef class="w-5"> </th>
+                  <td mat-cell *matCellDef="let row" class="w-5 text-center"> {{row.Index}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef class="w-75"> </th>
+                  <td mat-cell *matCellDef="let row" class="w-75 text-left">
+                    <div *ngIf="!row.isEdit" class="word-wrap-text">{{row.Description}}</div>
+                    <div *ngIf="row.isEdit">
+                      <mat-form-field appearance="fill" class="w-100">
+                        <textarea matInput [value]="row.Description" rows="3" cols="70" (keyup)="onChange($event)"
+                          class="text-area" id="description">{{row.Description}}</textarea>
+                      </mat-form-field>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef class="w-20"> </th>
+                  <td mat-cell *matCellDef="let row" class="w-20 text-center">
+                    <ng-container *ngIf="!row.isEdit">
+                      <!-- <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="Edit" color="primary" (click)="editControl(row)" [disabled]="blockEdit">
+                        <mat-icon>edit</mat-icon>
+                      </button> -->
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="Delete" color="primary" (click)="deleteControl(row)" [disabled]="blockEdit" id="deleteControl">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </ng-container>
+                    <ng-container *ngIf="row.isEdit">
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="Save" color="primary" [disabled]="!this.controlData.trim()"
+                        (click)="saveControl(row)" id="saveControl"><mat-icon>save</mat-icon>
+                      </button>
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="cancel" color="primary" (click)="cancel(row)" id="closeControl"><mat-icon>close</mat-icon>
+                      </button>
+                    </ng-container>
+                  </td>
+                </ng-container>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsCC;"></tr>
+                <tr *matNoDataRow>
+                  <td [attr.colspan]="displayedColumnsCC.length">No controls added yet</td>
+                </tr>
+              </table>
+            </div>
+            <div class="w-100 px-0 text-end py-4">
+              <div><button class="btn btn-primary modalColorBtn modalColorBtnGreen" [disabled]="blockEdit"
+                (click)="addControl()" *ngIf="!getFormDisability()" id="addControl"><span class="font-weight-bold">+</span> Add</button></div>
+            </div>
+          </div>
+          <mat-error *ngIf="controlExists">Control Already Exists.</mat-error>
+          <!-- <mat-error *ngIf="(submitted && service.TableCC.data?.length == 0)">Atleast one current control is
+            required.</mat-error> -->
+          <mat-error *ngIf="(submitted && checkControlSave(service.TableCC.data))" style="font-size: medium;">Please save the control.</mat-error>
+          <!-- <div class="w-100 h-20 px-0 text-left py-1">
+            <div><button mat-button class="btn btn-primary modalColorBtn modalColorBtnGreen" [disabled]="blockEdit"
+              (click)="addControl()" *ngIf="!getFormDisability()" id="addControl"><span class="font-weight-bold">+</span> Add</button></div>
+          </div> -->
+        </div>
+        <div class="col-12 px-0">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Effectiveness
+            of Current Controls <sup class="red" *ngIf="checkCCLenght()">*</sup></label>
+          <div class="d-flex justify-content-start py-3">
+            <div class="me-4" *ngFor="let item of service.riskMasterList?.CurrentControlEffectivenessList">
+              <label [matTooltip]="getTooltipData()"><input type="radio" name="effectvienessCC" [id]="item.ControlEffectivenessID"
+                  [value]="item.ControlEffectivenessID" [(ngModel)]="service.selectedRiskData.ControlEffectivenessID"
+                  aria-label="select" (keydown.enter)="$event.preventDefault()" [disabled]="getFormDisability() || getControlEffectiveness()"
+                  (change)="service.calculateRiskRatings(3)"/>
+                {{item.ControlEffectiveness}}
+              </label>
+            </div>
+          </div>
+          <mat-error class="position-absolute" style="margin-top: -0.5vw; font-size: medium;"
+            *ngIf="(submitted && !service.selectedRiskData?.ControlEffectivenessID && checkCCLenght())">Select
+            Effectiveness Of Current Controls</mat-error>
+        </div>
+        <div class="col-12 px-0">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Risk Treatment Strategy <sup
+              class="red">*</sup></label>
+          <div class="d-flex justify-content-start py-3">
+            <div class="me-4" *ngFor="let item of service.riskMasterList?.RiskTreatmentStrategyList">
+              <label><input type="radio" name="RTStrategy" [id]="item.RiskTreatmentStrategyID" aria-label="select"
+                  [value]="item.RiskTreatmentStrategyID" [(ngModel)]="service.selectedRiskData.RiskTreatmentStrategyID"
+                  (keydown.enter)="$event.preventDefault()" (click)="scrollDown('updateScrollTop')" [disabled]="getFormDisability()"/>
+                {{item.RiskTreatmentStrategy}}</label>
+            </div>
+          </div>
+          <mat-error class="position-absolute" style="margin-top: -0.5vw; font-size: medium;"
+            *ngIf="(submitted && !service.selectedRiskData?.RiskTreatmentStrategyID)">Select
+            Risk Treatment Strategy</mat-error>
+        </div>
+      </div>
+    </div>
+    <div class="col-6 ps-5 pe-0">
+      <div class="row mx-0 pt-2">
+        <div class="col-10 ps-0 pe-2">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Threat
+            Category </label>
+          <select class="form-control-plaintext fldcolor" [disabled]="true" style="opacity: 0.8;" id="staticEmail">
+            <option>{{service.selectedRiskData?.ThreatCategory}}</option>
+          </select>
+        </div>
+        <div class="col-2 ps-2 pe-0">
+          <div class="w-100 h-100 ciaBox text-center position-relative">
+            <div class="d-flex justify-content-around p-2 position-absolute vhmiddle w-100 h-100">
+              <div class="text-center p-2" *ngFor="let impact of service.riskMasterList?.ThreatImpactMaster">
+                <div class="radioRed position-relative mb-0 disabled">
+                  <input type="radio" [checked]="isImpactChecked(impact.ThreatImpactID)"
+                    [name]="impact.ThreatImpactCode" [id]="impact.ThreatImpactID" aria-label="select"
+                    (keydown.enter)="$event.preventDefault()" />
+                  <label [for]="impact.ThreatImpactID" class="fa fa-check-circle">{{impact.ThreatImpactCode}}</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 px-0">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Risk Owner <sup
+            class="red">*</sup></label>
+        <mat-form-field appearance="fill" class="w-100 position-relative" *ngIf="riskOnwerName?.length > 0">
+          <input type="text" placeholder="Owner" matInput [(ngModel)]="riskOnwerName" [disabled]="true"
+            (keydown.enter)="$event.preventDefault()" />
+          <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+            alt="">
+        </mat-form-field>
+      </div>
+
+      <div class="col-12 px-0 mb-2 position-relative">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Inherent (Gross) Risk</label>
+        <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-22">
+          <div class="row mx-0">
+            <div class="col-3">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Likelihood <sup
+                  class="red">*</sup></label>
+              <div class="d-flex flex-column">
+                <div class="margin2" *ngFor="let item of service.riskMasterList?.InherentLikelihoodMasterList" id="inherentLikelihood">
+                  <label><input type="radio" [id]="item.InherentLikelihoodRatingID" name="InherentLikelihood"
+                      aria-label="select" [(ngModel)]="service.selectedRiskData.InherentLikelihoodRatingID"
+                      [value]="item.InherentLikelihoodRatingID" (change)="service.calculateRiskRatings(1)"
+                      (keydown.enter)="$event.preventDefault()" [disabled]="getFormDisability()"/>
+                    {{item.InherentLikelihoodRating}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-3">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Impact <sup
+                  class="red">*</sup></label>
+              <div class="d-flex flex-column">
+                <div class="margin2" *ngFor="let item of service.riskMasterList?.InherentImpactMasterList" id="inherentImpact">
+                  <label><input type="radio" name="InherentImpact" [id]="item.InherentImpactRatingID"
+                      aria-label="select" [(ngModel)]="service.selectedRiskData.InherentImpactRatingID"
+                      [value]="item.InherentImpactRatingID" (change)="service.calculateRiskRatings(1)"
+                      (keydown.enter)="$event.preventDefault()" [disabled]="getFormDisability()"/>
+                    {{item.InherentImpactRating}}</label>
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="d-flex flex-column align-items-center text-center">
+                <div class="fontSize2 mt-4">Risk Rating</div>
+                <div class="riskRating"
+                  [ngClass]="{'high': service.selectedRiskData?.OverallInherentRiskRatingID === 3, 'medium': service.selectedRiskData?.OverallInherentRiskRatingID === 2, 'low': service.selectedRiskData?.OverallInherentRiskRatingID === 1}"
+                  *ngIf="service.selectedRiskData?.OverallInherentRiskRatingID">
+                  {{service.selectedRiskData?.OverallInherentRiskRating}}</div>
+                <div class="smallgrey mt-4">Auto calculated<br>based on user selection
+                </div>
+              </div>
+            </div>
+          </div>
+          <mat-error class="position-absolute mt-4" style="font-size: medium;"
+            *ngIf="(submitted && !service.selectedRiskData?.OverallInherentRiskRating)">Select Inherent Risk</mat-error>
+        </div>
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Residual Risk</label>
+        <div class="w-100 ModaltableContent ModaltableContentBlue">
+          <div class="row mx-0">
+            <div class="col-6">
+              <div class="d-flex flex-column align-items-center text-center py-3">
+                <div class="fontSize2 mt-2">Risk Rating</div>
+                <div class="riskRating"
+                  [ngClass]="{'high': service.selectedRiskData?.OverallResidualRiskRatingID === 3, 'medium': service.selectedRiskData?.OverallResidualRiskRatingID === 2, 'low': service.selectedRiskData?.OverallResidualRiskRatingID === 1}"
+                  *ngIf="service.selectedRiskData?.OverallResidualRiskRatingID">
+                  {{service.selectedRiskData.OverallResidualRiskRating}}</div>
+                <div class="smallgrey mt-2" *ngIf="!service.selectedRiskData?.OverallResidualRiskRatingID">
+                  Auto calculated<br>based on Inherent Risk &amp;<br>Control Effectiveness
+                </div>
+                <div class="smallgrey mt-2" *ngIf="service.selectedRiskData?.OverallResidualRiskRatingID">
+                  Auto calculated<br>based on user selection
+                </div>
+              </div>
+            </div>
+            <div class="col-6">
+              <div class="w-100 px-0">
+                <label for="expRating" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Brief
+                  explanation for the rating</label>
+                <mat-form-field appearance="fill" class="w-100" *ngIf="service.selectedRiskData">
+                  <textarea matInput class="text-area" id="expRating" rows="2" [(ngModel)]="service.selectedRiskData.ResidualRiskDescription"
+                    (keyup)="bindRRDes($event)" [disabled]="getFormDisability()"></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <mat-error class="position-absolute mt-1" style="font-size: medium;"
+            *ngIf="(submitted && !service.selectedRiskData?.OverallResidualRiskRating)">
+            Residual Risk is auto-derived. Ensure Inherent Risk and Control Effectiveness are set.</mat-error>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="service.selectedRiskData?.RiskTreatmentStrategyID == 1" class="p-0">
+      <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Plan</label>
+      <div class="w-100 ModaltableContent ModaltableContentBlue">
+        <div class="w-100 h-100">
+          <div style="max-height: 30vh;" class="vscroll p-0" id="ActionPlanID">
+            <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+              [dataSource]="service.TableAP" id="actionPlanTable">
+              <ng-container matColumnDef="Index">
+                <th mat-header-cell *matHeaderCellDef class="w-4 text-center"> # </th>
+                <td mat-cell *matCellDef="let row" class="w-4 text-center">
+                  {{row.Index}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="ActionItem">
+                <th mat-header-cell *matHeaderCellDef class="w-36">
+                  Action Item </th>
+                <td mat-cell *matCellDef="let row" class="w-36"> {{row.actionItem}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="StartDate">
+                <th mat-header-cell *matHeaderCellDef class="w-20">
+                  Start Date </th>
+                <td mat-cell *matCellDef="let row" class="w-20"> {{getDateFormat(row.startDate)}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="TargetDate">
+                <th mat-header-cell *matHeaderCellDef class="w-20">
+                  Target Date </th>
+                <td mat-cell *matCellDef="let row" class="w-20"> {{getDateFormat(row.targetDate)}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Owner">
+                <th mat-header-cell *matHeaderCellDef class="w-10">
+                  Owner </th>
+                <td mat-cell *matCellDef="let row" class="w-10"> {{row.actionItemOwner}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef class="w-10"> </th>
+                <td mat-cell *matCellDef="let row" class="w-10 text-center">
+                  <ng-container>
+                    <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                      matTooltip="Edit" color="primary" (click)="editAction(row)" [disabled]="blockEdit" [id]="'edit' + row.Index">
+                      <mat-icon>edit</mat-icon>
+                    </button>
+                    <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                      matTooltip="Delete" color="primary" (click)="deleteAction(row)" [disabled]="blockEdit" [id]="'delete' + row.Index">
+                      <mat-icon>delete</mat-icon>
+                    </button>
+                  </ng-container>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsAP; sticky: true" class="table-bg-header-color"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsAP;"></tr>
+            </table>
+          </div>
+
+          <form [formGroup]="defineActionItemForm" *ngIf="!getFormDisability()">
+            <div class="row mx-0">
+              <div class="col-6 ps-0 pe-2">
+                <label for="actionItem" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Action Item <sup
+                    class="red">*</sup></label>
+                <mat-form-field appearance="fill" class="w-100">
+                  <textarea matInput class="text-area" formControlName="actionItemText"
+                    id="actionItem" rows="5" (keyup)="checkActionExsist($event)"></textarea>
+                </mat-form-field>
+                <mat-error *ngIf="(actionSubmitted || f['actionItemText'].touched) && f['actionItemText'].errors" style="font-size: medium;">Enter
+                  Action Item</mat-error>
+              </div>
+              <div class="col-6 ps-2 pe-0">
+                <div class="row mx-0">
+                  <div class="col-6 ps-0 pe-2">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Start Date
+                      <sup class="red">*</sup></label>
+                    <mat-form-field appearance="fill" (click)="picker.open()" class="w-100">
+                      <input matInput formControlName="startDate" [max]="maxDate" [matDatepicker]="picker" id="actionplanstartDate"
+                        (keydown.enter)="$event.preventDefault()" (dateChange)="setStartDate()">
+                      <mat-datepicker-toggle id="startDateToggle" matSuffix [for]="picker"></mat-datepicker-toggle>
+                      <mat-datepicker id="startDate" #picker></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="(actionSubmitted || f['startDate'].touched) && f['startDate'].errors" style="font-size: medium;">Select Start Date</mat-error>
+                    <mat-error *ngIf="minStartDateError && !endDateError" style="font-size: medium;">Start date needs to be a future date including today</mat-error>
+                    <mat-error *ngIf="endDateError" style="font-size: medium;">Start date cannot be after End date.</mat-error>
+                  </div>
+                  <div class="col-6 ps-2 pe-0">
+                    <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Target Date
+                      <sup class="red">*</sup></label>
+                    <mat-form-field appearance="fill" (click)="picker1.open()" class="w-100">
+                      <input matInput formControlName="targetDate" [max]="maxDate" [matDatepicker]="picker1" id="actionplantargetDate"
+                        (keydown.enter)="$event.preventDefault()" (dateChange)="setEndDate()">
+                      <mat-datepicker-toggle id="targetDateToggle" matSuffix [for]="picker1"></mat-datepicker-toggle>
+                      <mat-datepicker id="targetDate" #picker1></mat-datepicker>
+                    </mat-form-field>
+                    <mat-error *ngIf="(actionSubmitted || f['targetDate'].touched) && f['targetDate'].errors" style="font-size: medium;">Select Target Date</mat-error>
+                    <mat-error *ngIf="minEndDateError && !endDateError" style="font-size: medium;">End Date should starts from todays date</mat-error>
+                    <mat-error *ngIf="endDateError" class="error ml-3" style="font-size: medium;"> End date cannot be before Start date.</mat-error>
+                  </div>
+                  <label for="actionItemO" class="col-12 p-0 col-form-label slctLbl text-start mt-0">Action Item Owner
+                    <sup class="red">*</sup></label>
+                  <div class="col-12 p-0 mb-2 position-relative">
+                    <mat-form-field appearance="fill" class="w-100">
+                      <input type="text" matInput formControlName="actionItemOwnerName" [matAutocomplete]="owner"
+                        #autoCompleteActionItemOwner (input)="filterActionOwnerList($event)"
+                        (keydown.enter)="$event.preventDefault()" id="actionItemO" />
+                      <img src="./assets/images/icon-site-bcposition.svg"
+                        class="vmiddleRight position-absolute formIconMddl2" alt="user-card" />
+                      <mat-autocomplete #owner="matAutocomplete">
+                        <mat-option *ngFor="let owner of this.filteredActionOwner" [value]="owner.AdminName"
+                          (onSelectionChange)="setActionOwnerID(owner)" [id]="owner.AdminName">
+                          {{ owner.AdminName }}
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <mat-error
+                      *ngIf="(actionSubmitted || f['actionItemOwnerName'].touched) && f['actionItemOwnerName'].errors" style="font-size: medium;">Select
+                      Action Owner</mat-error>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="w-100 h-20 px-0 text-end py-1 mt-3">
+              <div class="d-flex justify-content-end align-items-center">
+                <mat-error class="me-5" style="font-size: medium;"
+                  *ngIf="(submitted && (service.selectedRiskData?.RiskTreatmentStrategyID == 1) && service.TableAP.data?.length == 0 && !actionItemPrompt && !isActionExsist)">
+                  Atleast One Action Item Required</mat-error>
+                <mat-error class="me-5" style="font-size: medium;"
+                  *ngIf="(actionSubmitted && (service.selectedRiskData?.RiskTreatmentStrategyID == 1) && isActionExsist && actionItemPrompt)">
+                  Action Item already exsist</mat-error>
+                <mat-error style="font-size: medium;" *ngIf="(submitted && (service.selectedRiskData?.RiskTreatmentStrategyID == 1) && blockEdit && !isActionExsist)">Please save Action Item.</mat-error>
+                <mat-error style="font-size: medium;" *ngIf="((actionItemPrompt && submitted) && (service.selectedRiskData?.RiskTreatmentStrategyID == 1) && !blockEdit && !isActionExsist)">Please save Action Item.</mat-error>
+                <button type="button" mat-button class="btn btn-secondary modalCancelBtn ms-5 me-2"
+                  (click)="updateNReset()" id="cancelActionPlan">Cancel</button>
+                <button type="button" mat-button class="btn btn-primary normalColorBtn modalColorBtnGreen"
+                  (click)="addActionItem()" style="background-color: #1C9F50; color: white;" id="addActionItem"><span class="fw-bold"><img
+                      src="./assets/images/icon-save.svg"></span> {{actionItemMode}} Action Item</button>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div *ngIf="service.selectedRiskData?.RiskTreatmentStrategyID == 2" class="p-0">
+      <label for="tolerate" class="w-100 p-0 col-form-label slctLbl text-start mt-4 position-relative">Tolerate -
+        Explanation <sup class="red">*</sup> <span class="textSelectedFull ps-2">Please provide
+          an explanation for why this risk can be tolerated.</span></label>
+      <mat-form-field appearance="fill" class="w-100">
+        <textarea matInput class="text-area" id="tolerate" rows="3" [disabled]="getFormDisability()"
+          [(ngModel)]="service.selectedRiskData.RiskTolerateExplanation"></textarea>
+      </mat-form-field>
+      <mat-error class="position-absolute" style="font-size: medium;"
+        *ngIf="(submitted && (service.selectedRiskData?.RiskTreatmentStrategyID == 2) && !service.selectedRiskData.RiskTolerateExplanation)">Add
+        Explanation</mat-error>
+    </div>
+
+    <div *ngIf="service.selectedRiskData?.RiskTreatmentStrategyID" class="px-0">
+      <label for="evidenceUpload" class="w-100 p-0 col-form-label slctLbl text-start mt-5">Evidence</label>
+      <div class="w-100 ModaltableContent ModaltableContentBlue">
+        <div class="w-100 h-14 vscroll" >
+          <table class="w-100 modalTble seablueTble smallTable">
+            <tbody>
+              <tr *ngIf="service?.riskUploadedAttachments?.length == 0" style="height: 5vw;">
+                <td class="w-100 text-center"> No Attachments </td>
+              </tr>
+              <tr *ngFor="let file of service.riskUploadedAttachments; index as i">
+                <td class="w-4">{{i+1}}</td>
+                <td class="w-65" (click)="service.downloadFile(file.FileContentID)" [id]="'download'+ file.AttachmentID" class="cursor-pointer"><img src="./assets/images/icon-attachment.svg" >
+                  <a class="tblLnk">{{file.AttachmentName}}</a>
+                </td>
+                <td class="w-26">{{formatedDate(file.CreatedDate)}}</td>
+                <td class="w-5" *ngIf="!getFormDisability()">
+                  <button mat-icon-button class="custom-button" style="padding-left: 0.5rem;" (click)="service.deleteUploadSRAAttachment(file.FileContentID)"
+                    [id]="'delete'+ file.FileContentID" alt="delete"><img src="./assets/images/icon-delete-black.svg"></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="w-100 px-0 text-end py-4" *ngIf="!getFormDisability()">
+          <div>
+            <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGreen" (click)="openFileUploadPopup()"
+              id="addEvidence"><span class="fw-bold"> <img src="./assets/images/icon-attachment.svg"
+                style="filter: invert(); width: 8%;" alt="">
+              </span> Attach Supporting Document
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="service.selectedRiskData?.ThreatReviewComments?.length != 0 " class="p-0 pt-4">
+      <span class="position-relative">
+        <label for="tolerate" style="top: -1vh; width: 97% !important;" class="p-0 col-form-label slctLbl text-start mt-4 position-relative">{{ 'sra.addEdit.reviewerComments' | translate }}
+          <!-- <span class="position-absolute previousComments" (click)="showComments(service.selectedRiskData?.ThreatReviewComments)">View Previous Comments</span> -->
+        </label>
+        <button mat-icon-button [matTooltip]="'common.viewPreviousComments' | translate" *ngIf="service.selectedRiskData?.ThreatReviewComments?.length > 1"
+          class="eye-icon position-absolute" (click)="showComments(service.selectedRiskData?.ThreatReviewComments)"> <img src="./assets/images/icon-prev-comments.svg" class="pb-1" alt="Home" style="cursor: pointer;">
+        </button>
+      </span>
+      <mat-form-field appearance="fill" class="w-100">
+        <textarea matInput class="text-area"  id="tolerate" rows="2" [disabled]="true"
+        [(ngModel)]="service.selectedRiskData?.ThreatReviewComments[0].CommentBody"></textarea>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+  <!-- Review page for BCM view -->
+  <form [formGroup]="reviewForm" *ngIf="service.selectedRiskData?.IsReviewer">
+    <div class="row mx-3">
+      <div class="w-100 ModaltableContent ModaltableContentGrey heightVH-28 mt-4">
+        <div class="w-100 h-100">
+          <div class="row mx-0">
+            <div class="col-3 ps-0 pe-4">
+              <span class="position-relative">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4 position-relative" style="top: -1vh;">{{ 'sra.addEdit.reviewDecision' | translate }} <sup
+                    class="red">*</sup></label>
+              </span>
+              <div class="greenRadio radioTxt"><label class="mb-0"><input mat-radio-button type="radio"
+                  formControlName="decission" name="decission" [value]="1" id="rd1" aria-label="select"/>
+                  {{ 'sra.addEdit.approved' | translate }}</label></div>
+              <div class="redRadio mt-3 radioTxt"><label class="mb-0"><input mat-radio-button type="radio"
+                  formControlName="decission" name="decission" id="rd2" aria-label="select" [value]="0"> {{ 'sra.addEdit.returnWithComments' | translate }}</label></div>
+              <mat-error *ngIf="(reviewed || f1['decission'].touched) && f1['decission'].errors" style="font-size: medium;">{{ 'sra.addEdit.selectReviewDecision' | translate }}</mat-error>
+            </div>
+            <div class="col-6 ps-2 pe-4">
+              <span class="position-relative">
+                <label for="reviewComments" style="top: -1vh;" class="w-100 p-0 col-form-label slctLbl text-start mt-4 position-relative">{{ 'sra.addEdit.reviewerComments' | translate }}
+                  <sup class="red">*</sup>
+                <!-- <span class="position-absolute previousComments" (click)="showComments(service.selectedRiskData?.ThreatReviewComments)"><img src="./assets/images/icon-prev-comments.svg" class="pb-1" alt="Home" style="cursor: pointer;"></span> -->
+              </label>
+              <button mat-icon-button [matTooltip]="'common.viewPreviousComments' | translate" *ngIf="service.selectedRiskData?.ThreatReviewComments?.length > 0 && !service.selectedRiskData?.IsRiskOwner"
+                class="eye-icon previousComments" (click)="showComments(service.selectedRiskData?.ThreatReviewComments)">
+                <img src="./assets/images/icon-prev-comments.svg" class="pb-1" alt="Home" style="cursor: pointer;">
+              </button>
+              </span>
+            <mat-form-field appearance="fill" class="w-100">
+              <textarea class="text-area" matInput formControlName="comment" id="reviewComments"
+                rows="4"></textarea>
+            </mat-form-field>
+            <mat-error *ngIf="(reviewed || f1['comment'].touched) && f1['comment'].errors" style="font-size: medium;">{{ 'sra.addEdit.enterReviewComment' | translate }}</mat-error>
+            </div>
+            <div class="col-3 ps-2 pe-0 mt-4">
+              <div class="smallgrey text-start font-italic pt-4">{{ 'sra.addEdit.reviewCommentNote' | translate }}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+  <!-- End of Review page for BCM view -->
+</div>
+<mat-error class="position-absolute">{{saveerror}}</mat-error>
+
+<div class="modal-footer modalFooter">
+  <button type="button"  mat-dialog-close class="btn btn-secondary modalCancelBtn me-2" id="cancelUpdate"
+    (click)="resetForm()">{{ 'common.cancel' | translate }}</button>
+  <button type="button"  class="btn btn-primary modalColorBtn btnBig"
+   [disabled]="(service.selectedRiskData?.IsReviewed == null && [1,2].includes(service.selectedRiskData?.StatusID)) || (service.selectedRiskData?.IsReviewed == 1 && [5,6,7].includes(service.selectedRiskData?.StatusID))"
+    *ngIf="service.selectedRiskData?.IsReviewer" (click)="onBCMSubmit()" id="updateSubmit"><img style="width: 1.5vw;"
+      src="./assets/images/icon-application.svg" class="me-1" alt="">
+    {{ 'common.save' | translate }}</button>
+  <button type="button"  class="btn btn-primary modalColorBtn btnBig" [disabled]="getFormDisability()"
+  *ngIf="!getFormDisability()" (click)="onSubmit()" id="updateSubmit"><img style="width: 1.5vw;"
+    src="./assets/images/icon-application.svg" class="me-1" alt="">
+  {{ 'common.save' | translate }}</button>
+</div>

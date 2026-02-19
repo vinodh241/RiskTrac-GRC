@@ -1,0 +1,51 @@
+<mat-expansion-panel class="mt-5 review-comments" id="commentHistory" [expanded]="true">
+  <mat-expansion-panel-header
+    style="padding: 1.5vw; height: 3vw; background-color: #C6E9D8; border: 1px solid #BBBBBB;">
+    <mat-panel-title style="font-size: 140%;color: #000;">
+      <img src="./assets/images/icon-review.svg" alt="" class="me-2">
+      {{ 'bcms.reviewComments.reviewCommentsHistory' | translate }}
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="card-body bodyAccordion">
+    <div class="row mx-0" *ngIf="submitPD" style="padding: 0 1vw;">
+      <div class="col-6 ps-0 pe-2">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">{{ 'bcms.reviewComments.reviewDecision' | translate }} <sup
+          class="red">*</sup></label>
+        <div class="radioTxt" *ngFor="let item of reviewOptions" [ngClass]="item.className">
+          <label class="mb-0"><input type="radio" [(ngModel)]="reviewerDescision" name="rd1" [id]="item.id" [value]="item.value"
+              aria-label="select"> {{item.option}}</label>
+        </div>
+        <mat-error *ngIf="(submitted && !reviewerDescision)">{{ 'bcms.reviewComments.selectReviewDecision' | translate }}</mat-error>
+      </div>
+      <div class="col-6 ps-2 pe-0">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">{{ 'bcms.reviewComments.reviewerComments' | translate }} <sup
+            class="red">*</sup></label>
+        <mat-form-field appearance="fill" class="w-100">
+          <textarea matInput class="form-control-psaintext fldcolor" id="reviewerComments" [(ngModel)]="reviewerComments"
+            rows="4">Comments</textarea>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted && !reviewerComments)">{{ 'bcms.reviewComments.enterReviewComments' | translate }}</mat-error>
+      </div>
+      <div class="col-6 offset-6  ps-2 pe-0 mt-3">
+        <button type="button" class="btn btn-primary modalColorBtn forBoxAction" id="SRDecision"
+          (click)="submitParticipantDescision()" ><img src="./assets/images/icon-prd.svg" alt=""> {{ 'bcms.reviewComments.submitReviewDecision' | translate }}</button>
+      </div>
+    </div>
+    <div class="reviewComments mt-4 ms-2 me-2" *ngIf="submitPD"></div>
+    <div style="overflow-y: auto; max-height: 40vw; padding: 0 1vw;">
+      <div class="w-100 position-relative reviewComments mt-5 p-0" *ngFor="let each of reviewCommentsHistory">
+        <span class="position-absolute reviewDate"><i>{{getDateFormat(each.CreatedDate)}}</i></span>
+        <div class="d-flex align-items-start mb-3">
+          <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+          <p>
+            <strong>{{each.CommentUserName}}</strong><br>
+            {{each.CommentBody}}
+          </p>
+        </div>
+        <div class="reviewComments mt-4"></div>
+      </div>
+    </div>
+    <div class="w-100 position-relative reviewComments mt-5 p-0" *ngIf="reviewCommentsHistory?.length == 0"
+      style="padding: 3vw; font-size: 2rem; text-align: center;">{{ 'bcms.reviewComments.noComments' | translate }}</div>
+  </div>
+</mat-expansion-panel>

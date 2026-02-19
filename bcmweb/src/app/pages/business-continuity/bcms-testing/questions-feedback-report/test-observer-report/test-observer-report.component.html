@@ -1,0 +1,259 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 text-center position-relative h-100 d-flex align-items-center justify-content-start"
+    id="nav-bcmsTestDetails" aria-labelledby="nav-bcmsTesting-tab">
+    <button mat-raised-button color="primary" id="backButton" class="me-3"
+      style="display:inline-block; padding:0vh 1vh;border-radius:100vw;margin: 7px 6px;" matTooltip="Navigate back"
+      (click)="navigateToTestBCMData()">
+      <span style="font-size:16px; margin-right:10px;">&#11164;</span>{{ 'common.back' | translate }}
+    </button>
+    <div class="navtabHeading me-5" style="margin: 0.8vw; width: 25vw;" [matTooltip]="BCMSTest?.TestName?.length > 100? BCMSTest?.TestName:''">{{service.getTitleValue(BCMSTest?.TestName)}}</div>
+    <div class="ms-5 me-3">
+      <span class="statusID px-1 statusStyle"
+        [ngClass]="(BCMSTest?.TestAssessmentStatusID == 1) ? 'statusScheduled' : (BCMSTest?.TestAssessmentStatusID == 2) ? 'statusInprogress' : (BCMSTest?.TestAssessmentStatusID == 3) ? 'statusCompleted' : 'statusPublished'">{{BCMSTest?.TestAssessmentStatus}}</span>
+    </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4 vscroll" id="observerReport">
+  <div class="h-100 pb-3 w-100">
+    <div class="row mx-0 h-100">
+      <div class="col-8 ps-0 pe-3 h-100 position-relative">
+        <div class="cardGen cardGenAutoAccord colorGeyGradient w-100" id="accordion5">
+          <div class="cardBody singleRowNoimg w-100 p-0">
+            <mat-expansion-panel expanded="true" id="testDetails" class="participant-report test-observer">
+              <mat-expansion-panel-header class="expansion-panel-header h-8 h2bg"
+                style="padding: 1.0vw; height: 3.5vw;">
+                <mat-panel-title style="font-size: 140%;color: #000;">
+                  <h2 class="h-100">{{ 'bcms.observerReport.testObserverReport' | translate }}</h2>
+                  <p class="position-absolute vmiddleRight forbarStatus"><span>Status </span> <span [class]="(service.testObserverDetails?.TestWorkflowStatusID == 2)? 'new' : (service.testObserverDetails?.TestWorkflowStatusID == 4)? 'rinp' : ([7, 8].includes(service.testObserverDetails?.TestWorkflowStatusID))? 'responded' : (service.testObserverDetails?.TestWorkflowStatusID == 12)? 'rwc' : 'topapproved'">{{service.testObserverDetails?.QualifiedStatusName}}</span></p>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <div class="w-100 px-2 py-3">
+                <div class="col-12 px-3">
+                  <div class="col-12 py-3">
+                    <div class="smallblack text-start fst-italic">{{ 'bcms.observerReport.instructionText' | translate }}</div>
+                  </div>
+                  <form [formGroup]="observerForm">
+                    <div *ngFor="let section of allSections; let i = index" class="">
+                      <ng-container [ngSwitch]="section.SectionID == null">
+                        <div *ngSwitchCase="false">
+                          <div class="question d-flex justify-content-start">
+                            <span>Q{{i+1}}.</span>
+                            <span><strong>{{section.Section}}:</strong>
+                            </span>
+                          </div>
+                          <div *ngFor="let question of section.QuestionsList; let j = index" class="">
+                            <div class="answer" id="">
+                              <label for="" class="w-100 p-0 col-form-label slctLbl text-lef">{{getAlphabet(j)}}. {{question.Question}}<sup class="red">*</sup>
+                                <span class="smallgrey text-start font-italic d-block pt-2">{{question.Notes}}</span>
+                              </label>
+                              <ng-container [ngSwitch]="question.IsSupportTeam">
+                                <div class="d-flex justify-content-start" *ngSwitchCase="false">
+                                  <div class="w-50" *ngIf="checkPropertyExists(question, 'ControlType')">
+                                    <div class="w-100 d-flex justify-content-start ms-3">
+                                      <label class="options me-3" *ngFor="let op of question.Options">
+                                        <input type="radio" [name]="'Options' + question.QuestionID" [formControlName]="'Options' + question.QuestionID"
+                                          [id]="'Options' + question.QuestionID" [value]="op.OptionID">{{ op.Option }}
+                                      </label>
+                                    </div>
+                                    <mat-error *ngIf="submitted && formControls['Options' + question.QuestionID].errors?.['required']">
+                                      {{ 'bcms.participantReport.selectAnOption' | translate }}
+                                    </mat-error>
+                                  </div>
+                                  <div *ngIf="checkPropertyExists(question, 'CommentType')" class="ms-3" [class]="question.CommentType == 'ckeditor'? 'w-100':'w-50'">
+                                    <ng-container *ngIf="question.CommentType == 'ckeditor'">
+                                      <ckeditor [formControlName]="'CommentType' + question.QuestionID" [id]="'CommentType' + question.QuestionID"
+                                        [readOnly]="!([2,4,12].includes(this.service.testObserverDetails.TestWorkflowStatusID) && (this.service.testObserverDetails.TestObserverID == this.service.loggedUser))"
+                                        [config]="!(!([2,4,12].includes(this.service.testObserverDetails.TestWorkflowStatusID) && (this.service.testObserverDetails.TestObserverID == this.service.loggedUser)))? ckeConfig : disabledCkeConfig" [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+                                      <mat-error *ngIf="submitted && formControls['CommentType' + question.QuestionID].errors?.['required']">
+                                        {{ 'bcms.participantReport.enterComments' | translate }}
+                                      </mat-error>
+                                    </ng-container>
+                                    <ng-container *ngIf="question.CommentType === 'textarea'">
+                                      <div class="w-100 p-0 mb-2">
+                                        <mat-form-field appearance="fill" class="w-100">
+                                          <textarea matInput rows="3" [formControlName]="'CommentType' + question.QuestionID"
+                                            [id]="'CommentType' + question.QuestionID"></textarea>
+                                        </mat-form-field>
+                                        <mat-error *ngIf="submitted && formControls['CommentType' + question.QuestionID].errors?.['required']">
+                                          {{ 'bcms.participantReport.enterComments' | translate }}
+                                        </mat-error>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                                <div class="w-96 mstart-2" id="" *ngSwitchCase="true">
+                                  <table class="tblContent w-100">
+                                    <tbody>
+                                      <tr *ngFor="let item of question.SupportTeamList; let i = index">
+                                        <td class="align-top w-40">
+                                          <address>
+                                            <strong>Support Lead {{i+1}}</strong><br>
+                                            <abbr>{{item.SupportLeadName}}</abbr>
+                                          </address>
+                                        </td>
+                                        <td class="align-middle w-60">
+                                          <div class="w-100 d-flex justify-content-start">
+                                            <label class="options me-5" *ngFor="let op of item.Options; let j = index">
+                                              <input type="radio" [name]="'teamsOptions' + item.BusinessApplicationsLNID" [id]="'SupportLead' + (i+1) + '_' + op.Option + (j+1)"
+                                               [formControlName]="'teamsOptions' + item.BusinessApplicationsLNID" [value]="op.OptionID">{{ op.Option }}
+                                            </label>
+                                          </div>
+                                          <mat-error *ngIf="submitted && formControls['teamsOptions' + item.BusinessApplicationsLNID].errors?.['required']">
+                                            {{ 'bcms.participantReport.selectAnOption' | translate }}
+                                          </mat-error>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </ng-container>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngSwitchCase="true">
+                          <div *ngFor="let question of section.QuestionsList" class="">
+                            <div class="question d-flex justify-content-start">
+                              <label for="" class="w-100 p-0 col-form-label slctLbl text-lef">Q{{i+1}}. {{question.Question}}<sup class="red">*</sup>
+                                <span class="smallgrey text-start font-italic d-block pt-2">{{question.Notes}}</span>
+                              </label>
+                            </div>
+                            <ng-container [ngSwitch]="question.IsSupportTeam">
+                              <div class="answer" id="" *ngSwitchCase="false">
+                                <div class="d-flex justify-content-start">
+                                  <div class="w-50" *ngIf="checkPropertyExists(question, 'ControlType')">
+                                    <label class="options" *ngFor="let op of question.Options">
+                                      <input type="radio" [name]="'Options' + question.QuestionID" [id]="'Options' + question.QuestionID"
+                                       [formControlName]="'Options' + question.QuestionID" [value]="op.OptionID">{{ op.Option }}
+                                    </label>
+<mat-error *ngIf="submitted && formControls['Options' + question.QuestionID].errors?.['required']">
+                                    {{ 'bcms.participantReport.selectAnOption' | translate }}
+                                  </mat-error>
+                                </div>
+                                <div *ngIf="checkPropertyExists(question, 'CommentType')" [class]="question.CommentType == 'ckeditor'? 'w-100':'w-50'">
+                                  <ng-container *ngIf="(question.CommentType == 'ckeditor') && intializeCKEditor">
+                                    <ckeditor [formControlName]="'CommentType' + question.QuestionID" [id]="'CommentType' + question.QuestionID"
+                                      [readOnly]="!([2,4,12].includes(this.service.testObserverDetails.TestWorkflowStatusID) && (this.service.testObserverDetails.TestObserverID == this.service.loggedUser))"
+                                      [config]="!(!([2,4,12].includes(this.service.testObserverDetails.TestWorkflowStatusID) && (this.service.testObserverDetails.TestObserverID == this.service.loggedUser)))? ckeConfig : disabledCkeConfig" [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+                                    <mat-error *ngIf="submitted && formControls['CommentType' + question.QuestionID].errors?.['required']">
+                                      {{ 'bcms.participantReport.enterComments' | translate }}
+                                    </mat-error>
+                                    </ng-container>
+                                    <ng-container *ngIf="question.CommentType === 'textarea'">
+                                      <div class="w-100 p-0 mb-2">
+                                        <mat-form-field appearance="fill" class="w-100">
+                                          <textarea matInput rows="3" [formControlName]="'CommentType' + question.QuestionID"
+                                            [id]="'CommentType' + question.QuestionID"></textarea>
+                                        </mat-form-field>
+                                        <mat-error *ngIf="submitted && formControls['CommentType' + question.QuestionID].errors?.['required']">
+                                          {{ 'bcms.participantReport.enterComments' | translate }}
+                                        </mat-error>
+                                      </div>
+                                    </ng-container>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="w-96 mstart-2" id="" *ngSwitchCase="true">
+                                <table class="tblContent w-100">
+                                  <tbody>
+                                    <tr *ngFor="let item of question.SupportTeamList; let i = index">
+                                      <td class="align-top w-40">
+                                        <address>
+                                          <strong>Support Lead {{i+1}}</strong><br>
+                                          <abbr>{{item.SupportLeadName}}</abbr>
+                                        </address>
+                                      </td>
+                                      <td class="align-middle w-60">
+                                        <div class="w-100 d-flex justify-content-start">
+                                          <label class="options" *ngFor="let op of item.Options; let j = index">
+                                            <input type="radio" [name]="'teamsOptions' + item.BusinessApplicationsLNID" [id]="'SupportLead' + (i+1) + '_' + op.Option + (j+1)"
+                                             [formControlName]="'teamsOptions' + item.BusinessApplicationsLNID" [value]="op.OptionID">{{ op.Option }}
+                                          </label>
+                                          <mat-error *ngIf="submitted && formControls['teamsOptions' + item.BusinessApplicationsLNID].errors?.['required']">
+                                            {{ 'bcms.participantReport.selectAnOption' | translate }}
+                                          </mat-error>
+                                        </div>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                              </div>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </form>
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Q{{allSections?.length + 1}}. {{ 'bcms.participantReport.attachments' | translate }}</label>
+                  <div class="w-98 ModaltableContent ModaltableContentBlue ms-5">
+                    <div class="w-100 h-14 vscroll" >
+                      <table class="w-100 modalTble seablueTble smallTable">
+                        <tbody>
+                          <tr *ngIf="service?.observerUploadedAttachments?.length == 0" style="height: 5vw;">
+                            <td class="w-100 text-center"> {{ 'bcms.participantReport.noAttachments' | translate }} </td>
+                          </tr>
+                          <tr *ngFor="let file of service.observerUploadedAttachments;index as i">
+                            <td class="w-4">{{i+1}}</td>
+                            <td class="w-65" (click)="service.downloadFile(file.FileContentID)" [id]="'download'+ file.AttachmentID" class="cursor-pointer"><img src="./assets/images/icon-attachment.svg" >
+                              <a class="tblLnk">{{file.AttachmentName}}</a>
+                            </td>
+                            <td class="w-26">{{formatedDate(file.CreatedDate)}}</td>
+                            <td class="w-5" *ngIf="([2,4,12].includes(service.testObserverDetails?.TestWorkflowStatusID) && (service.testObserverDetails?.TestObserverID == service.loggedUser))">
+                              <button mat-icon-button class="custom-button" style="padding-left: 0.5rem;" (click)="service.deleteUploadObserverAttachment(file.FileContentID)"
+                                [id]="'delete'+ file.FileContentID" alt="delete"><img src="./assets/images/icon-delete-black.svg"></button>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="w-100 px-0 text-end py-4" *ngIf="([2,4,12].includes(service.testObserverDetails?.TestWorkflowStatusID) && (service.testObserverDetails?.TestObserverID == service.loggedUser))">
+                      <div>
+                        <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGreen" (click)="openFileUploadPopup()"
+                          id="addEvidence"><span class="fw-bold"> <img src="./assets/images/icon-attachment.svg"
+                            style="filter: invert(); width: 8%;" alt="">
+                          </span> {{ 'bcms.participantReport.attachSupportingDocument' | translate }}
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 px-0 mt-4">
+                  <div class="footerBtn text-center">
+                    <button class="btn btn-primary modalColorBtn textDetailBtn" id="bottomSave"
+                      *ngIf="([2,4,12].includes(service.testObserverDetails?.TestWorkflowStatusID) && (service.testObserverDetails?.TestObserverID == service.loggedUser))" (click)="saveReportData(1)">
+                      <span class="fw-bold"><img src="./assets/images/icon-application.svg"></span> {{ 'common.save' | translate }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 ps-0 pe-3 h-100 position-relative">
+        <app-bcms-test-details></app-bcms-test-details>
+        <div class="w-100 mt-4 d-flex justify-content-end text-end">
+          <div class="me-2">
+            <button class="btn btn-primary modalColorBtn textDetailBtn forBoxAction" id="topSave"
+            (click)="saveReportData()" *ngIf="([2,4,12].includes(service.testObserverDetails?.TestWorkflowStatusID) && (service.testObserverDetails?.TestObserverID == service.loggedUser))">
+            <span class="fw-bold"><img src="./assets/images/icon-save.svg" class="saveImg" style="width: 10% !important;"></span>
+               {{ 'common.save' | translate }}
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-primary modalColorBtn modalColorBtnGreen textDetailBtn forBoxAction" id="submitReport"
+            (click)="submitObserverReport('observer')" *ngIf="([2,4,12].includes(service.testObserverDetails?.TestWorkflowStatusID) && (service.testObserverDetails?.TestObserverID == service.loggedUser))">
+            <span class="fw-bold"><img src="./assets/images/icon-filecheck.svg"></span> {{ 'bcms.observerReport.submitReport' | translate }}</button>
+          </div>
+          <div>
+            <button class="btn btn-primary modalColorBtn modalColorBtnGreen textDetailBtn forBoxAction" id="submitReview"
+            (click)="submitObserverReport('bcmanager')" *ngIf="[7,8].includes(service.testObserverDetails?.TestWorkflowStatusID) && service.isBCManager">
+            <span class="fw-bold"><img src="./assets/images/icon-filecheck.svg"></span> {{ 'bcms.observerReport.submitReviewDecision' | translate }}</button>
+          </div>
+        </div>
+        <mat-error *ngIf="saveerror">{{saveerror}}</mat-error>
+        <app-review-comments-history></app-review-comments-history>
+      </div>
+    </div>
+  </div>
+</div>

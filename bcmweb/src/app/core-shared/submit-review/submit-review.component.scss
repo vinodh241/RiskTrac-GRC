@@ -1,0 +1,10 @@
+.text-area {
+  text-align: left;
+  background-color: white;
+  line-height: 1.2 !important;
+  font-size: 110% !important;
+}
+
+::ng-deep .submit-review .mat-expansion-panel-body {
+  padding: 0 !important;
+}

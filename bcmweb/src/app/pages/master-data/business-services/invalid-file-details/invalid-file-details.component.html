@@ -1,0 +1,117 @@
+<div  >
+<div >
+    <div class="modal-header bgSeaGreenGradient text-white allModalHeader" style="width: 166.57vh;">
+      <h5 class="modal-title modalh5" id="staticBackdropLabel">Uploaded Invalid Excel File Details</h5>
+      <button type="button" class="close customClose example-icon"
+      mat-dialog-close>
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="table-model-bg  px-3 w-100 py-4" style="height: 59vh;">
+      <div class="h-100 pb-3 w-100">
+        <div class="cardGen colorGeyGradient h-100 text-left">
+          <div class="cardBody singleRow w-100 h-100">
+            <div class="w-100 h-100 px-2 py-3 position-relative">
+              <div class="w-100 h-94">
+
+                <section class="w-100 vscroll tableContent h-100" tabindex="0">
+                  <table mat-table [dataSource]="dataSource"
+                    class="table-striped" id="businessServicesID">
+                    <ng-container matColumnDef="Position">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                      <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ApplicationName">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Application
+                        / Services</th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.ApplicationName}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="BusinessGroup">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Business
+                        Group/Function</th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> <label class="link">
+                          {{element.BusinessFunction}}</label> </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="DeploymentSite">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 9vw;border: 2px solid white;padding-left: 10px;">Deployment
+                        Site
+                      </th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Site}} </td>
+                    </ng-container>
+
+                    <!-- <ng-container matColumnDef="BusinessOwner">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 7vw;border: 2px solid white;padding-left: 10px;">Business
+                        Owner</th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.BusinessOwnerName}}
+                      </td>
+                    </ng-container> -->
+
+                    <ng-container matColumnDef="ITOwner">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">IT Owner
+                      </th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.ITOwnerEmailID}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="SupportLead">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 6vw;border: 2px solid white;padding-left: 10px;">Support Lead
+                      </th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.SupportLeadEmailID}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="RTO">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">RTO</th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RTOValue + element.RTOUnit}}
+                        {{element.TimeUnit}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="RPO">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">RPO</th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RPOValue + element.RPOUnit}}
+                        {{element.PointUnit}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="FailedFields">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Failed Field</th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.FailureDesc}}
+                        {{element.PointUnit}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                      style="background-color:  rgb(207, 205, 205);"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                    <tr *matNoDataRow>
+                      <td [attr.colspan]="displayedColumns.length">No data found.</td>
+                    </tr>
+                  </table>
+                </section>
+
+
+
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer modalFooter">
+      <button type="button" class="btn btn-secondary modalCancelBtn me-2" id="cancelID" mat-dialog-close>Cancel</button>
+    </div>
+
+</div>
+
+</div>
+<!-- (click)="closeAllPopup()" -->

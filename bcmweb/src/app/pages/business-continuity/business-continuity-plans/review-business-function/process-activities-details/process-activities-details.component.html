@@ -1,0 +1,616 @@
+<div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+    [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+    style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: 2vh; font-size: 2.3vh;"
+    [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+    (workFlowStatusID == 2) ? 'statusInprogress' :
+    (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+    (workFlowStatusID == 8) ? 'statusCompleted' :
+    (workFlowStatusID == 7) ? 'statusDelayed' :
+    'statusPublished'">
+     {{ workFlowStatus }}
+  </span>
+  </span>
+
+  <div class="cardBody singleRow w-100 h-100">
+    <div class="w-100 h-100 px-2 py-3 position-relative">
+      <div class="w-100 h-6 pb-5">
+        <h2 class="h-100"><img src="./assets/images/icon-tl.svg" class="headingIcon longBox icoAs" alt="BCP Coverage">
+          {{ 'bcp.section2.title' | translate }}</h2>
+      </div>
+
+      <div *ngIf="!isBCPListing">
+        <form [formGroup]="processActivityForm">
+          <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;margin-top: 3vh;">
+            <div class="move-buttons" style="margin-left: 76vh;margin-top: -31vh">
+              <button class="active toggle-link" id="colapse" (click)="toggleExpandCollapse()">
+                {{ isAllExpanded ? '- Collapse all' : '+ Expand all' }}
+              </button>
+            </div>
+
+            <mat-expansion-panel *ngFor="let item of BusinessProcessList; let i = index" style="margin-bottom: 1.4vh;">
+              <mat-expansion-panel-header class="expansion-header">
+                <mat-panel-title>
+                  <span><b>{{i+1}}.&nbsp;</b></span>
+                  <span><b>{{item.BusinessProcessName}}</b></span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="row pb-3 bc-process-details-container">
+                <div class="col-7 left-col leftcolSmall">
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Business Process Description<sup
+                          class="red">*</sup></label>
+                      <div class="form-control-plaintext pt-0">
+                        <mat-form-field appearance="fill" class="w-100">
+                          <textarea matInput class="form-control-plaintext fldcolor fldcolor23"
+                            [formControlName]="'desc_'+ item.BusinessProcessID" placeholder="Description" id="desc"
+                            cols="" rows="7"></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="col-6">
+                      <div class="row">
+                        <div class="col-12">
+                          <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Facility / Premises
+                            Required<sup class="red">*</sup></label>
+                          <div class="form-control-plaintext pt-0">
+                            <mat-form-field appearance="fill" style="width: 18vw;">
+                              <mat-select matSelectSearch [formControlName]="'facility_'+item.BusinessProcessID" id="facility"
+                                placeholder="Select Facility/Premises">
+                                <mat-option *ngFor="let facility of facilityDetails" [value]="facility.SiteID"
+                                  [id]="facility.SiteID">{{facility.SiteName}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12">
+                          <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Normal Working Hours<sup
+                              class="red">*</sup></label>
+                          <div class="d-flex align-items-center">
+                            <div class="form-control-plaintext pt-0">
+                              <div class="btn-group w-100">
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'normalWH_'+item.BusinessProcessID" id="normalWH"
+                                    (blur)="validTimeNormalWorkingHours($event, item.BusinessProcessID, 'NWHFrom')">
+                                </mat-form-field>
+                                <div class="px-4">to</div>
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'normalWHTO_'+item.BusinessProcessID" id="normalWHTO"
+                                    (blur)="validTimeNormalWorkingHours($event, item.BusinessProcessID, 'NWHTo')">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12">
+                          <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Peak Working Hours<sup
+                              class="red">*</sup></label>
+                          <div class="d-flex align-items-center">
+                            <div class="form-control-plaintext pt-0">
+                              <div class="btn-group w-100">
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'peakWH_'+item.BusinessProcessID" id="peakWH"
+                                    (blur)="validTimePeakWorkingHours($event, item.BusinessProcessID, 'peakWH')">
+                                </mat-form-field>
+                                <div class="px-4">to</div>
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'peakWHTO_'+item.BusinessProcessID" id="peakWHTO"
+                                    (blur)="validTimePeakWorkingHours($event, item.BusinessProcessID, 'peakWHTO')">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">MTPD<sup class="red">*</sup><img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Max Tolerable Period of Disruption</p>
+                      <div class="d-flex" style="margin-top: 3.5vh !important;">
+                        <div class="form-control-plaintext pt-0 me-2">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'MTPD_'+item.BusinessProcessID" id="MTPD"
+                              min="0" (input)="noDecimal($event,'MTPD_',item.BusinessProcessID)">
+                          </mat-form-field>
+                        </div>
+
+                        <div class="form-control-plaintext pt-0">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <mat-select matSelectSearch [formControlName]="'MTPDUnit_'+item.BusinessProcessID" id="MTPDUnit"
+                              placeholder="select">
+                              <mat-option *ngFor="let mtpd of MTPDList" [value]="mtpd.MTPDIName"
+                                [id]="mtpd.MTPDId">{{mtpd.MTPDIName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">RTO<sup class="red">*</sup><img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Recovery Time Objective (Acceptable loss of time)</p>
+                      <div class="d-flex">
+                        <div class="d-flex">
+                          <div class="form-control-plaintext pt-0 me-2">
+                            <mat-form-field appearance="fill" style="width: 6vw;">
+                              <input type="number" matInput [formControlName]="'RTO_'+item.BusinessProcessID" id="RTO"
+                                min="0" (input)="noDecimal($event,'RTO_',item.BusinessProcessID)" appNoDecimal>
+                            </mat-form-field>
+                          </div>
+
+                          <div class="form-control-plaintext pt-0">
+                            <mat-form-field appearance="fill" style="width: 6vw;">
+                              <mat-select matSelectSearch [formControlName]="'RTOUnit_'+item.BusinessProcessID" id="RTOUnit"
+                                placeholder="select">
+                                <mat-option *ngFor="let rto of RTOList" [value]="rto.RTOName"
+                                  [id]="rto.RTOId">{{rto.RTOName}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">RPO<sup class="red">*</sup><img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Recovery Point Objective (Acceptable loss of data)</p>
+                      <div class="d-flex">
+                        <div class="form-control-plaintext pt-0 me-2">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'RPO_'+item.BusinessProcessID" id="RPO"
+                              min="0" (input)="noDecimal($event,'RPO_',item.BusinessProcessID)" appNoDecimal>
+                          </mat-form-field>
+                        </div>
+
+                        <div class="form-control-plaintext pt-0">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <mat-select matSelectSearch [formControlName]="'RPOUnit_'+item.BusinessProcessID" id="RPOUnit"
+                              placeholder="select">
+                              <mat-option *ngFor="let rpo of RPOList" [value]="rpo.RPOName"
+                                [id]="rpo.RPOId">{{rpo.RPOName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">MAC<sup class="red">*</sup><img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Minimum Acceptable Capacity</p>
+                      <div class="d-flex">
+                        <div class="form-control-plaintext pt-0 me-2">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'MAC_'+item.BusinessProcessID" id="MAC"
+                              min="0" (change)="isValueInRange($event,item.BusinessProcessID )">
+                          </mat-form-field>%
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-8">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">MNPR<sup class="red">*</sup><img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">(Minimum Number of People required)</p>
+                      <div class="d-flex justify-content-space-around">
+                        <div
+                          class="input-label form-control-plaintext pt-0 d-flex justify-content-start align-items-center">
+                          <label for="" class="w-70 text-end pe-1">Remote Headcount<sup class="red">*</sup></label>
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'remote_'+item.BusinessProcessID"
+                              id="remote" min="0" pattern="^[0-9]*$" appNoDecimal>
+                          </mat-form-field>
+                        </div>
+                        <div
+                          class="input-label form-control-plaintext pt-0 d-flex justify-content-start align-items-center ps-2">
+                          <label for="" class="w-70 text-end pe-1">Office Headcount<sup class="red">*</sup></label>
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'ofc_'+item.BusinessProcessID" id="ofc"
+                              min="0" pattern="^[0-9]*$" appNoDecimal>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-5 leftcolSmall">
+                  <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Sub Processes /
+                    Activities<sup class="red">*</sup></label>
+                  <p for="" class="w-100 p-0 pb-2 slctLbl text-start min-description">Please list & describe the key
+                    sub-processes/activities that are part of this business process</p>
+                  <div class="table-bg">
+                    <div class="w-100 h-82 vscroll" style="max-height: 60vh;">
+                      <table class="w-100 modalTble fixedTbleHead table-row-bg" mat-table
+                        [dataSource]="processList(item.BusinessProcessID)" id="addProcess">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Name">
+                          <th mat-header-cell *matHeaderCellDef class="w-50">Name</th>
+                          <td mat-cell *matCellDef="let row" class="w-50 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Name}}</div>
+                            <div *ngIf="row.isEdit">
+                              <textarea matInput [value]="row.Description" rows="2" cols="0" id="processName"
+                                (keyup)="onChangeName($event,item.BusinessProcessID)"
+                                class="text-area" placeholder="Max(250 chars)">{{row.Name}}</textarea>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Description">
+                          <th mat-header-cell *matHeaderCellDef class="w-80">Description</th>
+                          <td mat-cell *matCellDef="let row" class="w-80 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Description}}</div>
+                            <div *ngIf="row.isEdit">
+                              <textarea matInput [value]="row.Description" rows="2" cols="0" id="processDesc"
+                                (keyup)="onChangeDesc($event,item.BusinessProcessID)"
+                                class="text-area" placeholder="Max(500 chars)">{{row.Description}}</textarea>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Action">
+                          <th mat-header-cell *matHeaderCellDef class="w-15"> </th>
+                          <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                            <ng-container *ngIf="!row.isEdit">
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.delete' | translate" color="primary" (click)="deleteProcess(row)" id="deleteSave"
+                                [disabled]="blockEdit">
+                                <mat-icon>delete</mat-icon>
+                              </button>
+                            </ng-container>
+
+                            <ng-container *ngIf="row.isEdit">
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.save' | translate" color="primary" [disabled]="!this.processName.trim()" id="saveProcess"
+                                (click)="saveProcess(row)"><mat-icon>save</mat-icon>
+                              </button>
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancel(row)"
+                                id="closeProcess"><mat-icon>close</mat-icon>
+                              </button>
+                            </ng-container>
+                          </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                          style="background-color:  rgb(207, 205, 205);"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumns.length">{{ 'bcp.section2.noProcessAdded' | translate }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  <mat-error *ngIf="(submitted && service.TablePA.data?.length == 0)">Atleast one sub process is
+                    required.</mat-error>
+                  <mat-error
+                    *ngIf="(!processExists && (processSubmit && checkProcessSave(service.TablePA.data)))">Please save
+                    sub process.</mat-error>
+                  <mat-error *ngIf="duplicateErr && this.checkProcess == item.BusinessProcessID">Sub process cannot be
+                    duplicate in same business process.</mat-error>
+                  <div class="w-100 h-20 px-0 text-left py-1">
+                    <div><button mat-button class="btn btn-primary modalColorBtn modalColorBtnGreen"
+                        [disabled]="blockEdit" id="addCurrentControl" (click)="addProcess(item.BusinessProcessID)"><span
+                          class="font-weight-bold">+</span>{{ 'common.addNew' | translate }}</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </form>
+      </div>
+
+      <!-- View page starts-->
+
+      <div *ngIf="isBCPListing">
+        <form [formGroup]="processActivityForm">
+          <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;margin-top: 3vh;">
+            <div class="move-buttons" style="margin-left: 76vh;margin-top: -31vh">
+              <button class="active toggle-link" id="colapse" (click)="toggleExpandCollapse()">
+                {{ isAllExpanded ? '- Collapse all' : '+ Expand all' }}
+              </button>
+            </div>
+
+            <mat-expansion-panel *ngFor="let item of BusinessProcessList; let i = index" style="margin-bottom: 1.4vh;">
+              <mat-expansion-panel-header class="expansion-header">
+                <mat-panel-title>
+                  <span><b>{{i+1}}.&nbsp;</b></span>
+                  <span><b>{{item.BusinessProcessName}}</b></span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="row pb-3 bc-process-details-container">
+                <div class="col-7 left-col leftcolSmall">
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Business Process
+                        Description</label>
+                      <div class="form-control-plaintext pt-0">
+                        <mat-form-field appearance="fill" class="w-100">
+                          <textarea matInput class="form-control-plaintext fldcolor fldcolor23"
+                            [formControlName]="'desc_'+ item.BusinessProcessID" placeholder="Description" id="desc"
+                            cols="" rows="7" readonly="true"></textarea>
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="col-6" [ngClass]="isBCPListing ? 'disable' : '' ">
+                      <div class="row">
+                        <div class="col-12">
+                          <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Facility / Premises
+                            Required</label>
+                          <div class="form-control-plaintext pt-0">
+                            <mat-form-field appearance="fill" style="width: 18vw;">
+                              <mat-select matSelectSearch [formControlName]="'facility_'+item.BusinessProcessID" id="facility"
+                                placeholder="Select Facility/Premises">
+                                <mat-option *ngFor="let facility of facilityDetails" [value]="facility.SiteID"
+                                  [ngClass]="isBCPListing ? 'disable' : '' "
+                                  [id]="facility.SiteID">{{facility.SiteName}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12">
+                          <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Normal Working Hours</label>
+                          <div class="d-flex align-items-center">
+                            <div class="form-control-plaintext pt-0">
+                              <div class="btn-group w-100">
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'normalWH_'+item.BusinessProcessID" id="normalWH">
+                                </mat-form-field>
+                                <div class="px-4">to</div>
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'normalWHTO_'+item.BusinessProcessID" id="normalWHTO">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row">
+                        <div class="col-12">
+                          <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Peak Working Hours</label>
+                          <div class="d-flex align-items-center">
+                            <div class="form-control-plaintext pt-0">
+                              <div class="btn-group w-100">
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'peakWH_'+item.BusinessProcessID" id="peakWH">
+                                </mat-form-field>
+                                <div class="px-4">to</div>
+                                <mat-form-field class="w-50">
+                                  <input matInput class="time-picker-style" type="time"
+                                    [formControlName]="'peakWHTO_'+item.BusinessProcessID" id="peakWHTO">
+                                </mat-form-field>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">MTPD<img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Max Tolerable Period of Disruption</p>
+                      <div class="d-flex"  style="margin-top: 3.5vh !important;">
+                        <div class="form-control-plaintext pt-0 me-2">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'MTPD_'+item.BusinessProcessID" id="MTPD"
+                              min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                          </mat-form-field>
+                        </div>
+                        <div class="form-control-plaintext pt-0" [ngClass]="isBCPListing ? 'disable' : '' ">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <mat-select matSelectSearch [formControlName]="'MTPDUnit_'+item.BusinessProcessID" id="MTPDUnit"
+                              placeholder="select">
+                              <mat-option *ngFor="let mtpd of MTPDList" [value]="mtpd.MTPDIName"
+                                [id]="mtpd.MTPDId">{{mtpd.MTPDIName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">RTO<img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Recovery Time Objective (Acceptable loss of time)</p>
+                      <div class="d-flex">
+                        <div class="d-flex">
+                          <div class="form-control-plaintext pt-0 me-2">
+                            <mat-form-field appearance="fill" style="width: 6vw;">
+                              <input type="number" matInput [formControlName]="'RTO_'+item.BusinessProcessID" id="RTO"
+                                min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                            </mat-form-field>
+                          </div>
+                          <div class="form-control-plaintext pt-0" [ngClass]="isBCPListing ? 'disable' : '' ">
+                            <mat-form-field appearance="fill" style="width: 6vw;">
+                              <mat-select matSelectSearch [formControlName]="'RTOUnit_'+item.BusinessProcessID" id="RTOUnit"
+                                placeholder="select">
+                                <mat-option *ngFor="let rto of RTOList" [value]="rto.RTOName"
+                                  [id]="rto.RTOId">{{rto.RTOName}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">RPO<img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Recovery Point Objective (Acceptable loss of data)</p>
+                      <div class="d-flex">
+                        <div class="form-control-plaintext pt-0 me-2">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'RPO_'+item.BusinessProcessID" id="RPO"
+                              min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                          </mat-form-field>
+                        </div>
+                        <div class="form-control-plaintext pt-0" [ngClass]="isBCPListing ? 'disable' : '' ">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <mat-select matSelectSearch [formControlName]="'RPOUnit_'+item.BusinessProcessID" id="RPOUnit"
+                              placeholder="select">
+                              <mat-option *ngFor="let rpo of RPOList" [value]="rpo.RPOName"
+                                [id]="rpo.RPOId">{{rpo.RPOName}}
+                              </mat-option>
+                            </mat-select>
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-4">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">MAC<img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">Minimum Acceptable Capacity</p>
+                      <div class="d-flex">
+                        <div class="form-control-plaintext pt-0 me-2">
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'MAC_'+item.BusinessProcessID" id="MAC"
+                              min="0" (change)="isValueInRange($event,item.BusinessProcessID)" readonly="true">
+                          </mat-form-field>%
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-8">
+                      <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">MNPR<img
+                          src="./assets/images/question-icon.svg" alt=""></label>
+                      <p class="sub-titles">(Minimum Number of People required)</p>
+                      <div class="d-flex justify-content-space-around">
+                        <div
+                          class="input-label form-control-plaintext pt-0 d-flex justify-content-start align-items-center">
+                          <label for="" class="w-70 text-end pe-1">Remote Headcount</label>
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'remote_'+item.BusinessProcessID"
+                              id="remote" min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                          </mat-form-field>
+                        </div>
+                        <div
+                          class="input-label form-control-plaintext pt-0 d-flex justify-content-start align-items-center ps-2">
+                          <label for="" class="w-70 text-end pe-1">Office Headcount</label>
+                          <mat-form-field appearance="fill" style="width: 6vw;">
+                            <input type="number" matInput [formControlName]="'ofc_'+item.BusinessProcessID" id="ofc"
+                              min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                          </mat-form-field>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-5 leftcolSmall">
+                  <label for="" class="w-100 p-0 slctLbl text-start mt-4 min-title" style="font-weight: bold;">Sub Processes / Activities</label>
+                  <p for="" class="w-100 p-0 pb-2 slctLbl text-start min-description">Please list & describe the key
+                    sub-processes/activities that are part of this business process</p>
+                  <div class="table-bg">
+                    <div class="w-100 h-82 vscroll" style="max-height: 60vh;">
+                      <table class="w-100 modalTble fixedTbleHead table-row-bg" mat-table
+                        [dataSource]="processList(item.BusinessProcessID)" id="addProcess">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Name">
+                          <th mat-header-cell *matHeaderCellDef class="w-50">Name</th>
+                          <td mat-cell *matCellDef="let row" class="w-50 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Name}}</div>
+                            <div *ngIf="row.isEdit">
+                              <textarea matInput [value]="row.Description" rows="2" cols="0" id="processName"
+                                (keyup)="onChangeName($event,item.BusinessProcessID)"
+                                class="text-area">{{row.Name}}</textarea>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Description">
+                          <th mat-header-cell *matHeaderCellDef class="w-80">Description</th>
+                          <td mat-cell *matCellDef="let row" class="w-80 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Description}}</div>
+                            <div *ngIf="row.isEdit">
+                              <textarea matInput [value]="row.Description" rows="2" cols="0" id="processDesc"
+                                (keyup)="onChangeDesc($event,item.BusinessProcessID)"
+                                class="text-area">{{row.Description}}</textarea>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns1"
+                          style="background-color:  rgb(207, 205, 205);"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns1;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumns1.length">{{ 'bcp.section2.noProcessAdded' | translate }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </form>
+      </div>
+
+      <!-- View page ends-->
+
+      <!-- <div class="child-button " style="margin-top: 6vh;">
+        <div class="move-buttons" style="margin-left: 92vh; margin-top: -1vh;" *ngIf="!isBCPListing">
+          <button class="buttons save" id="savePro" (click)="save()" style="height: 6vh; width: 24vh;"
+            [ngClass]="isSaveEnable() ? 'disable1'  : ''"><img src="./assets/images/icon-application.svg"
+              alt="Save">Save</button>
+        </div>
+      </div>
+
+      <span *ngIf="!isBCPListing"><mat-error style="margin-top: -4vh;" *ngIf="isSaveEnable()"> The save button will be
+          enabled once all the mandatory data is filled.</mat-error></span> -->
+
+    </div>
+  </div>

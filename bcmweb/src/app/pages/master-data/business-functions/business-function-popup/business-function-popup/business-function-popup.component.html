@@ -1,0 +1,98 @@
+<!-- MAODAL POPUP -->
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{mod}} Business Function</h5>
+  <button type="button" id="closeFunPopup" class="example-icon" mat-icon-button data-dismiss="modal" aria-label="Close"
+    (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<form [formGroup]="addBusinessFunForm">
+  <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+    <div class="row mx-3">
+
+      <div class="col-7 p-0 mb-2">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Business Group <sup class="red">*</sup></label>
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-select matSelectSearch formControlName="businessId" id="businessId" placeholder="Select Business group"
+            (selectionChange)="filterGroup($event.value)">
+            <mat-option *ngFor="let bussgroup of bussGroupList" [value]="bussgroup.GroupID"
+              [id]="bussgroup.GroupID">{{bussgroup.GroupName}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-error *ngIf="(submitted || f['businessId'].touched) && f['businessId'].errors">Select Business Group</mat-error>
+      </div> <br>
+
+      <div class="col-7 p-0 mb-2">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Name<sup class="red">*</sup></label>
+        <mat-form-field appearance="fill" class="w-100">
+          <mat-select matSelectSearch formControlName="unitID" id="unitID" placeholder="Select Business Function">
+            <mat-option *ngFor="let unitName of filteredGroup" [value]="unitName.UnitID"
+              (click)="filterCode(unitName.UnitID)" [id]="unitName.UnitID">{{unitName.Name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-error
+          *ngIf="(submitted || f['unitID'].touched) && f['unitID'].errors && (!filteredGroup || filteredGroup.length > 0)">
+          Select Name
+        </mat-error>
+        <mat-error *ngIf="filteredGroup && filteredGroup.length === 0">
+          No Business Function for the selected Group
+        </mat-error>
+
+      </div>
+
+      <div class="col-5 ps-3 pe-0 mb-2">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Short Code <sup class="red">*</sup></label>
+        <mat-form-field appearance="fill" style="width: 18vw;">
+          <input matInput formControlName="shortCode" id="shortCode" readonly="true" class="disabled-field">
+        </mat-form-field>
+        <mat-error *ngIf="submitted && f['unitID'].errors">Select name to display short code</mat-error>
+      </div>
+
+      <div class="col-7 p-0 mb-2">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Business Owner <sup class="red">*</sup></label>
+        <div class="w-100 position-relative">
+          <mat-form-field appearance="fill" class="w-100">
+            <input type="text" id="fbccName" placeholder="Select Business owner" matInput formControlName="fbccName"
+              [matAutocomplete]="auto" (input)="filterFbcc($event)" (keydown.enter)="$event.preventDefault()">
+            <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+              alt="">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let fbcc of this.filteredUserList" [value]="fbcc.FBCCName" [id]="fbcc.fbccId"
+                (onSelectionChange)="setFbccID(fbcc, $event)">
+                {{ fbcc.FBCCName }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+          <mat-error>{{getErrorMessage()}}</mat-error>
+        </div>
+      </div>
+
+      <label for="" class="col-7 p-0 col-form-label slctLbl text-left mt-4 fw-semibold">Sites <sup class="red">*</sup></label>
+      <div class="col-12 p-0 mb-2 position-relative">
+        <mat-form-field appearance="fill" class="w-100 ">
+          <mat-select matSelectSearch formControlName="sitesId" id="site" placeholder="Sites" multiple>
+            <mat-option *ngFor="let item of siteList" [value]="item.SiteID"
+              [id]="item.SiteID">{{item.SiteName}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-error *ngIf="(submitted || f['sitesId'].touched) && f['sitesId'].errors">Select Site</mat-error>
+      </div>
+
+    </div>
+  </div>
+
+  <mat-error class="ms-5" *ngIf="saveerror">{{saveerror}}</mat-error>
+
+  <div class="modal-footer modalFooter">
+    <button type="button" class="btn btn-secondary modalCancelBtn me-3" data-dismiss="modal" id="cancelBussFunPopup"
+      (click)="close()">Cancel</button>
+    <button type="button" class="btn btn-primary modalColorBtn" (click)="addUpdateBussFun()"><img
+        src="./assets/images/icon-create-new-dashboard.svg" alt="" id="addBussFunPopup"> {{mod}} Business
+      Function</button>
+  </div>
+</form>
+<!-- END MAODAL ONE -->

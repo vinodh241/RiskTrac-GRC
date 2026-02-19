@@ -1,0 +1,43 @@
+// Incident Reports - #FF6565
+// Scheduled - #8E8E8E
+// In Progress - #318DFA
+// Completed - #11BC56
+// Published - #346594
+// Delayed - #FF2C2D
+
+
+.forbarStatus.new {
+  background: linear-gradient(100deg, #fff 9.29%, #d88922 100%);
+  color: #8d5103;
+}
+
+.forbarStatus.rinp { //review inprogress
+  background: linear-gradient(100deg, #fff 9.29%, #318DFA 100%);
+  color: #084288;
+}
+
+.forbarStatus.responded {
+  background: linear-gradient(100deg, #fff 9.29%, #85ad50 100%);
+  color: #3d6606;
+}
+
+.forbarStatus .rbo {  // review by Business Owner
+  background: linear-gradient(100deg, #FFF 9.29%, #ffb619 100%);
+  color: #a3540b;
+}
+
+.forbarStatus.rwc {  // return with comments
+  background: linear-gradient(91deg, #FFF 0%, #FFCACA 100%);
+  color: #D31313;
+}
+
+.forbarStatus .topapproved {
+  background: linear-gradient(91deg, #FFF 0%, #CAFFE6 100%);
+  color: #00A944;
+}
+
+.disabled-btn{
+  // cursor: not-allowed;
+  opacity: 0.5; /* Adjust the opacity as needed */
+  pointer-events: none;
+}

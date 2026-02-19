@@ -1,0 +1,103 @@
+<mat-expansion-panel expanded="true" id="testDetails" class="test-details">
+  <mat-expansion-panel-header class="expansion-panel-header h-8 h2bg"
+    style="padding: 1.0vw; height: 3.5vw;">
+    <mat-panel-title style="font-size: 140%;color: #000;">
+      <h2 class="p-0">{{ 'bcms.testDetails.testDetails' | translate }}</h2>
+    </mat-panel-title>
+  </mat-expansion-panel-header>
+  <div class="w-100 px-2 py-3 tableContent collapse show" id="collapseSix">
+    <div class="col-12 px-3">
+      <table class="listTbl w-100">
+        <tbody>
+          <tr>
+            <td class="text-end w-30">{{ 'bcms.create.plannedStartDate' | translate }}</td>
+            <td class="text-start w-68"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2" alt="">{{getDateFormat(testDetails?.ScheduledDate)}}</td>
+          </tr>
+          <tr>
+            <td class="text-end w-28">{{ 'bcms.create.plannedEndDate' | translate }}</td>
+            <td class="text-start w-68"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2" alt="">{{getDateFormat(testDetails?.EndDate)}}</td>
+          </tr>
+          <tr>
+            <td class="text-end w-28">{{ 'bcms.testDetails.actualStartDate' | translate }}</td>
+            <td class="text-start w-68"><img src="./assets/images/icon-calender.svg" class="ms-3 me-2" alt="">
+              <ng-container *ngIf="!isDateTimeEditable">
+                {{!(testDetails?.ActualStartDateTime)? '(Not started yet)':getDateFormat(testDetails?.ActualStartDateTime)}}
+              </ng-container>
+              <ng-container *ngIf="isDateTimeEditable">
+                <mat-form-field appearance="fill" (click)="pickerActualStart.open()" class="w-45 me-3">
+                  <input matInput  [matDatepicker]="pickerActualStart" [(ngModel)]="actualStartDate"
+                    (keydown.enter)="$event.preventDefault()"  [min]="minDate" (dateChange)="setStartTestDate()">
+                  <mat-datepicker-toggle  id="startIncDateToggle" matSuffix [for]="pickerActualStart"></mat-datepicker-toggle>
+                  <mat-datepicker id="startIncDate" #pickerActualStart></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="w-25 position-absolute">
+                  <input matInput class="time-picker-style" type="time" [(ngModel)]="actualStartTime" id="timePickerStart">
+                </mat-form-field>
+                <mat-error class="ms-5 w-85" *ngIf="endTestDateError">{{ 'bcms.create.startDateAfterEnd' | translate }}</mat-error>
+              </ng-container>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-end w-28">{{ 'bcms.testDetails.actualEndDate' | translate }}</td>
+            <td class="text-start w-68"><div><img src="./assets/images/icon-calender.svg" class="ms-3 me-2" alt="">
+              <ng-container *ngIf="!isDateTimeEditable">
+                {{!(testDetails?.ActualEndDateTime)? '(Not started yet)':getDateFormat(testDetails?.ActualEndDateTime)}}
+              </ng-container>
+              <ng-container *ngIf="isDateTimeEditable">
+                <mat-form-field appearance="fill" (click)="pickerActualEnd.open()" class="w-45 me-3">
+                  <input matInput  [matDatepicker]="pickerActualEnd" [(ngModel)]="actualEndDate"
+                    (keydown.enter)="$event.preventDefault()"  [min]="minDate" (dateChange)="setEndTestDate()">
+                  <mat-datepicker-toggle    id="endIncDateToggle" matSuffix [for]="pickerActualEnd"></mat-datepicker-toggle>
+                  <mat-datepicker id="endIncDate" #pickerActualEnd></mat-datepicker>
+                </mat-form-field>
+                <mat-form-field class="w-25 position-absolute">
+                  <input matInput class="time-picker-style" type="time" [(ngModel)]="actualEndTime" id="timePickerEnd">
+                </mat-form-field>
+                <mat-error class="ms-5 w-85" *ngIf="endTestDateError" > {{ 'bcms.create.endDateBeforeStart' | translate }}</mat-error>
+              </ng-container>
+            </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-end w-28">{{ 'bcms.create.testType' | translate }}</td>
+            <td class="text-start w-68"><img src="./assets/images/icon-annual-assessment.svg" class="ms-3 me-2 w-6" alt="">{{testDetails?.TestType}}</td>
+          </tr>
+          <tr>
+            <td class="text-end w-28">{{ 'bcms.create.testObserver' | translate }}</td>
+            <td class="text-start w-68"><div><img src="./assets/images/thumb-user.svg" class="ms-3 me-2 w-6" alt="">{{testDetails?.TestObserver}}</div>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-end w-28">{{ 'bcms.create.participants' | translate }}</td>
+            <td class="text-start w-68">
+              <div class="d-flex justify-content-start">
+                <span><img src="./assets/images/icon-users-black.svg" class="ms-3 me-3 w-60 align-top" alt="">
+                </span>
+                <p class="lh-1">{{testDetails?.ParticipantOption}}<span *ngIf="testDetails?.ParticipantOptionID != 1"> : </span> <span class="fw-bold">{{getParticipantOptionValue()}}</span></p>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td class="text-end w-28">{{ 'bcms.testDetails.testScenario' | translate }}</td>
+            <td class="text-start w-68"><span class="fw-bold">{{testDetails?.TestingScenario}}</span>: {{testDetails?.TestScenarioDescription}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="col-12 px-3 py-3">
+      <table class="tblContent w-100">
+        <thead>
+          <tr>
+            <th colspan="2" class="w-100">{{ 'bcms.create.disruptionScenarios' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of testDetails?.DisruptionScenarios; index as i">
+            <td>{{i+1}}</td>
+            <td>{{item.DisruptionScenarioName}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</mat-expansion-panel>

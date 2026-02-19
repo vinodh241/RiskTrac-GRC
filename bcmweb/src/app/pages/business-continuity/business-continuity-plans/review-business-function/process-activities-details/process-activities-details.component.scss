@@ -1,0 +1,76 @@
+::ng-deep .addProcess tbody td {
+  vertical-align: middle !important;
+}
+
+.toggle-link {
+  text-decoration: none;
+  color: blue;
+  font-size: 12px;
+  width: 12vh;
+  height: 5vh;
+  border: unset;
+  background-image: linear-gradient(to right, #e9caca, #F5F5F5);
+}
+
+.move-buttons1 .buttons{display: flex;justify-content: space-around;align-items: center;cursor: pointer;margin: 0.5em;width: 11vw; padding: 0.5em;border-radius: 0.3em;color: #fff;background: linear-gradient(45deg, rgba(29, 160, 79, 0.8), rgba(11, 89, 161, 0.8));outline: none; border: none; filter: drop-shadow(0px 5px 4px rgba(0, 0, 0, 0.5));opacity: .3;}
+.move-buttons1 .buttons.active{display: flex;justify-content: space-around;align-items: center;cursor: pointer;margin: 0.5em;width: 11vw; padding: 0.5em;border-radius: 0.3em;color: #fff;background: linear-gradient(45deg, rgba(29, 160, 79, 0.8), rgba(11, 89, 161, 0.8));outline: none; border: none; filter: drop-shadow(0px 5px 4px rgba(0, 0, 0, 0.5));opacity: 1;}
+
+.expansion-header {
+  display: flex;
+  font-size: 16px;
+  background-image: linear-gradient(to right, #BED6EC, #F5F5F5);
+  padding: 0 1rem;
+}
+
+ /* child.component.css */
+ .child-button {
+  // background-color: #384bc1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* child.component.css */
+.child-button {
+  position: relative;
+  z-index: 1; /* Ensure the button is on top */
+}
+
+.buttons.save {
+  cursor: pointer; /* Ensure the button has a pointer cursor */
+}
+
+.disable{
+  cursor: none !important;
+  pointer-events: none;
+  opacity: 0.8 !important; /* Adjust the opacity as needed */
+}
+
+.disable1{
+  cursor: none !important;
+  pointer-events: none;
+  opacity: 0.5 !important; /* Adjust the opacity as needed */
+}
+
+.normalColorBtn.modalColorBtnGreen {
+  background-color: #1C9F50;
+  height: 5vh;
+  width: 10vh;
+  font-size: 13px;
+}
+table#addProcess {
+  border: 2px solid #d2cbcb; /* Change color as needed */
+  border-collapse: collapse;
+}
+
+
+table#addProcess tr {
+  border-bottom: 1px solid #d2cbcb;
+}

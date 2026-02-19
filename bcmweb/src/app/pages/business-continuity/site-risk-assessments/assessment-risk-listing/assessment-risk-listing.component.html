@@ -1,0 +1,280 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 text-start position-relative h-100">
+    <button mat-raised-button color="primary" id="backButton" style="display:inline-block; padding:0vh 1vh;border-radius:100vw;margin-right: 10px;margin-top: 1rem;
+      margin-left: 1rem;" matTooltip="Navigate back" (click)="navigateToSiteRiskListing()">
+      <span style="font-size:16px; margin-right:10px;">&#11164;</span>{{ 'common.back' | translate }}
+    </button>
+    <div class="position-absolute vmiddleLeft navsiteHeading px-5"
+      style="color: white; width: 50%; line-height: 17px; overflow:hidden" [matTooltip]="getSiteName()">Site Risk Assessment -
+      {{stripSite(siteName)}}<span *ngIf="siteName?.length >= 150">...</span></div>
+    <span class="statusID position-absolute vmiddleLeft px-1 leftStatusRisk"
+      [ngClass]="(service.riskList?.siteRiskAssessments && service.riskList?.siteRiskAssessments[0]?.StatusID == 1) ? 'statusScheduled' : (service.riskList?.siteRiskAssessments && service.riskList?.siteRiskAssessments[0]?.StatusID == 2) ? 'statusInprogress' : 'statusPublished'">{{overallStatusName}}</span>
+    <div class="dueText dueDate" *ngIf="!reviwerStatus && !overallCompletedStatus">{{ 'sra.listing.dueForReview' | translate }}:
+      <span>{{dueDate}}</span>
+    </div>
+    <div class="dueText dueDate" *ngIf="reviwerStatus && !overallCompletedStatus">{{ 'sra.listing.dueForSubmission' | translate }}:
+      <span>{{dueDate}}</span>
+    </div>
+    <div class="dueText dueDate" *ngIf="overallCompletedStatus">{{ 'sra.listing.completed' | translate }}:
+      <span>{{completedDate}}</span>
+    </div>
+    <div class="d-flex justify-content-right align-items-center vmiddleRight progressRight">
+
+      <div class="overallStatus textOnlytop text-end">{{ 'sra.listing.overallProgress' | translate }}: <span>{{overallProgress}}%</span></div>
+      <div class="w-40 position-absolute vmiddleRight">
+        <div class="progress tableProgress w-90">
+          <!-- (result.overAllStatusID == 1)? 'green' : (result.overAllStatusID == 2)? 'orange' : 'red'" -->
+          <div [ngClass]="{ 'progress-bar': +(overallProgress) < 99, 'color-class-full': +(overallProgress) == 100 }"  role="progressbar" [style.width]="overallProgress + '%'"
+            [style.backgroundColor]="getColor(overallProgress)">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4 vscroll">
+  <div class="h-100 pb-3 w-100">
+    <div class="row mx-0 h-100">
+      <div class="col-8 ps-0 pe-4 h-100">
+        <div class="cardGen colorGeyGradient w-100 h-100">
+          <div class="cardBody singleRow w-100 h-100">
+            <div class="w-100 h-100 px-2 py-3 position-relative">
+              <div class="w-100 h-6 position-relative">
+                <h2 class="h-100"><img src="./assets/images/icon-as.svg" class="headingIcon longBox icoAs"
+                    alt="BCP Coverage"> {{ 'sra.listing.siteRisks' | translate }}</h2>
+                    <!-- Commented below code for Jira AMK-2602  -->
+                <!-- <div class="position-absolute vmiddleRight btnExportDraft">
+                  <div *ngIf="reviwerStatus == true" class="applyFilter addDesktop position-relative text-start me-4">
+                    <button type="button" id="addNewRisk" class="btn btn-dark btnGradient btnGradientNoshadow"
+                      [disabled]="!isAddNewRisk" (click)="addUpdateRisk('Add')">Add New
+                      Risk</button>
+                    <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+                        src="./assets/images/icon-add-desktop.svg"></span>
+                  </div>
+                </div> -->
+                <div class="position-absolute vmiddleRight btnAddObservation">
+                  <div class="applyFilter addDesktop position-relative text-start me-4">
+                    <button type="button" id="exportDraft" class="btn btn-dark btnGradient btnGradientNoshadow"
+                      (click)="exportDraft()">{{ 'sra.listing.exportDraft' | translate }}</button>
+                    <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img
+                        src="./assets/images/icon-export-draft.svg"></span>
+                  </div>
+                </div>
+              </div>
+              <div class="w-100 h-94 vscroll tableContent">
+                <table mat-table [dataSource]="riskData" class="tblContent w-100 fixedTbleHead" id="riskListTable">
+
+                  <ng-container matColumnDef="Position">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">#</th>
+                    <td mat-cell *matCellDef="let element">{{element.Index}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="RiskTitle">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.riskTitle' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">
+                      <a href="javascript: void(0);" class="tblLnk"
+                        *ngIf="!(element.IsRiskOwnerActive == false && overallStatusId != 3)"
+                        (click)="updateSiteRisk(element)">{{element.RiskTitle}}</a>
+                      <a href="javascript: void(0);" class="tblLnk"
+                        *ngIf="(element.IsRiskOwnerActive == false && overallStatusId != 3)"
+                        [matTooltip]="getMessage(element)"
+                        [ngClass]="{'disabled-btn': (element.IsRiskOwnerActive == false && overallStatusId != 3)}">{{element.RiskTitle}}</a>
+                      <button mat-icon-button [id]="'editSRARisk'+ element.RiskTitle" class="example-icon"
+                        [ngClass]="{'disabled-btn': (!isAddNewRisk || ([6,7].includes(element.RiskAssessmentStatusID)) || (element.IsRiskOwnerActive == false && overallStatusId != 3))}"
+                        [disabled]="!isAddNewRisk || ([6,7].includes(element.RiskAssessmentStatusID)) || (element.IsRiskOwnerActive == false && overallStatusId != 3)"
+                        *ngIf="element.IsCustomRisk == 1 && reviwerStatus == true"
+                        (click)="addUpdateRisk('Edit',element)"><img src="./assets/images/icon-edit.svg"></button>
+
+                      <button mat-icon-button [id]="'deleteSRARisk'+ element.RiskTitle" class="example-icon"
+                        [ngClass]="{'disabled-btn': (!isAddNewRisk || ([6,7].includes(element.RiskAssessmentStatusID)) || (element.IsRiskOwnerActive == false && overallStatusId != 3))}"
+                        [disabled]="!isAddNewRisk || ([6,7].includes(element.RiskAssessmentStatusID)) || (element.IsRiskOwnerActive == false && overallStatusId != 3)"
+                        *ngIf="element.IsCustomRisk == 1 && reviwerStatus == true" (click)="deleteRisk(element)"><img
+                          src="./assets/images/icon-delete-black.svg"></button>
+
+                      <button mat-icon-button [id]="'deleteSRARisk' + element.RiskTitle" class="example-icon"
+                        [ngClass]="{'disabled-btn':  ([1, 2, 7].includes(element.RiskAssessmentStatusID) || ([6].includes(element.RiskAssessmentStatusID) && element.IsReviewed == true))}"
+                        [disabled]="([1, 2, 7].includes(element.RiskAssessmentStatusID) || ([6].includes(element.RiskAssessmentStatusID) && element.IsReviewed == true ))"
+                        *ngIf="element.IsCustomRisk === 1 && IsReviewer" (click)="deleteRisk(element)">
+                        <img src="./assets/images/icon-delete-black.svg"></button>
+                    </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="CIA">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.cia' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{element.RiskImpactCode}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Category">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.category' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{element.ThreatCategory}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="InherentRisk">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.inherentRisk' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{element.OverallInherentRiskRating}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="ExistingControls">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.existingControls' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{element.ExistingControls}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="ResidualRisk">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.residualRisk' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{element.OverallResidualRiskRating}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Treatment">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.treatment' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{element.RiskTreatmentStrategyName}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="RiskOwner">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.riskOwner' | translate }}</th>
+                    <td mat-cell *matCellDef="let element">{{element.RiskOwner}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Responded">
+                    <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.responded' | translate }}</th>
+                    <td mat-cell *matCellDef="let element" class="text-center position-relative" style="display: flex;align-items: center;">
+                      <span
+                        [ngClass]="(reviwerStatus ? getStatusColorRiskOwner(element.RiskAssessmentStatus): getStatusColorBCMang(element.RiskAssessmentStatus,element))"><i
+                          class="fa fa-check-circle" aria-hidden="true"></i></span><span>{{reviwerStatus ? service.getStatusRiskOwner(element.RiskAssessmentStatus): service.getStatusBCMang(element.RiskAssessmentStatus, element)}}</span>
+                    </td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:  rgb(207, 205, 205);">
+                  </tr>
+                  <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                  <tr *matNoDataRow>
+                    <td [attr.colspan]="displayedColumns?.length">{{ 'common.noDataFound' | translate }}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-4 ps-4 pe-0 h-100">
+        <div class="cardGen cardGenAuto colorGeyGradient w-100">
+          <div class="cardBody singleRowNoimg w-100 p-0">
+            <div class="w-100 px-0 py-0 position-relative">
+              <div class="w-100 h-8 h2bg position-relative">
+                <h2 class="h-100">{{ 'sra.listing.summary' | translate }}</h2>
+              </div>
+              <div class="w-100 h-94 py-3" *ngIf="viewAcess">
+                <section class="w-100 vscroll tableContent" tabindex="0" style="max-height: 29vh;">
+                  <table mat-table [dataSource]="categoryData" class="table-striped" id="summaryTable">
+
+                    <ng-container matColumnDef="ThreatCategory">
+                      <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.threatCategory' | translate }}</th>
+                      <td mat-cell *matCellDef="let element">{{element.ThreatCategory}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Responded">
+                      <th mat-header-cell *matHeaderCellDef style="font-size: medium;">{{ 'sra.listing.responded' | translate }}</th>
+                      <td mat-cell *matCellDef="let element">{{element.RespondedRisks}}/{{element.TotalRisks}}</td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="Columnsdisplayed; sticky: true"
+                      style="background-color:  rgb(207, 205, 205);"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index columns: Columnsdisplayed;"></tr>
+                  </table>
+                </section>
+              </div>
+              <div class="w-100 h-94 py-3" *ngIf="viewAcessRisk">
+                <section class="w-100 vscroll tableContent" tabindex="0" style="max-height: 29vh;">
+                  <table mat-table [dataSource]="categoryData" class="table-striped" id="summaryBC">
+
+                    <ng-container matColumnDef="Index">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #
+                      </th>
+                      <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="RiskOwner">
+                      <th mat-header-cell *matHeaderCellDef>{{ 'sra.listing.riskOwner' | translate }}</th>
+                      <td mat-cell *matCellDef="let element">{{element.RiskOwnerName}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Responded">
+                      <th mat-header-cell *matHeaderCellDef>Responded</th>
+                      <td mat-cell *matCellDef="let element">{{element.RespondedRisks}}/{{element.TotalRisks}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ReviewStatus">
+                      <th mat-header-cell *matHeaderCellDef>{{ 'sra.listing.reviewStatus' | translate }}</th>
+                      <td mat-cell *matCellDef="let element">
+                        <span
+                          [ngStyle]="{ 'color': getStatusColor(element.QualifiedStatusName) }">{{element.QualifiedStatusName}}</span>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="columnsDisplayedBC; sticky: true"
+                      style="background-color:  rgb(207, 205, 205);"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index columns: columnsDisplayedBC;"></tr>
+                  </table>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="cardGen cardGenAuto colorGeyGradient w-100 mt-4">
+          <div class="cardBody singleRowNoimg w-100 h-100 p-0">
+            <div class="w-100 h-100 px-0 py-0 position-relative">
+              <div class="w-100 h-16 h2bg position-relative">
+                <h2 class="h-100">{{ 'sra.listing.workflowActions' | translate }}</h2>
+                <button class="btnAddcomment position-absolute vmiddleRight revieComments"
+                  (click)="reviewComments()"><img src="./assets/images/icon-comment.svg" class="mx-3" alt=""> {{ 'sra.listing.reviewComments' | translate }}</button>
+              </div>
+              <div class="w-100 px-2 py-3 vscroll tableContent" style="min-height: 20vh;">
+                <div class="col-12 px-3">
+
+                  <table class="listTbl w-100">
+                    <tbody>
+                      <tr>
+                        <td class="text-start w-25">{{ 'sra.listing.currentStep' | translate }}</td>
+                        <td class="text-start w-75">{{currentStep}}</td>
+                      </tr>
+                      <tr>
+                        <td class="text-start w-25">{{ 'sra.listing.nextStep' | translate }}</td>
+                        <td class="text-start w-75">{{nextStep}}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2" class="text-end w-100">
+                          <div class="d-flex justify-content-between w-100 text-start">
+
+                            <button *ngIf="reviwerStatus == true" type="button" class="btnAddcomment"
+                              id="submitForReview" [disabled]="!isBtnEnableRiskOwner" (click)="openSubmitForReview()"
+                              [class.disabled-btn]="!isBtnEnableRiskOwner"><img src="./assets/images/icon-save.svg"
+                                class="mx-3" alt="">{{WorkflowButton}}</button>
+
+                            <button *ngIf="reviwerStatus != true && publishStatus != true" type="button"
+                              id="submitForReview" class="btnAddcomment" [disabled]="isBtnEnableBCMang"
+                              (click)="openSubmitForReview()" [class.disabled-btn]="isBtnEnableBCMang"><img
+                                src="./assets/images/icon-save.svg" class="mx-3" alt="">{{WorkflowButton}}</button>
+
+                            <button *ngIf="reviwerStatus != true && publishStatus == true" type="button"
+                              id="submitForReview" style="width: 13vw !important;" class="btnAddcomment"
+                              [disabled]="!isBtnEnabBCMangPublish" (click)="openSubmitForReview()"
+                              [class.disabled-btn]="!isBtnEnabBCMangPublish"><img src="./assets/images/icon-save.svg"
+                                class="mx-3" alt="">{{WorkflowButton}}</button>
+
+                            <span class="font-italic text-end colorlegend" *ngIf="reviwerStatus ">{{ 'sra.listing.enablesWhenAllAssignedRisksResponded' | translate }}</span>
+                            <span class="font-italic text-end colorlegend" *ngIf="!reviwerStatus ">{{ 'sra.listing.enablesWhenAllSubmittedRisksResponded' | translate }}</span>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

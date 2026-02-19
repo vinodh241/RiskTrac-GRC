@@ -1,0 +1,84 @@
+<div style="width: 55vw;">
+  <form [formGroup]="addPageForm">
+    <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+      <h5 class="modal-title modalh5" id="staticBackdropLabel">Configure New Page</h5>
+      <button type="button" class="close customClose" data-dismiss="modal" (click)="close()" id="closeID" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+
+    <div class="modal-body greyModalBody vscroll" style="    height: 59vh;
+            width: 114.1vh;">
+      <ng-container *ngIf="validatemsg1; else elseTemplate">
+        <div class="text-center mt-5">
+          <h1 class="text-center">{{validatemsg}}</h1>
+        </div>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <div class="row justify-content-center mx-3">
+          <div class="col-5 m-1 p-0 mb-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Page Title<sup
+                class="red">*</sup></label>
+            <input class="form-control fldcolor" (keypress)="removeSpecialCharacter($event)" formControlName="PageTitle"
+              id="titleID">
+            <span class="text-danger" *ngIf="(f['PageTitle'].touched || submitted) && f['PageTitle'].errors">
+              Page Title is required
+            </span>
+            <!-- <span  *ngIf="(submitted || f['PageTitle'].touched) && f['PageTitle'].errors"></span> -->
+          </div>
+          <div class="col-5 m-1 p-0 mb-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Page Display Name<sup
+                class="red">*</sup></label>
+            <input class="form-control fldcolor" formControlName="PageDisplayName" id="dID">
+            <span class="text-danger"
+              *ngIf="(f['PageDisplayName'].touched || submitted) && f['PageDisplayName'].errors">
+              Page Display Name is required
+            </span>
+          </div>
+
+          <div class="col-5 m-1 p-0 mb-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Add Button Title<sup
+                class="red">*</sup></label>
+            <input class="form-control fldcolor" formControlName="AddButtonTitle" id="buttonID">
+            <span class="text-danger" *ngIf="(f['AddButtonTitle'].touched || submitted) && f['AddButtonTitle'].errors">
+              Add Button Title is required
+            </span>
+          </div>
+          <div class="col-5 m-1 p-0 mb-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Popup Title<sup
+                class="red">*</sup></label>
+            <input class="form-control fldcolor" formControlName="PopupTitle" id="popupID">
+            <span class="text-danger" *ngIf="(f['PopupTitle'].touched || submitted) && f['PopupTitle'].errors">
+              Popup Title is required
+            </span>
+          </div>
+
+          <div class="col-5 m-1 p-0 mb-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Save Button Title<sup
+                class="red">*</sup></label>
+            <input class="form-control fldcolor" formControlName="SaveButtonTitle" id="saveID">
+            <span class="text-danger"
+              *ngIf="(f['SaveButtonTitle'].touched || submitted) && f['SaveButtonTitle'].errors">
+              Save Button Title is required
+            </span>
+          </div>
+          <div class="col-5 m-1 p-0 mb-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Cancel Button
+              Title<sup class="red">*</sup></label>
+            <input class="form-control fldcolor" formControlName="CancelButtonTitle" id="cancelID">
+            <span class="text-danger"
+              *ngIf="(f['CancelButtonTitle'].touched || submitted) && f['CancelButtonTitle'].errors">
+              Cancel Button Title is required
+            </span>
+          </div>
+        </div>
+      </ng-template>
+    </div>
+    <div class="modal-footer modalFooter">
+      <button type="button" class="btn btn-secondary modalCancelBtn" data-dismiss="modal" id="canID"
+        (click)="close()">Cancel</button>
+      <button type="button" class="btn btn-primary modalColorBtn" *ngIf="this.show_save_btn1" id="newID" (click)="addPage()"><img
+          src="./assets/images/icon-create-new-dashboard.svg" width="28px !important" alt=""> Add New Page</button>
+    </div>
+  </form>
+</div>

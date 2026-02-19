@@ -1,0 +1,25 @@
+.srasessmentStaus {
+  border-radius: 50vh;
+  height: 10px;
+  aspect-ratio: 1 / 1;
+}
+
+.srasessmentStaus.open {
+  background: linear-gradient(308deg, rgba(234, 138, 50, 1) 0%, rgba(229, 49, 108, 1) 100%);
+}
+
+.srasessmentStaus.closed {
+  background: linear-gradient(308deg, rgba(22, 191, 110, 1) 0%, rgba(27, 223, 223, 1) 100%);
+}
+
+.margin-left{
+  margin-left: 1%;
+}
+
+.margin-right{
+  margin-right: 1%;
+}
+
+.margin {
+  margin: 10px;
+}

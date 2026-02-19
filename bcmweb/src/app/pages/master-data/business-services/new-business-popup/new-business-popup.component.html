@@ -1,0 +1,262 @@
+<div style="width: 55vw;">
+  <form [formGroup]="addApplicationForm">
+    <div class="modal-header bgSeaGreenGradient text-white allModalHeader" style="width: 114.57vh;">
+      <h5 class="modal-title modalh5" id="staticBackdropLabel">{{title}}</h5>
+      <button type="button" class="close customClose example-icon" data-dismiss="modal" aria-label="Close"
+        mat-icon-button id="closeID" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body greyModalBody vscroll" style="    height: 59vh;width: 114.1vh;">
+      <div class="row mx-3">
+        <div style="display: flex;">
+        <div class="col-6 px-0">
+          <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label>Application / Services name<sup class="red">*</sup>
+            </label></div>
+          <mat-form-field appearance="fill" style="width: 23vw;">
+            <input matInput formControlName="applicationName" placeholder="Application Name" id="applicationNameID"
+              (keyup)="checkApplicationNameExist($event);getPatternError()">
+          </mat-form-field>
+          <mat-error
+            *ngIf="(submitted || f['applicationName'].touched) && !validApplication && f['applicationName'].errors && f['applicationName'].value?.length === 0">Application / Services name is required</mat-error>
+          <div *ngIf="validApplication">
+            <mat-error *ngIf="(submitted || f['applicationName'].touched)">{{getPatternError()}}</mat-error>
+          </div>
+            <mat-error *ngIf="(submitted || f['applicationName'].touched) && isNameExists">Application Name already
+            exists</mat-error>
+        </div>
+        <div class="col-6 pl-4 pr-0 mb-2" >
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Application Type <sup
+              class="red">*</sup></label>
+          <mat-form-field appearance="fill" style="width: 48vh;"
+            *ngIf="MasterBusinessService.businessData?.ApplicationTypeList.length > 0">
+            <mat-select matSelectSearch formControlName="applicationType" id="applicationTypeID" placeholder="Application Type">
+              <mat-option *ngFor="let application of  MasterBusinessService.businessData.ApplicationTypeList"
+                [value]="application.ApplicationTypeID" [id]="application.ApplicationTypeID">
+                {{application.ApplicationType}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error
+            *ngIf="(submitted || f['applicationType'].touched) && f['applicationType'].errors && f['applicationType'].value?.length === 0">Application
+            Type
+            is required</mat-error>
+        </div>
+      </div>
+
+        <div class="col-12 p-0 mb-2" style="margin-left: 1vh;margin-top: -2vh;">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Business Function <sup
+              class="red">*</sup></label>
+          <mat-form-field appearance="fill" style="width: 102vh;"
+            *ngIf=" MasterBusinessService.businessData?.BusinessFunctionsList.length > 0">
+            <mat-select matSelectSearch formControlName="businessFunction" id="businessFunctionID" placeholder="Select Business Function">
+              <mat-option *ngFor="let business of MasterBusinessService.businessData.BusinessFunctionsList"
+                [value]="business.BusinessFunctionsID" [id]="business.BusinessFunctionsID" (click)="selectBusinessFunction(business.BusinessFunctionsID, $event)">
+                {{business.BusinessFunction}}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+          <mat-error *ngIf="(submitted || f['businessFunction'].touched) && f['businessFunction'].errors">Business
+            Function is required</mat-error>
+        </div>
+
+        <div class="col-6 pl-0 pr-4 mb-2" style="margin-top: -2vh;">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Recovery Time Objective (RTO) <sup
+              class="red">*</sup></label>
+          <div class="row mx-0">
+
+            <div class="col-6 pl-0 pr-2">
+              <mat-form-field appearance="fill" style="margin-left: -1vh;width: 20vh;">
+                <input matInput type="number" formControlName="rtoValue" placeholder="Time" min="0" max="100"
+                  pattern="[0-9]*" id="rtoValue" (input)="noDecimal($event)" appNoDecimal>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted && mod == 'add' && (addApplicationForm.get('rtoValue')?.value == 0)) ">Select
+                RTO value</mat-error>
+              <mat-error>{{errorMsg}}</mat-error>
+            </div>
+            <div class="col-6 pl-2 pr-0">
+              <mat-form-field appearance="fill" style="width: 20vh;">
+                <mat-select matSelectSearch formControlName="rtoUnit" id="rtoUnit" placeholder="Select Hours/Days">
+                  <mat-option *ngFor="let hours of hoursList" [value]="hours.RecoveryPointUnit"
+                    [id]="hours.RecoveryPoint">
+                    {{hours.RecoveryPoint}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['rtoUnit'].touched) && f['rtoUnit'].errors">Select
+                Hours/Days</mat-error>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 pl-4 pr-0 mb-2" style="margin-top: -2vh;">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Recovery Point Objective (RPO) <sup
+              class="red">*</sup></label>
+          <div class="row mx-0">
+
+            <div class="col-6 pl-0 pr-2">
+              <mat-form-field appearance="fill" style="width: 20vh;">
+                <input matInput type="number" formControlName="rpoValue" placeholder="Time" min="0" max="100"
+                  pattern="[0-9]*" id="rpoValue" (input)="noDecimalRpo($event)" appNoDecimal>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted && mod == 'add' && (addApplicationForm.get('rpoValue')?.value == 0)) ">Select
+                RPO value</mat-error>
+              <mat-error>{{errorMsgRPO}}</mat-error>
+            </div>
+            <div class="col-6 pl-2 pr-0">
+              <mat-form-field appearance="fill" style="width: 20vh;">
+                <mat-select matSelectSearch formControlName="rpoUnit" id="rpoUnit" placeholder="Select Hours/Days">
+                  <mat-option *ngFor="let hours of hoursListRPO" [value]="hours.RecoveryTimeUnit"
+                    [id]="hours.RecoveryTime">
+                    {{hours.RecoveryTime}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="(submitted || f['rpoUnit'].touched) && f['rpoUnit'].errors">Select
+                Hours/Days</mat-error>
+            </div>
+          </div>
+        </div>
+        <div class="col-6 pl-0 pr-4" style="margin-top: -2vh;">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4 fw-semibold position-relative">Sites (Select Business Function first)<sup
+              class="red">*</sup><span class="position-absolute textSelected"></span></label>
+          <div class="w-100 p-0 mb-2 position-relative">
+            <div class="w-100 vscroll h-88">
+              <mat-form-field appearance="fill" style="width: 46vh;" *ngIf="siteList?.length>0">
+                <mat-select matSelectSearch formControlName="selectedSites" id="selectedSites" placeholder="Select Sites" multiple>
+                  <mat-option *ngFor="let site of siteFilteredList" [value]="(site.SiteID)" [id]="site.SiteID" (click)="getSelectedSites()">
+                    {{site.SiteName}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="siteNotFoundError && submitted">Select Sites</mat-error>
+              <!-- <mat-error *ngIf="(submitted || f['selectedSites'].touched) && siteNotFoundError && f['selectedSites'].errors">Select
+                Sites</mat-error> -->
+                <mat-error *ngIf="addEditError && submitted">Select Sites</mat-error>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-6 pl-4 pr-0 mb-2" style="margin-top: -2vh;">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Business Owner <sup
+              class="red">*</sup></label>
+          <div class="w-100 mb-2 position-relative">
+            <mat-form-field appearance="fill" style="width:47vh">
+              <input matInput placeholder="Business Owner" formControlName="businessOwner"
+                 id="businessOwner" >
+              <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+                alt="">
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['businessOwner'].touched) && f['businessOwner'].errors">Select
+              Business Owner</mat-error>
+            <mat-error *ngIf="submitted && isOwnerExists">Please select derived Business Owner</mat-error>
+          </div>
+
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">IT Owner <sup
+              class="red">*</sup></label>
+          <div class="w-100 position-relative">
+            <mat-form-field appearance="fill" style="width:47vh">
+              <input type="text" placeholder="It Owner" matInput formControlName="itOwner"
+                [matAutocomplete]="itOwnerAuto" id="itOwner" (input)="filterITOwners($event)">
+              <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+                alt="">
+              <mat-autocomplete #itOwnerAuto="matAutocomplete">
+                <mat-option *ngFor="let owner of filteredITOwners" [value]="owner.OwnerName"
+                  (onSelectionChange)="setITOwnerID(owner)" [id]="owner.OwnerName">
+                  {{owner.OwnerName}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['itOwner'].touched) && f['itOwner'].errors">Select
+              IT owner</mat-error>
+            <mat-error *ngIf="submitted && isITOwnerExists">Please select derived IT Owner</mat-error>
+          </div>
+
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Support Lead <sup
+              class="red">*</sup></label>
+          <div class="w-100 position-relative">
+            <mat-form-field appearance="fill" style="width:47vh">
+              <input type="text" placeholder="Support Lead Name" matInput formControlName="supportLead" id="supportLead"
+                [matAutocomplete]="supportLeadAuto" (input)="filterSupportLead($event)">
+              <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+                alt="">
+              <mat-autocomplete #supportLeadAuto="matAutocomplete">
+                <mat-option *ngFor="let owner of filteredSupportLead" [value]="owner.LeadName"
+                  (onSelectionChange)="setSupportLeade(owner)" [id]="owner.LeadName">
+                  {{owner.LeadName}}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['supportLead'].touched) && f['supportLead'].errors">Select
+              Support Lead</mat-error>
+            <mat-error *ngIf="submitted && issupportLeadExists">Please select derived Support Lead</mat-error>
+          </div>
+        </div>
+
+        <div>
+          <label for="" class="col-12 p-0 col-form-label slctLbl text-left mt-4 fw-semibold">Support Team <sup
+              class="red">*</sup></label>
+        </div>
+
+        <div class="col-12 p-0 mb-2 position-relative" >
+          <span class="position-absolute textSelectedFull">Required for communication related to BCMS Testing, Incidents
+            & Crisis alerts</span>
+          <span class="position-absolute vmiddleLeft iconsearchPositionLeft"><i class="fa fa-search"
+              aria-hidden="true"></i></span>
+          <mat-form-field appearance="fill" style="width:107vh">
+            <input type="text" placeholder="Search & Add Members" matInput formControlName="teamMembers"
+              id="teamMembers" [matAutocomplete]="auto" (input)="supportTeam($event)">
+            <mat-autocomplete #auto="matAutocomplete">
+              <mat-option *ngFor="let owner of filteredSupportTeamList" [value]="owner.TeamMember"
+                (onSelectionChange)="setSupportTeam(owner)" [id]="owner.TeamMember">
+                {{owner.TeamMember}}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div *ngIf="submitted && this.dataSource.data.length === 0" class="errors" style="color: red;font-size: 12px;">
+          Support Team is required
+        </div>
+        <div class="w-100 ModaltableContent" style="height: 30vh;">
+          <div class="w-100 vscroll  h-100">
+            <mat-table [dataSource]="this.dataSource.data" class="mat-elevation-z8">
+              <ng-container matColumnDef="Position">
+                <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
+                <mat-cell *matCellDef="let element let i = index"> {{i+1}}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="SupportTeam">
+                <mat-header-cell *matHeaderCellDef> Support Team Member </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.TeamMember }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="BusinessGroup">
+                <mat-header-cell *matHeaderCellDef> Business Group </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{ element.BusinessGroup }}</mat-cell>
+              </ng-container>
+
+              <ng-container matColumnDef="Action">
+                <mat-header-cell *matHeaderCellDef> Action </mat-header-cell>
+                <mat-cell *matCellDef="let element let i=index">
+                  <button mat-icon-button [id]="'delete'+ i" (click)="deleteSupportTeam(element)"><img
+                      src="./assets/images/icon-delete-black.svg"></button>
+                </mat-cell>
+              </ng-container>
+
+              <mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></mat-header-row>
+              <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+            </mat-table>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer modalFooter">
+      <p style="color:red">{{this.messagedata}}</p>
+      <button type="button" class="btn btn-secondary modalCancelBtn me-2" id="cancelID" mat-dialog-close>Cancel</button>
+      <button type="button" class="btn btn-primary modalColorBtn" id="applicationAddID" *ngIf="mod=='add'"
+        (click)="onSubmit()"><img src="./assets/images/icon-application.svg" alt=""> Add Application</button>
+      <button type="button" class="btn btn-primary modalColorBtn" id="applicationAddID" *ngIf="mod=='edit'"
+        (click)="onSubmit()"><img src="./assets/images/icon-application.svg" alt=""> Edit Application</button>
+    </div>
+  </form>
+</div>

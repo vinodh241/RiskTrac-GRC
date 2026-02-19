@@ -1,0 +1,23 @@
+
+.roundStatus {
+  border-radius: 61vh;
+  width: 0.8em;
+  aspect-ratio: 1 / 1;
+  border: 1px solid #fff;
+  box-shadow: 0vh 0vh 0.4vh 0px rgb(0 0 0 / 22%);
+  display: block;
+  position: absolute;
+  right: -67%;
+  top: 10%;
+  transform: translateY(-50%);
+  animation: statusScale 5s infinite;
+}
+
+.roundStatus.nobcp  {
+  background: linear-gradient(308deg, #FCE38A 0%, #F3B181 100%);
+}
+
+.roundStatus.coverage {
+  background: linear-gradient(308deg, #F54E4E 0%, #DEB0B0 100%);
+}
+

@@ -1,0 +1,45 @@
+::ng-deep .business mat-dialog-container{
+  padding: 0px !important;
+}
+.table-bg-header-color {
+  background-color: #E7E7E7;
+}
+
+.example-container {
+  height: 464px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-row:hover {
+  background: #cedbec;
+}
+.btnGenDown {background-color: #245A8C; border-radius: 50vh; min-height: 3.5vh; height: 3.5vh; padding: 0.2vh 0.8vw; vertical-align: middle; color: #fff; line-height: 1.5; cursor: pointer; text-wrap: nowrap;}
+.btnGenUp {background-color: #3CBC60; border-radius: 50vh; min-height: 3.5vh; height: 3.5vh; padding: 0.2vh 0.8vw; vertical-align: middle; color: #fff; line-height: 1.5; cursor: pointer; text-wrap: nowrap;}
+
+@keyframes blink {
+  0% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.blinking-icon {
+  animation: blink 1s infinite;
+}
+
+.disable {
+  cursor: none !important;
+  opacity: 0.5 !important;
+  /* Adjust the opacity as needed */
+}

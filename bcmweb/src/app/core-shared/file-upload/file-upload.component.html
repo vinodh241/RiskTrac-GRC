@@ -1,50 +1,58 @@
-<div class="container">
-    <div class="mat-elevation-z8">
-        <mat-table [dataSource]="FileData">
-            <ng-container matColumnDef="Index">
-                <mat-header-cell *matHeaderCellDef> # </mat-header-cell>
-                <mat-cell *matCellDef="let row; let i = index"> {{i + 1}} </mat-cell>
-            </ng-container>
-            <ng-container matColumnDef="UploadFile">
-                <mat-header-cell *matHeaderCellDef> File </mat-header-cell>
-                <ng-container *matCellDef="let row">
-                    <td *ngIf="showFileIcon; else fileName"> <a class="link" matTooltipPosition="below"
-                            matTooltip="{{row.FileName}}" matTooltipClass="tooltip-fulltext"
-                            (click)="getFile(row, evdname)">
-                            <mat-icon style="color: black;padding: 0 10px;">description</mat-icon>
-                        </a> </td>
-                    <ng-template #fileName>
-                        <td>
-                            <a class="link" (click)="getFile(row, evdname)">
-                                {{row.FileName}}
-                            </a>
-                        </td>
-                    </ng-template>
-                </ng-container>
+<!-- <ng-container>
+  <input ng2FileSelect class="form-control" type="file" name="uploadFileName" [uploader]="uploader" id="UploadFile"
+    style="display: none;" onclick="this.value=null;"/>
+  <button (click)="triggerFileUpload()" class="btn btn-primary modalColorBtn modalColorBtnGreen minwidth10vw">
+    <span class="fw-bold">+</span>{{uploadButtonText}}
+  </button>
+  <mat-error *ngIf="validFileNameErr" style="padding-top: 5px;">Special Characters are not allowed in File name</mat-error>
+</ng-container> -->
 
-            </ng-container>
-            <ng-container matColumnDef="Remark">
-                <mat-header-cell *matHeaderCellDef> Remark </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{row.Remark}} </mat-cell>
-            </ng-container>
-            <!-- <ng-container matColumnDef="CreatedDate">
-                <mat-header-cell *matHeaderCellDef> Uploaded On </mat-header-cell>
-                <mat-cell *matCellDef="let row"> {{utils.formatDate(row.CreatedDate, true)}} </mat-cell>
-            </ng-container> -->
-            <ng-container matColumnDef="AddIcon">
-                <mat-header-cell *matHeaderCellDef>
-                    <button mat-icon-button (click)="uploadEvidence($event)" [disabled]="disabled">
-                        <mat-icon aria-hidden="false" aria-label="Add" fontIcon="add"></mat-icon>
-                    </button>
-                </mat-header-cell>
-                <mat-cell *matCellDef="let row">
-                    <button mat-icon-button (click)="remove(row, evdname)" [disabled]="disabled">
-                        <mat-icon aria-hidden="false" aria-label="Delete" fontIcon="delete"></mat-icon>
-                    </button>
-                </mat-cell>
-            </ng-container>
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-        </mat-table>
+
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader position-relative">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">Upload Evidence (Allowed file type - {{parent.config.FileExtensions.join(', ')}})</h5>
+  <button mat-icon-button class="close customClose" aria-label="Close" id="closeFU" cdkFocusInitial
+    mat-dialog-close>
+    <span>&times;</span>
+  </button>
+</div>
+
+<div class="modal-body greyModalBody vscroll" style="height: 36vh;">
+  <div class="row mx-3 p-2">
+    <div class="col-12 ModaltableContent ModaltableContentBlue" style="height: 32vh;">
+      <div class="row mx-0">
+        <div class="col-12 px-4">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">File Title
+            <sup class="red">*</sup></label>
+          <input type="text" class="form-control fldcolor" placeholder="Uploaded file title" id=""  
+            [value]="selectedFileName ? selectedFileName : ''" [readonly]="true" required>
+          <mat-error *ngIf="uploadEvidenceError">{{uploadEvidenceError}}</mat-error>
+          <mat-error *ngIf="submitted && !selectedFileName">Please select a file to upload</mat-error>
+        </div>
+        <div class="col-6 px-4" [ngClass]="!(uploadEvidenceError || (submitted && !selectedFileName)) ? 'mt-4': 'mt-2'">
+          Drag file here to Upload<br>
+          <div class="dragNdrop cursor-pointer" style="border-radius: 0.5vw;" (drop)="onFileDrop($event)" (dragover)="allowDrop($event)" id="dragdrop"></div>
+        </div>
+
+        <div class="col-6 px-4 mt-4">
+          <span class="grey">or</span>
+          <div class="position-relative">
+            <label class="btn-file btnUploadVisible cursor-pointer" for="file-input" id="uploadFile">
+              <img src="./assets/images/icon-attachment.svg" style="filter: invert();" class="mx-2" alt=""> Select file
+              Manually
+            </label>
+            <input type="file" class="file-upload" id="file-input" name="file-input"
+              (change)="onFileSelected($event)" style="display: none;">
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+</div>
+
+<div class="modal-footer modalFooter">
+  <button type="button" class="btn btn-secondary modalCancelBtn me-2" id="cancelFU" mat-dialog-close>Cancel</button>
+  <button type="button" class="btn btn-primary modalColorBtn" style="min-width: 10vw !important;" id="saveFU" (click)="saveEvidenceFile()">
+    <img src="./assets/images/icon-upload.svg" style="width: 15% !important; margin-bottom: 4%;" alt="upload"/>
+    {{parent.config.buttonName}}
+  </button>
 </div>

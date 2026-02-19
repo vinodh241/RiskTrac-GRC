@@ -1,0 +1,31 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">Add Steering Committee User </h5>
+    <button type="button" class="close customClose example-icon" data-dismiss="modal" aria-label="Close"
+         mat-icon-button id="closeID" (click)="close()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body greyModalBody vscroll">
+  <div class="row mx-3">
+      <div class="col-12 p-0 mb-2" style="margin-left: 1vh; margin-top: -2vh;">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">
+              Steering Committee User <sup class="red">*</sup>
+          </label>
+          <mat-form-field appearance="fill" style="width: 98vh;">
+              <mat-select matSelectSearch id="usersID" placeholder="Select user" [(ngModel)]="selectedUserGUID" name="selectedUser" (selectionChange)="onSelectUser($event)">
+                  <mat-option *ngFor="let users of service.steeringInfoData" [value]="users.UserGUID">
+                      {{ users.UserFullName }}
+                  </mat-option>
+              </mat-select>
+          </mat-form-field>
+          <p style="color:red;margin-right: 38vh;" *ngIf="submit">Please Select a Steering Committee User</p>
+      </div>
+  </div>
+</div>
+<div class="modal-footer modalFooter">
+  <p style="color:red;margin-right: 38vh;">{{!service.steeringInfoData.length ? 'No users found to add' : ''}}</p>
+  <button type="button" class="btn btn-secondary modalCancelBtn me-2" id="cancelID" mat-dialog-close>Cancel</button>
+  <button type="button" class="btn btn-primary modalColorBtn" id="applicationAddID"
+    (click)="onSubmit()"><img src="./assets/images/icon-application.svg" alt=""> Add</button>
+</div>
+  

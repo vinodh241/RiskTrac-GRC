@@ -1,0 +1,225 @@
+<!-- VENDOR POPUP-->
+<!--Table Details-->
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{mod}} Service Provider</h5>
+  <button type="button" class="example-icon" mat-icon-button data-dismiss="modal" aria-label="Close"
+    id="closeVendorPopup" (click)="close()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body greyModalBody vscroll" style="height: 56vh;" id="applDetails">
+  <form [formGroup]="addVendorForm">
+    <div class="col-12 p-0 mb-2">
+      <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Service Provider Name<sup class="red">*</sup></label>
+      <mat-form-field appearance="fill" style="width: 97vh;">
+        <input matInput formControlName="vendorName" placeholder="Service Provider Name" id="vendorName"
+          (keydown.enter)="$event.preventDefault()" (keyup)="checkVendorExist($event)">
+      </mat-form-field>
+      <mat-error *ngIf="(submitted || f1['vendorName'].touched) && f1['vendorName'].errors">Enter Service Provider
+        Name</mat-error>
+    </div>
+  </form>
+  <br>
+
+  <form [formGroup]="addServiceProviderForm">
+    <div class="col-12 px-0">
+      <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-0 fw-semibold">Application Support<sup class="red">*</sup></label>
+      <div class="w-100 p-0 mb-2 position-relative">
+        <div class="w-100 vscroll ModaltableContent ModaltableContentBlue heightVH-30">
+          <table mat-table [dataSource]="filteredData" class="w-100 modalTble seablueTble addVendor" id="vendorApplTable">
+
+            <ng-container matColumnDef="Position">
+              <th mat-header-cell *matHeaderCellDef style="width: 0.5vw; padding-left: 10px"> #</th>
+              <td mat-cell *matCellDef="let element"> {{element.Index}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Application">
+              <th mat-header-cell *matHeaderCellDef style="width: 0.5vw; padding-left: 10px">Application</th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px; width: 0.5vw;">
+                {{element.ApplicationName}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="PrimaryContact">
+              <th mat-header-cell *matHeaderCellDef style="width: 0.5vw; padding-left: 10px">Primary Contact</th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px; width: 0.5vw;"> <label
+                  class="link"></label>{{element.PrimaryContactFullName}}<br>M:{{element.PrimaryContactMobileNumber}}<br>E:{{element.PrimaryContactEmailID}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="AlternateContact">
+              <th mat-header-cell *matHeaderCellDef style="width: 0.5vw; padding-left: 10px">Alternate Contact</th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px; width: 0.5vw;">
+                {{element.AlternateContactFullName}}<br>M:{{element.AlternateContactMobileNumber}}<br>E:{{element.AlternateContactEmailID}}
+              </td>
+            </ng-container>
+
+            <ng-container matColumnDef="ContractTAT">
+              <th mat-header-cell *matHeaderCellDef style="width: 0.5vw; padding-left: 10px">Contract TAT</th>
+              <td mat-cell *matCellDef="let element" style="padding-left: 10px; width: 0.5vw;">{{element.ContractTAT}}
+                {{element.TATTimeUnit}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="Action">
+              <th mat-header-cell *matHeaderCellDef style="width: 4.5vw; padding-left: 10px"></th>
+              <td mat-cell *matCellDef="let row" style="width: 4.5vw; padding-left: 10px;">
+                <button class="example-icon" mat-icon-button [id]="'editService'+ row.PrimaryContactFullName"
+                  (click)="editService(row)"><img src="./assets/images/icon-edit.svg"></button>
+                <button class="example-icon" mat-icon-button [id]="'deleteService'+ row.PrimaryContactFullName"
+                  (click)="deleteService(row)"><img src="./assets/images/icon-delete-black.svg"></button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:  rgb(207, 205, 205);"></tr>
+            <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+            <tr *matNoDataRow>
+              <td [attr.colspan]="displayedColumns.length">No data found.</td>
+            </tr>
+          </table>
+        </div>
+
+        <mat-error *ngIf="(submitted && filteredData.data?.length == 0)">Atleast one application is required.</mat-error>
+
+        <!--End of Table Details-->
+
+        <!--Table Fields Detail-->
+
+        <div class="w-100 ModaltableContent ModaltableContentLtBlue">
+          <div class="row mx-0">
+            <div class="col-6 ps-0 pe-4">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Application <sup class="red">*</sup></label>
+              <mat-form-field appearance="fill" style="width: 47vh;">
+                <mat-select matSelectSearch formControlName="applId" id="applId" placeholder="Select an Application">
+                  <mat-option *ngFor="let service of this.applicationList" id="service.ApplicationID"
+                    [value]="service.ApplicationID"
+                    [id]="service.ApplicationID">{{service.ApplicationName}}</mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="(tablesubmitted || f['applId'].touched) && f['applId'].errors">Select Application</mat-error>
+            </div>
+
+            <div class="col-6 ps-4 pe-0">
+              <div class="row mx-0">
+                <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Contract Turnaround Time (TAT)<sup class="red">*</sup></label>
+                <div class="col-6 ps-0 pe-2">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="contract" placeholder="Enter Turnaround Time" id="contract">
+                  </mat-form-field>
+                  <mat-error *ngIf="(tablesubmitted || f['contract'].touched) && f['contract'].errors">Enter Contract Turnaround Time</mat-error>
+                </div>
+
+                <div class="col-6 ps-2 pe-0">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <mat-select matSelectSearch formControlName="contractId" id="contractId" placeholder="Hours">
+                      <mat-option *ngFor="let contract of ContractDetails" [id]="contract.TATTimeUnitID"
+                        [value]="contract.TATTimeUnitID">{{contract.TATTimeUnit}}</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error *ngIf="(tablesubmitted || f['contractId'].touched) && f['contractId'].errors">Select Value</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <label for="" class="col-12 p-0 col-form-label slctLbl text-left mt-4">Primary Contact <sup class="red">*</sup></label>
+            <div class="col-6 ps-0 pe-4">
+              <div class="row mx-0">
+                <div class="col-6 ps-0 pe-2">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="name" placeholder="Name" id="name">
+                  </mat-form-field>
+                  <mat-error *ngIf="(tablesubmitted || f['name'].touched) && f['name'].errors">Enter Primary Contact Name</mat-error>
+                </div>
+
+                <div class="col-6 ps-2 pe-0">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="email" placeholder="Email" id="email">
+                  </mat-form-field>
+                  <mat-error
+                    *ngIf="(tablesubmitted || f['email'].touched) && f['email'].errors && !f['email'].hasError('pattern')">Enter Email ID</mat-error>
+                  <mat-error *ngIf="f['email'].hasError('pattern')" class="error">Enter Valid Primary Email ID </mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 ps-4 pe-0">
+              <div class="row mx-0">
+                <div class="col-6 ps-0 pe-2">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="mob" placeholder="Mobile Phone" id="mob">
+                  </mat-form-field>
+                  <mat-error *ngIf="(tablesubmitted || f['mob'].touched) && f['mob'].errors && !f['mob'].hasError('pattern')">Enter
+                    Mobile Number</mat-error>
+                  <mat-error *ngIf="f['mob'].hasError('pattern')" class="error"> Enter Valid Mobile Number</mat-error>
+                </div>
+                <div class="col-6 ps-2 pe-0">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="ofc" placeholder="Office Phone" id="ofc">
+                  </mat-form-field>
+                  <mat-error *ngIf="f['ofc'].hasError('pattern')" class="error">Enter Valid Office Number</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <label for="" class="col-12 p-0 col-form-label slctLbl text-left mt-4">Alternate Contact <sup class="red">*</sup></label>
+            <div class="col-6 ps-0 pe-4">
+              <div class="row mx-0">
+                <div class="col-6 ps-0 pe-2">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="altname" placeholder="Name" id="altname">
+                  </mat-form-field>
+                  <mat-error *ngIf="(tablesubmitted || f['altname'].touched) && f['altname'].errors">Enter Alternate Contact</mat-error>
+                </div>
+
+                <div class="col-6 ps-2 pe-0">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="altemail" placeholder="Email" id="altemail">
+                  </mat-form-field>
+                  <mat-error *ngIf="(tablesubmitted || f['altemail'].touched) && f['altemail'].errors
+                   && !f['altemail'].hasError('pattern')">Enter Alternate Email ID</mat-error>
+                  <mat-error *ngIf="f['altemail'].hasError('pattern')" class="error"> Enter Valid Alternate Email ID</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 ps-4 pe-0">
+              <div class="row mx-0">
+                <div class="col-6 ps-0 pe-2">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="mob1" placeholder="Mobile Phone" id="mob1">
+                  </mat-form-field>
+                  <mat-error
+                    *ngIf="(tablesubmitted || f['mob1'].touched) && f['mob1'].errors && !f['mob1'].hasError('pattern')">Enter
+                    Alternate Mobile Number</mat-error>
+                  <mat-error *ngIf="f['mob1'].hasError('pattern')" class="error"> Enter Valid Alternate Mobile Number</mat-error>
+                </div>
+                <div class="col-6 ps-2 pe-0">
+                  <mat-form-field appearance="fill" style="width: 22vh;">
+                    <input matInput formControlName="ofc1" placeholder="Office Phone" id="ofc1">
+                  </mat-form-field>
+                  <mat-error *ngIf="f['ofc1'].hasError('pattern')" class="error">Enter Valid Alternate Office Number</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-12 px-0 text-center py-4">
+              <div><button type="button" class="btn btn-primary modalColorBtn modalColorBtnGreen" id="addUpdateService"
+                  (click)="addUpdateService()"><img src="./assets/images/icon-save.svg" alt=""> Add / Update Details</button></div>
+            </div>
+          </div>
+        </div>
+
+        <!--End of Table Fields Detail-->
+      </div>
+    </div>
+  </form>
+</div>
+
+<mat-error class="ms-5" *ngIf="saveerror">{{saveerror}}</mat-error>
+
+<div class="modal-footer modalFooter" style="padding-top: 4% !important;">
+  <button type="button" class="btn btn-secondary modalCancelBtn me-3" data-dismiss="modal" id="cancelVendorService"
+    (click)="close()">Cancel</button>
+  <button type="button" class="btn btn-primary modalColorBtn" id="submitVendorService" [disabled]="isEdited"
+    (click)="onSubmit()"><img src="./assets/images/icon-application.svg" alt=""> {{mod}} Application</button>
+</div>
+<!-- END MAODAL ONE -->

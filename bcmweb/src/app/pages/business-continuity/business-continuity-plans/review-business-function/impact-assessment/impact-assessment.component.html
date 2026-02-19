@@ -1,0 +1,179 @@
+<div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+      [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+      style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: -2vh; font-size: 2.3vh;"
+      [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+      (workFlowStatusID == 2) ? 'statusInprogress' :
+      (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+      (workFlowStatusID == 8) ? 'statusCompleted' :
+      (workFlowStatusID == 7) ? 'statusDelayed' :
+      'statusPublished'">
+       {{ workFlowStatus }}
+    </span>
+  </span>
+
+  <div class="cardBody singleRow w-100 h-100">
+    <div class="w-100 h-100 px-2 py-3 position-relative">
+      <div class="w-100 h-6 pb-5">
+        <h2 class="h-100"><img src="./assets/images/icon-tl.svg" class="headingIcon longBox icoAs" alt="BCP Coverage">
+          {{ 'bcp.section4.title' | translate }}</h2>
+      </div>
+
+      <div *ngIf="!isBCPListing">
+        <div class="h-78 vscroll pe-3 bc-process-details-container" style="height: 56vh;">
+          <div class="impact-assessment-container" *ngFor="let item of processActivity">
+            <div class="row pb-3">
+              <div class="customtable m-0 p-0">
+                <div class="col-2 px-0">
+                  <div class="w-100">
+                    <div class="w-100 h-100 p-0 vscroll tableContent2">
+                      <div class="row">
+                        <div class="col-12 customtableheader"></div>
+                      </div>
+                    </div>
+                    <div class="w-100" style="height:36vh;">
+                      <div class="w-100 h-100 p-4 vscroll tableContent2">
+                        <h3><b>{{item.BusinessProcessName}}</b></h3>
+                        <div class="subhead pt-3">
+                          <p>{{ 'bcp.section2.subProcesses' | translate }}:</p>
+                          <div *ngFor="let sub of getSubActivity(item.BusinessProcessId); let i=index">
+                            <div>{{i+1}}. {{sub.SubBusinessProcessName}}</div>
+                          </div><br>
+                          <p><b>{{ 'bcp.section4.impactCount' | translate }} - {{impactCount}}</b></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-10 pl-0" style="width: 64vw;height: 46vh;overflow-x: scroll; scrollbar-width: thin;">
+                  <div class="w-100">
+                    <div class="w-100 p-0 tableContent2">
+                      <div class="row mx-0 position-relative" style="width: 219vh;">
+                        <div class="col w-15 text-center customtableheader" *ngFor="let master of impactMasterData">
+                          <b>{{master.ImpactMasterData}}</b><br>
+                          <div class="custom-space"></div>
+                          <div class="w-100" style="margin-top: 4vh;">
+                            <div class="w-100 h-100 p-0 tableContent2">
+                              <div class="row py-3 mx-0">
+                                <div class="col w-15">
+                                  <form [formGroup]="impactForm">
+                                    <table class="tblContent fixedTbleHead tablebody">
+                                      <tbody *ngFor="let per of impactPeriod">
+                                        <tr>
+                                          <td>{{per.Period}}<sup class="red">*</sup></td>
+                                          <td>
+                                            <select class="form-control-plaintext py-0 fldcolor"
+                                              [style.backgroundColor]="getBackgroundColor('Impact_' + item.BusinessProcessId + '_' + master.ImpactMasterDataID + '_' +per.PeriodDesc)"
+                                              id="staticEmail" (change)="onImpactChange($event, $event.target)"
+                                              [formControlName]="'Impact_' + item.BusinessProcessId + '_' + master.ImpactMasterDataID + '_' +per.PeriodDesc">
+                                              <option *ngFor="let opt of impactList" [value]="opt.ImpactID"
+                                                [style.backgroundColor]="opt.color">{{opt.ImpactName }}</option>
+                                            </select>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View page starts-->
+
+      <div *ngIf="isBCPListing">
+        <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;">
+          <div class="impact-assessment-container" *ngFor="let item of processActivity">
+            <div class="row pb-3">
+              <div class="customtable m-0 p-0">
+                <div class="col-2 px-0">
+                  <div class="w-100">
+                    <div class="w-100 h-100 p-0 vscroll tableContent2">
+                      <div class="row">
+                        <div class="col-12 customtableheader"></div>
+                      </div>
+                    </div>
+                    <div class="w-100" style="height:36vh;">
+                      <div class="w-100 h-100 p-4 vscroll tableContent2">
+                        <h3><b>{{item.BusinessProcessName}}</b></h3>
+                        <div class="subhead pt-3">
+                          <p>{{ 'bcp.section2.subProcesses' | translate }}:</p>
+                          <div *ngFor="let sub of getSubActivity(item.BusinessProcessId); let i=index">
+                            <div>{{i+1}}. {{sub.SubBusinessProcessName}}</div>
+                          </div><br>
+                          <p><b>{{ 'bcp.section4.impactCount' | translate }} - {{impactCount}}</b></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-10 pl-0" style="width: 64vw;height: 46vh;overflow-x: scroll; scrollbar-width: thin;">
+                  <div class="w-100">
+                    <div class="w-100 p-0 tableContent2">
+                      <div class="row mx-0 position-relative" style="width: 219vh;">
+                        <div class="col w-15 text-center customtableheader" *ngFor="let master of impactMasterData">
+                          <b>{{master.ImpactMasterData}}</b><br>
+                          <div class="custom-space"></div>
+                          <div class="w-100" style="margin-top: 4vh;">
+                            <div class="w-100 h-100 p-0 tableContent2">
+                              <div class="row py-3 mx-0" [ngClass]="isBCPListing ? 'disable' : '' ">
+                                <div class="col w-15">
+                                  <form [formGroup]="impactForm">
+                                    <table class="tblContent fixedTbleHead tablebody">
+                                      <tbody *ngFor="let per of impactPeriod">
+                                        <tr>
+                                          <td>{{per.Period}}</td>
+                                          <td>
+                                            <select class="form-control-plaintext py-0 fldcolor"
+                                              [style.backgroundColor]="getBackgroundColor('Impact_' + item.BusinessProcessId + '_' + master.ImpactMasterDataID + '_' +per.PeriodDesc)"
+                                              id="staticEmail" (change)="onImpactChange($event, $event.target)"
+                                              [formControlName]="'Impact_' + item.BusinessProcessId + '_' + master.ImpactMasterDataID + '_' +per.PeriodDesc">
+                                              <option *ngFor="let opt of impactList" [value]="opt.ImpactID"
+                                                [style.backgroundColor]="opt.color">{{opt.ImpactName }}</option>
+                                            </select>
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                    </table>
+                                  </form>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- View page ends-->
+
+      <!-- <div class="child-button " style="margin-top: 6vh;">
+        <div class="move-buttons" style="margin-left: 92vh; margin-top: -1vh;" *ngIf="!isBCPListing">
+          <button class="buttons save" id="saveImp" (click)="saveImpact()" style="height: 6vh; width: 24vh;"
+            [ngClass]="isAnyControlInvalid() ? 'disable1'  : ''"><img src="./assets/images/icon-application.svg"
+              alt="Save">{{ 'common.save' | translate }}</button>
+        </div>
+      </div>
+
+      <span *ngIf="!isBCPListing"><mat-error style="margin-top: -4vh;" *ngIf="isAnyControlInvalid()"> {{ 'bcp.section1.saveButtonEnabled' | translate }}</mat-error></span> -->
+
+    </div>
+  </div>
+</div>

@@ -1,0 +1,511 @@
+<div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+    [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+      style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: -1vh; font-size: 2.3vh;"
+    [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+    (workFlowStatusID == 2) ? 'statusInprogress' :
+    (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+    (workFlowStatusID == 8) ? 'statusCompleted' :
+    (workFlowStatusID == 7) ? 'statusDelayed' :
+    'statusPublished'">
+     {{ workFlowStatus }}
+  </span>
+  </span>
+
+  <div class="cardBody singleRow w-100 h-100">
+    <div class="w-100 h-100 px-2 py-3 position-relative">
+      <div class="w-100 h-6 pb-5">
+        <h2 class="h-100"><img src="./assets/images/icon-tl.svg" class="headingIcon longBox icoAs" alt="BCP Coverage">
+          {{ 'bcp.section8.title' | translate }}</h2>
+      </div>
+
+      <div *ngIf="!isBCPListing">
+        <form [formGroup]="recoveryForm">
+          <div class="w-100 h-78 vscroll pe-3 bc-process-details-container" style="height: 56vh;">
+            <div class="top-section-margin">
+              <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-description" style="font-weight: bold;">Recovery Staff Requirement [Minimum
+                staff count required during Disaster situation]<sup class="red">*</sup></label>
+              <div class="recovery-process-container mb-1 mx-0 mt-0">
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">Day 1<sup class="red">*</sup></p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="Enter Value" style="font-size: 15px;" formControlName="day1" id="day1"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal>
+                      </mat-form-field>
+                      <mat-error style="font-size: small;" *ngIf="(submitted || f['day1'].touched) && f['day1'].errors
+                      && !getErrorMsg(this.recoveryForm.get('day1')?.value)">Enter Day1</mat-error>
+                      <mat-error
+                        style="font-size: small;">{{getErrorMsg(this.recoveryForm.get('day1')?.value)}}</mat-error>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">Day 2<sup class="red">*</sup></p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="Enter Value" style="font-size: 15px;" formControlName="day2" id="day2"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal>
+                      </mat-form-field>
+                      <mat-error style="font-size: small;" *ngIf="(submitted || f['day2'].touched) && f['day2'].errors
+                      && !getErrorMsg(this.recoveryForm.get('day2')?.value)">Enter Day2</mat-error>
+                      <mat-error
+                        style="font-size: small;">{{getErrorMsg(this.recoveryForm.get('day2')?.value)}}</mat-error>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">Day 3<sup class="red">*</sup></p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="Enter Value" style="font-size: 15px;" formControlName="day3" id="day3"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal>
+                      </mat-form-field>
+                      <mat-error style="font-size: small;" *ngIf="(submitted || f['day3'].touched) && f['day3'].errors
+                      && !getErrorMsg(this.recoveryForm.get('day3')?.value)">Enter Day3</mat-error>
+                      <mat-error
+                        style="font-size: small;">{{getErrorMsg(this.recoveryForm.get('day3')?.value)}}</mat-error>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">Day 4<sup class="red">*</sup></p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="Enter Value" style="font-size: 15px;" formControlName="day4" id="day4"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal>
+                      </mat-form-field>
+                      <mat-error style="font-size: small;" *ngIf="(submitted || f['day4'].touched) && f['day4'].errors
+                      && !getErrorMsg(this.recoveryForm.get('day4')?.value)">Enter Day4</mat-error>
+                      <mat-error
+                        style="font-size: small;">{{getErrorMsg(this.recoveryForm.get('day4')?.value)}}</mat-error>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">Day 5<sup class="red">*</sup></p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="Enter Value" style="font-size: 15px;" formControlName="day5" id="day5"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal>
+                      </mat-form-field>
+                      <mat-error style="font-size: small;" *ngIf="(submitted || f['day5'].touched) && f['day5'].errors
+                      && !getErrorMsg(this.recoveryForm.get('day5')?.value)">Enter Day5</mat-error>
+                      <mat-error
+                        style="font-size: small;">{{getErrorMsg(this.recoveryForm.get('day5')?.value)}}</mat-error>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">Total<sup class="red">*</sup></p>
+                    <mat-form-field appearance="fill" style="width: 6vw;">
+                      <input class="nospin" matInput placeholder="0" style="font-size: 15px;" formControlName="total" id="total" readonly="true">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">Working Remotely<sup class="red">*</sup></p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" matInput type="number" placeholder="0" style="font-size: 15px;" formControlName="workingRemote"
+                          id="workingRemot" (input)="autoCountRemote()" min="0" pattern="^[0-9]*$" appNoDecimal>
+                      </mat-form-field>
+                      <mat-error style="font-size: small;" *ngIf="(submitted || f['workingRemote'].touched) && f['workingRemote'].errors
+                      && !getErrorMsg(this.recoveryForm.get('workingRemote')?.value)">Enter the value</mat-error>
+                      <mat-error
+                        style="font-size: small;">{{getErrorMsg(this.recoveryForm.get('workingRemote')?.value)}}</mat-error>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name" style="font-size: medium;">On Premise<sup class="red">*</sup></p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" matInput type="number" placeholder="0" style="font-size: 15px;" formControlName="onPremise"
+                          id="onPremise" (input)="autoCountPremise()" min="0" pattern="^[0-9]*$" appNoDecimal>
+                      </mat-form-field>
+                      <mat-error style="font-size: small;" *ngIf="(submitted || f['onPremise'].touched) && f['onPremise'].errors
+                      && !getErrorMsg(this.recoveryForm.get('onPremise')?.value)">Enter the value</mat-error>
+                      <mat-error
+                        style="font-size: small;">{{getErrorMsg(this.recoveryForm.get('onPremise')?.value)}}</mat-error>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--Second  Table-->
+
+            <div class="recovery-process-container1 mt-1">
+              <div class="row pb-3">
+                <div class="col-12">
+                  <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-description" style="font-weight: bold;">Recovery Strategies<sup
+                      class="red">*</sup></label>
+                  <div class="w-100 h-52 vscroll tableContent11">
+                    <div class="w-100 h-100 p-0 vscroll tableContent2">
+                      <table class="tblContent w-100 fixedTbleHead" mat-table [dataSource]="recoveryStrategy"
+                        id="recoveryTable">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-4">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-2 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Business">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Business Process</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit"> {{row.BusinessProcessName}}</div>
+                            <div *ngIf="row.isEdit">{{row.BusinessProcessName}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Who">
+                          <th mat-header-cell *matHeaderCellDef class="w-15">Who</th>
+                          <td mat-cell *matCellDef="let row" class="w-15 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Who}}</div>
+                            <div *ngIf="row.isEdit">{{row.Who}}</div>
+                          </td>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="Who">
+                          <th mat-header-cell *matHeaderCellDef class="w-15">Who</th>
+                          <td mat-cell *matCellDef="let row" class="w-15 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Who}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input type="text" id="Who" placeholder="Select User" matInput formControlName="Who"
+                                  [matAutocomplete]="auto" (input)="filterUser($event)"
+                                  (keydown.enter)="$event.preventDefault()">
+                                <img src="./assets/images/icon-site-bcposition.svg"
+                                  class="vmiddleRight position-absolute formIconMddl2" alt="">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                  <mat-option *ngFor="let user of this.userList" [value]="user.UserName"
+                                    [id]="user.WhoId" (onSelectionChange)="setUserID(user, $event)">
+                                    {{ user.UserName }}
+                                  </mat-option>
+                                </mat-autocomplete>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="When">
+                          <th mat-header-cell *matHeaderCellDef class="w-12">When / Trigger</th>
+                          <td mat-cell *matCellDef="let row" class="w-12 text-left">
+                            <div *ngIf="!row.isEdit"> {{row.When}}</div>
+                            <div *ngIf="row.isEdit">{{row.When}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Where">
+                          <th mat-header-cell *matHeaderCellDef class="w-26">Where</th>
+                          <td mat-cell *matCellDef="let row" class="w-26 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Where}} {{row.Site ?  " -- " + row.Site : ''}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 18vh;">
+                                <mat-select matSelectSearch formControlName="Where" id="Where" placeholder="Select">
+                                  <mat-option *ngFor="let item of siteDetails" [value]="item.Name" [id]="item.Id"
+                                    (click)="onSelect(item.Name)">
+                                    {{item.Name}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field> &nbsp;
+                              <mat-form-field *ngIf="isAlternate == true" appearance="fill" style="width: 18vh;">
+                                <mat-select matSelectSearch formControlName="Site" id="Site" placeholder="Please select a site">
+                                  <mat-option *ngFor="let site of siteList" [value]="site.SiteName" [id]="site.SiteID"
+                                    (click)="selectedSite(site.SiteID)">
+                                    {{site.SiteName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="How">
+                          <th mat-header-cell *matHeaderCellDef class="w-23">How (activities)</th>
+                          <td mat-cell *matCellDef="let row" class="w-23 text-left">
+                            <div *ngFor="let subProcess of row.SubBusinessProcesses let i= index">
+                              {{i+1}}. {{subProcess.SubBusinessProcessName}} <br>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Action">
+                          <th mat-header-cell *matHeaderCellDef class="w-15"></th>
+                          <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                            <ng-container>
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.edit' | translate" color="primary" (click)="editRecovery(row)" id="resourceEdit"
+                                *ngIf="!blockEdit"><mat-icon>edit</mat-icon>
+                              </button></ng-container>
+
+                            <ng-container *ngIf="row.isEdit">
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.save' | translate" color="primary" id="saveResource" [disabled]="!isSaveDisable()"
+                                (click)="saveRecovery(row)"><mat-icon>save</mat-icon>
+                              </button>
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancel(row)"
+                                id="closeControl"><mat-icon>close</mat-icon>
+                              </button>
+                            </ng-container>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumns.length">No Recovery Strategies.</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!--View Page starts-->
+
+      <div *ngIf="isBCPListing">
+        <form [formGroup]="recoveryForm">
+          <div class="w-100 h-78 vscroll pe-3 bc-process-details-container" style="height: 56vh;">
+            <div class="top-section-margin">
+              <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-description" style="font-weight: bold;">Recovery Staff Requirement [Minimum
+                staff count required during Disaster situation]</label>
+              <div class="recovery-process-container mb-1 mx-0 mt-0">
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">Day 1</p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="0" formControlName="day1" id="day1"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                      </mat-form-field>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">Day 2</p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="0" formControlName="day2" id="day2"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                      </mat-form-field>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">Day 3</p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="0" formControlName="day3" id="day3"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                      </mat-form-field>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">Day 4</p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="0" formControlName="day4" id="day4"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                      </mat-form-field>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">Day 5</p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" type="number" matInput placeholder="0" formControlName="day5" id="day5"
+                          (input)="totalCount()" min="0" pattern="^[0-9]*$" appNoDecimal readonly="true">
+                      </mat-form-field>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">Total</p>
+                    <mat-form-field appearance="fill" style="width: 6vw;">
+                      <input class="nospin" matInput placeholder="0" formControlName="total" id="total" readonly="true">
+                    </mat-form-field>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">Working Remotely</p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" matInput type="number" placeholder="0" formControlName="workingRemote"
+                          id="workingRemot" (input)="autoCountRemote()" min="0" pattern="^[0-9]*$" appNoDecimal
+                          readonly="true">
+                      </mat-form-field>
+                    </p>
+                  </div>
+                </div>
+
+                <div class="process-box">
+                  <div class="content-box1">
+                    <p class="mb-1 content-name">On Premise</p>
+                    <p class="mb-0">
+                      <mat-form-field appearance="fill" style="width: 6vw;">
+                        <input class="nospin" matInput type="number" placeholder="0" formControlName="onPremise"
+                          id="onPremise" (input)="autoCountPremise()" min="0" pattern="^[0-9]*$" appNoDecimal
+                          readonly="true">
+                      </mat-form-field>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!--Second  Table-->
+
+            <div class="recovery-process-container1 mt-1">
+              <div class="row pb-3">
+                <div class="col-12">
+                  <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-description" style="font-weight: bold;">Recovery Strategies</label>
+                  <div class="w-100 h-52 vscroll tableContent11">
+                    <div class="w-100 h-100 p-0 vscroll tableContent2">
+                      <table class="tblContent w-100 fixedTbleHead" mat-table [dataSource]="recoveryStrategy"
+                        id="recoveryTable">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-4">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-2 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Business">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Business Process</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit"> {{row.BusinessProcessName}}</div>
+                            <div *ngIf="row.isEdit">{{row.BusinessProcessName}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Who">
+                          <th mat-header-cell *matHeaderCellDef class="w-15">Who</th>
+                          <td mat-cell *matCellDef="let row" class="w-15 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Who}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input type="text" id="Who" placeholder="Select User" matInput formControlName="Who"
+                                  [matAutocomplete]="auto" (input)="filterUser($event)"
+                                  (keydown.enter)="$event.preventDefault()">
+                                <img src="./assets/images/icon-site-bcposition.svg"
+                                  class="vmiddleRight position-absolute formIconMddl2" alt="">
+                                <mat-autocomplete #auto="matAutocomplete">
+                                  <mat-option *ngFor="let user of this.userList" [value]="user.UserName"
+                                    [id]="user.WhoId" (onSelectionChange)="setUserID(user, $event)">
+                                    {{ user.UserName }}
+                                  </mat-option>
+                                </mat-autocomplete>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="When">
+                          <th mat-header-cell *matHeaderCellDef class="w-12">When / Trigger</th>
+                          <td mat-cell *matCellDef="let row" class="w-12 text-left">
+                            <div *ngIf="!row.isEdit"> {{row.When}}</div>
+                            <div *ngIf="row.isEdit">{{row.When}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Where">
+                          <th mat-header-cell *matHeaderCellDef class="w-26">Where</th>
+                          <td mat-cell *matCellDef="let row" class="w-26 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Where}} {{row.Site ? " -- " + row.Site : ''}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 18vh;">
+                                <mat-select matSelectSearch formControlName="Where" id="Where" placeholder="Select">
+                                  <mat-option *ngFor="let item of siteDetails" [value]="item.Name" [id]="item.Id"
+                                    (click)="onSelect(item.Name)">
+                                    {{item.Name}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field> &nbsp;
+                              <mat-form-field *ngIf="isAlternate == true" appearance="fill" style="width: 18vh;">
+                                <mat-select matSelectSearch formControlName="Site" id="Site" placeholder="Select">
+                                  <mat-option *ngFor="let site of siteList" [value]="site.SiteName" [id]="site.SiteID"
+                                    (click)="selectedSite(site.SiteID)">
+                                    {{site.SiteName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="How">
+                          <th mat-header-cell *matHeaderCellDef class="w-23">How (activities)</th>
+                          <td mat-cell *matCellDef="let row" class="w-23 text-left">
+                            <div *ngFor="let subProcess of row.SubBusinessProcesses let i= index">
+                              {{i+1}}. {{subProcess.SubBusinessProcessName}} <br>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumns1.length">No Recovery Strategies.</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!--View Page ends-->
+
+      <div class="child-button " style="margin-top: 6vh;">
+        <div class="move-buttons" style="margin-left: 79vh; margin-top: -1vh;" *ngIf="!isBCPListing">
+          <button class="buttons save" id="saveRes" (click)="saveRecoveryProcess()" style="height: 6vh; width: 24vh;"
+            [ngClass]="isSaveEnable() ? 'disable'  : ''"><img src="./assets/images/icon-application.svg"
+              alt="Save">{{ 'common.save' | translate }}</button>
+        </div>
+      </div>
+
+      <span *ngIf="!isBCPListing"><mat-error style="margin-top: -4vh;" *ngIf="isSaveEnable()"> The save button will be
+          enabled once all the mandatory data is filled.</mat-error></span>
+
+    </div>
+  </div>
+</div>

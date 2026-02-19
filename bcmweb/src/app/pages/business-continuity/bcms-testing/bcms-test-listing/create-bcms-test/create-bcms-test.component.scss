@@ -1,0 +1,61 @@
+.text-area {
+  text-align: left;
+  background-color: white;
+  line-height: 1.2 !important;
+  font-size: 110% !important;
+}
+
+.mat-mdc-table {
+  background: none !important;
+}
+
+.invisible {
+  color: white;
+}
+
+// .mat-horizontal-scroll {
+//   display: inline-block;
+//   /* Ensure the fields behave inline for horizontal overflow */
+//   overflow-x: auto;
+//   /* Enable horizontal scrolling */
+//   white-space: nowrap;
+//   /* Prevent wrapping of content */
+// }
+
+// // .w-100 {
+// //   min-width: 100%;
+// //   /* Ensure full width, but respect the overflow */
+// // }
+
+// input[matInput] {
+//   min-width: 300px;
+//   /* Minimum width to trigger scrolling */
+//   width: auto;
+//   /* Dynamic width based on content */
+// }
+
+// .mat-form-field .mat-input-element {
+//   white-space: nowrap;
+//   /* Prevent wrapping */
+//   overflow-x: auto;
+//   /* Enable horizontal scroll */
+//   display: block;
+//   /* Ensure it behaves as a block element */
+// }
+
+// .mat-form-field {
+//   width: 100%;
+//   /* Ensures the field spans the full width */
+// }
+
+// .mat-form-field-wrapper {
+//   width: auto;
+//   /* Allow the field to dynamically adjust width */
+// }
+
+// .mat-form-field-infix {
+//   overflow-x: auto;
+//   /* Enable horizontal scrolling within the input */
+//   white-space: nowrap;
+//   /* Prevent wrapping of the content */
+// }

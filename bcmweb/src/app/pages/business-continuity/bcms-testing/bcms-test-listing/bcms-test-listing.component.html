@@ -1,0 +1,153 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 text-start position-relative h-100" id="nav-busitness-fnc" role="tabpanel" style="z-index: 1;"
+    aria-labelledby="nav-busitness-fnc">
+    <div class="d-flex justify-content-right align-items-center vmiddleRight filterRight">
+      <div class="applyFilter addDesktop position-relative text-start me-4" style="margin-bottom: 0.2em;">
+        <button type="button" class="btn btn-dark btnGradient" (click)="addUpdateTest('Add')"
+          *ngIf="service.isBCManager" id="createBCMSTest">{{ 'bcms.newBcmsTest' | translate }}</button>
+        <span class="position-absolute vmiddleLeft text-white" style="left: 0.4vw !important;"><img
+            src="./assets/images/icon-add-desktop.svg"></span>
+      </div>
+
+      <div class="d-inline-block position-relative searchInput me-2">
+        <input [placeholder]="'common.search' | translate" class="form-control tblfilter" id="bcmsTestListSearch" (keyup)="applyFilter($event)">
+        <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+            aria-hidden="true"></i></span>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-right align-items-center vmiddleLeft filterLeft">
+      <div class="position-relative colorStatus scheduled me-4" id="TestSch" [ngClass]="{ 'active': testStatusIds.includes(1)}" (click)="filterStatus(1)">
+        <span class="vmiddleLeft position-absolute">{{getStatusCount(1)}}</span>
+        {{ 'bcms.statusCards.testsScheduled' | translate }}<br>{{ 'bcms.statusCards.testsScheduledLabel' | translate }}
+      </div>
+
+      <div class="position-relative colorStatus inprogress me-4" id="TestInp" [ngClass]="{ 'active': testStatusIds.includes(2)}" (click)="filterStatus(2)">
+        <span class="vmiddleLeft position-absolute">{{getStatusCount(2)}}</span>
+        {{ 'bcms.statusCards.testsInProgress' | translate }}<br>{{ 'bcms.statusCards.testsInProgressLabel' | translate }}
+      </div>
+
+      <div class="position-relative colorStatus completed me-4" id="TestCom" [ngClass]="{ 'active': testStatusIds.includes(3)}" (click)="filterStatus(3)">
+        <span class="vmiddleLeft position-absolute">{{getStatusCount(3)}}</span>
+        {{ 'bcms.statusCards.testsCompleted' | translate }}<br>{{ 'bcms.statusCards.testsCompletedLabel' | translate }}
+      </div>
+
+      <div class="position-relative colorStatus published me-4" id="TestPub" [ngClass]="{ 'active': testStatusIds.includes(4)}" (click)="filterStatus(4)">
+        <span class="vmiddleLeft position-absolute">{{getStatusCount(4)}}</span>
+        {{ 'bcms.statusCards.testsPublished' | translate }}<br>{{ 'bcms.statusCards.testsPublishedLabel' | translate }}
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4 vscroll">
+  <div class="h-100 pb-3 w-100">
+    <div class="row mx-0 h-100">
+      <div class="col-12 px-0 h-100">
+        <div class="cardGen colorGeyGradient w-100 h-100">
+          <div class="cardBody singleRow w-100 h-100">
+            <div class="w-100 h-100 px-2 py-3 position-relative">
+              <div class="w-100 h-6 position-relative">
+                <h2 class="h-100 text-start"><img src="./assets/images/icon-as.svg" class="headingIcon longBox icokKPI"
+                    alt="BCP Coverage"> {{ 'bcms.pageTitle' | translate }}</h2>
+              </div>
+              <div class="w-100 h-94">
+                <section class="w-100 vscroll tableContent h-100" tabindex="0" >
+                  <table mat-table [dataSource]="service.TableBCMSTest" class="table-striped">
+
+                    <ng-container matColumnDef="index">
+                      <th mat-header-cell *matHeaderCellDef class="w-2" style="border-right: 1px solid #fff;"> # </th>
+                      <td mat-cell *matCellDef="let row" class="w-2" style="padding-left: 8px;text-align: center;">
+                        {{row.Index}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TestName">
+                      <th mat-header-cell *matHeaderCellDef class="w-15" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.testName' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-15" style="padding-left: 8px; position: relative;"><a
+                          href="javascript: void(0);" class="tblLnk w-100" style="position: static;" (click)="directToTestDetails(row)">
+                          <label class="texthorizontal-position" style="cursor: pointer;" [matTooltip]="row.TestName?.length > 100? row.TestName:''">
+                            {{service.getTitleValue(row.TestName)}}
+                          </label></a>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TestType">
+                      <th mat-header-cell *matHeaderCellDef class="w-7" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.testType' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-7" style="padding-left: 8px;"> {{row.TestType}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TestScenario">
+                      <th mat-header-cell *matHeaderCellDef class="w-8" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.testScenario' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-8" style="padding-left: 8px;">
+                        {{row.TestingScenario}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TestScope">
+                      <th mat-header-cell *matHeaderCellDef class="w-10" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.testScope' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-10" style="padding-left: 8px;">
+                        {{row.TestScope}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Sites">
+                      <th mat-header-cell *matHeaderCellDef class="w-10" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.sites' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-10" style="padding-left: 8px;">
+                        {{row.ParticipantOptionID == 1? row.ParticipantOption : row.FormatedSites}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ParticipatingFunctions">
+                      <th mat-header-cell *matHeaderCellDef class="w-16" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.participatingFunctions' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-16" style="padding-left: 8px;">
+                        {{row.ParticipantOptionID == 1? row.ParticipantOption : row.FormatedBusinessFunctions}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Observer">
+                      <th mat-header-cell *matHeaderCellDef class="w-5" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.observer' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-5" style="padding-left: 8px;">
+                        {{row.TestObserver}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ScheduledData">
+                      <th mat-header-cell *matHeaderCellDef class="w-8" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.scheduledDate' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-8" style="padding-left: 8px;">
+                        {{row.FormatedDate}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Duration">
+                      <th mat-header-cell *matHeaderCellDef class="w-6" style="border-right: 1px solid #fff; padding-left: 8px;"> {{ 'bcms.columns.duration' | translate }} </th>
+                      <td mat-cell *matCellDef="let row" class="w-6" style="padding-left: 8px;">
+                        {{row.Duration}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Status">
+                      <th mat-header-cell *matHeaderCellDef class="w-8 text-center" style="border-right: 1px solid #fff; padding-left: 8px;">{{ 'bcms.columns.status' | translate }}</th>
+                      <td mat-cell *matCellDef="let row" class="w-8 text-center" style="padding-left: 8px;text-align: center; position: relative !important;">
+                        <span class="statusID" style="cursor: auto;"
+                          [ngClass]="(row.TestAssessmentStatusID == 1) ? 'statusScheduled' : (row.TestAssessmentStatusID == 2) ? 'statusInprogress' : (row.TestAssessmentStatusID == 3) ? 'statusCompleted' : 'statusPublished'"
+                        >{{row.TestAssessmentStatus}}</span>
+                        <img [src]="(row.TestAssessmentStatusID == 1) ? './assets/images/icon-scheduled.svg' : (row.TestAssessmentStatusID == 2) ? './assets/images/icon-status-inprogress.svg' : (row.TestAssessmentStatusID == 3) ?  './assets/images/icon-completed.svg' : './assets/images/icon-status-published.svg'"
+                        class="vmiddleRight" style="padding-right: 5px;">
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Actions">
+                      <th mat-header-cell *matHeaderCellDef class="w-4" style="border-right: 1px solid #fff; padding-left: 8px;"> </th>
+                      <td mat-cell *matCellDef="let row" class="w-4 ps-2 pe-2 text-center">
+                        <button mat-icon-button class="example-icon custom-button" [id]="'editThreat'+ row.RiskCode"
+                          (click)="addUpdateTest('Update', row)"><img src="assets/images/icon-edit.svg"
+                          alt="edit"></button>
+                      </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-bg-header-color"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">{{ 'common.noDataFound' | translate }}</td></tr>
+                  </table>
+                </section>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

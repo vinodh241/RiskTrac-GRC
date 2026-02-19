@@ -1,0 +1,102 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{mode}} Communication Template
+  <span *ngIf="mode == 'Edit' && crisisTempData?.Attached" style="font-size: small;">(The template
+    details cannot be edited as it is associated with the crisis communications)</span></h5>
+  <button type="button" class="close customClose p-0" mat-icon-button cdkFocusInitial mat-dialog-close (click)="resetCrisis()" id="crisisClose">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body greyModalBody vscroll" style="height: 61vh;">
+  <div class="row mx-3">
+
+    <div class="col-6 ps-0 pe-4">
+      <div class="row mx-0">
+        <div class="col-12 px-0">
+          <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="emailTemplate">Template<sup class="red">*</sup>
+            </label></div>
+          <mat-form-field appearance="fill" class="w-100">
+            <input matInput placeholder="Template Name" [(ngModel)]="crisisTempData.TemplateName" (keydown.enter)="$event.preventDefault()" id="emailTemplate"
+            (keyup)="checkTemplateExist($event)" [disabled]="crisisTempData?.Attached"/>
+          </mat-form-field>
+          <mat-error *ngIf="(submitted && crisisTempData.TemplateName?.length == 0)">Enter Template Name</mat-error>
+          <mat-error *ngIf="(submitted && isTemplateExists)">Email Template Name already exists</mat-error>
+        </div>
+
+        <div class="col-12 px-0">
+          <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="emailTitle">Email Title<sup class="red">*</sup>
+            </label></div>
+          <mat-form-field appearance="fill" class="w-100">
+            <input matInput placeholder="Title" [(ngModel)]="crisisTempData.EmailTitle" (keydown.enter)="$event.preventDefault()" id="emailTitle"
+            [disabled]="crisisTempData?.Attached" />
+          </mat-form-field>
+          <mat-error *ngIf="(submitted && crisisTempData.EmailTitle?.length == 0)">Enter Email Title</mat-error>
+        </div>
+
+        <div class="col-12 px-0">
+          <label for="emailContent" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Email Content <sup
+              class="red">*</sup></label>
+          <ckeditor [(ngModel)]="crisisTempData.EmailContent" id="emailContent"
+            [config]="!crisisTempData?.Attached? ckeConfig : disabledCkeConfig" [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+          <mat-error *ngIf="(submitted && crisisTempData.EmailContent?.length == 0)">Enter Email Content</mat-error>
+        </div>
+
+      </div>
+    </div>
+    <div class="col-6 ps-4 pe-0">
+      <div class="w-100 p-0 mb-2 position-relative">
+        <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Reference <br><span
+            class="textSmall font-italic">Use variables enclosed in double square brackets, e.g.
+            [[assessment_title]]</span></label>
+        <div class="w-100 ModaltableContent ModaltableContentBlue" style="height: 50vh;">
+          <div class="w-100 h-100 vscroll">
+            <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+              <tbody>
+                <tr  *ngFor="let data of service.infoData?.ReferenceVariableList">
+                  <td class="w-30">{{data.Name}}</td>
+                  <td class="w-50">{{data.Description}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <div class="row mx-3 pt-2">
+    <div class="col-4 ps-0 pe-2">
+      <label for="actionLink" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Action Link<sup class="red">*</sup></label>
+      <mat-form-field appearance="fill" *ngIf="service.infoData?.ActionLinksList.length > 0">
+        <mat-select matSelectSearch [(ngModel)]="crisisTempData.ActionLinkID" [disabled]="crisisTempData?.Attached" id="actionLink">
+          <mat-option *ngFor="let link of service.infoData.ActionLinksList" [value]="link.ActionLinkID" [id]="link.ActionLinkID">
+            {{link.ActionLink}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-error *ngIf="(submitted && !crisisTempData.ActionLinkID)">Select Action Link</mat-error>
+    </div>
+    <div class="col-8 ps-2 pe-2">
+      <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Criticality <sup class="red">*</sup></label>
+      <div class="d-flex justify-content-start py-sm-2 py-xl-3" *ngIf="service.infoData?.CriticalityList">
+        <div class="me-4 radioTxt" *ngFor="let critical of service.infoData.CriticalityList">
+          <input type="radio" mat-radio-button name="criticality" [(ngModel)]="crisisTempData.CriticalityID" [id]="'critical' + critical.CriticalityID"
+            [value]="critical.CriticalityID" aria-label="select" (keydown.enter)="$event.preventDefault()" [disabled]="crisisTempData?.Attached">
+          {{critical.CriticalityName}}
+        </div>
+      </div>
+      <mat-error *ngIf="(submitted && !crisisTempData.CriticalityID)">Select Criticality</mat-error>
+    </div>
+
+  </div>
+
+</div>
+<mat-error *ngIf="saveerror">{{saveerror}}</mat-error>
+<div class="modal-footer modalFooter">
+  <button  class="btn btn-secondary modalCancelBtn me-2" cdkFocusInitial mat-dialog-close (click)="resetCrisis()" id="crisisCancel">Cancel</button>
+  <button  class="btn btn-primary modalColorBtn" (click)="onSubmit()" id="saveTemplate" [disabled]="crisisTempData?.Attached"><img src="./assets/images/icon-application.svg" class="me-1"  alt="">
+   {{mode == "Add" ? 'Add New Template' : 'Save Template'}}</button>
+</div>

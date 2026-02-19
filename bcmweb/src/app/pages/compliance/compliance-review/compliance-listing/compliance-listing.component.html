@@ -1,0 +1,135 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 test-end position-relative h-100" style="z-index: 1;">
+    <div class="d-flex justify-content-right align-items-center vmiddleRight filterRight">
+      <div class="btnGen customize mr-4" data-toggle="modal" data-target="#consolidateReport"><img src="./assets/images/icon-cr.svg" width="20%" alt="Setting"> Consolidated Report</div>
+      <div class="applyFilter addDesktop position-relative text-left mr-4">
+          <button type="button" class="btn btn-dark btnGradient" data-toggle="modal" data-target="#newIncident" (click)="addCompliance()">Create New Message</button>
+          <span class="position-absolute vmiddleLeft text-white iconPositionLeft"><img src="./assets/images/icon-add-desktop.svg"></span>
+      </div>
+      <div class="d-inline-block position-relative searchInput me-2">
+        <input placeholder="Search" class="form-control tblfilter" id="filterID">
+        <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+            aria-hidden="true"></i></span>
+      </div>
+
+    </div>
+
+    <div class="d-flex justify-content-right align-items-center vmiddleLeft filterLeft">
+      <div class="position-relative colorStatus ir mr-4" data-toggle="modal" data-target="#incidentReport">
+          <span class="vmiddleLeft position-absolute">6</span>
+          Incidents<br>Reported
+      </div>
+
+      <div class="position-relative colorStatus rip mr-4" data-toggle="modal" data-target="#reportNewIncident">
+          <span class="vmiddleLeft position-absolute">2</span>
+          Reviews<br>In Progress
+      </div>
+
+      <div class="position-relative colorStatus rd active" data-toggle="modal" data-target="#incidentReport2">
+          <span class="vmiddleLeft position-absolute">3</span>
+          Reviews<br>Delayed
+      </div>
+  </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4">
+  <div class="h-100 pb-3 w-100">
+    <div class="cardGen colorGeyGradient h-100">
+      <div class="cardBody singleRow w-100 h-100">
+        <div class="w-100 h-100 px-2 py-3 position-relative">
+          <div class="w-100 h-6">
+            <h2 class="h-100"><img src="./assets/images/icon-cr2.svg" class="headingIcon longBox icokKPI" alt="BCP Coverage"> Compliance Reviews</h2>
+          </div>
+          <div class="w-100 h-94 vscroll tableContent">
+            <table mat-table [dataSource]="dataSource" matSort class="table-striped" id="cTable">
+              <ng-container matColumnDef="Index">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="complainceCode">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 7vw;border: 2px solid white;padding-left: 10px;">
+                  Code</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;" >
+                  <a href="javascript: void(0);" class="tblLnk" (click)="directToAsmtCompliance(element)">{{element.ComplianceReviewCode}}</a></td>
+              </ng-container>
+
+              <ng-container matColumnDef="complainceName">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 12vw;border: 2px solid white;padding-left: 10px;">Title</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label class="link">{{element.ComplianceReviewTitle}}</label></td>
+              </ng-container>
+
+              <ng-container matColumnDef="type">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">Type</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"
+                  ><label class="link">
+                    {{element.ComplianceReviewType}}</label></td>
+              </ng-container>
+
+              <ng-container matColumnDef="framework">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">Framework
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Framework}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="scope">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">Scope
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Scope}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="startDate">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 6vw;border: 2px solid white;padding-left: 10px;">Start Date
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.StartDate|date:'MMM d,y'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="endDate">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">End Date</th>
+                  <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.EndDate|date:'MMM d, y'}}
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Status</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Status}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="progress">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Progress</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Progress}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="respondent">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Respondent</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Respondent}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="auditor">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">Auditor</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.Auditor}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" style="background-color:  rgb(207, 205, 205);">
+              </tr>
+              <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+              <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">No data found.</td></tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

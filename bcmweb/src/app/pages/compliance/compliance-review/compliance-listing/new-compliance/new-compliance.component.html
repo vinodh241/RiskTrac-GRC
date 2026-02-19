@@ -1,0 +1,447 @@
+<!-- MAODAL TWO -->
+<div class="modal-content modalContent">
+  <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+    <h5 class="modal-title modalh5" id="staticBackdropLabel">New Compliance Review</h5>
+    <button type="button" class="close customClose" data-bs-dismiss="modal" aria-label="Close" (click)="close()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+
+  <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+      <li class="nav-item modalTabBg" role="presentation">
+        <button class="nav-link active" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home"
+          type="button" role="tab" aria-controls="pills-home" aria-selected="true"
+          [ngClass]="{active: sectionname =='Details'}" (click)="onSelectTab('Details')"> Details & Timeline</button>
+      </li>
+      <li class="nav-item modalTabBg" role="presentation">
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+          type="button" role="tab" aria-controls="pills-profile" aria-selected="false"
+          [ngClass]="{active: sectionname =='Frameworks'}" (click)="onSelectTab('Frameworks')">Frameworks</button>
+      </li>
+      <li class="nav-item modalTabBg" role="presentation">
+        <button class="nav-link" id="pills-contact-tab" data-bs-toggle="pill" data-bs-target="#pills-contact"
+          type="button" role="tab" aria-controls="pills-contact" aria-selected="false"
+          [ngClass]="{active: sectionname =='Participants'}" (click)="onSelectTab('Participants')">Participants</button>
+      </li>
+    </ul>
+
+    <!--First Section Details & Timeline-->
+
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade show active modaltabContentBg" id="pills-home" role="tabpanel"
+        [ngClass]="sectionname =='Details'? 'show active' : ''" aria-labelledby="pills-home-tab">
+        <form [formGroup]="addEditCompliance">
+          <div class="row mx-3">
+            <div class="col-6 ps-0 pe-5">
+              <div class="row mx-0">
+
+                <div class="col-6 ps-0 pe-4">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Code</label>
+                  <input class="form-control fldcolor" formControlName="assessmentCode" readonly id="">
+                </div>
+
+                <div class="col-6 ps-4 pe-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Type <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" style="width: 47vh;"
+                    *ngIf="complianceService.allComplainceInfo.AssessmentTypeList.length > 0">
+                    <!-- <mat-label>Select an Application</mat-label> -->
+
+                    <mat-select matSelectSearch formControlName="assessmentType" id="assessmentTypeID">
+                      <mat-option *ngFor="let assessment of  complianceService.allComplainceInfo.AssessmentTypeList"
+                        [value]="assessment.AssessmentTypeID" [id]="assessment.AssessmentTypeID">
+                        {{assessment.AssessmentType}}
+                      </mat-option>
+                    </mat-select>
+                  </mat-form-field>
+                  <mat-error
+                    *ngIf="(submitted || f['assessmentType'].touched) && f['assessmentType'].errors && f['assessmentType'].value?.length === 0">Assessment
+                    Type
+                    is required</mat-error>
+                </div>
+
+                <div class="col-12 px-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Name <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" style="width: 23vw;">
+                    <input matInput formControlName="assessmentName" placeholder="Assessment Name"
+                      id="AssessmentNameID">
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['assessmentName'].touched)">Assessment Name is Required</mat-error>
+                </div>
+
+                <div class="col-6 ps-0 pe-4">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Start Date <sup
+                      class="red">*</sup></label>
+                  <mat-form-field appearance="fill" (click)="picker.open()" class="w-100">
+                    <input matInput formControlName="startDate" id="startDateID" [min]="mindate" [max]="maxEndDate"
+                      [matDatepicker]="picker" (keydown.enter)="$event.preventDefault()"
+                      (dateChange)="updateSelecedStartDate($event)">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['startDate'].touched) && f['startDate'].errors">Start Date is
+                    required</mat-error>
+                  <mat-error *ngIf="endDateError">Start date cannot be after End date.</mat-error>
+                </div>
+
+                <div class="col-6 ps-4 pe-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Estimated End Date</label>
+                  <mat-form-field appearance="fill" (click)="picker1.open()" class="w-100">
+                    <input matInput formControlName="endDate" id="EndID" [min]="minStartDate" [max]="maxEndDate"
+                      [matDatepicker]="picker1" (keydown.enter)="$event.preventDefault()"
+                      (dateChange)="updateSelectedEndDate()">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['endDate'].touched) && f['endDate'].errors">End Date is
+                    required</mat-error>
+                  <mat-error *ngIf="endDateError" class="error ml-3"> End date cannot be before Start date.</mat-error>
+                  <mat-error *ngIf="endDateErrorValid" class="error ml-3"> End date cannot be same as Start
+                    date.</mat-error>
+                </div>
+
+                <div class="col-12 px-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Description <sup
+                      class="red">*</sup></label>
+                  <!-- <textarea class="form-control-plaintext fldcolor" id="descriptionId" formControlName="description"
+                      rows="3"></textarea> -->
+                  <mat-form-field appearance="fill" class="w-100">
+                    <textarea matInput class="text-area" id="descriptionId" formControlName="description"
+                      rows="5"></textarea>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['description'].touched) && f['description'].errors">Description is
+                    required</mat-error>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-6 ps-5 pe-0">
+              <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Review Scope <sup
+                  class="red">*</sup></label>
+              <div class="w-100 ModaltableContent ModaltableContentBlue">
+                <div class="row mx-0">
+
+                  <div class="col-12 px-0">
+                    <label>
+                      <input type="radio" mat-radio-button (change)="selectReviewOption(1)" name="participants"
+                        id="customList" aria-label="select" [checked]="">
+                      Custom list of Business
+                      Functions</label>
+                    <div class="radioFiterBg">
+                      <div class="row mx-0">
+                        <div class="col-6 px-0 position-relative mb-3">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <input type="text" matInput formControlName="businessFun"
+                              placeholder="Search Business Groups / Functions.." [matAutocomplete]="businessAuto"
+                              #autoCompleteInput (input)="filterBusinessList($event)"
+                              (keydown.enter)="$event.preventDefault()" id="businessFun" />
+                            <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+                                aria-hidden="true"></i></span>
+                            <mat-autocomplete #businessAuto="matAutocomplete">
+                              <mat-option *ngFor="let business of filteredBusiness" [value]="business.BusinessFunction"
+                                (onSelectionChange)="setSelectedBusiness(business)" [id]="business.BusinessFunction">
+                                {{business.BusinessFunction}}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                          <!-- <mat-error *ngIf="submitted && (defineBCMSTestForm.get('participantGroup.participants')?.value == 3) &&
+                                selectedBusiness?.length == 0">Select atleast one Business Function</mat-error> -->
+                        </div>
+                        <div _ngcontent-ng-c364572589="" class="col-6 mb-3"></div>
+                      </div>
+                      <div class="col-6 mb-3"></div>
+                      <ng-container *ngIf="(addEditCompliance.get('businessFun')?.value == 1)">
+                        <div *ngFor="let business of selectedBusiness"
+                          class="blueCrossFilter position-relative d-inline-block me-2 mb-1 w-auto">
+                          {{business.BusinessFunction}}
+                          <span (click)="removeSelectedBusiness(business)"
+                            class="vmiddleRight position-absolute">X</span>
+                        </div>
+                      </ng-container>
+                    </div>
+                  </div>
+
+                  <div class="col-12 px-0 mt-3">
+                    <label><input type="radio" name="rd1" id="rd1" aria-label="select"> Custom list of Sites</label>
+                    <div class="radioFiterBg">
+                      <div class="row mx-0">
+                        <div class="col-6 px-0 position-relative mb-3">
+                          <input type="text" class="form-control fldcolor" placeholder="Search Sites" id="">
+                          <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+                              aria-hidden="true"></i></span>
+                        </div>
+                        <div class="col-6 mb-3"></div>
+                        <div class="blueCrossFilter position-relative d-inline-block me-2 w-auto">Amlak HO <span
+                            class="vmiddleRight position-absolute">X</span></div>
+                        <div class="blueCrossFilter position-relative d-inline-block w-auto">Riyadh Branch <span
+                            class="vmiddleRight position-absolute">X</span></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!--End of first Section Details & Timeline-->
+
+      <!--Second Section FrameWork-->
+
+      <div class="tab-pane fade modaltabContentBg" id="pills-profile" role="tabpanel"
+        aria-labelledby="pills-profile-tab">
+        <div class="row mx-3 position-relative">
+          <span class="vhmiddle"><img src="./assets/images/icon-solid-right-arrow.svg"></span>
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Choose Framework <sup
+              class="red">*</sup></label>
+          <div class="col-6 ps-0 pe-5">
+
+            <div class="w-100 p-0 mb-2 position-relative">
+              <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-30">
+                <div class="w-100 h-100 vscroll">
+                  <table class="w-100 modalTble seablueTble smallTable fixedTbleHead" mat-table
+                    [dataSource]="dataSource" id="frameworkTable">
+
+                    <ng-container matColumnDef="Radio">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"></th>
+                      <td mat-cell *matCellDef="let element" class="w-6"><span class="ps-2"><input type="radio"
+                            aria-label="select" name="rd1" (change)="selectFramework(element)"
+                            [id]="element.FrameworkID"></span></td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Index">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px">#</th>
+                      <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Framework">
+                      <th mat-header-cell *matHeaderCellDef
+                        style="background-color:#e4e4e4;width: 12vw;border: 2px solid white;padding-left: 10px;">
+                        Framework</th>
+                      <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label
+                          class="link">{{element.FrameworkName}}</label></td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"
+                      style="background-color:  rgb(207, 205, 205);"></tr>
+                    <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+                    <tr *matNoDataRow>
+                      <td [attr.colspan]="displayedColumns.length">No data found.</td>
+                    </tr>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 ps-5 pe-0">
+            <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-30">
+              <div class="w-100 h-100 vscroll">
+                <table class="w-100 modalTble seablueTble smallTable fixedTbleHead" mat-table [dataSource]="domainList"
+                  id="domainTable">
+
+                  <ng-container matColumnDef="Checkbox">
+                    <th mat-header-cell *matHeaderCellDef
+                      style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"></th>
+                    <td mat-cell *matCellDef="let element" class="w-6"><span class="ps-2"><input type="checkbox"
+                          aria-label="select"></span></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Index">
+                    <th mat-header-cell *matHeaderCellDef
+                      style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px">#</th>
+                    <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Domain">
+                    <th mat-header-cell *matHeaderCellDef
+                      style="background-color:#e4e4e4;width: 12vw;border: 2px solid white;padding-left: 10px;">Domains /
+                      Sub-domains</th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label
+                        class="link">{{element.DomainName}}</label></td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="Controls">
+                    <th mat-header-cell *matHeaderCellDef
+                      style="background-color:#e4e4e4;width: 12vw;border: 2px solid white;padding-left: 10px;"></th>
+                    <td mat-cell *matCellDef="let element" style="padding-left: 10px;">[<a href="#" class="tblLnk">View Controls</a>]&nbsp;<img src="./assets/images/icon-copy.svg"></td>
+                  </ng-container>
+
+                  <tr mat-header-row *matHeaderRowDef="domainColumns; sticky: true"
+                    style="background-color:  rgb(207, 205, 205);"></tr>
+                  <tr mat-row *matRowDef="let row; let i = index columns: domainColumns;"></tr>
+                  <tr *matNoDataRow><td [attr.colspan]="domainColumns.length">No data found.</td></tr>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!--End of second Section FrameWork-->
+
+      <!--Third Section Participants-->
+
+      <div class="tab-pane fade modaltabContentBg" id="pills-contact" role="tabpanel"
+        aria-labelledby="pills-contact-tab">
+        <div class="row mx-3">
+          <div class="col-6 ps-0 pe-5">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Assessment Reviewer <sup
+                class="red">*</sup></label>
+            <div class="w-100 mb-2 position-relative">
+              <input class="form-control fldcolor" placeholder="BCM Manager" id="">
+              <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+                alt="">
+            </div>
+          </div>
+          <div class="col-6 ps-5 pe-0">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Manage Observers <sup
+                class="red">*</sup></label>
+            <div class="w-100 mb-2 position-relative">
+              <input class="form-control fldcolor" placeholder="Search and add observers" id="">
+              <span class="vmiddleRight position-absolute formIconMddl2"><i class="fa fa-search"
+                  aria-hidden="true"></i></span>
+            </div>
+          </div>
+        </div>
+        <div class="row mx-3">
+
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Manage Assessment
+            Respondents</label>
+          <div class="col-6 ps-0 pe-5">
+
+            <div class="w-100 p-0 mb-2 position-relative">
+              <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-20">
+                <div class="w-100 h-100 vscroll">
+                  <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+                    <thead>
+                      <tr>
+                        <th class="w-4"></th>
+                        <th class="w-50">Business Function</th>
+                        <th class="w-40">FBCC</th>
+                        <th class="w-6"></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td class="text-center">1</td>
+                        <td class="w-50">Credit Administration & Control</td>
+                        <td class="w-46">Amlak Head Office</td>
+                        <td class="text-center"><img src="./assets/images/icon-edit.svg"></td>
+                      </tr>
+                      <tr>
+                        <td class="text-center">1</td>
+                        <td class="w-50">Credit Administration & Control</td>
+                        <td class="w-46">Amlak Head Office</td>
+                        <td class="text-center"><img src="./assets/images/icon-edit.svg"></td>
+                      </tr>
+                      <tr>
+                        <td class="text-center">1</td>
+                        <td class="w-50">Credit Administration & Control</td>
+                        <td class="w-46">Amlak Head Office</td>
+                        <td class="text-center"><img src="./assets/images/icon-edit.svg"></td>
+                      </tr>
+                      <tr>
+                        <td class="text-center">1</td>
+                        <td class="w-50">Credit Administration & Control</td>
+                        <td class="w-46">Amlak Head Office</td>
+                        <td class="text-center"><img src="./assets/images/icon-edit.svg"></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 ps-5 pe-0">
+            <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-20">
+              <div class="w-100 h-100 vscroll">
+                <table class="w-100 modalTble seablueTble smallTable fixedTbleHead">
+                  <thead>
+                    <tr>
+                      <th class="w-4 text-center">#</th>
+                      <th class="w-60">Observers</th>
+                      <th class="w-26">Department</th>
+                      <th class="w-6"></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                    <tr>
+                      <td class="text-center">1</td>
+                      <td>Yousef Broughton</td>
+                      <td>Internal Audit</td>
+                      <td class="text-center"><img src="./assets/images/icon-delete-black.svg"></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!--End of Third Section Participants-->
+
+  <div class="modal-footer modalFooter">
+    <button type="button" class="btn btn-secondary modalCancelBtn" data-bs-dismiss="modal"
+      (click)="close()">Cancel</button>&nbsp;
+    <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGreen btnsave"><img
+        src="./assets/images/icon-save.svg" alt=""> Save</button>&nbsp;
+    <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGrey btnPrevious"><img
+        src="./assets/images/icon-previous.svg" alt=""> Previous</button>&nbsp;
+    <button type="button" class="btn btn-primary modalColorBtn modalColorBtnDarkGrey btnNext" (click)="next()"> Next
+      <img src="./assets/images/icon-next.svg" alt=""></button>
+  </div>
+</div>
+<!-- END MAODAL TWO -->

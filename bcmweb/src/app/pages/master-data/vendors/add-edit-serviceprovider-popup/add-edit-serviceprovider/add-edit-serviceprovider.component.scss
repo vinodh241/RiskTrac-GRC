@@ -1,0 +1,19 @@
+::ng-deep .service mat-dialog-container{
+  padding: 0px !important;
+}
+
+::ng-deep .addVendor tbody td {
+  vertical-align: middle !important;
+}
+
+.mat-mdc-table {
+  background: none !important;
+}
+
+.modalTble.seablueTble tr:hover {
+  background-color: hsl(0deg 0% 100% / 68%) !important;
+}
+
+.modalTble.seablueTble.mat-mdc-row:nth-child(odd){
+  background-color: #ffffff66 !important;
+}

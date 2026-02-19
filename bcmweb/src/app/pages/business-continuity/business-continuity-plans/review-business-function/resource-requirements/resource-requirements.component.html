@@ -1,0 +1,460 @@
+<div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+    [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+    style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: 2vh; font-size: 2.3vh;"
+    [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+    (workFlowStatusID == 2) ? 'statusInprogress' :
+    (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+    (workFlowStatusID == 8) ? 'statusCompleted' :
+    (workFlowStatusID == 7) ? 'statusDelayed' :
+    'statusPublished'">
+     {{ workFlowStatus }}
+  </span>
+  </span>
+
+  <div class="cardBody singleRow w-100 h-100">
+    <div class="w-100 h-100 px-2 py-3 position-relative">
+      <div class="w-100 h-6 pb-5">
+        <h2 class="h-100"><img src="./assets/images/icon-tl.svg" class="headingIcon longBox icoAs" alt="BCP Coverage">
+          {{ 'bcp.section6.title' | translate }}</h2>
+      </div>
+
+      <div *ngIf="!isBCPListing">
+        <form [formGroup]="resourceReqForm">
+          <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;margin-top: 3vh;">
+            <div class="move-buttons" style="margin-left: 76vh;margin-top: -31vh">
+              <button class="active toggle-link" id="colapse" (click)="toggleExpandCollapse()">
+                {{ isAllExpanded ? '- Collapse all' : '+ Expand all' }}
+              </button>
+            </div>
+
+            <mat-expansion-panel *ngFor="let item of processActivity; let i = index" style="margin-bottom: 1.4vh;">
+              <mat-expansion-panel-header class="expansion-header">
+                <mat-panel-title>
+                  <span><b>{{i+1}}.&nbsp;</b></span>
+                  <span><b>{{item.BusinessProcessName}}</b></span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="row pb-3 mx-0  bc-process-details-container">
+                <div class="col-12 px-4">
+                  <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">Vital Records<sup
+                      class="red">*</sup></label>
+                   <div class="table-bg">
+                        <div class="table-bg vscroll">
+                    <div class="w-100 heightVH-12 vscroll">
+                      <table class="w-100 modalTble seablueTble smallTable headBrd fixedTbleHead" mat-table
+                        [dataSource]="filterDataVR(item.BusinessProcessID)" id="vitalRecordTable">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SubProcessActivity">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Sub-Process / Activity</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit"> {{row.SubBusinessProcessName}}</div>
+                            <div *ngIf="row.isEdit">{{row.SubBusinessProcessName}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="RecordType">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Record Type</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.RecordType}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="text" [value]="row.RecordType" formControlName="RecordType"
+                                  id="RecordType" placeholder="Max(500 chars)">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="MediaType">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Media Type</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.MediaType}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <mat-select matSelectSearch formControlName="MediaType" id="MediaType" placeholder="Select">
+                                  <mat-option *ngFor="let media of mediaList" [value]="media.MediaTypeName"
+                                    [id]="media.MediaTypeID" (click)="mediaType(media.MediaTypeID)">
+                                    {{media.MediaTypeName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="AlternateSource">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Alternate Source</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.AlternateSource}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <mat-select matSelectSearch formControlName="AlternateSource" id="AlternateSource" placeholder="Select">
+                                  <mat-option *ngFor="let alt of altSourceList" [value]="alt.AlternateSourceName"
+                                    [id]="alt.AlternateSourceID" (click)="altSource(alt.AlternateSourceID)">
+                                    {{alt.AlternateSourceName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Action">
+                          <th mat-header-cell *matHeaderCellDef class="w-30"> </th>
+                          <td mat-cell *matCellDef="let row" class="w-30 text-center">
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.edit' | translate" color="primary" (click)="editProcess(row)" id="resourceEdit"
+                              [disabled]="blockEdit">
+                              <mat-icon>edit</mat-icon>
+                            </button>
+                            <ng-container *ngIf="row.isEdit">
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.save' | translate" color="primary" id="saveResource" [disabled]="!isSaveDisable()"
+                                (click)="saveProcess(row, item.BusinessProcessID)"><mat-icon>save</mat-icon>
+                              </button>
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancelProcess(row)"
+                                id="closeControl"><mat-icon>close</mat-icon>
+                              </button>
+                            </ng-container>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsVR"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsVR;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumnsVR.length">{{ 'bcp.section6.noVitalRecordsAdded' | translate }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                  </div>
+                </div>
+
+                <div class="col-12 px-4">
+                  <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">Critical Equipment & Supplies<sup
+                      class="red">*</sup></label>
+                  <div class="table-bg">
+                    <div class="w-100 heightVH-12 vscroll">
+                      <table class="w-100 modalTble seablueTble smallTable headBrd fixedTbleHead" mat-table
+                        [dataSource]="filterDataCE(item.BusinessProcessID)" id="criticalEquTable">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Equipment">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Equipment</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Equipment}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 30vh;">
+                                <mat-select matSelectSearch formControlName="Equipment" id="Equipment" placeholder="Select">
+                                  <mat-option *ngFor="let equ of equipmentList" [value]="equ.EquipmentName"
+                                    [id]="equ.EquipmentId" (click)="equip(equ.EquipmentId)">
+                                    {{equ.EquipmentName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Description">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Description</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Description}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="text" [value]="row.Description" formControlName="Description"
+                                  id="Description" placeholder="Max(500 chars)">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="TotalCount">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Total Count</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.TotalCount}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="number" min="0" [value]="row.TotalCount"
+                                  formControlName="TotalCount" id="TotalCount" (input)="maxValue()" placeholder="Enter Value">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="MinimumCount">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Minimum Count</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.MinimumCount}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="number" min="0" [value]="row.MinimumCount"
+                                  formControlName="MinimumCount" id="MinimumCount" (input)="maxValue()" placeholder="Enter Value">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Action">
+                          <th mat-header-cell *matHeaderCellDef class="w-30"> </th>
+                          <td mat-cell *matCellDef="let row" class="w-30 text-center">
+                            <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                              [matTooltip]="'common.edit' | translate" color="primary" (click)="editCritical(row)" id="resourceEdit"
+                              [disabled]="blockEdit"><mat-icon>edit</mat-icon>
+                            </button>
+
+                            <ng-container *ngIf="!row.isEdit">
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.delete' | translate" color="primary" (click)="deleteCritical(row)" id="deleteSave"
+                                [disabled]="blockEdit"><mat-icon>delete</mat-icon>
+                              </button>
+                            </ng-container>
+
+                            <ng-container *ngIf="row.isEdit">
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.save' | translate" color="primary" id="saveResource" [disabled]="!isSaved()"
+                                (click)="saveCritical(row, item.BusinessProcessID)"><mat-icon>save</mat-icon>
+                              </button>
+                              <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                                [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancel(row)"
+                                id="closeCritical"><mat-icon>close</mat-icon>
+                              </button>
+                            </ng-container>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsCE"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsCE;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumnsCE.length">{{ 'bcp.section6.noCriticalEquipmentAdded' | translate }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    <div class="row py-3">
+                      <div class="col-12 text-end">
+                        <div><button type="button" [disabled]="blockEdit"
+                            class="btn btn-primary normalColorBtn modalColorBtnGreen"
+                            (click)="addCritical(item.BusinessProcessID)" id="addCritical"><span
+                              class="fw-bold">+</span> {{ 'common.addNew' | translate }}</button></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </form>
+      </div>
+
+      <!-- View page starts-->
+
+      <div *ngIf="isBCPListing">
+        <form [formGroup]="resourceReqForm">
+          <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;margin-top: 3vh;">
+            <div class="move-buttons" style="margin-left: 76vh;margin-top: -31vh">
+              <button class="active toggle-link" id="colapse" (click)="toggleExpandCollapse()">
+                {{ isAllExpanded ? '- Collapse all' : '+ Expand all' }}
+              </button>
+            </div>
+
+            <mat-expansion-panel *ngFor="let item of processActivity; let i = index" style="margin-bottom: 1.4vh;">
+              <mat-expansion-panel-header class="expansion-header">
+                <mat-panel-title>
+                  <span><b>{{i+1}}.&nbsp;</b></span>
+                  <span><b>{{item.BusinessProcessName}}</b></span>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="row pb-3 mx-0 bc-process-details-container">
+                <div class="col-12 px-4">
+                  <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">Vital Records</label>
+                  <div class="table-bg">
+                    <div class="w-100 heightVH-12 vscroll">
+                      <table class="w-100 modalTble seablueTble smallTable headBrd fixedTbleHead" mat-table
+                        [dataSource]="filterDataVR(item.BusinessProcessID)" id="vitalRecordTable">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="SubProcessActivity">
+                          <th mat-header-cell *matHeaderCellDef class="w-30">Sub-Process / Activity</th>
+                          <td mat-cell *matCellDef="let row" class="w-30 text-left">
+                            <div *ngIf="!row.isEdit"> {{row.SubBusinessProcessName}}</div>
+                            <div *ngIf="row.isEdit">{{row.SubBusinessProcessName}}</div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="RecordType">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Record Type</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.RecordType}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="text" [value]="row.RecordType" formControlName="RecordType"
+                                  id="RecordType">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="MediaType">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Media Type</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.MediaType}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <mat-select matSelectSearch formControlName="MediaType" id="MediaType">
+                                  <mat-option *ngFor="let media of mediaList" [value]="media.MediaTypeName"
+                                    [id]="media.MediaTypeID" (click)="mediaType(media.MediaTypeID)">
+                                    {{media.MediaTypeName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="AlternateSource">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Alternet Source</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.AlternateSource}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <mat-select matSelectSearch formControlName="AlternateSource" id="AlternateSource">
+                                  <mat-option *ngFor="let alt of altSourceList" [value]="alt.AlternateSourceName"
+                                    [id]="alt.AlternateSourceID" (click)="altSource(alt.AlternateSourceID)">
+                                    {{alt.AlternateSourceName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsVR1"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsVR1;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumnsVR1.length">{{ 'bcp.section6.noVitalRecordsAdded' | translate }}</td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-12 px-4">
+                  <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">Critical Equipment & Supplies</label>
+                  <div class="table-bg">
+                    <div class="w-100 heightVH-12 vscroll">
+                      <table class="w-100 modalTble seablueTble smallTable headBrd fixedTbleHead" mat-table
+                        [dataSource]="filterDataCE(item.BusinessProcessID)" id="criticalEquTable">
+
+                        <ng-container matColumnDef="Index">
+                          <th mat-header-cell *matHeaderCellDef class="w-5">#</th>
+                          <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center">{{i+1}}</td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Equipment">
+                          <th mat-header-cell *matHeaderCellDef class="w-30">Equipment</th>
+                          <td mat-cell *matCellDef="let row" class="w-30 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Equipment}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 30vh;">
+                                <mat-select matSelectSearch formControlName="Equipment" id="Equipment">
+                                  <mat-option *ngFor="let equ of equipmentList" [value]="equ.EquipmentName"
+                                    [id]="equ.EquipmentId" (click)="equip(equ.EquipmentId)">
+                                    {{equ.EquipmentName}}
+                                  </mat-option>
+                                </mat-select>
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="Description">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Description</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.Description}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="text" [value]="row.Description" formControlName="Description"
+                                  id="Description">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="TotalCount">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Total Count</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.TotalCount}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="number" min="0" [value]="row.TotalCount"
+                                  formControlName="TotalCount" id="TotalCount">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="MinimumCount">
+                          <th mat-header-cell *matHeaderCellDef class="w-20">Minimum Count</th>
+                          <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                            <div *ngIf="!row.isEdit">{{row.MinimumCount}}</div>
+                            <div *ngIf="row.isEdit">
+                              <mat-form-field appearance="fill" style="width: 20vh;">
+                                <input matInput type="number" min="0" [value]="row.MinimumCount"
+                                  formControlName="MinimumCount" id="MinimumCount">
+                              </mat-form-field>
+                            </div>
+                          </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsCE1"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsCE1;"></tr>
+                        <tr *matNoDataRow>
+                          <td [attr.colspan]="displayedColumnsCE1.length">{{ 'bcp.section6.noCriticalEquipmentAdded' | translate }}
+                          </td>
+                        </tr>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-expansion-panel>
+          </div>
+        </form>
+      </div>
+
+      <!-- View page ends-->
+
+      <!-- <div class="child-button " style="margin-top: 6vh;">
+        <div class="move-buttons" style="margin-left: 92vh; margin-top: -1vh;" *ngIf="!isBCPListing">
+          <button class="buttons save" id="saveRes" (click)="saveResource()" style="height: 6vh; width: 24vh;"
+            [ngClass]="isAnyTableInvalid() ? 'disable'  : ''"><img src="./assets/images/icon-application.svg"
+              alt="Save">Save</button>
+        </div>
+      </div>
+
+      <span *ngIf="!isBCPListing"><mat-error style="margin-top: -4vh;" *ngIf="isAnyTableInvalid()"> The save button will
+          be enabled once all the mandatory data is filled.</mat-error></span> -->
+
+    </div>
+  </div>
+</div>

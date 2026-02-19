@@ -1,0 +1,27 @@
+<div class="cardGen colorGeyGradient">
+  <div class="cardBody bgwhite w-100 h-100">
+    <div class="w-100 h-100 px-2 py-3 position-relative">
+      <h2 class="mb-0"><img src="./assets/images/icon-rt.svg" class="headingIcon rt" alt="Remediation Tracker">
+        Remediation Tracker</h2>
+      <div class="bcpcContent rtpara">
+        <p class="cardParagraph rt">
+          Status of action items across all
+          sub-modules - Site Risk
+          Assessments, BCMS Testing, Crisis
+          Management
+        </p>
+      </div>
+      <div>
+        <span class="mt-2 position-absolute">Open Action Items</span>
+        <app-action-items-bar-chart [chartID]="barChartID"
+          [openActionItemsBarChartData]="openActionItemsBarChartData"></app-action-items-bar-chart>
+      </div>
+      <div class="w-80 h-60 rtGraph position-absolute p-1 text-center" *ngIf="actionItemsPieChartData?.length > 0">
+          <app-remediation-tracker-pie-chart  [chartID]="pieChartID"
+            [actionItemsPieChartData]="actionItemsPieChartData"></app-remediation-tracker-pie-chart>
+      </div>
+      <div *ngIf="actionItemsPieChartData?.length == 0" class="w-80 h-60 rtGraph position-absolute p-1 text-center" style="top: 17%;"> No Data Available</div>
+
+    </div>
+  </div>
+</div>

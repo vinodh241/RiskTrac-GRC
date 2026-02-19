@@ -1,0 +1,538 @@
+<div class="col-10 ps-0 pe-4 h-100" style="width: 82.8vw;">
+  <span class="statusID statusReview position-absolute vmiddleLeft px-1 leftblStatus filtertopStatusAs">
+    <span class="statusID"
+    [ngStyle]="{'min-width': (workFlowStatus?.length > 10) ? '15vw' : '6vw'}"
+    style="height: 4.2vh; text-align: center; margin-bottom: 69vh; margin-left: -1vh; font-size: 2.3vh;"
+      [ngClass]="(workFlowStatusID == 1) ? 'statusScheduled' :
+      (workFlowStatusID == 2) ? 'statusInprogress' :
+      (workFlowStatusID == 4 || workFlowStatusID == 3 || workFlowStatusID == 6) ? 'StatusUnderReview' :
+      (workFlowStatusID == 8) ? 'statusCompleted' :
+      (workFlowStatusID == 7) ? 'statusDelayed' :
+      'statusPublished'">
+       {{ workFlowStatus }}
+    </span>
+  </span>
+
+  <div class="tab-pane pb-2 h-100" id="section-1-content" role="tabpanel" aria-labelledby="section-1">
+    <div class="cardGen colorGeyGradient w-100 h-100" aria-labelledby="detail-timeline-tab">
+      <div class="cardBody singleRow w-100 h-100">
+        <div class="w-100 h-100 px-2 py-3 position-relative">
+          <div class="w-100 h-6 pb-5">
+            <h2 class="h-100"><img src="./assets/images/icon-tl.svg" class="headingIcon longBox icoAs"
+                alt="BCP Coverage"> {{ 'bcp.section3.title' | translate }}</h2>
+          </div>
+
+          <div *ngIf="!listingBCP">
+            <form [formGroup]="dependencyForm">
+              <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;margin-top: 3vh;padding-top: 1vh;">
+                <div class="move-buttons" style="margin-left: 76vh;margin-top: -31vh">
+                  <button class="active toggle-link" id="colapse" (click)="toggleExpandCollapse()">
+                    {{ isAllExpanded ? '- Collapse all' : '+ Expand all' }}
+                  </button>
+                </div>
+
+                <mat-expansion-panel *ngFor="let business of businessProcess; index as i" style="margin-bottom: 1.4vh;">
+                  <mat-expansion-panel-header class="expansion-header">
+                    <mat-panel-title>
+                      <span><b>{{i+1}}.&nbsp;</b></span>
+                      <span><b>{{' ' + business.BusinessActivity}}</b></span>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div class="row pb-3 mx-0 bc-process-details-container">
+                    <div class="col-12 px-4">
+                      <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section3.technologyDependencies' | translate }}<sup
+                          class="red">*</sup></label>
+                      <div class="table-bg">
+                        <div class="table-bg vscroll">
+                          <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                            [dataSource]="filterData(business.BusinessActivityID)" id="addCritical">
+
+                            <ng-container matColumnDef="Index">
+                              <th mat-header-cell *matHeaderCellDef>#</th>
+                              <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="BusinessApplication">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">{{ 'bcp.section3.itBusinessApplication' | translate }}<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.BusinessApplication}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 47vh;">
+                                    <mat-select matSelectSearch formControlName="Application" id="techApplID" [placeholder]="'common.select' | translate">
+                                      <mat-option *ngFor="let application of businessApplication"
+                                        [value]="application.BusinessApplication"
+                                        (click)="onChange($event , business.BusinessActivityID)"
+                                        [id]="application.BusinessApplicationID">
+                                        {{application.BusinessApplication}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Description">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">{{ 'bcp.section3.description' | translate }}<sup
+                                  class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.Description}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 20vh;">
+                                    <input matInput type="text" formControlName="Description" id="Description" [placeholder]="'bcp.section3.maxCharsPlaceholder' | translate">
+                                  </mat-form-field>
+                                  <mat-error *ngIf="dependencyForm.controls['Description'].hasError('maxlength')">
+                                    Description cannot exceed 500 characters.
+                                  </mat-error>
+
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Action">
+                              <th mat-header-cell *matHeaderCellDef class="w-15" style="border-left: 1px solid #fff"></th>
+                              <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                                <button mat-icon-button
+                                  class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.edit' | translate"
+                                  color="primary" (click)="editTech(row)" id="controlEditTech" [disabled]="blockEdit">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+
+                                <ng-container *ngIf="!row.isEdit">
+                                  <button mat-icon-button
+                                    class="material-icons app-toolbar-menu save-button custom-button"
+                                    [matTooltip]="'common.delete' | translate" color="primary" (click)="deleteTech(row)" id="deleteSave"
+                                    [disabled]="blockEdit">
+                                    <mat-icon>delete</mat-icon>
+                                  </button>
+                                </ng-container>
+
+                                <ng-container *ngIf="row.isEdit">
+                                  <button mat-icon-button
+                                    class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.save' | translate"
+                                    color="primary" id="techCritical" [disabled]="!isSaveDisable()"
+                                    (click)="saveTech(row)"><mat-icon>save</mat-icon>
+                                  </button>
+                                  <button mat-icon-button
+                                    class="material-icons app-toolbar-menu save-button custom-button"
+                                    [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancel(row)"
+                                    id="closeCritical"><mat-icon>close</mat-icon>
+                                  </button>
+                                </ng-container>
+                              </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsTD"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsTD;"></tr>
+                            <tr *matNoDataRow>
+                              <td [attr.colspan]="displayedColumnsTD.length">{{ 'bcp.section3.noTechnologyDependenciesAdded' | translate }}</td>
+                            </tr>
+                          </table>
+                          <mat-error *ngIf="techDependencyExits && processID == business.BusinessActivityID">Technology
+                            Dependencies cannot be duplicate.</mat-error>
+                        </div>
+
+                        <div class="row py-3">
+                          <div class="col-12 text-end">
+                            <div><button type="button" [disabled]="blockEdit" id="techSave"
+                                class="btn btn-primary normalColorBtn modalColorBtnGreen"
+                                [disabled]="techDependencyExits" (click)="addtech(business.BusinessActivityID)"><span
+                                  class="fw-bold">+</span> {{ 'common.addNew' | translate }}</button></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 px-4">
+                      <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section3.interdependentProcesses' | translate }}<sup
+                          class="red">*</sup></label>
+                      <div class="table-bg">
+                        <div class="w-100 heightVH-12 vscroll">
+                          <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                            [dataSource]="filterDataIP(business.BusinessActivityID)" id="addInterdependent">
+
+                            <ng-container matColumnDef="Index">
+                              <th mat-header-cell *matHeaderCellDef>#</th>
+                              <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Activity">
+                              <th mat-header-cell *matHeaderCellDef>{{ 'bcp.section3.subProcessActivity' | translate }}<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit"> {{row.SubActivity}}</div>
+                                <div *ngIf="row.isEdit">
+                                  {{row.SubActivity}}
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Dependency">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Description of
+                                dependency<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.Dependency}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 20vh;">
+                                    <input matInput type="text" [value]="row.Dependency" formControlName="Dependency"
+                                      id="InterDependency" [placeholder]="'bcp.section3.maxCharsPlaceholder' | translate">
+                                  </mat-form-field>
+                                  <mat-error *ngIf="dependencyForm.controls['Dependency'].hasError('maxlength')">
+                                    Description of dependency cannot exceed 500 characters.
+                                  </mat-error>
+
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Function">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">{{ 'bcp.section3.dependentFunction' | translate }}<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.Function}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 30vh;">
+                                    <mat-select matSelectSearch formControlName="Function" id="interApplID" [placeholder]="'common.select' | translate">
+                                      <mat-option *ngFor="let function of dependentFunctions"
+                                        [value]="function.BusinessFunction" [id]="function.BusinessFunctionID">
+                                        {{function.BusinessFunction}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Type">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">Dependency
+                                Type<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.Type}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 30vh;">
+                                    <mat-select matSelectSearch formControlName="Type" id="interDependencyID" [placeholder]="'common.select' | translate">
+                                      <mat-option *ngFor="let dependent of dependencyType"
+                                        [value]="dependent.DependencyType" [id]="dependent.DependencyID">
+                                        {{dependent.DependencyType}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Action">
+                              <th mat-header-cell *matHeaderCellDef class="w-15" style="border-left: 1px solid #fff"></th>
+                              <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                                <button mat-icon-button
+                                  class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.edit' | translate"
+                                  color="primary" (click)="editInterdependent(row,business.BusinessActivityID)"
+                                  id="controlIndedit" [disabled]="blockEdit">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+
+                                <ng-container *ngIf="row.isEdit">
+                                  <button mat-icon-button
+                                    class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.save' | translate"
+                                    color="primary" id="saveind" [disabled]="!isSaveIPDisable()"
+                                    (click)="saveInterdependent(row,business.BusinessActivityID)"><mat-icon>save</mat-icon>
+                                  </button>
+                                  <button mat-icon-button
+                                    class="material-icons app-toolbar-menu save-button custom-button"
+                                    [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancelInterdependent(row)"
+                                    id="indCritical"><mat-icon>close</mat-icon>
+                                  </button>
+                                </ng-container>
+                              </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsIP"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsIP;"></tr>
+                            <tr *matNoDataRow>
+                              <td [attr.colspan]="displayedColumnsIP.length">{{ 'bcp.section3.noInterdependentProcessesAdded' | translate }}</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 px-4">
+                      <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section3.supplierDependencies' | translate }}<sup class="red">*</sup></label>
+                      <div class="table-bg">
+                        <div class="w-100 heightVH-12 vscroll">
+                          <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                            [dataSource]="filterDataSD(business.BusinessActivityID)" id="addSupplier">
+                            <ng-container matColumnDef="Index">
+                              <th mat-header-cell *matHeaderCellDef>#</th>
+                              <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Activity">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">{{ 'bcp.section3.subProcessActivity' | translate }}<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit"> {{row.SubActivity}}</div>
+                                <div *ngIf="row.isEdit">
+                                  {{row.SubActivity}}
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Dependency">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">{{ 'bcp.section3.descriptionOfDependency' | translate }}<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.Dependency}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 20vh;">
+                                    <input matInput type="text" [value]="row.Dependency" formControlName="Dependency"
+                                      id="supDependency" [placeholder]="'bcp.section3.maxCharsPlaceholder' | translate">
+                                  </mat-form-field>
+                                  <mat-error *ngIf="dependencyForm.controls['Dependency'].hasError('maxlength')">
+                                    Description of dependency cannot exceed 500 characters.
+                                  </mat-error>
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Supplier">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff;width: 29vh;">
+                                {{ 'bcp.section3.supplier' | translate }}<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.Supplier}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 30vh;">
+                                    <mat-select matSelectSearch formControlName="Supplier" id="supplierID" [placeholder]="'common.select' | translate">
+                                      <mat-option *ngFor="let supplier of supplierList" [value]="supplier.SupplierName"
+                                        [id]="supplier.SupplierID">
+                                        {{supplier.SupplierName}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Type">
+                              <th mat-header-cell *matHeaderCellDef style="border-left: 1px solid #fff">{{ 'bcp.section3.dependencyType' | translate }}<sup class="red">*</sup></th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div *ngIf="!row.isEdit">{{row.Type}}</div>
+                                <div *ngIf="row.isEdit">
+                                  <mat-form-field appearance="fill" style="width: 30vh;">
+                                    <mat-select matSelectSearch formControlName="Type" id="suppDependencyID" [placeholder]="'common.select' | translate">
+                                      <mat-option *ngFor="let dependent of dependencyType"
+                                        [value]="dependent.DependencyType" [id]="dependent.DependencyID">
+                                        {{dependent.DependencyType}}
+                                      </mat-option>
+                                    </mat-select>
+                                  </mat-form-field>
+                                </div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Action">
+                              <th mat-header-cell *matHeaderCellDef class="w-15" style="border-left: 1px solid #fff"></th>
+                              <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                                <button mat-icon-button
+                                  class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.edit' | translate"
+                                  color="primary" (click)="editSupplier(row)" id="controlEdit" [disabled]="blockEdit">
+                                  <mat-icon>edit</mat-icon>
+                                </button>
+                                <ng-container *ngIf="row.isEdit">
+                                  <button mat-icon-button
+                                    class="material-icons app-toolbar-menu save-button custom-button" [matTooltip]="'common.save' | translate"
+                                    color="primary" id="saveCritical" [disabled]="!isSaveSuDisable()"
+                                    (click)="saveSupplier(row,business.BusinessActivityID)"><mat-icon>save</mat-icon>
+                                  </button>
+                                  <button mat-icon-button
+                                    class="material-icons app-toolbar-menu save-button custom-button"
+                                    [matTooltip]="'common.cancel' | translate" color="primary" (click)="cancelSupplier(row)"
+                                    id="supCritical"><mat-icon>close</mat-icon>
+                                  </button>
+                                </ng-container>
+                              </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsSD"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsSD;"></tr>
+                            <tr *matNoDataRow>
+                              <td [attr.colspan]="displayedColumnsSD.length">{{ 'bcp.section3.noSupplierDependenciesAdded' | translate }}</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </div>
+            </form>
+          </div>
+
+          <div *ngIf="listingBCP">
+            <div class="w-100 h-78 vscroll pe-3" style="height: 56vh;margin-top: 3vh;">
+              <div class="move-buttons" style="margin-left: 76vh;margin-top: -31vh">
+                <button class="active toggle-link" id="colapse" (click)="toggleExpandCollapse()">
+                  {{ isAllExpanded ? '- Collapse all' : '+ Expand all' }}
+                </button>
+              </div>
+
+              <div >
+                <mat-expansion-panel *ngFor="let business of technologyDetails; index as i">
+
+                  <mat-expansion-panel-header class="expansion-header" style="margin-bottom: 1vh;">
+                    <mat-panel-title>
+                      <span><b>{{i+1}}.&nbsp;</b></span>
+                      <span><b>{{' ' + business.BusinessProcessName}}</b></span>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+
+                  <div class="row pb-3 mx-0 bc-process-details-container">
+                    <div class="col-12 px-4">
+                      <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section3.technologyDependencies' | translate }}</label>
+                      <div class="table-bg">
+                        <div class="w-100 heightVH-12 vscroll">
+                          <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                            [dataSource]="business.TechnologyDependency" id="addTechnology">
+                            <ng-container matColumnDef="Index">
+                              <th mat-header-cell *matHeaderCellDef>#</th>
+                              <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="BusinessApplication">
+                              <th mat-header-cell *matHeaderCellDef>IT / Business Application</th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div>{{row.BusinessApplicationName}}</div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Description">
+                              <th mat-header-cell *matHeaderCellDef>Description</th>
+                              <td mat-cell *matCellDef="let row" class=" text-left">
+                                <div>{{row.Description}}</div>
+                              </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsTDV"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsTDV;"></tr>
+                            <tr *matNoDataRow>
+                              <td [attr.colspan]="displayedColumnsTDV.length">No Technology Dependencies added
+                                yet.</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 px-4">
+                      <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;">{{ 'bcp.section3.interdependentProcesses' | translate }}</label>
+                      <div class="table-bg">
+                        <div class="w-100 heightVH-12 vscroll">
+                          <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                            [dataSource]="business.InterdependentProcesses" id="addCritical">
+                            <ng-container matColumnDef="Index">
+                              <th mat-header-cell *matHeaderCellDef>#</th>
+                              <td mat-cell *matCellDef="let element  let i = index" class="w-10 text-left"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Activity">
+                              <th mat-header-cell *matHeaderCellDef>Sub-process / activity</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div> {{row.ProcessActivityName}}</div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Dependency">
+                              <th mat-header-cell *matHeaderCellDef>Description of dependency</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div>{{row.Description}}</div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Function">
+                              <th mat-header-cell *matHeaderCellDef>Dependent Function</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div *ngIf="!row.isEdit">{{row.DependentFunction}}</div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Type">
+                              <th mat-header-cell *matHeaderCellDef>Dependency Type</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div>{{row.DependencyType}}</div>
+                              </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsIPV"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsIPV;"></tr>
+                            <tr *matNoDataRow>
+                              <td [attr.colspan]="displayedColumnsIPV.length">No Interdependent Processes added yet.</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 px-4">
+                      <label for="" class="w-100 p-0 slctLbl text-left mt-4 min-title" style="font-weight: bold;" >{{ 'bcp.section3.supplierDependencies' | translate }}</label>
+                      <div class="table-bg">
+                        <div class="w-100 heightVH-12 vscroll">
+                          <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                            [dataSource]="business.SupplierDependency" id="addSupplier">
+                            <ng-container matColumnDef="Index">
+                              <th mat-header-cell *matHeaderCellDef>#</th>
+                              <td mat-cell *matCellDef="let element  let i = index" class="w-10 text-left"> {{i+1}}</td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Activity">
+                              <th mat-header-cell *matHeaderCellDef>Sub-process / activity</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div> {{row.SubActivityName}}</div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Dependency">
+                              <th mat-header-cell *matHeaderCellDef>Description of dependency</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div>{{row.Description}}</div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Supplier">
+                              <th mat-header-cell *matHeaderCellDef>Supplier</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div>{{row.SupplierName}}</div>
+                              </td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Type">
+                              <th mat-header-cell *matHeaderCellDef>Dependency Type</th>
+                              <td mat-cell *matCellDef="let row" class="w-20 text-left">
+                                <div>{{row.DependentTypeName}}</div>
+                              </td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="displayedColumnsSDV"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumnsSDV;"></tr>
+                            <tr *matNoDataRow>
+                              <td [attr.colspan]="displayedColumnsSDV.length">No Supplier Dependencies added yet.</td>
+                            </tr>
+                          </table>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </mat-expansion-panel>
+              </div>
+            </div>
+          </div>
+
+          <div class="child-button " style="margin-top: 6vh;">
+            <div class="move-buttons" style="margin-left: 92vh;margin-top: -4vh;" *ngIf="!listingBCP">
+              <button class="buttons save" id="saveSub" (click)="onSubmit()" style="height: 6vh; width: 24vh;"
+                [ngClass]="isAnyTableInvalid() ? 'disable'  : ''"><img src="./assets/images/icon-application.svg"
+                  alt="Save">Save</button>
+            </div>
+          </div>
+
+          <span *ngIf="!listingBCP"><mat-error style="margin-top: -8vh;" *ngIf="isAnyTableInvalid()"> The save button
+              will be enabled once all the mandatory data is filled.</mat-error></span>
+
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

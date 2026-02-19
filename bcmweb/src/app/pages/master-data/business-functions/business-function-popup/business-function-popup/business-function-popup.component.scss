@@ -1,0 +1,8 @@
+::ng-deep .bussfun mat-dialog-container{
+  padding: 0px !important;
+}
+
+.disabled-field {
+  opacity: 0.5; /* Reduce opacity to indicate disabled state */
+  pointer-events: none; /* Prevent interactions with the disabled field */
+}

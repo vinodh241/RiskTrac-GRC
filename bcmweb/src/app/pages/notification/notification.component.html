@@ -1,0 +1,159 @@
+<div (click)="$event.stopPropagation()" class="main-container">
+  <div class="header">
+          <label>Notifications</label>
+  </div>
+  <!-- <mat-accordion>
+    <mat-expansion-panel *ngFor="let item of inAppData" [expanded]="false" style="margin-top: 10px;">
+      <mat-expansion-panel-header>
+        <mat-panel-title style="flex-grow: 1 !important; display: flex; align-items: center;">
+          <img [src]="item.image" alt="icon" height="24" width="24" style="margin-right: 10px;">
+          <span>{{ item.title }}</span>
+        </mat-panel-title>
+        <mat-panel-description>
+          Total Count: {{ item.TotalCount }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="custom_notification_body">
+        <div *ngFor="let data of item.data" class="notification-box">
+          <mat-card class="notiContent">
+            <mat-card-content>
+              <div style="margin: auto; padding: 10px">
+                {{ data.message }}
+                <a style="color: blue; text-decoration: underline; cursor: pointer;" (click)="sendAlertId(data.AlertID, data.link)">View details</a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-expansion-panel>
+  </mat-accordion> -->
+  <mat-accordion>
+
+    <!-- SRA -->
+    <mat-expansion-panel [expanded]="false" >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./assets/images/ic-sra.svg" alt="SRA Icon" height="24" width="24" style="margin-right: 10px;filter: invert(1);">
+          <span>Site Risk Assessment</span>
+        </mat-panel-title>
+        <mat-panel-description>
+          Total Count: {{ SRAInAppData.length }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="custom_notification_body" style="height: 300px; overflow: auto;">
+        <div *ngFor="let data of SRAInAppData" class="notification-box">
+          <mat-card class="notiContent">
+            <mat-card-content>
+              <div style="margin: auto; padding: 10px">
+                {{ data.message }}
+                <a style="color: blue; text-decoration: underline; cursor: pointer;" (click)="sendAlertId(data.AlertID, data.link)">View details</a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Business Continuity Plans -->
+    <mat-expansion-panel [expanded]="false" >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./assets/images/ic-bcplan.svg" alt="BCP Icon" height="24" width="24" style="margin-right: 10px;filter: invert(1);">
+          <span>Business Continuity Plans</span>
+        </mat-panel-title>
+        <mat-panel-description>
+          Total Count: {{ BCPInAppData.length }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="custom_notification_body" style="height: 300px; overflow: auto;">
+        <div *ngFor="let data of BCPInAppData" class="notification-box">
+          <mat-card class="notiContent">
+            <mat-card-content>
+              <div style="margin: auto; padding: 10px">
+                {{ data.message }}
+                <a style="color: blue; text-decoration: underline; cursor: pointer;" (click)="sendAlertId(data.AlertID, data.link)">View details</a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- BCMS Testing -->
+    <mat-expansion-panel [expanded]="false" >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./assets/images/ic-bcmstesting.svg" alt="BCMS Icon" height="24" width="24" style="margin-right: 10px;filter: invert(1);">
+          <span>BCMS Testing</span>
+        </mat-panel-title>
+        <mat-panel-description>
+          Total Count: {{ BCMSInAppData.length }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="custom_notification_body" style="height: 300px; overflow: auto;">
+        <div *ngFor="let data of BCMSInAppData" class="notification-box">
+          <mat-card class="notiContent">
+            <mat-card-content>
+              <div style="margin: auto; padding: 10px">
+                {{ data.message }}
+                <a style="color: blue; text-decoration: underline; cursor: pointer;" (click)="sendAlertId(data.AlertID, data.link)">View details</a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Crisis Communication -->
+    <mat-expansion-panel [expanded]="false" >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./assets/images/ic-crisis.svg" alt="Crisis Icon" height="24" width="24" style="margin-right: 10px;filter: invert(1);">
+          <span>Crisis Communication</span>
+        </mat-panel-title>
+        <mat-panel-description>
+          Total Count: {{ CrisisInAppData.length }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="custom_notification_body" style="height: 300px; overflow: auto;">
+        <div *ngFor="let data of CrisisInAppData" class="notification-box">
+          <mat-card class="notiContent">
+            <mat-card-content>
+              <div style="margin: auto; padding: 10px">
+                {{ data.message }}
+                <a style="color: blue; text-decoration: underline; cursor: pointer;" (click)="sendAlertId(data.AlertID, data.link)">View details</a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+    <!-- Remediation Tracker -->
+    <mat-expansion-panel [expanded]="false" >
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <img src="./assets/images/ic-tracker.svg" alt="Tracker Icon" height="24" width="24" style="margin-right: 10px;filter: invert(1);">
+          <span>Remediation Tracker</span>
+        </mat-panel-title>
+        <mat-panel-description>
+          Total Count: {{ RMTInAppData.length }}
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+      <div class="custom_notification_body" style="height: 300px; overflow: auto;">
+        <div *ngFor="let data of RMTInAppData" class="notification-box">
+          <mat-card class="notiContent">
+            <mat-card-content>
+              <div style="margin: auto; padding: 10px">
+                {{ data.message }}
+                <a style="color: blue; text-decoration: underline; cursor: pointer;" (click)="sendAlertId(data.AlertID, data.link)">View details</a>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </div>
+    </mat-expansion-panel>
+
+  </mat-accordion>
+
+</div>

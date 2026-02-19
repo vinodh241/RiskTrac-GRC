@@ -1,0 +1,525 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 text-center position-relative h-100 d-flex align-items-center justify-content-between"
+    id="nav-bcmsTestDetails" aria-labelledby="nav-bcmsTesting-tab">
+    <div class="d-flex align-items-center justify-content-start">
+      <button mat-raised-button color="primary" id="backButton" class="me-3"
+        style="display:inline-block; padding:0vh 1vh;border-radius:100vw;margin: 7px 6px;" matTooltip="Navigate back"
+        (click)="navigateToTestBCMData()">
+        <span style="font-size:16px; margin-right:10px;">&#11164;</span>{{ 'common.back' | translate }}
+      </button>
+      <div class="navtabHeading me-5" style="margin: 0.8vw; width: 25vw;" [matTooltip]="BCMSTest?.TestName?.length > 100? BCMSTest?.TestName:''">{{service.getTitleValue(BCMSTest?.TestName)}}</div>
+      <div class="ms-5 me-3">
+        <span class="statusID px-1 statusStyle"
+          [ngClass]="(BCMSTest?.TestAssessmentStatusID == 1) ? 'statusScheduled' : (BCMSTest?.TestAssessmentStatusID == 2) ? 'statusInprogress' : (BCMSTest?.TestAssessmentStatusID == 3) ? 'statusCompleted' : 'statusPublished'">{{BCMSTest?.TestAssessmentStatus}}</span>
+      </div>
+    </div>
+    <div class="applyFilter addDesktop position-relative text-end me-5">
+      <button class="btn btn-dark btnGradient" [disabled]="![17, 18].includes(testWorkflowStatusID)" (click)="downloadDraftPDF(BCMSTest)">{{ 'common.exportDraftReport' | translate }}</button>
+      <span class="position-absolute vmiddleLeft text-white" style="left: -.2em !important"><img
+        src="./assets/images/icon-export-draft.svg"></span>
+    </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4 vscroll" id="TopTestData">
+  <div class="h-100 pb-3 w-100">
+    <div class="row mx-0 h-100">
+      <div class="col-8 ps-0 pe-3 h-100 position-relative">
+        <mat-expansion-panel expanded="true" id="testDetails" class="test-details">
+          <mat-expansion-panel-header class="expansion-panel-header h-8 h2bg" style="padding: 1.0vw; height: 3.5vw;">
+            <mat-panel-title style="font-size: 140%;color: #000;">
+              <h2 class="p-0">{{ 'bcms.testReport.overallTestReport' | translate }}</h2>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <div class="col-12 px-3" *ngIf="initiateForm">
+            <form [formGroup]="reportDataForm">
+              <div class="question d-flex justify-content-start">
+                <span class="w-3">1. </span>
+                <span>{{ 'bcms.testReport.testLimitations' | translate }} <b class="smallgrey fw-normal">{{ 'bcms.testReport.testElementsNotIncluded' | translate }}</b></span>
+              </div>
+              <div class="answer" id="">
+                <table class="tblContent w-100">
+                  <thead>
+                    <tr>
+                      <th class="w-50">{{ 'bcms.testReport.plannedAsPerScope' | translate }}<sup class="red">*</sup></th>
+                      <th class="w-50">{{ 'bcms.testReport.postTestAnalysis' | translate }}<sup class="red">*</sup></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="text-center align-top" *ngIf="intializeCKEditor">
+                        <div class="w-100 p-0 mb-2">
+                          <ckeditor formControlName="testLimitPlanned" id="testLimitPlanned" [readOnly]="testWorkflowStatusID == 18"
+                            [config]="!(testWorkflowStatusID == 18)? ckeConfig : disabledCkeConfig" [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+                          <mat-error *ngIf="(submitted || f['testLimitPlanned'].touched) && f['testLimitPlanned'].errors"
+                            style="text-align: left;">{{ 'bcms.testReport.enterPlannedAsPerScope' | translate }}</mat-error>
+                        </div>
+                      </td>
+                      <td class="align-top" *ngIf="intializeCKEditor">
+                        <div class="w-100 p-0 mb-2">
+                          <ckeditor formControlName="testLimitPosttest" id="testLimitPosttest" [readOnly]="testWorkflowStatusID == 18"
+                            [config]="!(testWorkflowStatusID == 18)? ckeConfig : disabledCkeConfig" [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+                          <mat-error *ngIf="(submitted || f['testLimitPosttest'].touched) && f['testLimitPosttest'].errors">{{ 'bcms.testReport.enterPostTestAnalysis' | translate }}</mat-error>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="question d-flex justify-content-start">
+                <span class="w-3">2. </span>
+                <span>{{ 'bcms.testReport.businessImpact' | translate }} <b class="smallgrey fw-normal">{{ 'bcms.testReport.businessImpactDesc' | translate }}</b><sup class="red">*</sup></span>
+              </div>
+              <div class="answer" id="">
+                <table class="tblContent w-100">
+                  <thead>
+                    <tr>
+                      <th class="w-33-3">{{ 'bcms.testReport.businessImpact' | translate }}</th>
+                      <th class="w-33-3">{{ 'bcms.testReport.plannedAsPerScope' | translate }}</th>
+                      <th class="w-33-3">{{ 'bcms.testReport.postTestAnalysis' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td class="align-top">{{ 'bcms.testReport.financialImpact' | translate }}</td>
+                      <td class="align-top">
+                        <div class="w-100 p-0 mb-2">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <textarea matInput rows="3" formControlName="plannedFinancialImpact" id="plannedFinancialImpact"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td class="align-top">
+                        <div class="w-100 p-0 mb-2">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <textarea matInput rows="3" formControlName="postAnalysisFinancialImpact" id="postAnalysisFinancialImpact"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="align-top">{{ 'bcms.testReport.customerImpact' | translate }}</td>
+                      <td class="align-top">
+                        <div class="w-100 p-0 mb-2">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <textarea matInput rows="3" formControlName="plannedCustomerImpact" id="plannedCustomerImpact"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td class="align-top">
+                        <div class="w-100 p-0 mb-2">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <textarea matInput rows="3" formControlName="postAnalysisCustomerImpact" id="postAnalysisCustomerImpact"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="align-top">{{ 'bcms.testReport.otherImpacts' | translate }}</td>
+                      <td class="align-top">
+                        <div class="w-100 p-0 mb-2">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <textarea matInput rows="3" formControlName="plannedOtherImpact" id="plannedOtherImpact"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                      <td class="align-top">
+                        <div class="w-100 p-0 mb-2">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <textarea matInput rows="3" formControlName="postAnalysisOtherImpact" id="postAnalysisOtherImpact"></textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <mat-error *ngIf="(submitted ||
+                  (f['plannedFinancialImpact'].touched || f['postAnalysisFinancialImpact'].touched || f['plannedCustomerImpact'].touched
+                  || f['postAnalysisCustomerImpact'].touched)) &&
+                  (f['plannedFinancialImpact'].errors || f['postAnalysisFinancialImpact'].errors || f['plannedCustomerImpact'].errors
+                  || f['postAnalysisCustomerImpact'].errors)">{{ 'common.allFieldsMandatoryExceptOther' | translate }}</mat-error>
+              </div>
+
+              <div class="question d-flex justify-content-start">
+                <span class="w-3">3. </span>
+                <span>{{ 'bcms.testReport.disruptionScenarios' | translate }}<sup class="red">*</sup></span>
+              </div>
+              <div class="answer" id="">
+                <table class="tblContent w-100">
+                  <thead>
+                    <tr>
+                      <th class="w-4 text-center">#</th>
+                      <th class="w-46">{{ 'bcms.testReport.disruptionScenario' | translate }}</th>
+                      <th class="w-20">{{ 'bcms.testReport.tested' | translate }}</th>
+                      <th class="w-30">{{ 'bcms.testReport.continuityProcess' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container formArrayName="disruptionScenarios">
+                      <tr *ngFor="let scenario of disruptionScenariosControls; let i = index" [formGroupName]="i">
+                        <td class="lign-top text-center">{{i + 1}}</td>
+                        <td class="align-top">{{scenario.get('disruptionScenarios')?.value}}</td>
+                        <td class="align-top">
+                          <div class="" id="">
+                            <div class="w-100">
+                              <label class="options">
+                                <input type="radio" formControlName="isTested" value="1" [id]="'isTestedY' + i">
+                                {{ 'common.yes' | translate }}
+                              </label>
+                              <label class="options">
+                                <input type="radio" formControlName="isTested" value="0" [id]="'isTestedN' + i">
+                                {{ 'common.no' | translate }}
+                              </label>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="align-top">
+                          <mat-form-field appearance="fill" class="w-100">
+                            <textarea matInput rows="3" formControlName="continuityProcess" [id]="'continuityProcess' + i"></textarea>
+                          </mat-form-field>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <mat-error *ngIf="isDisruptionScenariosInvalid() && (disruptionScenariosControls.length > 0 && submitted)">
+                  {{ 'common.allFieldsMandatory' | translate }}
+                </mat-error>
+              </div>
+
+              <div class="question d-flex justify-content-start mt-4">
+                <span class="w-3">4. </span>
+                <span>{{ 'bcms.testReport.testingComponentsCovered' | translate }}<sup class="red">*</sup></span>
+              </div>
+              <div class="answer" id="">
+                <table class="tblContent w-100">
+                  <thead>
+                    <tr>
+                      <th class="w-4 text-center">#</th>
+                      <th class="w-70">{{ 'bcms.testReport.exerciseType' | translate }}</th>
+                      <th class="w-26">{{ 'bcms.testReport.testUndertaken' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container formArrayName="testingComponents">
+                      <tr *ngFor="let test of testingComponentsControls; let i = index" [formGroupName]="i">
+                        <td class="lign-top text-center">{{i + 1}}</td>
+                        <td class="align-top">{{test.get('component')?.value}}</td>
+                        <td class="align-top">
+                          <div class="" id="">
+                            <div class="w-100 d-flex justify-content-start">
+                              <label class="options ms-4 me-3">
+                                <input type="radio" formControlName="isTestUnderTaken" value="1" [id]="'isTestUnderTaken' + i">
+                                {{ 'common.yes' | translate }}
+                              </label>
+                              <label class="options">
+                                <input type="radio" formControlName="isTestUnderTaken" value="0" [id]="'isTestUnderTaken' + i">
+                                {{ 'common.no' | translate }}
+                              </label>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+                <mat-error *ngIf="testingComponentsInvalid() && (testingComponentsControls.length > 0 && submitted)">
+                  {{ 'common.allFieldsMandatory' | translate }}
+                </mat-error>
+              </div>
+
+              <div class="question d-flex justify-content-start mt-4">
+                <span class="w-3">5. </span>
+                <span>{{ 'bcms.testReport.detailedTestResults' | translate }}<sup class="red">*</sup></span>
+              </div>
+              <div class="answer" id="">
+                <table class="tblContent w-100">
+                  <thead>
+                    <tr>
+                      <th class="w-4 text-center">#</th>
+                      <th class="w-24">{{ 'bcms.testReport.businessDepartmentFunction' | translate }}</th>
+                      <th class="w-16">{{ 'bcms.testReport.recoveryAsPerDocumentedProcedures' | translate }}</th>
+                      <th class="w-30">{{ 'bcms.testReport.additionalInformation' | translate }}</th>
+                      <th class="w-26">{{ 'bcms.testReport.result' | translate }}</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <ng-container formArrayName="testResults">
+                      <tr *ngFor="let businessFun of testResultsControls; let i = index" [formGroupName]="i">
+                        <td class="align-top text-center">{{i+1}}</td>
+                        <td class="align-top">{{businessFun.get('businessFunctionsName')?.value}}</td>
+                        <td class="align-top">
+                          <div class="" id="">
+                            <div class="w-100">
+                              <label class="options">
+                                <input type="radio" formControlName="recoveryProcedures" value="1" [id]="'recoveryProcedures' + i">
+                                {{ 'common.yes' | translate }}
+                              </label>
+                              <label class="options">
+                                <input type="radio" formControlName="recoveryProcedures" value="0" [id]="'recoveryProcedures' + i">
+                                {{ 'common.no' | translate }}
+                              </label>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="align-top">
+                          <div class="w-100 p-0 mb-2">
+                            <mat-form-field appearance="fill" class="w-100">
+                              <textarea matInput rows="3" formControlName="additionalInformation" [id]="'additionalInformation' + i"></textarea>
+                            </mat-form-field>
+                            <mat-error *ngIf="businessFun.hasError('requiredAI')">{{ 'bcms.testReport.informationRequired' | translate }}</mat-error>
+                          </div>
+                        </td>
+                        <td class="align-top">
+                          <div class="w-100 p-0 mb-2">
+                            <select class="form-control-plaintext fldcolor" [id]="'staticEmail' + i" formControlName="result" (change)="initializeCPInput()">
+                              <option *ngFor="let status of testReportData.OverAllStatus" [id]="status.overAllStatusID"
+                                [value]="status.overAllStatusID">
+                                {{status.overAllStatus}}
+                              </option>
+                            </select>
+                            <div *ngIf="testResultsControls?.length == 1 && reportDataForm.get('testResults')!.value[0].result == '2' && intializeCPF">
+                              <form [formGroup]="completionPercentForm">
+                                <label for="completionPercent">{{ 'bcms.testReport.enterCompletionPercentage' | translate }}</label>
+                                <input type="number" class="form-control-plaintext fldcolor custom-select forlblLeft" id="completionPercent"
+                                  name="completionPercent" formControlName="completionPercent" min="0" max="100" (keyup)="limitNumber()"/>
+                                <mat-error *ngIf="(submitted || f1['completionPercent'].touched) && completionPercentForm.get('completionPercent')?.hasError('min') || completionPercentForm.get('completionPercent')?.hasError('max') || completionPercentForm.get('completionPercent')?.hasError('pattern')">
+                                  {{ 'bcms.testReport.rangeError' | translate }}
+                                </mat-error>
+                              </form>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="5">
+                          <mat-error *ngIf="testResultsInvalid() && (testResultsControls.length > 0 && submitted)|| (testResultsControls?.length == 1 && (reportDataForm.get('testResults')!.value[0].result == '2') && ['0%', '0', '', null].includes(completionPercentForm.get('completionPercent')!.value) && !rangeErrorCP)">
+                            {{ 'common.allFieldsMandatory' | translate }}
+                          </mat-error>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td colspan="5" class="align-top text-center p-2">
+                          <div class="w-100 overallTestResult d-flex align-items-center">
+                            <div class="overallTxt text-start w-50 fw-bold">{{ 'bcms.testReport.overallTestResults' | translate }}</div>
+                            <div class="w-50 text-end">
+                              <table class="float-end">
+                                <tbody>
+                                  <tr>
+                                    <td class="text-end w-60">{{ 'bcms.testReport.successful' | translate }}</td>
+                                    <td>
+                                      <div class="green text-start"><span
+                                          class="statusdot green"></span>{{testReportData?.OverAllReportData[0]?.TestResult[0].percentage}}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-end w-60">{{ 'bcms.testReport.partiallySuccessful' | translate }}</td>
+                                    <td>
+                                      <div class="orange text-start"><span
+                                          class="statusdot orange"></span>{{testReportData?.OverAllReportData[0]?.TestResult[1].percentage}}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                  <tr>
+                                    <td class="text-end w-60">{{ 'bcms.testReport.failed' | translate }}</td>
+                                    <td>
+                                      <div class="red text-start"><span
+                                          class="statusdot red"></span>{{testReportData?.OverAllReportData[0]?.TestResult[2].percentage}}
+                                      </div>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </ng-container>
+                  </tbody>
+                </table>
+              </div>
+              <div class="question d-flex justify-content-start mt-4">
+                <span class="w-3">6. </span>
+                <span>{{ 'bcms.testReport.overallTestObservations' | translate }} <b class="smallgrey fw-normal">{{ 'bcms.testReport.overallTestObservationsDesc' | translate }}</b><sup class="red">*</sup></span>
+              </div>
+              <div class="answer" id="" formGroupName="actionItems">
+                <div class="w-100 vscroll" style="height: 30vh;" id="actionItemDiv">
+                  <table class="w-t blContent" mat-table
+                    [dataSource]="service.TableTO" id="addTestObservation">
+                    <ng-container matColumnDef="Index">
+                      <th mat-header-cell *matHeaderCellDef class="w-4">#</th>
+                      <td mat-cell *matCellDef="let row" class="w-4 text-center"> {{row.Index}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TestObservation">
+                      <th mat-header-cell *matHeaderCellDef class="w-25">{{ 'bcms.testReport.testObservationLearning' | translate }}</th>
+                      <td mat-cell *matCellDef="let row" class="w-25 text-left">
+                        <div *ngIf="!row.isEdit" class="word-wrap-text" style="padding: 5px 0px;">
+                          {{row.TestObservation}}</div>
+                        <div *ngIf="row.isEdit">
+                          <mat-form-field appearance="fill" style="width: 10vw;">
+                            <textarea matInput formControlName="testObservation" cols="90" id="TestObservation"
+                              (keyup)="onTestObservationChange()" class="text-area">{{row.TestObservation}}</textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ActionItem">
+                      <th mat-header-cell *matHeaderCellDef class="w-25">{{ 'bcms.testReport.actionItem' | translate }}</th>
+                      <td mat-cell *matCellDef="let row" class="w-25 text-left">
+                        <div *ngIf="!row.isEdit" class="word-wrap-text" style="padding: 5px 0px;">{{row.ActionItem}}
+                        </div>
+                        <div *ngIf="row.isEdit">
+                          <mat-form-field appearance="fill" style="width: 10vw;">
+                            <textarea matInput formControlName="actionItem" cols="90" id="ActionItem"
+                              (keyup)="onActionItemChange()" class="text-area">{{row.ActionItem}}</textarea>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="ActionItemOwner">
+                      <th mat-header-cell *matHeaderCellDef class="w-16">{{ 'bcms.testReport.actionItemOwner' | translate }}</th>
+                      <td mat-cell *matCellDef="let row" class="w-16 text-left">
+                        <div *ngIf="!row.isEdit" class="word-wrap-text" style="padding: 5px 0px;">
+                          {{row.ActionItemOwner}}</div>
+                        <div *ngIf="row.isEdit">
+                          <mat-form-field appearance="fill" style="width: 10vw">
+                            <input type="text" [placeholder]="'bcms.testReport.selectActionItemOwner' | translate" matInput
+                              formControlName="actionItemOwner" [matAutocomplete]="actionItem"
+                              _MatAutocompleteOriginBase="action" (input)="filterActionOwnerList($event)"
+                              (keydown.enter)="$event.preventDefault()" id="threadCatId"  #autoCompleteActionInput>
+                            <mat-autocomplete #actionItem="matAutocomplete" connectedTo="action">
+                              <mat-option *ngFor="let actionItem of filteredActionItemOnwers"
+                                [value]="actionItem.ActionItemOwnerName" [id]="actionItem.ActionItemOwnerName"
+                                (onSelectionChange)="setActionItemGUID(actionItem)">
+                                {{ actionItem.ActionItemOwnerName }}
+                              </mat-option>
+                            </mat-autocomplete>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="TargetDate">
+                      <th mat-header-cell *matHeaderCellDef class="w-12">{{ 'bcms.testReport.targetDate' | translate }}</th>
+                      <td mat-cell *matCellDef="let row" class="w-12 text-left">
+                        <div *ngIf="!row.isEdit" class="word-wrap-text" style="padding: 5px 0px;">{{row.FormatedDate}}
+                        </div>
+                        <div *ngIf="row.isEdit">
+                          <mat-form-field appearance="fill" (click)="picker1.open()" style="width: 8vw;">
+                            <input matInput formControlName="targetDate" [matDatepicker]="picker1"
+                              id="actionitemtargetDate" (keydown.enter)="$event.preventDefault()"
+                              (dateChange)="setTargetDate()">
+                            <mat-datepicker-toggle id="targetDateToggle" matSuffix
+                              [for]="picker1"></mat-datepicker-toggle>
+                            <mat-datepicker id="targetDate" #picker1></mat-datepicker>
+                          </mat-form-field>
+                        </div>
+                      </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="Action">
+                      <th mat-header-cell *matHeaderCellDef class="w-18"></th>
+                      <td mat-cell *matCellDef="let row" class="w-18 text-center">
+                        <ng-container *ngIf="!row.isEdit">
+                          <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                            matTooltip="Edit" color="primary" (click)="editActionItem(row)" id="editAction"
+                            [disabled]="blockActionEdit">
+                            <mat-icon>edit</mat-icon>
+                          </button>
+                          <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                            matTooltip="Delete" color="primary" (click)="deleteActionItem(row)" id="deleteAction"
+                            [disabled]="blockActionEdit">
+                            <mat-icon>delete</mat-icon>
+                          </button>
+                        </ng-container>
+                        <ng-container *ngIf="row.isEdit">
+                          <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                            matTooltip="Save" color="primary" [disabled]="!getSaveActionDisable()" id="saveAction"
+                            (click)="saveActionitem(row)"><mat-icon>save</mat-icon>
+                          </button>
+                          <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                            matTooltip="cancel" color="primary" (click)="cancelActionItem(row)"
+                            id="closeAction"><mat-icon>close</mat-icon>
+                          </button>
+                        </ng-container>
+                      </td>
+                    </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsAI; sticky: true"
+                      class="table-bg-header-color"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsAI;"></tr>
+                    <tr *matNoDataRow>
+                      <td [attr.colspan]="displayedColumnsAI.length">{{ 'bcms.testReport.noActionItems' | translate }}</td>
+                    </tr>
+                  </table>
+                </div>
+                <div class="w-100 p-1 text-end">
+                  <div>
+                    <button class="btn btn-primary modalColorBtn modalColorBtnGreen forBoxAction" [disabled]="blockActionEdit" id="addItem"
+                      (click)="addActionItem()" *ngIf="[16, 17].includes(testWorkflowStatusID)">
+                      <span class="fw-bold">+</span> {{ 'common.addNew' | translate }}
+                    </button>
+                  </div>
+                </div>
+                <mat-error *ngIf="observationExists && !actionItemExists && !minEndDateError">{{ 'bcms.testReport.testObservationExists' | translate }}</mat-error>
+                <mat-error *ngIf="actionItemExists && !observationExists && !minEndDateError">{{ 'bcms.testReport.actionItemExists' | translate }}</mat-error>
+                <mat-error *ngIf="observationExists && actionItemExists">{{ 'bcms.testReport.testObservationAndActionExists' | translate }}</mat-error>
+                <mat-error *ngIf="!(observationExists && actionItemExists) && minEndDateError">{{ 'bcms.testReport.targetDateFuture' | translate }}</mat-error>
+                <mat-error *ngIf="(actionItemSubmit && service.TableTO.data?.length == 0)">{{ 'bcms.testReport.atLeastOneActionItem' | translate }}</mat-error>
+                <mat-error *ngIf="(actionItemSubmit && checkTestObservationSave(service.TableTO.data) && !(observationExists || actionItemExists || minEndDateError))">{{ 'bcms.testReport.pleaseSaveActionItem' | translate }}</mat-error>
+              </div>
+
+              <div class="question d-flex justify-content-start mt-4">
+                <span class="w-3">7. </span>
+                <span>{{ 'bcms.testReport.rootCauseAnalysis' | translate }}<sup class="red">*</sup></span>
+              </div>
+              <div class="answer" id="" *ngIf="intializeCKEditor">
+                <ckeditor formControlName="rootCauseAnalysis" id="rootCauseAnalysis" [readOnly]="testWorkflowStatusID == 18"
+                  [config]="!(testWorkflowStatusID == 18)? ckeConfigRC : disabledCkeConfigRC" [editorUrl]="ckeConfigRC.ckeditorUrl" debounce="300"></ckeditor>
+                <mat-error *ngIf="(submitted || f['rootCauseAnalysis'].touched) && f['rootCauseAnalysis'].errors">{{ 'bcms.testReport.enterRootCauseAnalysis' | translate }}</mat-error>
+              </div>
+            </form>
+          </div>
+          <div class="col-12 px-0 mt-4 mb-4">
+            <mat-error *ngIf="saveerror" class="mt-2 ms-4">{{saveerror}}</mat-error>
+            <div class="footerBtn text-center">
+              <button class="btn btn-primary modalColorBtn textDetailBtn" (click)="saveReportData(1)" id="savebottom"
+                *ngIf="[16, 17].includes(testWorkflowStatusID)">
+                <span class="fw-bold">
+                  <img src="./assets/images/icon-application.svg">
+                </span> {{ 'common.save' | translate }}
+              </button>
+            </div>
+          </div>
+        </mat-expansion-panel>
+      </div>
+      <div class="col-4 ps-0 pe-3 h-100 position-relative">
+        <app-bcms-test-details></app-bcms-test-details>
+        <div class="w-100 mt-4 d-flex justify-content-end text-end" id="scrollMiddle">
+          <div class="me-2">
+            <button class="btn btn-primary modalColorBtn textDetailBtn forBoxAction" (click)="saveReportData()" id="saveMiddle"
+            *ngIf="[16, 17].includes(testWorkflowStatusID)">
+              <span class="fw-bold">
+                <i class="fa fa-file-o" aria-hidden="true"></i>
+              </span> {{ 'common.save' | translate }}
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-primary modalColorBtn modalColorBtnGreen textDetailBtn forBoxAction" (click)="publishReportData()"
+            *ngIf="[16, 17].includes(testWorkflowStatusID)" id="publishReport">
+              <span class="fw-bold">
+                <img src="./assets/images/icon-filecheck.svg"/>
+              </span> {{ 'common.publishReport' | translate }}
+            </button>
+          </div>
+        </div>
+        <mat-error *ngIf="saveerror" class="mt-2">{{saveerror}}</mat-error>
+        <app-review-comments-history></app-review-comments-history>
+      </div>
+    </div>
+  </div>
+</div>

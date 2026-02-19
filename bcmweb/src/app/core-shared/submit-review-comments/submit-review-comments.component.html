@@ -1,0 +1,135 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{parent.data.modalTitle}}</h5>
+  <button type="button" id="closeButton" class="close customClose example-icon" aria-label="Close" mat-icon-button
+    mat-dialog-close>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+  <div class="row mx-3">
+    <label for="" class="col-12 p-0 col-form-label slctLbl text-start mt-4">{{parent.data.modalBodyTitle}}</label>
+    <div class="col-5 ps-0 pe-5">
+      <div class="row mx-0">
+        <div class="col-12 px-0" *ngIf="parent.data.isDropdown?.required">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">{{parent.data.dropDownLable}}</label>
+          <!-- <select [disabled]="this.parent.BCOwner" class="form-control-plaintext fldcolor" id="dorpDown" [(ngModel)]="dropdownValue">
+              <option *ngFor="let drop of parent.data.isDropdown?.dropdownData" [value]="drop.value">{{drop.value}}</option>
+          </select> -->
+
+          <mat-form-field class="w-100">
+            <mat-select matSelectSearch id="dorpDown" [disabled]="this.parent.BCOwner"
+              placeholder="Select " [(ngModel)]="dropdownValue">
+              <mat-option *ngFor="let drop of parent.data.isDropdown?.dropdownData" [value]="drop.value">
+                <span class="d-inline-flex align-items-center">
+                  {{drop.value}}
+                  <i class="fa fa-info-circle ms-2 bia-rating-help-icon" 
+                     *ngIf="drop.description"
+                     [matTooltip]="drop.description"
+                     matTooltipClass="bia-rating-tooltip"
+                     matTooltipPosition="right"
+                     aria-label="BIA Rating description"></i>
+                </span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+        </div>
+        <mat-error *ngIf="checkValueExists(dropdownValue) && submitted && parent.data.isDropdown?.required"
+          class="p-0 mt-3 text-start">Selection is required</mat-error>
+
+        <div class="col-12 px-0" *ngIf="parent.data.isDecision?.required">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">{{parent.data.dropdownLable}} <sup
+              class="red">*</sup></label>
+          <div *ngIf="parent.data.isDecision?.required">
+            <div class="radioTxt" *ngFor="let item of parent.data.isDecision.optionData" [ngClass]="item.class"
+              style="border-radius: 1.3vh;"><label class="mb-0" style="cursor: pointer;"><input type="radio" [(ngModel)]="status"
+                  [value]="item.id" name="rd1" [id]="item.id" aria-label="select"> {{item.value}}</label></div>
+          </div>
+        </div>
+        <mat-error *ngIf="checkValueExists(status) && submitted && parent.data.isDecision?.required"
+          class="p-0 mt-3 text-start">Decision Selection is required</mat-error>
+
+        <div class="col-12 px-0">
+          <label for="riskOnwerComments"
+            class="w-100 p-0 col-form-label slctLbl text-start mt-4">{{parent.data.commentLabel}} <sup
+              class="red">*</sup></label>
+          <mat-form-field appearance="fill" class="w-100">
+            <textarea matInput class="text-area" id="riskOnwerComments" rows="5"
+              [(ngModel)]="reviewComments"></textarea>
+          </mat-form-field>
+        </div>
+        <mat-error *ngIf="!reviewComments && submitted" class="p-0 mt-3 text-start">Comments required</mat-error>
+      </div>
+    </div>
+
+    <div class="col-7 ps-5 pe-0">
+      <div class="row mx-0">
+        <div class="col-12 p-0 mt-4 mb-2 position-relative">
+          <mat-expansion-panel class="submit-comment" id="commentHistory" [expanded]="true">
+            <mat-expansion-panel-header
+              style="padding: 1.5vw; height: 3vw; background-color: #C6E9D8; border: 1px solid #BBBBBB;">
+              <mat-panel-title style="font-size: 140%;color: #000;">
+                <img src="./assets/images/icon-review.svg" alt="" class="me-2">
+                Comments History
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <!-- <div class="card-body bodyAccordion" style="padding: 0 1.5vw; overflow-y: auto; max-height: 20vw;">
+              <div class="w-100 position-relative reviewComments mt-5 p-0" *ngFor="let each of reviewCommentsHistory">
+                <span class="position-absolute reviewDate"><i>{{getDateFormat(each.CreatedDate)}}</i></span>
+                <div class="d-flex align-items-start mb-3">
+                  <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                  <p>
+                    <i><strong>{{each.TagName}}</strong></i>
+                    <br><strong>{{each.CommentedByUserName}}</strong><br>
+                    {{each.CommentBody}}
+                  </p>
+                </div>
+              </div>
+              <div class="w-100 position-relative reviewComments mt-5 p-0" *ngIf="reviewCommentsHistory?.length == 0"
+                style="padding: 3vw; font-size: 2rem; text-align: center;">No Comments</div>
+            </div> -->
+            <div id="collapseSix" class="collapse show vscroll" aria-labelledby="headingSix" data-bs-parent="#accordion4"
+              style="height: 70vh;">
+              <div class="card-body bodyAccordion" *ngFor="let comm of reviewCommentsHistory">
+                <div class="w-100 reviewComments mt-5">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                      <i style="margin-left: 2vh;"><strong>{{comm.TagName}}</strong></i>
+                    </div>
+                    <div>
+                      <i class="reviewDate" style="white-space: nowrap; margin-right: 2vh">{{getDateFormat(comm.CreatedDate)}}</i>
+                    </div>
+                    <!-- <div class="reviewDate" style="white-space: nowrap;">
+                                      <i>{{getDateFormat(comm.CreatedDate)}}</i>
+                                    </div> -->
+                  </div>
+                  <div class="d-flex align-items-start mt-2">
+                    <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                    <p>
+                      <strong>{{comm.CommentedByUserName}}</strong><br>{{(comm.CommentBody)}}
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div class="w-100 position-relative reviewComments mt-5 p-0" *ngIf="reviewCommentsHistory?.length == 0"
+                style="padding: 3vw; font-size: 2rem; text-align: center;">No Comments</div>
+            </div>
+          </mat-expansion-panel>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<mat-error class="ms-5">{{saveerror}}</mat-error>
+
+<div class="modal-footer modalFooter" style="display: flex;justify-content: space-between;">
+  <div>
+    <label><strong> Current Status :</strong></label> {{currentStep}}
+  </div>
+  <div>
+  <button type="button" class="btn btn-secondary modalCancelBtn me-2" mat-dialog-close id="cancelButton">Cancel</button>
+  <button type="button" class="btn btn-primary modalColorBtn" (click)="submitReviewComments()" id="submitButton"><img
+      src="./assets/images/icon-send.svg" alt="">
+    {{parent.data.buttonLabel}}</button>
+  </div>
+</div>

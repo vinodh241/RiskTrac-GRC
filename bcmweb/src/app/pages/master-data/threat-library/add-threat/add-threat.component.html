@@ -1,0 +1,215 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5">{{parent.headerName}}
+    <span *ngIf="this.parent.from == 1 && threadData.isThreatLinkedToAssessment" style="font-size: small;">(The risk
+      details cannot be edited(except Risk owner) as it is associated with the assessment)</span>
+  </h5>
+  <button type="button" class="close customClose p-0" mat-icon-button (click)="resetThreat()" cdkFocusInitial
+    mat-dialog-close id="threatClose">
+    <span>&times;</span>
+  </button>
+</div>
+<form [formGroup]="defineThreatLibraryForm">
+  <div class="modal-body greyModalBody vscroll" style="height: 56vh;">
+    <div class="row mx-3">
+      <div class="col-5 ps-0 pe-5">
+        <div class="row mx-0">
+          <div class="col-12 px-0">
+            <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="issueTitle">Issue / Risk Title<sup
+                  class="red">*</sup> </label></div>
+            <mat-form-field appearance="fill">
+              <input matInput formControlName="riskTitle" placeholder="Enter Title"
+                (keydown.enter)="$event.preventDefault()" id="issueTitle" (keyup)="checkIssueExist($event)" />
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['riskTitle'].touched) && f['riskTitle'].errors">Enter Issue / Risk
+              Title</mat-error>
+            <mat-error *ngIf="(submitted || f['riskTitle'].touched) && isIssueExists">Issue / Risk already
+              exists</mat-error>
+          </div>
+
+          <div class="col-12 px-0">
+            <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="description">Description<sup
+                  class="red">*</sup></label></div>
+            <mat-form-field appearance="fill">
+              <textarea matInput formControlName="riskDescription" rows="4" id="description"
+                placeholder="Enter Description"></textarea>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['riskDescription'].touched) && f['riskDescription'].errors">Enter
+              Description</mat-error>
+          </div>
+
+          <div class="col-12 px-0">
+            <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="riskOnwer">Risk Owner<sup
+                  class="red">*</sup></label></div>
+            <mat-form-field appearance="fill">
+              <input type="text" placeholder="Choose Risk Owner" matInput formControlName="riskOwnerName"
+                [matAutocomplete]="auto" _MatAutocompleteOriginBase="risk" (input)="filterOwners($event)"
+                (keydown.enter)="$event.preventDefault()" matAutocompletePosition="above" id="riskOnwer">
+              <img src="./assets/images/icon-site-bcposition.svg" class="vmiddleRight position-absolute formIconMddl2"
+                alt="">
+              <mat-autocomplete #auto="matAutocomplete" connectedTo="risk">
+                <mat-option *ngFor="let owner of this.filteredOwners" [value]="owner.RiskOwnerName"
+                  [id]="owner.RiskOwnerName" (onSelectionChange)="setOwnerID(owner)">
+                  {{ owner.RiskOwnerName }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['riskOwnerName'].touched) && f['riskOwnerName'].errors">Select Risk
+              Owner</mat-error>
+            <mat-error *ngIf="submitted && isOwnerExists">Please select derived Risk Owner</mat-error>
+          </div>
+
+          <div class="col-12 px-0">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4">Effectiveness
+              of Current Controls <sup class="red" *ngIf="checkCCLenght()">*</sup></label>
+            <div class="d-flex justify-content-start py-3">
+              <div class="me-4" *ngFor="let item of service.infoData?.ControlEffectivenessList">
+                <label [matTooltip]="getTooltipData()"><input type="radio" name="effectivenessCC" [id]="item.ControlEffectivenessID"
+                    [value]="item.ControlEffectivenessID" formControlName="effectivenessCC"
+                    aria-label="select" (keydown.enter)="$event.preventDefault()"/>
+                  {{item.ControlEffectiveness}}
+                </label>
+              </div>
+            </div>
+            <mat-error style="margin-top: -0.5vw;"
+              *ngIf="checkCCLenght() && (submitted || f['effectivenessCC'].touched) && f['effectivenessCC'].errors">Select
+              Effectiveness Of Current Controls</mat-error>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-7 ps-5 pe-0">
+        <div class="row mx-0">
+          <div class="col-5 ps-0 pe-2">
+            <label for="threadCatId" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Threat Category <sup
+                class="red">*</sup></label>
+            <mat-form-field appearance="fill">
+              <input type="text" placeholder="Select Category" matInput formControlName="threadCategory"
+                [matAutocomplete]="auto1" _MatAutocompleteOriginBase="thread" (input)="filterThread($event)"
+                (keydown.enter)="$event.preventDefault()"  id="threadCatId">
+              <mat-autocomplete #auto1="matAutocomplete" connectedTo="thread">
+                <mat-option *ngFor="let category of threadList" [value]="category.ThreatCategory"
+                  [id]="category.ThreatCategory" (onSelectionChange)="setThreadID(category)">
+                  {{ category.ThreatCategory }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+
+            <mat-error *ngIf="(submitted || f['threadCategory'].touched) && f['threadCategory'].errors">Select
+              Threat Category</mat-error>
+          </div>
+
+          <div class="col-5 ps-2 pe-2" *ngIf="!(this.parent.from != 2)"></div>
+          <div class="col-5 ps-2 pe-2" *ngIf="this.parent.from != 2">
+            <div class="w-100 p-0 col-form-label slctLbl text-left mt-4"> <label for="riskCode">Risk Code<sup
+                  class="red">*</sup></label></div>
+            <mat-form-field appearance="fill">
+              <input matInput formControlName="riskCode" (keydown.enter)="$event.preventDefault()" id="riskCode"
+                placeholder="Code will be auto generated after threat creation"/>
+            </mat-form-field>
+            <mat-error *ngIf="(submitted || f['riskCode'].touched) && f['riskCode'].errors">Enter Risk Code</mat-error>
+          </div>
+
+          <div class="col-2 ps-2 pt-2 pe-0 position-relative">
+            <div class="w-100 ciaBox text-center position-relative"
+              [ngClass]="(submitted && selectedImpactIDs.length == 0)? 'h-74':'h-90' ">
+              <div class="pt-2 pe-2 text-right"><sup class="red">*</sup></div>
+              <div class="d-flex justify-content-between p-2 position-absolute vhmiddle w-100">
+                <div class="text-center p-2" *ngFor="let impact of service.infoData?.ThreatImpactMaster">
+                  <label [for]="impact.ThreatImpactID"
+                    class="w-100 p-0 col-form-label slctLbl text-center">{{impact.ThreatImpactCode}}</label>
+                  <input type="checkbox" (change)="storeImpact(impact.ThreatImpactID)" class="me-0"
+                    [checked]="isImpactChecked(impact.ThreatImpactID)" name="impact"
+                    [disabled]="this.parent.from == 1 && this.threadData.isThreatLinkedToAssessment && (mode != 'Add')"
+                    [id]="impact.ThreatImpactID" aria-label="select" (keydown.enter)="$event.preventDefault()">
+                </div>
+              </div>
+            </div>
+            <mat-error class="position-absolute" *ngIf="(submitted && selectedImpactIDs.length == 0)">Select
+              Impact</mat-error>
+          </div>
+        </div>
+
+        <div class="w-100 p-0 mb-2 position-relative">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-left mt-4">Current Controls</label>
+          <div class="w-100 ModaltableContent ModaltableContentBlue">
+            <div class="w-100 heightVH-22 vscroll" id="controlsDiv">
+              <table class="w-100 modalTble seablueTble smallTable addThreat fixedTbleHead" mat-table
+                [dataSource]="service.TableCC" id="addControl">
+                <ng-container matColumnDef="Index">
+                  <th mat-header-cell *matHeaderCellDef class="w-5"> </th>
+                  <td mat-cell *matCellDef="let row" class="w-5 text-center"> {{row.Index}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Description">
+                  <th mat-header-cell *matHeaderCellDef class="w-80"> </th>
+                  <td mat-cell *matCellDef="let row" class="w-80 text-left">
+                    <div *ngIf="!row.isEdit" class="word-wrap-text" style="padding: 5px 0px;">{{row.Description}}</div>
+                    <div *ngIf="row.isEdit">
+                      <mat-form-field appearance="fill">
+                        <textarea matInput [value]="row.Description" cols="90" id="currentCDes"
+                          (keyup)="onChange($event)" class="text-area">{{row.Description}}</textarea>
+                      </mat-form-field>
+                    </div>
+                  </td>
+                </ng-container>
+
+                <ng-container matColumnDef="Action">
+                  <th mat-header-cell *matHeaderCellDef class="w-15"> </th>
+                  <td mat-cell *matCellDef="let row" class="w-15 text-center">
+                    <ng-container *ngIf="!row.isEdit">
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="Edit" color="primary" (click)="editControl(row)" id="controlEdit"
+                        [disabled]="blockEdit || (this.parent.from == 1 && this.threadData.isThreatLinkedToAssessment && (mode != 'Add'))">
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="Delete" color="primary" (click)="deleteControl(row)" id="deleteSave"
+                        [disabled]="blockEdit || (this.parent.from == 1 && this.threadData.isThreatLinkedToAssessment && (mode != 'Add'))">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </ng-container>
+                    <ng-container *ngIf="row.isEdit">
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="Save" color="primary" [disabled]="!this.controlData.trim()" id="saveControl"
+                        (click)="saveControl(row)"><mat-icon>save</mat-icon>
+                      </button>
+                      <button mat-icon-button class="material-icons app-toolbar-menu save-button custom-button"
+                        matTooltip="cancel" color="primary" (click)="cancel(row)"
+                        id="closeControl"><mat-icon>close</mat-icon>
+                      </button>
+                    </ng-container>
+                  </td>
+                </ng-container>
+                <tr mat-row *matRowDef="let row; columns: displayedColumnsCC;"></tr>
+                <tr *matNoDataRow>
+                  <td [attr.colspan]="displayedColumnsCC.length">No controls are added yet.</td>
+                </tr>
+              </table>
+            </div>
+            <div class="w-100 px-0 text-end py-4">
+              <div><button class="btn btn-primary modalColorBtn modalColorBtnGreen minwidth10vw"
+                  [disabled]="blockEdit || (this.parent.from == 1 && this.threadData.isThreatLinkedToAssessment && (mode != 'Add'))"
+                  id="addCurrentControl" (click)="addControl()"><span class="font-weight-bold">+</span> Add New</button>
+              </div>
+            </div>
+          </div>
+          <mat-error *ngIf="controlExists">Control Already Exists.</mat-error>
+          <!-- <mat-error *ngIf="(controlSubmit && service.TableCC.data?.length == 0)">Atleast one current control is required.</mat-error> -->
+          <mat-error *ngIf="(!controlExists && (controlSubmit && checkControlSave(service.TableCC.data)))">Please save
+            the control.</mat-error>
+          <!-- <div class="w-100 h-20 px-0 text-left py-1">
+            <div><button mat-button class="btn btn-primary modalColorBtn modalColorBtnGreen" [disabled]="blockEdit" id="addCurrentControl"
+                (click)="addControl()"><span class="font-weight-bold">+</span> Add</button></div>
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+  <mat-error class="ms-5" *ngIf="saveerror">{{saveerror}}</mat-error>
+  <div class="modal-footer modalFooter">
+    <button mat-dialog-close class="btn btn-secondary modalCancelBtn me-2" id="cancelThreat"
+      (click)="resetThreat()">Cancel</button>
+    <button class="btn btn-primary modalColorBtn" (click)="onSubmit()" id="saveThreat"><img
+        src="./assets/images/icon-application.svg" class="me-1" alt="">{{mode == "Add" ? 'Add New Risk' : 'Update Risk'}}</button>
+  </div>
+</form>

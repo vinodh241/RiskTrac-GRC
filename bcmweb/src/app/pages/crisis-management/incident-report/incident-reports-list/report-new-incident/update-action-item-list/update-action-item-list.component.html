@@ -1,0 +1,50 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">{{parent.modalTitle}}</h5>
+  <button type="button" id="closeButton" class="close customClose example-icon" aria-label="Close" mat-icon-button mat-dialog-close>
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body greyModalBody vscroll" style="height: 23vw !important;">
+  <div class="row mx-3">
+    <div class="col-12 ps-0 pe-0">
+      <div class="d-flex align-items-end">
+        <mat-error for="" class="p-0 col-form-label slctLbl text-start mt-4 me-2">Listed action item owners are not valid as they are now Site admin Head for updated Incident Locations.
+        </mat-error>
+      </div>
+      <section class="w-94 ModaltableContent tableBgWhite vscroll h-100 pt-0" tabindex="0" style="max-height: 40vh;min-height: 40vh;">
+        <table mat-table [dataSource]="updateActionItem" class="table-striped" id="reportTable">
+
+          <ng-container matColumnDef="Index">
+            <th mat-header-cell *matHeaderCellDef class="w-5" style="border-right: 1px solid #fff;"> # </th>
+            <td mat-cell *matCellDef="let row; let i = index" class="w-5" style="padding-left: 8px;text-align: center;">{{i+1}}</td>
+          </ng-container>
+
+          <ng-container matColumnDef="ActionItemIndex">
+            <th mat-header-cell *matHeaderCellDef class="w-25" style="border-right: 1px solid #fff; padding-left: 8px;">
+              Action Item Index </th>
+            <td mat-cell *matCellDef="let row" class="w-25" style="padding-left: 8px;"> {{row.Index}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ActionItem">
+            <th mat-header-cell *matHeaderCellDef class="w-35" style="border-right: 1px solid #fff; padding-left: 8px;">
+              Action Item </th>
+            <td mat-cell *matCellDef="let row" class="w-35" style="padding-left: 8px;"> {{row.ActionItem}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="ActionItemOwner">
+            <th mat-header-cell *matHeaderCellDef class="w-45" style="border-right: 1px solid #fff; padding-left: 8px;">
+              Action Item Owner </th>
+            <td mat-cell *matCellDef="let row" class="w-45" style="padding-left: 8px;"> {{row.ActionItemOwner}} </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true" class="table-bg-header-color"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr *matNoDataRow><td [attr.colspan]="displayedColumns.length">No data found.</td></tr>
+        </table>
+      </section>
+    </div>
+  </div>
+</div>
+<div class="modal-footer modalFooter">
+  <button type="button" class="btn btn-secondary modalCancelBtn me-3" mat-dialog-close>Cancel</button>
+</div>

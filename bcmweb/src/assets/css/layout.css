@@ -1,6 +1,6 @@
 /* .cardGen {border-radius: 0.3vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 100%; width: calc(100% / 3); padding: 1px;} */
 .cardGen {border-radius: 0.3vh; box-shadow: 0px 5px 5px 0px rgba(0, 0, 0, 0.15); height: 35vh; width: 100%; padding: 1px;}
-.cardGen .cardBody {border-radius: 0.3vh; font-size: 1.6rem;}
+.cardGen .cardBody {border-radius: 0.3vh; font-size: 1.6rem; padding:0.4%;}
 .cardGen.cardGenAuto {height: auto;}
 .cardGen.cardGenAutoAccord {height: auto; min-height: 10.2%; padding: 1px 1px 0 1px;}
 .cardGen.cardGenAutoAccordRgt {height: auto; min-height: 10.1%; padding: 1px 1px 0 1px;}

@@ -1,0 +1,229 @@
+<!-- MAODAL TWO -->
+<!--Details and Timeline Starts-->
+<div class="modal-content modalContent" style="height: 78vh;;">
+  <div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+    <h5 class="modal-title modalh5" id="staticBackdropLabel" *ngIf="mode == 'add'">{{ 'sra.addEdit.scheduleNewAssessment' | translate }}</h5>
+    <h5 class="modal-title modalh5" id="staticBackdropLabel" *ngIf="mode == 'edit'">{{ 'sra.addEdit.updateSiteRiskAssessment' | translate }}</h5>
+    <button mat-icon-button type="button" class="close customClose example-icon" id="closeID" aria-label="Close" mat-dialog-close>
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body greyModalBody vscroll" id="ScrollID" style="height: 55vh;margin-left: 2vh;margin-top: 2vh;">
+    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+      <li class="nav-item modalTabBg" role="presentation">
+        <button class="nav-link" id="pills-home-tab" data-bs-toggle="pill" data-bs-target="#pills-home" type="button"
+          role="tab" aria-controls="pills-home" aria-selected="true"
+          [ngClass]="{active: sectionname =='Details'}" (click)="onSelectTab('Details')">{{ 'sra.addEdit.detailsAndTimeline' | translate }}</button>
+    </li>
+
+      <li class="nav-item modalTabBg" role="presentation">
+        <button class="nav-link" id="pills-profile-tab" data-bs-toggle="pill" data-bs-target="#pills-profile"
+          type="button" role="tab" aria-controls="pills-profile" aria-selected="false"
+          [ngClass]="{active: sectionname =='Risk'}" (click)="onSelectTab('Risk')">{{ 'sra.addEdit.risks' | translate }}</button>
+      </li>
+
+    </ul>
+    <div class="tab-content" id="pills-tabContent">
+      <div class="tab-pane fade modaltabContentBg" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"
+        [ngClass]="sectionname =='Details'? 'show active' : ''">
+      <form [formGroup]="addSiteRisk">
+        <div class="row mx-3">
+            <div class="col-6 ps-0 pe-5">
+              <div class="row mx-0">
+                <div class="col-6 ps-0 pe-2" *ngIf="mode == 'add'">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">{{ 'sra.addEdit.site' | translate }}</label>
+                  <mat-form-field appearance="fill" style="width:46vh">
+                    <input type="text" [placeholder]="'common.search' | translate" matInput formControlName="selectedSites" id="selectedSitesID" [matAutocomplete]="auto"  (input)="siteListData($event)">
+                    <mat-autocomplete #auto="matAutocomplete">
+                     <mat-option *ngFor="let site of filteredSiteList" [value]="site.SiteName" [id]="site.SiteID" (click)="siteData(site)">
+                          {{ site.SiteName }}
+                        </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                  <div *ngIf="mode == 'add' && filteredSiteList?.length == 0 " style="color: red;">{{ 'sra.addEdit.noSitesAvailable' | translate }}</div>
+                </div>
+
+                <div class="col-6 ps-0 pe-2" *ngIf="mode == 'edit'" >
+                  <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">{{ 'sra.addEdit.site' | translate }}</label>
+                  <div *ngIf="selectedSites?.length < 80">
+                    <input type="text" class="form-control fldcolor" formControlName="selectedSites"  readonly
+                      placeholder="" id="selectedSites">
+                      </div>
+                      <div *ngIf="selectedSites?.length > 80">
+                        <textarea type="text" class="form-control fldcolor" style="width: 86vh;" rows="3" formControlName="selectedSites" readonly
+                          placeholder="" id="selectedSites"></textarea>
+                          </div>
+                </div>
+
+                <div class="col-12 px-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">{{ 'sra.addEdit.assessmentName' | translate }}</label>
+                  <div *ngIf="assessmentName?.length < 80">
+                  <input type="text" class="form-control fldcolor" formControlName="assessmentName" readonly
+                    placeholder="" id="assessmentName">
+                    </div>
+                    <div *ngIf="assessmentName?.length > 80">
+                      <textarea type="text" class="form-control fldcolor"  rows="3" formControlName="assessmentName" readonly
+                        placeholder="" id="assessmentName"></textarea>
+                        </div>
+                </div>
+
+                <div class="col-12 px-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">{{ 'sra.addEdit.assessmentCode' | translate }}</label>
+                  <input class="form-control fldcolor" placeholder="" id="assessmentCode"
+                    formControlName="assessmentCode" readonly>
+                </div>
+
+                <div class="col-6 ps-0 pe-4">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">{{ 'sra.addEdit.startDate' | translate }} <sup
+                      class="red">*</sup></label>
+
+                  <mat-form-field appearance="fill" (click)="picker.open()" class="w-100">
+                    <input matInput formControlName="startDate" id="startDateID" [min]="mindate"  [max]="maxEndDate" [matDatepicker]="picker"
+                      (keydown.enter)="$event.preventDefault()" (dateChange)="updateSelecedStartDate($event)">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['startDate'].touched) && f['startDate'].errors">{{ 'sra.addEdit.startDateRequired' | translate }}</mat-error>
+                  <mat-error *ngIf="dateError">{{ 'sra.addEdit.startDateFutureDate' | translate }}</mat-error>
+                  <mat-error *ngIf="endDateError">{{ 'sra.addEdit.startDateCannotBeAfterEndDate' | translate }}</mat-error>
+                  <mat-error *ngIf="endDateErrorValid" class="error ml-3"> {{ 'sra.addEdit.startDateCannotBeSameAsEndDate' | translate }}</mat-error>
+
+                </div>
+
+
+                <div class="col-6 ps-4 pe-0">
+                  <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">{{ 'sra.addEdit.estimatedEndDate' | translate }} <sup
+                      class="red">*</sup></label>
+
+                  <mat-form-field appearance="fill" (click)="picker1.open()" class="w-100">
+                    <input matInput formControlName="endDate" id="EndID"  [max]="maxEndDate" [matDatepicker]="picker1"
+                      (keydown.enter)="$event.preventDefault()" (dateChange)="updateSelectedEndDate()">
+                    <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                    <mat-datepicker #picker1></mat-datepicker>
+                  </mat-form-field>
+                  <mat-error *ngIf="(submitted || f['endDate'].touched) && f['endDate'].errors">{{ 'sra.addEdit.endDateRequired' | translate }}</mat-error>
+                  <mat-error *ngIf="endDateError || endDateError1" class="error ml-3"> {{ 'sra.addEdit.endDateCannotBeBeforeStartDate' | translate }}</mat-error>
+                  <mat-error *ngIf="endDateErrorValid" class="error ml-3"> {{ 'sra.addEdit.endDateCannotBeSameAsStartDate' | translate }}</mat-error>
+
+                </div>
+
+              </div>
+            </div>
+
+            <div class="col-6 ps-5 pe-0">
+
+            </div>
+          </div>
+  </form>
+
+      </div>
+      <!--Details and Timeline Ends-->
+
+      <!--Risk Starts-->
+
+      <div class="tab-pane fade modaltabContentBg" id="pills-profile" role="tabpanel"
+    aria-labelledby="pills-profile-tab" [ngClass]="sectionname =='Risk'? 'show active' : ''">
+
+    <div class="row mx-3">
+
+        <label for="" class="w-100 p-0 col-form-label slctLbl test-start mt-4">{{ 'sra.addEdit.threatCategory' | translate }}<sup
+          class="red">*</sup>
+          </label>
+        <div class="col-6 ps-0 pe-5" >
+
+            <div class="w-100 p-0 mb-2 position-relative">
+
+                <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-32">
+                    <div class="w-100 h-100 ModaltableContent tableBgWhite vscroll"  id="ScrollThreat" style="height: 38vh !important;">
+                        <table mat-table [dataSource]="ThreatData"
+                            class="tblContent colorBlueHead w-100 fixedTbleHead">
+
+                            <ng-container matColumnDef="Checkbox">
+                                <th mat-header-cell *matHeaderCellDef></th>
+                                <td mat-cell *matCellDef="let element" class="w-6" ><span
+                                        class="ps-2"><input type="checkbox" id="threatID" aria-label="select" [checked]="isChecked(element)"
+                                        (change)="selectRisk(element)" [id]="element.ThreatCategoryID">
+                                      </span></td>
+                            </ng-container>
+
+                            <ng-container matColumnDef="Position">
+                              <th mat-header-cell *matHeaderCellDef style="font-size:2.5vh;padding-top: 2vh;"><strong>#</strong></th>
+                              <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+                          </ng-container>
+
+                            <ng-container matColumnDef="ThreatCategory">
+                                <th mat-header-cell *matHeaderCellDef class="w-90" style="font-size: 2.5vh;padding-top: 2vh;"><strong>{{ 'sra.addEdit.threatCategory' | translate }}</strong>
+                                  <div class="d-inline-block position-relative searchInput me-2" style="margin-left: 30vh;">
+                                    <input [placeholder]="'common.search' | translate" class="form-control tblfilter" id="filterID" (keyup)="applyFilter($event)">
+                                    <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+                                        aria-hidden="true"></i></span>
+                                  </div>
+                                </th>
+                                <td mat-cell *matCellDef="let element" class="w-96 position-relative tableArrow">
+                                    <label class="link">
+                                        {{element.ThreatCategory}}</label>
+                                </td>
+                            </ng-container>
+
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"
+                                style="background-color: rgb(207, 205, 205);height: 6vh;"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;" style=" height: 5vh;"></tr>
+
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="showValidationMessage" class="validation-message" style="color: red;">{{ 'sra.addEdit.selectAtLeastOneCheckbox' | translate }}</div>
+        </div>
+
+        <div class="col-6 ps-5 pe-0">
+            <div class="w-100 ModaltableContent ModaltableContentBlue heightVH-32">
+                <div class="w-100 h-100 ModaltableContent tableBgWhite vscroll"  id="ScrollThreat" style="height: 38vh !important;">
+                    <table class="tblContent colorBlueHead w-100 fixedTbleHead" id="tableID">
+                        <thead>
+                            <tr>
+                                <th class="w-10 text-center" style="padding-top: 2vh;font-size: 2.5vh;height: 6vh;"><strong>#</strong></th>
+                                <th class="w-90 " style="padding-top: 2vh;font-size: 2.5vh;height: 6vh;"><strong>{{ 'sra.addEdit.issuesRisks' | translate }}</strong></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let element of riskList">
+                                <td class="w-10 text-center" let i="index">{{riskList.indexOf(element)+1}}</td>
+                                <td class="w-90">{{element.RiskTitle}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    </div>
+
+  </div>
+
+
+  <div class="modal-footer modalFooter">
+    <button type="button" class="btn btn-secondary modalCancelBtn me-2" id="cancelID" mat-dialog-close>{{ 'common.cancel' | translate }}</button>
+    <button type="button" class="btn btn-primary modalColorBtn" style="margin-right: 1vh;" id="submitID"
+      [disabled]="!addSiteRisk.valid || showValidationMessage || endDateErrorValid || endDateError || dateError || endDateError1"
+      *ngIf="sectionname =='Risk' && mode!='edit'" (click)="submit()"><img src="./assets/images/icon-prd.svg" alt="">
+      {{ 'sra.addEdit.scheduleAssessment' | translate }}</button>
+    <button type="button" class="btn btn-primary modalColorBtn" style="margin-right: 1vh;" id="submitID"
+      [disabled]="showValidationMessage || endDateErrorValid || endDateError || dateError || endDateError1"
+      *ngIf="sectionname =='Risk'&& mode=='edit' " (click)="submit()"><img src="./assets/images/icon-prd.svg" alt="">
+      {{ 'sra.addEdit.updateAssessment' | translate }}</button>
+    <!-- <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGrey btnPrevious" id="previousID" *ngIf="sectionname =='Risk'" (click)="previous()"><img
+          src="./assets/images/icon-previous.svg" alt=""> Previous</button> -->
+
+    <button type="button" class="btn btn-primary modalColorBtn modalColorBtnGrey btnPrevious" id="previousID"
+      style="background-color: #5F6468 !important;margin-right: 1vh;" [class.disabled-btn]="sectionname !== 'Risk'" [disabled]="sectionname !== 'Risk'"
+      (click)="previous()"><img src="./assets/images/icon-previous.svg" alt=""> {{ 'common.previous' | translate }}
+    </button>
+    <button type="button" class="btn btn-primary modalColorBtn modalColorBtnDarkGrey btnNext" id="nextID" style="background-color: #5F6468 !important;"
+      [class.disabled-btn]="sectionname !== 'Details'" [disabled]="sectionname !== 'Details'" (click)="next()"><img
+        src="./assets/images/icon-next.svg" alt=""> {{ 'common.next' | translate }}</button>
+  </div>
+</div>
+<!-- END MAODAL TWO -->

@@ -1,0 +1,47 @@
+::ng-deep .crisis mat-dialog-container{
+  padding: 0px !important;
+}
+
+.table-bg-header-color {
+  background-color: #E7E7E7;
+}
+
+.example-container {
+  height: 464px;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-row:hover {
+  background: #a1c2f0;
+}
+
+.custom-button {
+  outline: none;
+  border: none;
+}
+
+.custom-button:active {
+  background-color: transparent;
+}
+
+
+a.tblLnk:hover,
+a.tblLnk label,
+a.tblLnk:hover label {
+  color: #0087e7 !important;
+  text-decoration: underline;
+}
+
+.texthorizontal-position {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 95%;
+  white-space: nowrap;
+  position: absolute !important;
+  top: 50%;
+  transform: translateY(-50%);
+}

@@ -1,0 +1,63 @@
+ /* child.component.css */
+ .child-button {
+  // background-color: #384bc1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* child.component.css */
+.child-button {
+  position: relative;
+  z-index: 1; /* Ensure the button is on top */
+}
+
+.buttons.save {
+  cursor: pointer; /* Ensure the button has a pointer cursor */
+}
+
+.disable{
+  cursor: none !important;
+  pointer-events: none;
+  opacity: 0.5 !important; /* Adjust the opacity as needed */
+}
+
+.table-bg {
+  background-color: #E2EBEE;
+  padding: 0.5em;
+  border-radius: 0.2em;
+  border: 1px solid #BBBBBB;
+}
+
+.form-control-plaintext.fldcolor, select:focus-visible.form-control-plaintext.fldcolor, .form-control.fldcolor {
+  background-color: #FAFAFA;
+  box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, 0.25);
+  padding: 1rem 0.5rem;
+  outline: none;
+  outline-offset: 0;
+  font-size: 100%;
+  border-radius: 0.3vh;
+  color: #5C5C5C;
+}
+
+.normalColorBtn.modalColorBtnGreen {
+  background-color: #1C9F50;
+  height: 5vh;
+  width: 10vh;
+  font-size: 13px;
+}
+.fixed-autocomplete .mat-autocomplete-panel {
+  position: fixed !important;
+}
+.cdk-overlay-container {
+  z-index: 1000 !important;
+}.cdk-overlay-pane {
+  z-index: -1 !important;
+}

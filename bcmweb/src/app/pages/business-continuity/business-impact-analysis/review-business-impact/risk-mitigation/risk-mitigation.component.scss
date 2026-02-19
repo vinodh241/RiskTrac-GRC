@@ -1,0 +1,54 @@
+ /* child.component.css */
+ .child-button {
+  // background-color: #384bc1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+
+/* child.component.css */
+.child-button {
+  position: relative;
+  z-index: 1; /* Ensure the button is on top */
+}
+
+.buttons.save {
+  cursor: pointer; /* Ensure the button has a pointer cursor */
+}
+
+.disable{
+  cursor: none !important;
+  pointer-events: none;
+  opacity: 0.5 !important; /* Adjust the opacity as needed */
+}
+
+.normalColorBtn.modalColorBtnGreen {
+  background-color: #1C9F50;
+  height: 5vh;
+  width: 10vh;
+  font-size: 13px;
+}
+table#addCritical tr {
+  border-bottom: 1px solid #d2cbcb;
+  border-collapse: collapse;
+}
+
+table#addCritical th {
+  padding-right: 1vh;
+  border-right: 1px solid white;
+}
+
+.mat-table-padding tr:hover td {
+  background: #cedbec;
+}
+.mat-table-padding tr:nth-child(even) {
+  background-color: #f3f3f3;
+}

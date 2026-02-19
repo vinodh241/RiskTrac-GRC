@@ -1,0 +1,297 @@
+<!-- MAODAL TWO page 120 starts -->
+
+<div class="modal-content modalContent">
+  <div class="modal-header bgSeaGreenGradient text-white allModalHeader position-relative">
+    <h5 class="modal-title modalh5" id="staticBackdropLabel"
+      [matTooltip]="getItemName()?.length >= 50 ? getItemName() : '' ">Action Item
+      -{{stripSite(actionPlan?.IdentifiedActionItem, 50)}}
+      <span *ngIf="actionPlan?.IdentifiedActionItem?.length >= 50">...</span>
+    </h5>
+    <span *ngIf="actionPlan?.IdentifiedActionItem?.length >= 50" class="statusID" style="margin-right: 59vh"
+      [ngClass]="(actionPlan?.StatusID == 1) ? 'statusNotStarted' : (actionPlan?.StatusID == 2 ) ?
+          'StatusUnderReview' : (actionPlan?.StatusID == 3) ? 'statusInprogress' :(actionPlan?.StatusID == 4) ? 'statusPublished': (actionPlan?.StatusID == 6) ? 'statusCompleted':'statusDelayed'">{{actionPlan?.StatusName}}</span>
+    <span *ngIf="actionPlan?.IdentifiedActionItem?.length < 50" class="statusID" style="margin-right: 14vh"
+      [ngClass]="(actionPlan?.StatusID == 1) ? 'statusNotStarted' : (actionPlan?.StatusID == 2 ) ?
+      'StatusUnderReview' : (actionPlan?.StatusID == 3) ? 'statusInprogress' :(actionPlan?.StatusID == 4) ? 'statusPublished': (actionPlan?.StatusID == 6) ? 'statusCompleted':'statusDelayed'">{{actionPlan?.StatusName}}</span>
+
+    <div class="d-flex justify-content-right align-items-center vmiddleRight progressRight formodal">
+      <div class="overallStatus textOnlytop text-end" style="margin-left: -9vh;"> Overall Progress:
+        {{this.actionPlan?.ProgressPercentage ? this.actionPlan?.ProgressPercentage : 0}} %</div>
+      <div class="progress progressFilterBar w-40 position-absolute vmiddleRight" style="margin-right: 9vh;">
+        <div [ngClass]="{ 'progress-bar': (this.actionPlan?.ProgressPercentage) < 99, 'color-class-full': (this.actionPlan?.ProgressPercentage) == 100 }"
+          [ngStyle]="{ 'width':  this.actionPlan?.ProgressPercentage + '%', 'background-color': getColor( this.actionPlan?.ProgressPercentage) }">
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="close customClose" mat-icon-button mat-dialog-close aria-label="Close"
+      (click)="close()" id="popupclose"><span aria-hidden="true">&times;</span></button>
+  </div>
+
+  <div class="modal-body greyModalBody vscroll" style="height: 53vh;">
+    <div class="row mx-3">
+
+      <h2 class="col-12 px-0" [matTooltip]="getItemName()">{{stripSite(actionPlan?.IdentifiedActionItem, 50)}}<span
+          *ngIf="actionPlan?.IdentifiedActionItem?.length >= 90">...</span></h2>
+
+      <div class="col-6 pl-0 pr-5">
+        <div class="row mx-0">
+
+          <div class="col-12 px-0">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Action Plan</b></label>
+            <div class="fldcolor24vh" id="">
+              <ckeditor id="actionPlan" style="height: 2vh !important;" [(ngModel)]="actionPlanData" [readOnly]="true"
+                [config]="disabledCkeConfig" [editorUrl]="ckeConfig.ckeditorUrl" debounce="300"></ckeditor>
+            </div>
+          </div>
+
+          <div class="col-6 pl-0 pr-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Source</b></label>
+            <div style="word-wrap: break-word;">{{source}}</div>
+          </div>
+
+
+          <div class="col-6 pl-2 pr-0">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Module</b></label>
+            <div>{{actionPlan?.ActionItemModule}}</div>
+          </div>
+          <div class="col-6 pl-0 pr-2" *ngIf="RiskDetails?.length">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Risk</b></label>
+            <div style="word-wrap: break-word;">{{RiskDetails}}</div>
+          </div>
+
+          <div class="col-6 pl-0 pr-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Requires a Budget?</b></label>
+            <div style="display: flex;">
+              <div class="d-flex justify-content-start py-3" *ngFor="let item of BudgetList">
+                <div class="me-4"><input type="radio" [(ngModel)]="budgetStatus" [value]="item.BudgetId" name="rd2"
+                    [id]="item.BudgetId" aria-label="select" disabled="true">{{item.Budget}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 pl-2 pr-0">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Budgeted Cost</b></label>
+            <div class="w-100"><span class="me-1">{{currency}}</span><b>{{actionPlan?.BudgetedCost}}</b></div>
+          </div>
+
+          <div class="col-6 pl-0 pr-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Criticality</b></label>
+            <div style="display: flex;">
+              <div class="d-flex justify-content-start py-3" *ngFor="let item of CriticalList">
+                <div class="me-4" style="display: flex"><input type="radio" [(ngModel)]="critical"
+                    [value]="item.CriticalityID" [id]="item.CriticalityID" aria-label="select"
+                    disabled="true">{{item.CriticalityName}}</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-6 pl-2 pr-0">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Action Item Owner</b></label>
+            <div class="w-100">{{actionPlan?.ActionItemOwner}}</div>
+          </div>
+
+          <div class="col-6 pl-0 pr-2">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Start Date</b></label>
+            <div class="w-100">{{startDate |date:'MMM d, y'}}</div>
+          </div>
+
+          <div class="col-6 pl-2 pr-0 ">
+            <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Target Date</b></label>
+            <div class="w-100">{{endDate |date:'MMM d, y'}}</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-6 pl-5 pr-0">
+        <div class="row mx-0 pt-2">
+          <div class="col-12 p-0 mt-4 mb-2 position-relative">
+
+            <div id="accordion4" style="margin-top: 1.5vh;">
+              <div class="card">
+                <div class="card-header bgAccodion" id="headingSix">
+                  <h5 class="mb-0 position-relative">
+                    <button class="btn btn-link btnAccordion w-100 text-start" data-bs-toggle="collapse"
+                      data-bs-target="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                      <span class="position-absolute vmiddleRight"><i class="fa" aria-hidden="true"></i></span>
+                      <img src="./assets/images/icon-review.svg" alt="">
+                      Comments History
+                    </button>
+                  </h5>
+                </div>
+
+                <!-- <div id="collapseSix" class="collapse show vscroll" aria-labelledby="headingSix"
+                  data-bs-parent="#accordion4" style="height: 70vh;">
+                  <div class="card-body bodyAccordion" *ngFor="let comm of commentHistory">
+                    <div class="w-100 position-relative reviewComments mt-5">
+                      <span class="position-absolute reviewDate"><i>{{getDateFormat(comm.CreatedDate)}}</i></span>
+                      <div class="d-flex align-items-start">
+                        <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                        <p>
+                          <i><strong>{{comm.TagName}}</strong></i><br>
+                          <strong>{{comm.CommentedByUserName}}</strong><br>{{(comm.CommentBody)}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-100 position-relative reviewComments mt-5 p-0" *ngIf="commentHistory?.length == 0"
+                    style="padding: 3vw; font-size: 2rem; text-align: center;">No Comments</div>
+                </div> -->
+                <div id="collapseSix" class="collapse show vscroll" aria-labelledby="headingSix" data-bs-parent="#accordion4"
+                  style="height: 70vh;">
+                  <div class="card-body bodyAccordion" *ngFor="let comm of commentHistory">
+                    <div class="w-100 reviewComments mt-5">
+                      <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                          <i><strong>{{comm.TagName}}</strong></i>
+                        </div>
+                        <div>
+                          <i class="reviewDate" style="white-space: nowrap; margin-left: 14vh;">{{getDateFormat(comm.CreatedDate)}}</i>
+                        </div>
+                        <!-- <div class="reviewDate" style="white-space: nowrap;">
+                          <i>{{getDateFormat(comm.CreatedDate)}}</i>
+                        </div> -->
+                      </div>
+                      <div class="d-flex align-items-start mt-2">
+                        <img src="./assets/images/thumb-user.svg" class="align-top me-3" alt="">
+                        <p>
+                          <strong>{{comm.CommentedByUserName}}</strong><br>{{(comm.CommentBody)}}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-100 position-relative reviewComments mt-5 p-0" *ngIf="commentHistory?.length == 0"
+                    style="padding: 3vw; font-size: 2rem; text-align: center;">No Comments</div>
+                </div>
+
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider w-100 mt-4"></div>
+    <h2 class="w-100 px-0 mt-4">Progress</h2>
+    <form [formGroup]="actionItemForm">
+      <div class="row mx-0 pt-2" style="margin-top: -2vh">
+
+        <div class="col-6 pl-0 pr-4">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Update Comments</b><sup
+              class="red">*</sup></label>
+          <mat-form-field appearance="fill" class="w-100 mt-3" style="max-width: 58vh;">
+            <textarea matInput formControlName="comment" rows="3" id="comment"
+              class="form-control-plaintext fldcolor"></textarea>
+          </mat-form-field>
+          <mat-error *ngIf="(submitted || f['comment'].touched) && f['comment'].errors">Enter Comment</mat-error>
+        </div>
+
+        <div class="col-2 px-0" style="margin-left: -14vw;">
+          <label for="" class="w-100 p-0 col-form-label slctLbl text-start mt-4"><b>Progress</b><sup
+              class="red">*</sup></label>
+          <div class="w-100 d-flex justify-content-start">
+            <div class="form-control-plaintext fldcolor w-10 bgBsidefieldGrey mt-3">%</div>
+            <div class="w-90">
+              <input class="form-control-plaintext fldcolor custom-select forlblLeft  mt-3"  type="number" min="0"
+                placeholder="0" formControlName="quantity" id="quantity" (input)="enablemark()">
+            </div>
+          </div>
+          <mat-error *ngIf="(submitted && f['quantity'].errors) || f['quantity'].errors?.['min']">Enter valid
+            Percentage</mat-error>
+          <mat-error *ngIf="numErr">Progress Percentage must not exceed 100</mat-error>
+
+          <div class="position-relative" >
+            <div class="mt-4" *ngIf="!isSupp"><button type="button" [disabled] = "enableActionItem"
+                class="btn btn-primary modalColorBtn modalColorBtnGreen" data-bs-toggle="modal" (click)="upload()"
+                id="uploadBtn"><span class="fw-bold"> <img src="./assets/images/icon-attachment.svg"
+                    style="filter: invert(); width: 8%;" alt=""></span> Attach Supporting Document</button></div>
+          </div>
+        </div>
+
+        <div class="col-1 pr-0 mt-4" style="width:17vh">
+          <label class="w-100 mt-5">
+            <input type="checkbox" [checked]="actionItemForm.get('mark')?.value" aria-label="select"
+              formControlName="mark" id="mark" (input)="isChecked()">Mark Complete
+          </label>
+        </div>
+
+        <div style="width: 70vh; margin-top:2vh">
+          <label for="" class="slctLbl text-start "><b>Attachments</b></label>
+          <div class="vscroll" style="height: 20vh;">
+            <table mat-table [dataSource]="uploadedFileData" class="table-striped" id="reportTable">
+
+              <ng-container matColumnDef="Index">
+                <th mat-header-cell *matHeaderCellDef class="w-5 h-2 text-center border-right">#</th>
+                <td mat-cell *matCellDef="let row let i = index" class="w-5 text-center padding-left">{{i+1}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="OriginalFileName">
+                <th mat-header-cell *matHeaderCellDef class="w-45 h-2 border-right">Original File Name</th>
+                <td mat-cell *matCellDef="let row" class="w-45"
+                  [matTooltip]="row.OriginalFileName?.length >= 30 ? row.OriginalFileName : '' ">
+                  {{stripSite(row.OriginalFileName,30)}}
+                  <span *ngIf="row.OriginalFileName?.length >= 30">...</span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="CreatedDate">
+                <th mat-header-cell *matHeaderCellDef class="w-25 h-2 text-center border-right">Uploaded Date</th>
+                <td mat-cell *matCellDef="let row" class="w-25 text-center">
+                  {{formatTimeZone(row.CreatedDate)|date:'MMM d, y'}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="Action">
+                <th mat-header-cell *matHeaderCellDef class="w-25 h-2 text-center border-right">Action</th>
+                <td mat-cell *matCellDef="let row" class="w-25 text-center">
+
+                  <button mat-icon-button class="custom-button p-0" style="padding-left: 0.5rem;"
+                    (click)="downloadFile(row)" alt="download" id="suppDown" matTooltip="Click here to download file">
+                    <mat-icon aria-hidden="false" aria-label="Download" fontIcon="download">
+                    </mat-icon>
+                  </button>
+
+                  <button mat-icon-button class="custom-button" style="padding-left: 0.5rem;" (click)="deleteFile(row)"
+                    alt="delete" [disabled]="isDelIcon"
+                    *ngIf="(this.actionItemOwner == true && this.businessOwner) || this.actionItemOwner == true"
+                    id="suppDel" [matTooltip]="isDelIcon ? '' : 'Click here to delete file'">
+                    <mat-icon aria-hidden="false" aria-label="Delete" fontIcon="delete">
+                    </mat-icon>
+                  </button>
+
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              <tr *matNoDataRow>
+                <td [attr.colspan]="displayedColumns.length">No data found.</td>
+              </tr>
+            </table>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="modal-footer modalFooter" style="display: flex;justify-content: space-between;">
+    <div>
+      <label><strong> Current Status :</strong></label> {{this.actionPlan?.CurrentWorkFlowStatusToDB}} <br>
+    </div>
+    <div *ngIf="enableActionItem">
+     <strong>Note: Action item form will be enabled on - <span style="color:red"> {{this.infoData.FormattedStartDate}}</span> </strong>
+    </div>
+    <div>
+      <button *ngIf="isBtnEnable()" class="btn btn-primary modalColorBtn" type="button" style="margin-left: 18vh;"
+        class="btn btn-primary modalColorBtn" data-bs-toggle="modal" (click)="requestExtension()" id="btnExt">
+        <img src="./assets/images/icon-calender.svg" alt="">{{buttonExt}}</button>&nbsp;
+      <button type="button" class="btn btn-secondary modalCancelBtn" data-bs-dismiss="modal" mat-dialog-close
+        (click)="close()" id="closeNormal">Cancel</button>&nbsp;
+      <button [disabled]="!BtnEnableActionItem()  || enableActionItem" type="button" class="btn btn-primary modalColorBtn"
+        data-bs-toggle="modal" (click)="update()" id="updateName"><img src="./assets/images/icon-send.svg"
+          alt="">{{buttonName}}</button>
+    </div>
+  </div>
+</div>
+
+<!-- END MAODAL TWO page 120 ends -->

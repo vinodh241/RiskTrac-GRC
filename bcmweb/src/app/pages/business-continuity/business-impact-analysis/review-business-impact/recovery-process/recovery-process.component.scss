@@ -1,0 +1,49 @@
+/* child.component.css */
+.child-button {
+  // background-color: #384bc1;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+/* child.component.css */
+.child-button {
+  position: relative;
+  z-index: 1; /* Ensure the button is on top */
+}
+
+.buttons.save {
+  cursor: pointer; /* Ensure the button has a pointer cursor */
+}
+
+// .buttons.submit {
+//   cursor: pointer; /* Ensure the button has a pointer cursor */
+// }
+
+.disable{
+  cursor: none !important;
+  pointer-events: none;
+  opacity: 0.5 !important; /* Adjust the opacity as needed */
+}
+
+.move-buttons1 .buttons{display: flex;justify-content: space-around;align-items: center;cursor: pointer;margin: 0.5em;width: 11vw; padding: 0.5em;border-radius: 0.3em;color: #fff;background: linear-gradient(45deg, rgba(29, 160, 79, 0.8), rgba(11, 89, 161, 0.8));outline: none; border: none; filter: drop-shadow(0px 5px 4px rgba(0, 0, 0, 0.5));}
+
+.normalColorBtn.modalColorBtnGreen {
+  background-color: #1C9F50;
+  height: 5vh;
+  width: 10vh;
+  font-size: 13px;
+}
+
+.mat-mdc-table .mat-mdc-header-cell {
+  vertical-align: middle !important;
+  // text-align: center;
+}
+

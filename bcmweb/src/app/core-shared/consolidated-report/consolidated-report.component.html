@@ -1,0 +1,69 @@
+<div class="modal-header bgSeaGreenGradient text-white allModalHeader">
+  <h5 class="modal-title modalh5" id="staticBackdropLabel">Consolidated Report</h5>
+  <button type="button" class="close customClose p-0" mat-icon-button mat-dialog-close id="cancelConsolidate">
+    <span aria-hidden="true">×</span>
+  </button>
+</div>
+<div class="modal-body greyModalBody" style="height: 56vh;">
+  <div class="row mx-3 h-100">
+
+    <div class="col-12 px-0 h-100">
+      <label for="" class="w-100 p-0 col-form-label slctLbl text-start h-6">{{reportData?.popupHeader}}</label>
+
+      <section class="w-94 ModaltableContent tableBgWhite vscroll h-85 pt-0" tabindex="0">
+        <table mat-table [dataSource]="consolidatedReport" class="table-striped" id="reportTable"
+          matSort (matSortChange)="sortData($event)">
+          <ng-container matColumnDef="Action">
+            <th mat-header-cell *matHeaderCellDef class="w-4 text-center border-right"></th>
+            <td mat-cell *matCellDef="let row" class="w-4 text-center">
+              <mat-checkbox (change)="storeIds(row)" [id]="row[reportData.tableData[0].property]"></mat-checkbox>
+            </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Index">
+            <th mat-header-cell *matHeaderCellDef class="w-5 text-center border-right">#</th>
+            <td mat-cell *matCellDef="let row" class="w-5 text-center padding-left">{{row.Index}}</td>
+          </ng-container>
+
+          <ng-container *ngFor="let col of reportData.tableData" [matColumnDef]="col.columnDefs">
+            {{col.columnDefs}}
+            <th mat-header-cell *matHeaderCellDef [class]="col.columnStyle" [mat-sort-header]="col.columnDefs"
+              [disabled]="!col.sort" class="border-right padding-left"> {{col.header}}
+            </th>
+            <td mat-cell *matCellDef="let row" [class]="col.columnStyle" class="padding-left">
+              <ng-container *ngIf="col.property === 'BIARating'; else defaultCell">
+                <span class="d-inline-flex align-items-center">
+                  {{row[col.property]}}
+                  <i class="fa fa-info-circle ms-2 bia-rating-help-icon" 
+                     *ngIf="row[col.property] && row.BIARatingDescription"
+                     [matTooltip]="row.BIARatingDescription"
+                     matTooltipClass="bia-rating-tooltip"
+                     matTooltipPosition="right"
+                     aria-label="BIA Rating description"></i>
+                </span>
+              </ng-container>
+              <ng-template #defaultCell>{{row[col.property]}}</ng-template>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr *matNoDataRow>
+            <td [attr.colspan]="displayedColumns.length">No data found.</td>
+          </tr>
+        </table>
+      </section>
+    </div>
+  </div>
+</div>
+<mat-error class="position-absolute mt-4" style="margin-left: 2.8vw;"
+  *ngIf="(storedIds?.length == 0) && download">Select atleast one {{reportData.from == 1? 'Incident':''}} to downloaded the report
+</mat-error>
+<div class="modal-footer modalFooter" [ngClass]="parent.exportFileLimit != null? 'position-relative':''">
+  <ul class="position-absolute sraTxt maxReport" *ngIf="parent.exportFileLimit != null">
+    <li><b>Note:</b> {{parent.notes}}</li>
+  </ul>
+  <button type="button" class="btn btn-secondary modalCancelBtn me-2" mat-dialog-close id="cancelConsolidate" (click)="cancelConsolidated()">Cancel</button>
+  <button type="button" class="btn btn-primary modalColorBtn btnBig" id="exportConsolidatedReport" (click)="exportConsolidatedReport()">
+    <img src="./assets/images/icon-export.svg" alt="export"> Export Consolidated Report</button>
+</div>

@@ -1,0 +1,131 @@
+<div class="tab-content topTabContentBg h-8 mx-3">
+  <div class="p-1 test-end position-relative h-100">
+    <div class="d-flex justify-content-right align-items-center vmiddleRight filterRight">
+      <div class="d-inline-block position-relative searchInput me-2">
+        <input [placeholder]="'common.search' | translate" class="form-control tblfilter" id="">
+        <span class="position-absolute vmiddleRight iconPositionRight"><i class="fa fa-search"
+            aria-hidden="true"></i></span>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-right align-items-center vmiddleLeft filterLeft">
+      <div class="position-relative colorStatus ir me-4" id="completedID" (click)="review(3)">
+        <span class="vmiddleLeft position-absolute">{{reviewCount}}</span> {{ 'bcp.statusCards.bcpsDueForReview' | translate }}<br>{{ 'bcp.statusCards.bcpsDueForReviewLabel' | translate }}
+      </div>
+
+      <div class="position-relative colorStatus rip me-4" id="inProgressID" (click)="inProgress(2)">
+        <span class="vmiddleLeft position-absolute">{{inProgressCount}}</span> {{ 'bcp.statusCards.reviewsInProgress' | translate }}<br>{{ 'bcp.statusCards.reviewsInProgressLabel' | translate }}
+      </div>
+
+      <div class="position-relative colorStatus rd me-4" id="schedule" (click)="Overdue(1)">
+        <span class="vmiddleLeft position-absolute">{{OverdueCount}}</span>{{ 'bcp.statusCards.reviewsOverdue' | translate }}<br>{{ 'bcp.statusCards.reviewsOverdueLabel' | translate }}
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="table-model-bg h-80 px-3 w-100 py-4">
+  <div class="h-100 pb-3 w-100">
+    <div class="cardGen colorGeyGradient h-100">
+      <div class="cardBody singleRow w-100 h-100">
+        <div class="w-100 h-100 px-2 py-3 position-relative">
+          <div class="w-100 h-6">
+            <h2 class="h-100 text-start"><img src="./assets/images/icon-as.svg" class="headingIcon longBox icokKPI"
+                alt="BCP Coverage"> {{ 'bcp.pageTitle' | translate }}
+            </h2>
+          </div>
+          <div class="w-100 h-94 vscroll tableContent">
+            <table mat-table [dataSource]="dataSource" matSort class="table-striped">
+              <ng-container matColumnDef="Index">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;;width: 0.5vw;border: 1px solid #fff; padding-left: 10px"> #</th>
+                <td mat-cell *matCellDef="let element  let i = index"> {{i+1}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="businessFunction">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.businessFunction' | translate }}</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;">
+                  <a href="javascript: void(0);" class="tblLnk">{{element.BusinessFunctionName}}</a>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="group">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.department' | translate }}</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label
+                    class="link">{{element.BusinessGroup}}</label></td>
+              </ng-container>
+
+              <ng-container matColumnDef="mtpd">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 8vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.mtpd' | translate }}</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"><label class="link">
+                    {{element.MTPDValue}}</label></td>
+              </ng-container>
+
+              <ng-container matColumnDef="rto">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 9vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.rto' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RTOValue}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="rpo">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 5vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.rpo' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.RPOValue}}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="fbcc">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 6vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.fbcc' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.FBCCName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="bcc">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.bcc' | translate }}</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.BCCName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="docStatus">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.docStatus' | translate }}</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.DocStatus}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="nextReview">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.nextReview' | translate }}</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;">
+                  {{element.ReviewCompletionDate|date:'MMM d,y'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="reviewCompletion">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.nextReview' | translate }}</th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;">
+                  {{element.ReviewCompletionDate|date:'MMM d,y'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="reviewStatus">
+                <th mat-header-cell *matHeaderCellDef
+                  style="background-color:#e4e4e4;width: 3vw;border: 2px solid white;padding-left: 10px;">{{ 'bcp.columns.reviewStatus' | translate }}
+                </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 10px;"> {{element.ReviewStatus}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns" style="background-color:  rgb(207, 205, 205);"></tr>
+              <tr mat-row *matRowDef="let row; let i = index columns: displayedColumns;"></tr>
+            </table>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

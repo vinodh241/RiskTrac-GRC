@@ -1,0 +1,137 @@
+<div class="tab-content topTabContentBg h-9 mx-3">
+  <div class="p-1 text-center position-relative h-100 d-flex align-items-center justify-content-start"
+    id="nav-bcmsTestDetails" aria-labelledby="nav-bcmsTesting-tab">
+    <button mat-raised-button color="primary" id="backButton" class="me-3"
+      style="display:inline-block; padding:0vh 1vh;border-radius:100vw;margin: 7px 6px;" matTooltip="Navigate back"
+      (click)="navigateToTestListing()">
+      <span style="font-size:16px; margin-right:10px;">&#11164;</span>{{ 'common.back' | translate }}
+    </button>
+    <div class="navtabHeading me-5" style="margin: 0.8vw; width: 25vw;" [matTooltip]="BCMSTest?.TestName?.length > 100? BCMSTest?.TestName:''">{{service.getTitleValue(BCMSTest?.TestName)}}</div>
+    <div class="ms-5 me-3">
+      <span class="statusID px-1 statusStyle"
+        [ngClass]="(BCMSTest?.TestAssessmentStatusID == 1) ? 'statusScheduled' : (BCMSTest?.TestAssessmentStatusID == 2) ? 'statusInprogress' : (BCMSTest?.TestAssessmentStatusID == 3) ? 'statusCompleted' : 'statusPublished'">{{BCMSTest?.TestAssessmentStatus}}</span>
+    </div>
+  </div>
+</div>
+
+<div class="table-model-bg h-80 px-3 w-100 py-4 vscroll">
+  <div class="h-100 pb-3 w-100">
+    <div class="row mx-0 h-100">
+      <!-- Report Details Starts -->
+      <div class="col-4 ps-0 pe-3 h-100 position-relative">
+        <app-bcms-test-details></app-bcms-test-details>
+      </div>
+      <!-- Report Details Ends -->
+
+      <!-- Report Section Starts -->
+      <div class="ps-3 pe-3 h-100 position-relative col-5">
+        <ng-container *ngFor="let report of reportSections">
+          <mat-expansion-panel expanded="true" [id]="'testDetails'+ report.ReportSectionID" class="report-section mb-4">
+            <mat-expansion-panel-header class="expansion-panel-header h-8 h2bg m-0"
+              style="padding: 1.0vw; height: 3.5vw;">
+              <mat-panel-title style="font-size: 140%;color: #000;">
+                <h2 class="p-0">{{report.ReportSectionName}}</h2>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ng-container class="w-100 px-2 py-3">
+              <div class="col-12 px-3">
+                <div class="d-flex justify-content-start" [ngClass]="!isBCCUsersExsists? 'flex-column':''">
+                  <div class="smallgrey text-start fst-italic">
+                    {{report.ReportSectionDescription}}
+                  </div>
+                  <div *ngIf="!isBCCUsersExsists && (report?.ReportSectionName == 'Participant Feedback') && service.isBCManager">
+                   <span> Note: BCC is not available for the following bussiness functions, please <a class="tblLnk cursor-pointer" id="showBusinessFun" (click)="showBusinessFunctionList()">click here...</a></span>
+                  </div>
+                  <div class="text-start w-50 blueBg p-2"
+                    *ngIf="(report.ReportSectionName == 'Overall Test Observations & Report') && (service.bcmsTestData?.OverAllTestResult?.length > 0)">
+                    <table class="w-100">
+                      <thead>
+                        <th colspan="2" class="overallTxt fw-bold">{{ 'bcms.testReport.overallTestResults' | translate }}</th>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let result of service.bcmsTestData?.OverAllTestResult">
+                          <td class="text-end w-60">{{result.overAllStatus}}</td>
+                          <td>
+                            <div class="text-start" [ngClass]="(result.overAllStatusID == 1)? 'green' : (result.overAllStatusID == 2)? 'orange' : 'red'">
+                              <span class="statusdot" [ngClass]="(result.overAllStatusID == 1)? 'green' : (result.overAllStatusID == 2)? 'orange' : 'red'"></span>
+                              {{result?.percentage}}
+                            </div>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                  <div *ngIf="report.ButtonName" class="w-50 text-end">
+                    <button mat-button class="btn btn-primary modalColorBtn forBoxAction"[id]="report.ButtonName"
+                      style="min-width: 14vw !important;" (click)="navigateToFeedbackReport(report)">
+                      <span class="fw-bold"><i class="fa fa-file-o" aria-hidden="true"></i></span>
+                      {{report.ButtonName}}
+                    </button>
+                  </div>
+                </div>
+                <div class="mt-4" *ngIf="(report.ReportSectionName == 'Overall Test Observations & Report') && service.bcmsTestData.ReportSummary?.length > 0">
+                  <h2 class="h-100">{{ 'bcms.assessmentDetails.reportSummary' | translate }}</h2>
+                  <table class="tblContent w-100 fixedTbleHead">
+                    <thead>
+                      <tr>
+                        <th class="w-4 text-center">#</th>
+                        <th class="w-30">{{ 'bcms.testReport.testObservationLearning' | translate }}</th>
+                        <th class="w-46">{{ 'bcms.testReport.actionItem' | translate }}</th>
+                        <th class="w-20">{{ 'bcms.testReport.targetDate' | translate }}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let eachSummary of service.bcmsTestData.ReportSummary; index as i">
+                        <td class="text-center align-top">{{i+1}}</td>
+                        <td class="align-top">{{eachSummary.TestObservation}}</td>
+                        <td class="align-top">{{eachSummary.IdentifiedActionItem}}</td>
+                        <td class="align-top"><span><img src="./assets/images/icon-calender.svg"></span>{{getDateFormat(eachSummary.TargetDate)}}</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </ng-container>
+          </mat-expansion-panel>
+        </ng-container>
+      </div>
+      <!-- Report Section Ends -->
+
+      <!-- Report Actions Starts -->
+      <div class="col-3 ps-3 pe-0 h-100 position-relative" *ngIf="service?.bcmsTestData?.CurrentActions?.length != 0">
+        <mat-expansion-panel expanded="true" id="actionDetails" class="report-section mb-4">
+          <mat-expansion-panel-header class="expansion-panel-header h-8 h2bg m-0"
+            style="padding: 1.0vw; height: 3.5vw;">
+            <mat-panel-title style="font-size: 140%;color: #000;">
+              <h2 class="p-0">{{ 'bcms.assessmentDetails.actions' | translate }}</h2>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ng-container class="w-100 px-2 py-3">
+            <div class="col-12 px-3">
+              {{currentAction?.ActionDescription}}
+              <div class="mt-4" [matTooltip]="(!isBCCUsersExsists && service.isBCManager)? 'BCC is not available for Few Business function , Plesae find more details in the Participant feedback section':''">
+                <button *ngIf="service.isBCManager" class="btn btn-primary modalColorBtn forBoxAction" [ngClass]="service.testDetails?.TestAssessmentStatusID == 1 ? 'modalColorBtnGreen' : ''"
+                  (click)="UpdateBCMSTestStatus()" [disabled]="!isBCCUsersExsists || ((!isPlannedStartDateTimeMeets || isPlannedEndDateTimeReached) && service.testDetails?.TestAssessmentStatusID == 1)" id="statusAction">
+                  <span class="fw-bold"><i class="fa " [ngClass]="service.testDetails?.TestAssessmentStatusID == 1 ? 'fa-play' : 'fa-check-circle-o'" aria-hidden="true"></i></span>
+                  {{currentAction?.ActionButtonName}}
+                </button>
+              </div>
+              <span *ngIf="(!isPlannedStartDateTimeMeets && service.testDetails?.TestAssessmentStatusID == 1)">BCMS Test can be started from {{getCheckDateFormate(BCMSTest?.ScheduledDate)}}</span>
+              <mat-error *ngIf="(isPlannedEndDateTimeReached && service.testDetails?.TestAssessmentStatusID == 1)">BCMS Test has been crossed planned end date and time, please update the planned date and time to start the test</mat-error>
+              <div class="smallgrey text-start fst-italic mt-4" *ngIf="service.testDetails?.TestAssessmentStatusID == 1">Once the
+                test starts, the
+                email notification goes out to involved BCCs, Business Owners, Test Observer,
+                BCM team & Steering Committee.</div>
+              <div class="smallgrey text-start fst-italic mt-4" *ngIf="service.testDetails?.TestAssessmentStatusID == 2">Once the
+                test starts,
+                the email notification goes out to involved BCCs, Business Owners, Test Observer,
+                BCM team & Steering Committee</div>
+            </div>
+          </ng-container>
+        </mat-expansion-panel>
+        <mat-error *ngIf="this.saveerror">{{this.saveerror}}</mat-error>
+      </div>
+      <!-- Report Actions Ends -->
+    </div>
+  </div>
+</div>
