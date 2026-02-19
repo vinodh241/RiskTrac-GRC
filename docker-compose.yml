@@ -35,6 +35,8 @@ services:
     environment:
       - PORT=6002
       - AUTH_SERVICE_URL=http://authapi:6001
+      # Shared with ormapi/bcmapi so tokens verify (avoids "Session expired" in ORM/BCM)
+      - JWT_SECRET=${JWT_SECRET:-risktrac-grc-shared-jwt-secret-key-min-32-chars}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_USER=${DB_USER:-sqldev}
       - DB_SERVER=${DB_SERVER:-10.0.1.22}
@@ -62,10 +64,9 @@ services:
     container_name: risktrac-ormapi
     ports:
       - "6003:6003"
-    # Use same JWT secret as umapi so tokens issued at login verify here (avoids "Session expired")
-    volumes:
-      - ./umapi/config/certs:/app/config/certs:ro
     environment:
+      # Must match umapi JWT_SECRET so tokens issued at login verify here (avoids "Session expired")
+      - JWT_SECRET=${JWT_SECRET:-risktrac-grc-shared-jwt-secret-key-min-32-chars}
       - PORT=6003
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_USER=${DB_USER:-sqldev}
@@ -88,10 +89,9 @@ services:
     container_name: risktrac-bcmapi
     ports:
       - "6004:6004"
-    # Use same JWT secret as umapi so tokens issued at login verify here (avoids "Session expired")
-    volumes:
-      - ./umapi/config/certs:/app/config/certs:ro
     environment:
+      # Must match umapi JWT_SECRET so tokens issued at login verify here (avoids "Session expired")
+      - JWT_SECRET=${JWT_SECRET:-risktrac-grc-shared-jwt-secret-key-min-32-chars}
       - PORT=6004
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_USER=${DB_USER:-sqldev}

@@ -41,11 +41,15 @@ module.exports = class UtilityApp {
     }
 
     /**
-     * This function will read "secret.pem"  file and return secretkey
+     * This function will return JWT secret: env JWT_SECRET if set, else "secret.pem" file.
+     * Use same JWT_SECRET as umapi so tokens issued at login verify here (avoids "Session expired").
      */
     getAppSecretKey(){
+        var fromEnv = process.env.JWT_SECRET;
+        if (fromEnv && typeof fromEnv === 'string' && fromEnv.trim().length > 0)
+            return fromEnv.trim();
         try {
-            var key                         = FILE_SYSTEM.readFileSync(SECRET_KEY_FILE_PATH, "utf8");
+            var key = FILE_SYSTEM.readFileSync(SECRET_KEY_FILE_PATH, "utf8");
             return key;
         } catch (error) {
             logger.log('error', 'UtilityApp : getAppSecretKey : Error details : '+error);

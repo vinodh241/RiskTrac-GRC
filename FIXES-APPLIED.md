@@ -48,7 +48,7 @@ These changes are required for login to work reliably. Reverting any of them can
 - **CORS:** `ALLOWED_ORIGINS` extended with `http://10.0.1.32:8080`, `http://127.0.0.1:8080`, and env. CORS callback always allows (`callback(null, true)`).
 - **Global error handler:** 4-arg middleware added so unhandled errors return **200** with `{ success: 0, ... }` instead of 500.
 - **PORT:** Already supported (Docker: 6003).
-- **"Session expired" on ORM click:** The JWT token is **signed by umapi** at login. ormapi must verify it with the **same secret**. In **Docker**, `docker-compose.yml` mounts `./umapi/config/certs` into ormapi (and bcmapi) as read-only so they use umapi’s `secret.pem`. For **non-Docker** runs, copy `umapi/config/certs/secret.pem` into `ormapi/config/certs/` and `bcmapi/config/certs/` so token verification succeeds.
+- **"Session expired" on ORM click:** The JWT token is **signed by umapi** at login; ormapi and bcmapi must verify it with the **same secret**. **Preferred (Docker):** `docker-compose.yml` sets the same `JWT_SECRET` env var for umapi, ormapi, and bcmapi (default: `risktrac-grc-shared-jwt-secret-key-min-32-chars`). All three APIs use `JWT_SECRET` if set, else fall back to `config/certs/secret.pem`. No volume mount needed. Optional: set `JWT_SECRET` in `.env` to a custom value (same value for all). For **non-Docker** runs, set env `JWT_SECRET` to the same string before starting umapi, ormapi, and bcmapi, or copy `umapi/config/certs/secret.pem` into ormapi and bcmapi.
 - **KRI:** api-docs use `./KRI/` (folder is `KRI`); no path change needed.
 
 ---
