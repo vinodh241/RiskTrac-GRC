@@ -1,0 +1,4 @@
+# No dashboards provisioned; file exists to avoid Grafana startup errors.
+# Add providers and dashboard json later if needed.
+apiVersion: 1
+providers: []
