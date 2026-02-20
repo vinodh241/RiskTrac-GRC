@@ -74,9 +74,12 @@ APP.use(FILE_UPLOAD({
 
 /**
  * Node server is running on port no. "appPortNo"
+ * In Docker, use PORT env (e.g. 6004); otherwise use app-config or default.
  */
-var appPortNo   = APP_CONFIG_FILE_OBJECT.APP_SERVER.APP_START_PORT;
-appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.UNDEFINED ) ? CONSTANT_FILE_OBJECT.APP_CONSTANT.DEFAULT_PORT : appPortNo;
+var appPortNo   = (process.env.PORT != null && process.env.PORT !== '')
+    ? parseInt(process.env.PORT, 10)
+    : APP_CONFIG_FILE_OBJECT.APP_SERVER.APP_START_PORT;
+appPortNo       = (appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.NULL || appPortNo == CONSTANT_FILE_OBJECT.APP_CONSTANT.UNDEFINED || isNaN(appPortNo)) ? CONSTANT_FILE_OBJECT.APP_CONSTANT.DEFAULT_PORT : appPortNo;
 
 /**
  *  
