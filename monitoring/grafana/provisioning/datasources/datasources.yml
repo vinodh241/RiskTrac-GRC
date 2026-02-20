@@ -1,4 +1,5 @@
 # Auto-provision Prometheus as default Grafana datasource
+# Prometheus uses port 9090 (not 9000). Use this URL when editing the datasource manually.
 apiVersion: 1
 datasources:
   - name: Prometheus

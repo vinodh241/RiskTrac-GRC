@@ -84,6 +84,21 @@ docker volume rm risktrac-grc_prometheus_data risktrac-grc_grafana_data
 docker compose up -d
 ```
 
+## Troubleshooting
+
+### "dial tcp ...:9000: connect: connection refused" when querying Prometheus
+
+**Cause:** Something is trying to reach Prometheus on port **9000**. In this setup Prometheus listens on port **9090** (default), not 9000.
+
+**Fix:**
+
+1. **If using Grafana:**  
+   Go to **Connections → Data sources → Prometheus**. Set the URL to **`http://prometheus:9090`** (when Grafana runs in Docker) or **`http://10.0.1.32:9090`** (when accessing from the host). Do **not** use port 9000.
+2. **If using another tool or script:**  
+   Point it at **`http://10.0.1.32:9090`** (or `http://localhost:9090` if on the same host).
+3. **Ensure Prometheus is running:**  
+   `docker compose ps prometheus` and open http://10.0.1.32:9090 (or http://localhost:9090) in a browser to confirm.
+
 ## No Extra Install Required
 
 - **Prometheus** and **Grafana** run from Docker; no host install of Prometheus or Grafana is needed.
