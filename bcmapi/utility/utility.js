@@ -166,11 +166,15 @@ module.exports = class UtilityApp {
     }
 
     /**
-     * This function will read "secret.pem"  file and return secretkey
+     * Returns JWT secret: process.env.JWT_SECRET if set, else "secret.pem" file.
+     * Use same JWT_SECRET in authapi, umapi, ormapi, bcmapi so tokens verify across modules (avoids "Session expired" on BCM).
      */
     getAppSecretKey(){
+        var fromEnv = (typeof process !== 'undefined' && process.env) ? process.env.JWT_SECRET : null;
+        if (fromEnv && typeof fromEnv === 'string' && fromEnv.trim().length > 0)
+            return fromEnv.trim();
         try {
-            var absolutePathForSecretKey    = PATH.join(process.cwd(),SECRET_KEY_FILE_PATH);
+            var absolutePathForSecretKey    = PATH.join(process.cwd(), SECRET_KEY_FILE_PATH);
             var key                         = FILE_SYSTEM.readFileSync(absolutePathForSecretKey, "utf8");
             return key;
         } catch (error) {
