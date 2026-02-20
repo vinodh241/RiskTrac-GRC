@@ -11,6 +11,7 @@ Monitoring uses **official Docker images** only. No extra packages need to be in
 
 - **Prometheus** config: `monitoring/prometheus/prometheus.yml`
 - **Grafana** default datasource: Prometheus is auto-provisioned from `monitoring/grafana/provisioning/datasources/datasources.yml`
+- **Grafana** dashboard: **RiskTrac GRC – Overview** is provisioned from `monitoring/grafana/provisioning/dashboards/risktrac-overview.json` (folder: **RiskTrac GRC**). It shows targets `up` and Prometheus HTTP request rate. If you see "No data", ensure a **PromQL query** is set in the panel (e.g. `up`) and the time range includes recent data.
 
 ## Quick Start
 

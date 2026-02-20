@@ -1,4 +1,13 @@
-# No dashboards provisioned; file exists to avoid Grafana startup errors.
-# Add providers and dashboard json later if needed.
+# Provisioned dashboards (load from folder; use default Prometheus datasource)
 apiVersion: 1
-providers: []
+providers:
+  - name: 'RiskTrac'
+    orgId: 1
+    folder: 'RiskTrac GRC'
+    folderUid: 'risktrac'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 30
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
