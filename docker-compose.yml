@@ -169,7 +169,7 @@ services:
       - risktrac-net
     restart: unless-stopped
 
-  # --- Monitoring: Prometheus + Grafana (official Docker images) ---
+  # --- Monitoring: Prometheus + Grafana ---
   prometheus:
     image: prom/prometheus:v2.47.0
     container_name: risktrac-prometheus
@@ -196,7 +196,6 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
       - GF_SERVER_ROOT_URL=http://localhost:3000
-      - GF_INSTALL_PLUGINS=grafana-piechart-panel
     volumes:
       - grafana_data:/var/lib/grafana
       - ./monitoring/grafana/provisioning:/etc/grafana/provisioning:ro
