@@ -1,11 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Condensed:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
-@import url("theme.css");
-@import url("nav.css");
-@import url("form-fields.css");
-@import url("layout.css");
-@import url("modal.css");
-@import url("tables.css");
-@import url("media-query.css");
+/* Absolute paths so CSS loads correctly when BCM is served at /bcm/ (avoids 404 if base differs) */
+@import url("/bcm/assets/css/theme.css");
+@import url("/bcm/assets/css/nav.css");
+@import url("/bcm/assets/css/form-fields.css");
+@import url("/bcm/assets/css/layout.css");
+@import url("/bcm/assets/css/modal.css");
+@import url("/bcm/assets/css/tables.css");
+@import url("/bcm/assets/css/media-query.css");
 
 * {
   font-weight: normal;
