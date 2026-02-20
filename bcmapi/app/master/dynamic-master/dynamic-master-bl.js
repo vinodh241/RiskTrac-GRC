@@ -4,7 +4,6 @@ const DB_CONFIG                             = require('../../../config/db-config
 const MESSAGE_FILE_OBJ                      = require("../../../utility/message/message-constant.js");
 const CONSTANT_FILE_OBJ                     = require("../../../utility/constants/constant.js");
 const { logger }                            = require("../../../utility/log-manager/log-manager.js");
-const { log }                               = require('gulp-util');
 const fs                                    = require('fs');
 const path                                  = require('path');
 
