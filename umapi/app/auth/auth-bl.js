@@ -556,7 +556,8 @@ class AuthBl {
                 return response.status(CONSTANT_FILE_OBJ.APP_CONSTANT.TWO_HUNDRED).json(unsuccessfulResponse(refreshedToken, MESSAGE_FILE_OBJ.MESSAGE_CONSTANT.LOGOUT_FAIL));
             }
             
-            const DB_RESPONSE = await  authDbObject.updateUserLogout(userIdFromToken, userNameFromToken, token, accountGUIDFromToken);                
+            // Pass refreshedToken (current token in DB after middleware), not original token, so logout procedure finds the row
+            const DB_RESPONSE = await  authDbObject.updateUserLogout(userIdFromToken, userNameFromToken, refreshedToken, accountGUIDFromToken);                
             
             if(CONSTANT_FILE_OBJ.APP_CONSTANT.UNDEFINED == DB_RESPONSE || CONSTANT_FILE_OBJ.APP_CONSTANT.NULL == DB_RESPONSE){
                 logger.log('error', 'User Id : '+ userIdFromToken +' : AuthBl : updateUserLogout : Execution end. : DB Response is undefined or null.');
