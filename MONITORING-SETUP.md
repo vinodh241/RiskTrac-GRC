@@ -96,6 +96,29 @@ docker compose up -d
 
 ## Troubleshooting
 
+### Host CPU & RAM dashboard shows "No data"
+
+1. **Check that Node Exporter and Prometheus are running**
+   ```bash
+   docker compose ps node_exporter prometheus
+   ```
+   Both should be "Up". If not: `docker compose up -d node_exporter prometheus`.
+
+2. **Check Prometheus targets**  
+   Open http://localhost:9090/targets (or http://10.0.1.32:9090/targets). Under the **node** job, the target `node_exporter:9100` should show **UP** in green. If it is DOWN, Prometheus cannot reach Node Exporter (e.g. wrong network or container not running).
+
+3. **Verify metrics in Prometheus**  
+   In Prometheus → **Graph**, run the query: `node_cpu_seconds_total`. You should see at least one time series. If you get "no data", Node Exporter is not being scraped or has no metrics.
+
+4. **Grafana datasource**  
+   In Grafana go to **Connections → Data sources**. Open **Prometheus** and ensure **URL** is `http://prometheus:9090`. Click **Save & test** — it should report "Data source is working".
+
+5. **Time range**  
+   Try **Last 5 minutes** in the dashboard time picker; after a fresh start it can take 1–2 minutes for the first data to appear.
+
+6. **"Node Exporter target" panel**  
+   The Host CPU & RAM dashboard has a **Node Exporter target** panel at the bottom. If it shows **Up** (green), Prometheus is scraping Node Exporter and the other panels should get data. If it shows **Down** or **No data**, fix the Prometheus → Node Exporter connection first.
+
 ### "dial tcp ...:9000: connect: connection refused" or status=500 on `/api/datasources/uid/.../resources/*`
 
 **Cause:** A Prometheus data source in Grafana is using URL with port **9000**. Prometheus uses port **9090**, not 9000.
