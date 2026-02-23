@@ -374,15 +374,42 @@ async function maliciousErrorHandler(fileCheck) {
     }
 }
 
+function getSftpConnectConfig() {
+    const cfg = APP_CONFIG.SFTP_CONFIG;
+    const config = {
+        host: cfg.host,
+        port: cfg.port,
+        username: cfg.username
+    };
+    if (cfg.privateKeyPath) {
+        try {
+            config.privateKey = FILE_SYSTEM.readFileSync(cfg.privateKeyPath, 'utf8');
+            if (cfg.privateKeyPassphrase) config.passphrase = cfg.privateKeyPassphrase;
+        } catch (err) {
+            logger.log('error', 'BinaryData : getSftpConnectConfig : Failed to read SFTP private key from ' + cfg.privateKeyPath + ' : ' + (err && err.message));
+            return null;
+        }
+    } else {
+        const plainPassword = process.env.SFTP_PASSWORD
+            ? process.env.SFTP_PASSWORD
+            : utilityAppObject.decryptDataByPrivateKey(cfg.password);
+        if (plainPassword) config.password = plainPassword;
+    }
+    if (!config.privateKey && !config.password) {
+        logger.log('error', 'BinaryData : getSftpConnectConfig : No SFTP auth: set SFTP_PRIVATE_KEY_PATH or provide valid SFTP password (SFTP_PASSWORD env or encrypted in config with app public key).');
+        return null;
+    }
+    return config;
+}
+
 async function uploadFileToRemoteServer(fileContent, filePath, userIdFromToken, uploadedFileExtension) {
     logger.log('info', 'User Id :: BinaryData : uploadFileToRemoteServer : Execution started.');
-    const sftp = new Client(); // Create SftpClient instance here
-    let SFTP_CONNECTION_CONFIG = {
-        host: APP_CONFIG.SFTP_CONFIG.host,
-        port: APP_CONFIG.SFTP_CONFIG.port,
-        username: APP_CONFIG.SFTP_CONFIG.username,
-        password: utilityAppObject.decryptDataByPrivateKey(APP_CONFIG.SFTP_CONFIG.password)
-    };
+    const SFTP_CONNECTION_CONFIG = getSftpConnectConfig();
+    if (!SFTP_CONNECTION_CONFIG) {
+        logger.log('error', 'User Id : ' + userIdFromToken + ' : BinaryData : uploadFileToRemoteServer : SFTP config invalid (missing private key or password).');
+        return false;
+    }
+    const sftp = new Client();
     try {
         if (uploadedFileExtension === '.pdf' || uploadedFileExtension === 'pdf') {
             const res = await isPDFFileValid(fileContent);
@@ -402,8 +429,8 @@ async function uploadFileToRemoteServer(fileContent, filePath, userIdFromToken, 
         logger.log('info', 'User Id : ' + userIdFromToken + ': BinaryData : uploadFileToRemoteServer : Execution end.' + error.stack);
         return false;
     } finally {
+        try { await sftp.end(); } catch (e) { /* ignore if not connected */ }
         logger.log('info', 'User Id : ' + userIdFromToken + ': BinaryData : uploadFileToRemoteServer : connection got end. : ');
-        await sftp.end();
     }
 }
 

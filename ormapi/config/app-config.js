@@ -167,11 +167,14 @@ const FILE_UPLOAD = {
                                               ]
 };
 
+// SFTP: use env SFTP_HOST, SFTP_PORT, SFTP_USERNAME, SFTP_PASSWORD (plain), or SFTP_PRIVATE_KEY_PATH for key-based auth
 let SFTP_CONFIG = {
-    host        : '10.0.1.30',
-    port        : 22,
-    username    : 'sftpuser@secureyesdev.com',
-    password    : 'IFza31oNLRt/eFyYAE+9SKTHzSFpB3xTkZ+IqlSqE7MTbFjN2X9AsnDxv2XbOdQyW3ro5W6S+Eg/AaPvxEHClKUaezPKZS/Bu3RWGtktip9m56wFTJ/RFvZ9LUNJLkeU1GfOix+WWo8UiliWhlua7Bst6eqpwWnTuoWNSN8jg4HXc7IWUE0tKIo+puTe6p0xEGY367t2Cs6bKRKGcMKncJMHIfzpXupRyAmIJ010s0oHJrg/t2seRfGgYytp6dnjAUGqXnHfNTB0ENTa2SF2kBjvgyjhiTDyvE1o2/CPTvnRh7UpZh5tLOLkdKo7A2+70WWxIq1OD913Nlaz4hxVkaeeU4QLB88l1vchni1UDJij23Ne3hGPux/Ju4a51+j0yuin1QisRRp2V43GDKFDxEPfopZKFDz/76cNYvwNdLjPwNygupVRkmANT54bbXXHNrT6p/uImz+snUpzOaL8uXwijki4c1PyS6zzCzkb3ioWBt5TeOz+XiqNmde9zUOiFtZn18SaWJILsy1ZJFP3omFE0SNDzS/sTHRrBtiYEeRDqLGyTtH3x9bnIgvEVoXzcudo7s4p/jSKzuwerLiqPaImN2TZx3R11wIw2ud5S2zzGT5K26Wtn/r+LN+HKpC+lsiwBdz2yY2YBA41FOMFPJfO/TRy5pB5z+47kyA+Fyw='
+    host            : process.env.SFTP_HOST || '10.0.1.30',
+    port            : parseInt(process.env.SFTP_PORT || '22', 10),
+    username        : process.env.SFTP_USERNAME || 'sftpuser@secureyesdev.com',
+    password        : process.env.SFTP_PASSWORD || 'IFza31oNLRt/eFyYAE+9SKTHzSFpB3xTkZ+IqlSqE7MTbFjN2X9AsnDxv2XbOdQyW3ro5W6S+Eg/AaPvxEHClKUaezPKZS/Bu3RWGtktip9m56wFTJ/RFvZ9LUNJLkeU1GfOix+WWo8UiliWhlua7Bst6eqpwWnTuoWNSN8jg4HXc7IWUE0tKIo+puTe6p0xEGY367t2Cs6bKRKGcMKncJMHIfzpXupRyAmIJ010s0oHJrg/t2seRfGgYytp6dnjAUGqXnHfNTB0ENTa2SF2kBjvgyjhiTDyvE1o2/CPTvnRh7UpZh5tLOLkdKo7A2+70WWxIq1OD913Nlaz4hxVkaeeU4QLB88l1vchni1UDJij23Ne3hGPux/Ju4a51+j0yuin1QisRRp2V43GDKFDxEPfopZKFDz/76cNYvwNdLjPwNygupVRkmANT54bbXXHNrT6p/uImz+snUpzOaL8uXwijki4c1PyS6zzCzkb3ioWBt5TeOz+XiqNmde9zUOiFtZn18SaWJILsy1ZJFP3omFE0SNDzS/sTHRrBtiYEeRDqLGyTtH3x9bnIgvEVoXzcudo7s4p/jSKzuwerLiqPaImN2TZx3R11wIw2ud5S2zzGT5K26Wtn/r+LN+HKpC+lsiwBdz2yY2YBA41FOMFPJfO/TRy5pB5z+47kyA+Fyw=',
+    privateKeyPath  : process.env.SFTP_PRIVATE_KEY_PATH || null,
+    privateKeyPassphrase : process.env.SFTP_PRIVATE_KEY_PASSPHRASE || null
 };
 
 const ALLOWED_MODULE_ABBREVIATION = {
