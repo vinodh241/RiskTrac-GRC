@@ -77,6 +77,11 @@ services:
       - NOTIFICATION_DB_SERVER=${NOTIFICATION_DB_SERVER:-${DB_SERVER:-10.0.1.22}}
       - NOTIFICATION_DB_PORT=${NOTIFICATION_DB_PORT:-${DB_PORT:-1433}}
       - NOTIFICATION_DB_NAME=${NOTIFICATION_DB_NAME:-${DB_NAME:-SE_GRC}}
+      # SFTP file upload: set SFTP_PASSWORD (plain) or SFTP_PRIVATE_KEY_PATH for key-based auth
+      - SFTP_HOST=${SFTP_HOST:-10.0.1.30}
+      - SFTP_PORT=${SFTP_PORT:-22}
+      - SFTP_USERNAME=${SFTP_USERNAME:-sftpuser@secureyesdev.com}
+      - SFTP_PASSWORD=${SFTP_PASSWORD}
     networks:
       - risktrac-net
     restart: unless-stopped
