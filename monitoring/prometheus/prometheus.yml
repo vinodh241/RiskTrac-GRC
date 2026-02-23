@@ -29,7 +29,7 @@ scrape_configs:
   #     - targets: ['bcmapi:6004']
   #   metrics_path: '/metrics'
 
-  # Node exporter (optional - install node_exporter on host and add to network for host metrics)
-  # - job_name: 'node'
-  #   static_configs:
-  #     - targets: ['host.docker.internal:9100']
+  # Node Exporter – host CPU, RAM, disk (scrapes node_exporter container)
+  - job_name: 'node'
+    static_configs:
+      - targets: ['node_exporter:9100']

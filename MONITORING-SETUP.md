@@ -4,14 +4,17 @@ Monitoring uses **official Docker images** only. No extra packages need to be in
 
 ## What Was Added
 
-| Component   | Image                    | Port | Purpose                    |
-|------------|---------------------------|------|----------------------------|
-| **Prometheus** | `prom/prometheus:v2.47.0` | 9090 | Metrics collection & storage |
-| **Grafana**    | `grafana/grafana:10.2.0`  | 3000 | Dashboards & visualization   |
+| Component       | Image                         | Port | Purpose                         |
+|----------------|--------------------------------|------|---------------------------------|
+| **Node Exporter** | `prom/node-exporter:v1.7.0`  | 9100 | Host CPU, RAM, disk metrics     |
+| **Prometheus**   | `prom/prometheus:v2.47.0`    | 9090 | Metrics collection & storage   |
+| **Grafana**      | `grafana/grafana:10.2.0`     | 3000 | Dashboards & visualization      |
 
-- **Prometheus** config: `monitoring/prometheus/prometheus.yml`
-- **Grafana** default datasource: Prometheus is auto-provisioned from `monitoring/grafana/provisioning/datasources/datasources.yml`
-- **Grafana** dashboard: **RiskTrac GRC – Overview** is provisioned from `monitoring/grafana/provisioning/dashboards/risktrac-overview.json` (folder: **RiskTrac GRC**). It shows targets `up` and Prometheus HTTP request rate. If you see "No data", ensure a **PromQL query** is set in the panel (e.g. `up`) and the time range includes recent data.
+- **Prometheus** config: `monitoring/prometheus/prometheus.yml` (includes scrape job for `node_exporter:9100`).
+- **Grafana** default datasource: Prometheus is auto-provisioned from `monitoring/grafana/provisioning/datasources/datasources.yml`.
+- **Grafana** dashboards (folder **RiskTrac GRC**):
+  - **RiskTrac GRC – Overview**: targets `up`, Prometheus HTTP request rate.
+  - **Host CPU & RAM**: CPU usage %, RAM usage %, and memory used (GB) from Node Exporter.
 
 ## Quick Start
 
@@ -21,15 +24,17 @@ Monitoring uses **official Docker images** only. No extra packages need to be in
    ```
 
 2. **Access:**
-   - **Grafana:** http://localhost:3000 (or http://10.0.1.32:3000 if using the same server)
-     - Login: `admin` / `admin` (change on first login)
-   - **Prometheus:** http://localhost:9090
-     - Try **Status → Targets** to see scrape targets; run a query in **Graph** (e.g. `up`).
+   - **Grafana** (dashboards): http://localhost:3000 (or http://10.0.1.32:3000 if using the same server)
+     - **Login:** `admin` / `admin` (change password on first login if prompted)
+   - **Prometheus** (metrics UI): http://localhost:9090 (or http://10.0.1.32:9090)
+     - **No login** – Prometheus does not have a login screen; open the URL and use **Status → Targets** or **Graph** (e.g. query `up`).
 
 3. **Optional – start only monitoring (if app is already running):**
    ```bash
-   docker compose up -d prometheus grafana
+   docker compose up -d node_exporter prometheus grafana
    ```
+
+4. **View CPU & RAM in Grafana:** Open **Dashboards** → **RiskTrac GRC** → **Host CPU & RAM**. (Node Exporter must be running; on a Linux host it reports host metrics; on Windows Docker Desktop you get the Linux VM’s metrics.)
 
 ## Changing Grafana Admin Password
 

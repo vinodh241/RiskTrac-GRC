@@ -174,7 +174,26 @@ services:
       - risktrac-net
     restart: unless-stopped
 
-  # --- Monitoring: Prometheus + Grafana ---
+  # --- Monitoring: Prometheus + Grafana + Node Exporter ---
+  node_exporter:
+    image: prom/node-exporter:v1.7.0
+    container_name: risktrac-node-exporter
+    # Mount host paths so we get real host CPU/RAM (Linux host only; on Windows Docker you get the VM)
+    volumes:
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /:/rootfs:ro
+    command:
+      - '--path.procfs=/host/proc'
+      - '--path.sysfs=/host/sys'
+      - '--path.rootfs=/rootfs'
+      - '--collector.filesystem.mount-point-exclude=^/(sys|proc|dev|host|etc)($$|/)'
+    ports:
+      - "9100:9100"
+    networks:
+      - risktrac-net
+    restart: unless-stopped
+
   prometheus:
     image: prom/prometheus:v2.47.0
     container_name: risktrac-prometheus
@@ -197,6 +216,7 @@ services:
     ports:
       - "3000:3000"
     environment:
+      # Default login: admin / admin (use these to log in to http://localhost:3000)
       - GF_SECURITY_ADMIN_USER=admin
       - GF_SECURITY_ADMIN_PASSWORD=admin
       - GF_USERS_ALLOW_SIGN_UP=false
